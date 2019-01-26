@@ -1,20 +1,20 @@
 # hs-test
-A small test framework for simple testing of Hyperskill educational projects (built on top of JUnit).
+A small framework that simplifies testing educational projects for Hyperskill. It is built on top of JUnit.
 
 ## Requirements and build
 
-It needs Java 11, Maven 3.3.9 or later (for building).
+The project needs Java 11, Maven 3.3.9 or later.
 
-Build this project locally:
+Build it locally:
 ```
 mvn clean package
 ```
 
-## Using from educational projects
+## Using in educational projects
 
-To access all classes from edu projects, you may use **jitpack**. It allows downloading and building all sources from here.
+To access all classes in educational projects, you may use **jitpack**. It allows downloading and building all sources from here. To start use it, follow these steps:
 
-1) Add JitPack repo to your **gradle.build** file:
+1) add JitPack repo to your **gradle.build** file:
 
 ```
 repositories {
@@ -23,7 +23,7 @@ repositories {
 }
 ``` 
 
-2) Add a dependency on **hs-test**:
+2) add one dependency on **hs-test**:
 
 ```
 dependencies {
@@ -33,7 +33,7 @@ dependencies {
 }
 ```
 
-3) You may configure synchronization to automatically download and build the latest version of **hs-test** from GitHub:
+3) optionally, you may also configure synchronization to automatically get the latest version of **hs-test** from GitHub:
 
 ```
 configurations.all {
@@ -41,7 +41,7 @@ configurations.all {
 }
 ```
 
-An example:
+A fragment example of **gradle.build** file:
 
 ```
 subprojects {
@@ -59,7 +59,7 @@ subprojects {
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor 30, 'seconds'
     }
-    
+
     ...
 }
 ```
