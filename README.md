@@ -5,18 +5,16 @@ A small test framework for simple testing of Hyperskill educational projects (bu
 
 It needs Java 11, Maven 3.3.9 or later (for building).
 
-Build command:
+Build this project locally:
 ```
 mvn clean package
 ```
 
-## Using from projects
+## Using from educational projects
 
-To access it from projects, we use **jitpack** plugin to download and build all sources here.
+To access all classes from edu projects, you may use **jitpack**. It allows downloading and building all sources from here.
 
-To start use it from projects:
-
-1) Add JitPack repo **build.gradle** to your **gradle.build** file:
+1) Add JitPack repo to your **gradle.build** file:
 
 ```
 repositories {
@@ -25,15 +23,17 @@ repositories {
 }
 ``` 
 
-2) Add the dependency:
+2) Add a dependency on **hs-test**:
 
 ```
 dependencies {
+    ...
     implementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
+    ...
 }
 ```
 
-3) Configure synchronization (if you need), to automatically get the latest version of **hstest** from GitHub:
+3) You may configure synchronization to automatically download and build the latest version of **hs-test** from GitHub:
 
 ```
 configurations.all {
@@ -53,9 +53,7 @@ subprojects {
     }
 
     dependencies {
-        ...
         implementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
-	...
     }
 
     configurations.all {
