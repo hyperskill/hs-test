@@ -136,9 +136,9 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
                     String output = run(test);
-                    boolean result = checkPredefinedIO(output, test.getClue());
+                    CheckResult result = checkSolved(output, test.getClue());
                     String errorMessage = "Wrong answer in test #" + currTest;
-                    assertTrue(errorMessage, result);
+                    assertTrue(errorMessage, result.isCorrect());
                 }
             }
             if (overrodeTestCases) {
@@ -202,22 +202,13 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         }
         if (overrodeSolve) {
             String solution = solve(test.getInput());
-            if (overrodeCheckSolved) {
-                bySolving = checkSolved(output, solution);
-            }
-            else {
-                bySolving.setCorrect(checkPredefinedIO(output, solution));
-            }
+            bySolving = checkSolved(output, solution);
         }
 
         boolean isCorrect = byChecking.isCorrect() && bySolving.isCorrect();
         String resultFeedback = byChecking.getFeedback() + "\n" + bySolving.getFeedback().trim();
 
         return new CheckResult(isCorrect, resultFeedback);
-    }
-
-    private boolean checkPredefinedIO(String reply, String answer) {
-        return reply.trim().equals(answer.trim());
     }
 
     public List<TestCase<ClueType>> generateTestCases() {
@@ -237,6 +228,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     }
 
     public CheckResult checkSolved(String reply, String clue) {
-        return CheckResult.FALSE;
+        boolean isCorrect = reply.trim().equals(clue.trim());
+        return new CheckResult(isCorrect);
     }
 }
