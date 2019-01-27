@@ -1,4 +1,4 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.testcase;
 
 public class PredefinedIOTestCase extends TestCase<String> {
 

@@ -1,5 +1,8 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.stage;
 
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.testcase.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -133,7 +136,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest<ClueType> {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
                     String output = run(test);
-                    boolean result = checkPredefinedIO(output, test.clue);
+                    boolean result = checkPredefinedIO(output, test.getClue());
                     String errorMessage = "Wrong answer in test #" + currTest;
                     assertTrue(errorMessage, result);
                 }
@@ -144,8 +147,8 @@ public abstract class BaseStageTest<ClueType> implements StageTest<ClueType> {
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
                     String errorMessage = "Wrong answer in test #" + currTest
-                        + "\n" + result.feedback;
-                    assertTrue(errorMessage, result.isCorrect);
+                        + "\n" + result.getFeedback();
+                    assertTrue(errorMessage, result.isCorrect());
                 }
             }
         } catch (Exception ex) {
@@ -179,40 +182,38 @@ public abstract class BaseStageTest<ClueType> implements StageTest<ClueType> {
     }
 
     private String run(TestCase test) throws Exception {
-        systemIn.provideLines(test.input);
+        systemIn.provideLines(test.getInput());
         systemOut.clearLog();
-        if (test.args.size() == 0 && isTestingMain) {
+        if (test.getArgs().size() == 0 && isTestingMain) {
             test.addArgument(new String[]{});
         }
         createFiles(test.files);
-        testedMethod.invoke(testedObject, test.args.toArray());
+        testedMethod.invoke(testedObject, test.getArgs().toArray());
         deleteFiles(test.files);
         return systemOut.getLogWithNormalizedLineSeparator();
     }
 
     private CheckResult checkSolution(TestCase<ClueType> test, String output) {
-        CheckResult finalResult = new CheckResult(false);
-
         CheckResult byChecking = new CheckResult(true);
         CheckResult bySolving = new CheckResult(true);
 
         if (overrodeCheck) {
-            byChecking = check(output, test.clue);
+            byChecking = check(output, test.getClue());
         }
         if (overrodeSolve) {
-            String solution = solve(test.input);
+            String solution = solve(test.getInput());
             if (overrodeCheckSolved) {
                 bySolving = checkSolved(output, solution);
             }
             else {
-                bySolving.isCorrect = checkPredefinedIO(output, solution);
+                bySolving.setCorrect(checkPredefinedIO(output, solution));
             }
         }
 
-        finalResult.isCorrect = byChecking.isCorrect && bySolving.isCorrect;
-        finalResult.feedback = (byChecking.feedback + "\n" + bySolving.feedback).trim();
+        boolean isCorrect = byChecking.isCorrect() && bySolving.isCorrect();
+        String resultFeedback = byChecking.getFeedback() + "\n" + bySolving.getFeedback().trim();
 
-        return finalResult;
+        return new CheckResult(isCorrect, resultFeedback);
     }
 
     private boolean checkPredefinedIO(String reply, String answer) {

@@ -1,12 +1,12 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.testcase;
 
 import java.util.*;
 
 public class TestCase<ClueType> {
 
-    public String input;
-    public List<Object> args;
-    public ClueType clue;
+    private String input;
+    private List<Object> args;
+    private ClueType clue;
 
     // files needed to be set up before test
     public Map<String, String> files = new HashMap<>();
@@ -44,5 +44,21 @@ public class TestCase<ClueType> {
     public TestCase<ClueType> addFile(String filename, String content) {
         files.put(filename, content);
         return this;
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public List<Object> getArgs() {
+        return args;
+    }
+
+    public ClueType getClue() {
+        return clue;
+    }
+
+    public Map<String, String> getFiles() {
+        return files;
     }
 }

@@ -1,4 +1,4 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.stage;
 
 public abstract class MainMethodTest<ClueType> extends BaseStageTest<ClueType> {
 
@@ -6,5 +6,4 @@ public abstract class MainMethodTest<ClueType> extends BaseStageTest<ClueType> {
         super(testedClass.getMethod("main", String[].class));
         isTestingMain = true;
     }
-
 }

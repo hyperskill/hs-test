@@ -1,4 +1,8 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.stage;
+
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.testcase.TestCase;
 
 import java.util.List;
 
