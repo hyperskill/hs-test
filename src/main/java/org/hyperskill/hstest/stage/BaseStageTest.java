@@ -30,7 +30,6 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     private final boolean overrodePredefinedIO;
     private final boolean overrodeCheck;
     private final boolean overrodeSolve;
-    private final boolean overrodeCheckSolved;
 
     private final List<TestCase<ClueType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
@@ -74,16 +73,10 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
             .getDeclaringClass()
             .getName();
 
-        String checkSolvedOwner = getClass()
-            .getMethod("checkSolved", String.class, String.class)
-            .getDeclaringClass()
-            .getName();
-
         overrodeTestCases = !myName.equals(testCasesOwner);
         overrodePredefinedIO = !myName.equals(predefinedIOOwner);
         overrodeCheck = !myName.equals(checkOwner);
         overrodeSolve = !myName.equals(solveOwner);
-        overrodeCheckSolved = !myName.equals(checkSolvedOwner);
 
         if (!overrodeTestCases && !overrodePredefinedIO) {
             throw new Exception("No tests provided: override " +
@@ -131,7 +124,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-            // TODO both loops look very too similar
+
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
