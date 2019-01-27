@@ -124,7 +124,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-
+            // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
