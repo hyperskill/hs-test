@@ -20,7 +20,7 @@ import static org.hyperskill.hstest.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
-public abstract class BaseStageTest<ClueType> implements StageTest<ClueType> {
+public abstract class BaseStageTest<ClueType> implements StageTest {
 
     private final Object testedObject;
     private final Method testedMethod;
@@ -218,5 +218,25 @@ public abstract class BaseStageTest<ClueType> implements StageTest<ClueType> {
 
     private boolean checkPredefinedIO(String reply, String answer) {
         return reply.trim().equals(answer.trim());
+    }
+
+    public List<TestCase<ClueType>> generateTestCases() {
+        return List.of();
+    }
+
+    public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
+        return List.of();
+    }
+
+    public CheckResult check(String reply, ClueType clue) {
+        return CheckResult.FALSE;
+    }
+
+    public String solve(String input) {
+        return "";
+    }
+
+    public CheckResult checkSolved(String reply, String clue) {
+        return CheckResult.FALSE;
     }
 }
