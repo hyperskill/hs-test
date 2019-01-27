@@ -1,6 +1,5 @@
 package org.hyperskill.hstest;
 
-import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class SwingTest<ClueType> extends StageTest<ClueType> {
+public abstract class SwingTest<ClueType> extends BaseStageTest<ClueType> {
 
     protected JFrame frame;
     protected FrameFixture window;

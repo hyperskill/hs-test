@@ -1,17 +1,15 @@
 package org.hyperskill.hstest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 public class TestCase<ClueType> {
 
     public String input;
-    public ArrayList<Object> args;
+    public List<Object> args;
     public ClueType clue;
 
     // files needed to be set up before test
-    public HashMap<String, String> files = new HashMap<>();
+    public Map<String, String> files = new HashMap<>();
 
     public TestCase() {
         this(null);
