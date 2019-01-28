@@ -1,6 +1,13 @@
 # hs-test
 A small framework that simplifies testing educational projects for Hyperskill. It is built on top of JUnit.
 
+It is recommended but not required to use it for HS projects. Main features: 
+- multiple types of tests in a single unified way (without stdin, with stdin, files, swing)
+- less boilerplate for stdin tests
+- generating learner-friendly feedback (filtering stack-traces, hints)
+
+But you may also use a standard test framework like JUnit or testNG.
+
 ## Requirements and build
 
 The project needs Java 11, Maven 3.3.9 or later.
