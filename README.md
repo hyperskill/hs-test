@@ -70,3 +70,7 @@ subprojects {
     ...
 }
 ```
+
+## Examples
+
+Examples are available within the test directory: https://github.com/hyperskill/hs-test/tree/master/src/test/java/org/hyperskill/hstest.
