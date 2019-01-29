@@ -12,11 +12,6 @@ public class TestCase<ClueType> {
     public Map<String, String> files = new HashMap<>();
 
     public TestCase() {
-        this(null);
-    }
-
-    public TestCase(ClueType clue) {
-        this(clue, "");
     }
 
     public TestCase(ClueType clue, String consoleInput, Object... methodArguments) {
@@ -24,6 +19,19 @@ public class TestCase<ClueType> {
         this.args = new ArrayList<>();
         this.clue = clue;
         Collections.addAll(this.args, methodArguments);
+    }
+
+    /**
+     * Static factory method that generates tests with a given input
+     */
+    public static TestCase newTestCaseWithInput(String input) {
+        TestCase testCase = new TestCase();
+        testCase.input = input;
+        return testCase;
+    }
+
+    public static PredefinedIOTestCase newTestCaseWithPredefinedIO(String input, String output) {
+        return new PredefinedIOTestCase(input, output);
     }
 
     public TestCase<ClueType> setInput(String input) {

@@ -1,11 +1,11 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.calculator.stage1;
 
 import java.util.Scanner;
 
 /**
- * A program to be tested
+ * An example: this program just calculates the sum of two numbers
  */
-public class Program {
+public class CalculatorStage1 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

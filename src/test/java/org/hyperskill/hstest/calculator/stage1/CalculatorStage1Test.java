@@ -1,4 +1,4 @@
-package org.hyperskill.hstest;
+package org.hyperskill.hstest.calculator.stage1;
 
 import org.hyperskill.hstest.stage.MainMethodTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -7,25 +7,33 @@ import org.hyperskill.hstest.testcase.TestCase;
 import java.util.List;
 import java.util.Objects;
 
-public class UnitTest extends MainMethodTest {
+import static org.hyperskill.hstest.testcase.TestCase.*;
 
-    public UnitTest() throws Exception {
-        super(Program.class);
+public class CalculatorStage1Test extends MainMethodTest {
+
+    public CalculatorStage1Test() throws Exception {
+        super(CalculatorStage1.class);
     }
 
+    /**
+     * It generates a list of testcases with a specified input for stdin
+     */
     @Override
     public List<TestCase> generateTestCases() {
         return List.of(
-                new TestCase<>(null, "0 1"),
-                new TestCase<>(null, "1 0"),
-                new TestCase<>(null, "2 3"),
-                new TestCase<>(null, "100 123"),
-                new TestCase<>(null, "-1 5"),
-                new TestCase<>(null, "5 -2"),
-                new TestCase<>(null, "-300 -400")
+                newTestCaseWithInput("0 1"),
+                newTestCaseWithInput("1 0"),
+                newTestCaseWithInput("2 3"),
+                newTestCaseWithInput("100 123"),
+                newTestCaseWithInput("-1 5"),
+                newTestCaseWithInput("5 -2"),
+                newTestCaseWithInput("-300 -400")
         );
     }
 
+    /**
+     * It solves the same problem as the program to compare with a learner's solution
+     */
     @Override
     public String solve(String input) {
         String[] nums = input.split("\\s+");
@@ -34,7 +42,9 @@ public class UnitTest extends MainMethodTest {
         return Objects.toString(a + b);
     }
 
-
+    /**
+     * It checks our solution equal a learner's solution
+     */
     @Override
     public CheckResult checkSolved(String reply, String clue) {
         try {
