@@ -71,6 +71,10 @@ subprojects {
 }
 ```
 
+## Downloading
+
+If you would not use Gradle, you may just download the sources in place them in your project with a test for a program.
+
 ## Examples
 
 Examples are available within the test directory: https://github.com/hyperskill/hs-test/tree/master/src/test/java/org/hyperskill/hstest.
