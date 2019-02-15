@@ -35,15 +35,14 @@ repositories {
 ```
 dependencies {
     ...
-    implementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
+    testImplementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
     ...
 }
 ```
 
-A better choice would be don't connect to the latest commit on master, but use a special commit in which everything works and nothing changes ever. The list with such commits and corresponding versions listed below:
+A better choice would be don't connect to the latest commit on master, but use a special commit in which everything is guaranteed to work (commit hash will be updated here on every stable release):
 
-- 0.1 `implementation 'com.github.hyperskill:hs-test:2cef36d8051079c14ee1dbf47574a6886b178b2a'`
-- 0.2 `implementation 'com.github.hyperskill:hs-test:6236c460e7beefc7a17a507f02aedd3bfed2cff9'`
+- `testImplementation 'com.github.hyperskill:hs-test:5f272ea8c4bb0abae13ff335ff5f5deaf3dad42f'`
 
 3) optionally, you may also configure synchronization to automatically get the latest version of **hs-test** from GitHub:
 
@@ -65,7 +64,7 @@ subprojects {
     }
 
     dependencies {
-        implementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
+        testImplementation 'com.github.hyperskill:hs-test:master-SNAPSHOT'
     }
 
     configurations.all {
