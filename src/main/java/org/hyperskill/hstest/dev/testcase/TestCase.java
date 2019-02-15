@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.testcase;
+package org.hyperskill.hstest.dev.testcase;
 
 import java.util.*;
 

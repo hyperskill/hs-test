@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.stage;
+package org.hyperskill.hstest.dev.stage;
 
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;

@@ -1,8 +1,8 @@
-package org.hyperskill.hstest.stage;
+package org.hyperskill.hstest.dev.stage;
 
-import org.hyperskill.hstest.testcase.CheckResult;
-import org.hyperskill.hstest.testcase.PredefinedIOTestCase;
-import org.hyperskill.hstest.testcase.TestCase;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.hyperskill.hstest.common.Utils.*;
+import static org.hyperskill.hstest.dev.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 

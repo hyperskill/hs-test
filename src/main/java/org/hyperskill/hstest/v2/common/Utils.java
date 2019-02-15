@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.common;
+package org.hyperskill.hstest.v2.common;
 
 import java.io.File;
 import java.io.IOException;

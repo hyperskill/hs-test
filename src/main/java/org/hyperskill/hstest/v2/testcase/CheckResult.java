@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.testcase;
+package org.hyperskill.hstest.v2.testcase;
 
 public class CheckResult {
 

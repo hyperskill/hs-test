@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.stage;
+package org.hyperskill.hstest.v2.stage;
 
 public abstract class MainMethodTest<ClueType> extends BaseStageTest<ClueType> {
 
