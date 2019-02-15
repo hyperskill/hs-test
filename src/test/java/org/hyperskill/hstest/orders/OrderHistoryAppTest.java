@@ -1,12 +1,12 @@
 package org.hyperskill.hstest.orders;
 
-import org.hyperskill.hstest.stage.MainMethodTest;
-import org.hyperskill.hstest.testcase.CheckResult;
-import org.hyperskill.hstest.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 
 import java.util.List;
 
-import static org.hyperskill.hstest.testcase.TestCase.newTestCaseWithPredefinedIO;
+import static org.hyperskill.hstest.dev.testcase.TestCase.newTestCaseWithPredefinedIO;
 
 public class OrderHistoryAppTest extends MainMethodTest {
 

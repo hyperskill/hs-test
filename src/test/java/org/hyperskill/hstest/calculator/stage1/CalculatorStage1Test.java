@@ -1,13 +1,13 @@
 package org.hyperskill.hstest.calculator.stage1;
 
-import org.hyperskill.hstest.stage.MainMethodTest;
-import org.hyperskill.hstest.testcase.CheckResult;
-import org.hyperskill.hstest.testcase.TestCase;
+import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.TestCase;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.hyperskill.hstest.testcase.TestCase.*;
+import static org.hyperskill.hstest.dev.testcase.TestCase.*;
 
 public class CalculatorStage1Test extends MainMethodTest {
 
