@@ -25,6 +25,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     private final Object testedObject;
     private final Method testedMethod;
     protected boolean isTestingMain = false; // TODO potentially it is possible to make it final
+    protected boolean isWithoutTests = false;
 
     private final boolean overrodeTestCases;
     private final boolean overrodePredefinedIO;
@@ -78,7 +79,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         overrodeCheck = !myName.equals(checkOwner);
         overrodeSolve = !myName.equals(solveOwner);
 
-        if (!overrodeTestCases && !overrodePredefinedIO) {
+        if (!overrodeTestCases && !overrodePredefinedIO && !isWithoutTests) {
             throw new Exception("No tests provided: override " +
                 "generateTestCases and/or generatePredefinedInputOutput");
         }
