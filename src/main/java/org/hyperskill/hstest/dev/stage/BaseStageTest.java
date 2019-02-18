@@ -78,11 +78,6 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         overrodeCheck = !myName.equals(checkOwner);
         overrodeSolve = !myName.equals(solveOwner);
 
-        if (!overrodeTestCases && !overrodePredefinedIO) {
-            throw new Exception("No tests provided: override " +
-                "generateTestCases and/or generatePredefinedInputOutput");
-        }
-
         if (overrodeTestCases) {
             testCases.addAll(generateTestCases());
             if (testCases.size() == 0) {
