@@ -42,7 +42,7 @@ dependencies {
 
 A better choice would be don't connect to the latest commit on master, but use a special commit in which everything is guaranteed to work (commit hash will be updated here on every stable release):
 
-- `testImplementation 'com.github.hyperskill:hs-test:725d268a325427be3a0055a43c6b2942ed8f7379'`
+- `testImplementation 'com.github.hyperskill:hs-test:3dfacdef980f2123f4f5945728e2e8ce73f7ae1c'`
 
 3) optionally, you may also configure synchronization to automatically get the latest version of **hs-test** from GitHub:
 
