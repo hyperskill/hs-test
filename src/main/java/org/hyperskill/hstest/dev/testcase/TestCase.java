@@ -11,6 +11,9 @@ public class TestCase<AttachType> {
     // files needed to be set up before test
     private Map<String, String> files = new HashMap<>();
 
+    // runnables that should be run before test
+    private List<Runnable> processes = new ArrayList<>();
+
     public TestCase() {
         // use methods to configure TestCase
     }
@@ -32,6 +35,11 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> addFile(String filename, String content) {
         files.put(filename, content);
+        return this;
+    }
+
+    public TestCase<AttachType> runWith(Runnable process) {
+        processes.add(process);
         return this;
     }
 
