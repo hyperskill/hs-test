@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.orders;
+package org.hyperskill.hstest.examples.orders;
 
 public class Order {
 

@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.orders;
+package org.hyperskill.hstest.examples.orders;
 
 import org.hyperskill.hstest.v2.stage.MainMethodTest;
 import org.hyperskill.hstest.v2.testcase.CheckResult;

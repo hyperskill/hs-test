@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.orders;
+package org.hyperskill.hstest.examples.orders;
 
 import java.util.ArrayList;
 import java.util.List;
