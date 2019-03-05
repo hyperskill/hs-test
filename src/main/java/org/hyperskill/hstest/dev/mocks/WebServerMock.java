@@ -1,8 +1,19 @@
 package org.hyperskill.hstest.dev.mocks;
 
-public class WebServerMock {
-    String s = "123";
-    public WebServerMock() {
-        s += "234";
+import java.util.HashMap;
+import java.util.Map;
+
+public class WebServerMock implements Runnable {
+
+    private Map<String, String> pages = new HashMap<>();
+
+    @Override
+    public void run() {
+
+    }
+
+    public WebServerMock setPage(String url, String content) {
+        pages.put(url, content);
+        return this;
     }
 }
