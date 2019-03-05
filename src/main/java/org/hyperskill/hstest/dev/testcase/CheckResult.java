@@ -5,8 +5,8 @@ public class CheckResult {
     public static final CheckResult FALSE = new CheckResult(false);
     public static final CheckResult TRUE = new CheckResult(true);
 
-    private boolean isCorrect;
-    private String feedback;
+    private final boolean isCorrect;
+    private final String feedback;
 
     public CheckResult(boolean isCorrect) {
         this(isCorrect, "");
@@ -21,15 +21,7 @@ public class CheckResult {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
-
     public String getFeedback() {
         return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
     }
 }
