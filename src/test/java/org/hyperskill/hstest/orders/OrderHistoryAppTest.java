@@ -1,12 +1,10 @@
 package org.hyperskill.hstest.orders;
 
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
-import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.v2.stage.MainMethodTest;
+import org.hyperskill.hstest.v2.testcase.CheckResult;
+import org.hyperskill.hstest.v2.testcase.PredefinedIOTestCase;
 
 import java.util.List;
-
-import static org.hyperskill.hstest.dev.testcase.TestCase.newTestCaseWithPredefinedIO;
 
 public class OrderHistoryAppTest extends MainMethodTest {
 
@@ -20,11 +18,11 @@ public class OrderHistoryAppTest extends MainMethodTest {
     @Override
     public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
         return List.of(
-                newTestCaseWithPredefinedIO(
+                new PredefinedIOTestCase(
                         "apples 100\noranges 200\n/orders\n/exit",
                         "Order: apples, cost: 100\nOrder: oranges, cost: 200\n"
                 ),
-                newTestCaseWithPredefinedIO(
+                new PredefinedIOTestCase(
                         "apples\nexit",
                         "Invalid order"
                 )
