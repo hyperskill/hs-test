@@ -22,8 +22,11 @@ public class StaticFieldsManager {
         Field[] allFields = clazz.getDeclaredFields();
         try {
             for (Field field : allFields) {
-                if (Modifier.isStatic(field.getModifiers())) {
-                    if (Modifier.isPrivate(field.getModifiers())) {
+                boolean isStatic = Modifier.isStatic(field.getModifiers());
+                boolean isFinal = Modifier.isFinal(field.getModifiers());
+                boolean isPublic = Modifier.isPublic(field.getModifiers());
+                if (isStatic && !isFinal) {
+                    if (!isPublic) {
                         field.setAccessible(true);
                     }
                     Object value = ObjectsCloner.cloneObject(field.get(null));
