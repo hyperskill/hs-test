@@ -6,6 +6,11 @@ import java.util.Map;
 public class WebServerMock implements Runnable {
 
     private Map<String, String> pages = new HashMap<>();
+    private int port;
+
+    public WebServerMock(int port) {
+        this.port = port;
+    }
 
     @Override
     public void run() {
