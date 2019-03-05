@@ -20,7 +20,7 @@ import static org.hyperskill.hstest.dev.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
-public abstract class BaseStageTest<ClueType> implements StageTest {
+public abstract class BaseStageTest<AttachType> implements StageTest {
 
     private final Object testedObject;
     private final Method testedMethod;
@@ -31,7 +31,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
     private final boolean overrodeCheck;
     private final boolean overrodeSolve;
 
-    private final List<TestCase<ClueType>> testCases = new ArrayList<>();
+    private final List<TestCase<AttachType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
     public BaseStageTest(Method testedMethod) throws Exception {
@@ -124,13 +124,13 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
                     String output = run(test);
-                    CheckResult result = checkSolved(output, test.getClue());
+                    CheckResult result = checkSolved(output, test.getAttach());
                     String errorMessage = "Wrong answer in test #" + currTest;
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
             if (overrodeTestCases) {
-                for (TestCase<ClueType> test : testCases) {
+                for (TestCase<AttachType> test : testCases) {
                     currTest++;
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
@@ -175,18 +175,18 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         if (test.getArgs().size() == 0 && isTestingMain) {
             test.addArgument(new String[]{});
         }
-        createFiles(test.files);
+        createFiles(test.getFiles());
         testedMethod.invoke(testedObject, test.getArgs().toArray());
-        deleteFiles(test.files);
+        deleteFiles(test.getFiles());
         return systemOut.getLogWithNormalizedLineSeparator();
     }
 
-    private CheckResult checkSolution(TestCase<ClueType> test, String output) {
+    private CheckResult checkSolution(TestCase<AttachType> test, String output) {
         CheckResult byChecking = new CheckResult(true);
         CheckResult bySolving = new CheckResult(true);
 
         if (overrodeCheck) {
-            byChecking = check(output, test.getClue());
+            byChecking = check(output, test.getAttach());
         }
         if (overrodeSolve) {
             String solution = solve(test.getInput());
@@ -199,7 +199,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         return new CheckResult(isCorrect, resultFeedback);
     }
 
-    public List<TestCase<ClueType>> generateTestCases() {
+    public List<TestCase<AttachType>> generateTestCases() {
         return List.of();
     }
 
@@ -207,7 +207,7 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
         return List.of();
     }
 
-    public CheckResult check(String reply, ClueType clue) {
+    public CheckResult check(String reply, AttachType clue) {
         return CheckResult.FALSE;
     }
 

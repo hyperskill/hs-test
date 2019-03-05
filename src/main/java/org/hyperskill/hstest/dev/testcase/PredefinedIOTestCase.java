@@ -9,7 +9,7 @@ public class PredefinedIOTestCase extends TestCase<String> {
     public PredefinedIOTestCase(String input, String output) {
         super();
         setInput(input);
-        setClue(output);
+        setAttach(output);
     }
 
 }

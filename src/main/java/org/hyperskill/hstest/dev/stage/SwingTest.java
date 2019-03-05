@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class SwingTest<ClueType> extends BaseStageTest<ClueType> {
+public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
 
     protected JFrame frame;
     protected FrameFixture window;
