@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
-import org.hyperskill.hstest.dev.statics.StaticFieldsCleaner;
+import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -120,8 +120,8 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-            String topPackage = StaticFieldsCleaner.getTopPackage(testedMethod.getDeclaringClass());
-            StaticFieldsCleaner.saveStaticFields(topPackage);
+            String topPackage = StaticFieldsManager.getTopPackage(testedMethod.getDeclaringClass());
+            StaticFieldsManager.saveStaticFields(topPackage);
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
@@ -180,7 +180,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         }
         createFiles(test.getFiles());
         testedMethod.invoke(testedObject, test.getArgs().toArray());
-        StaticFieldsCleaner.resetStaticFields();
+        StaticFieldsManager.resetStaticFields();
         deleteFiles(test.getFiles());
         return systemOut.getLogWithNormalizedLineSeparator();
     }

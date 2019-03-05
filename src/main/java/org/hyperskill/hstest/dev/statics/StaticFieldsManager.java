@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StaticFieldsCleaner {
+public class StaticFieldsManager {
 
     private static Map<String, Class> nameToClass = new LinkedHashMap<>();
     private static Map<String, Map<Field, Object>> savedFields = new LinkedHashMap<>();
