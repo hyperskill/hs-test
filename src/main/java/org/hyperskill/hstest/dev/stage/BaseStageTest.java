@@ -120,7 +120,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-            String topPackage = StaticFieldsCleaner.getTopPackage(testedObject.getClass());
+            String topPackage = StaticFieldsCleaner.getTopPackage(testedMethod.getDeclaringClass());
             StaticFieldsCleaner.saveStaticFields(topPackage);
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
