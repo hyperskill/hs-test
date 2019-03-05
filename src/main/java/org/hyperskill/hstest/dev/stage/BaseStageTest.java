@@ -135,7 +135,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
                     String errorMessage = "Wrong answer in test #" + currTest
-                        + "\n" + result.getFeedback();
+                        + "\n\n" + result.getFeedback().trim();
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
