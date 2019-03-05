@@ -7,12 +7,9 @@ public class PredefinedIOTestCase extends TestCase<String> {
     }
 
     public PredefinedIOTestCase(String input, String output) {
-        super(output, input);
-    }
-
-    public PredefinedIOTestCase setConsoleOutput(String output) {
+        super();
+        setInput(input);
         setClue(output);
-        return this;
     }
 
 }

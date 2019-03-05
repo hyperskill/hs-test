@@ -4,34 +4,15 @@ import java.util.*;
 
 public class TestCase<ClueType> {
 
-    private String input;
-    private List<Object> args;
-    private ClueType clue;
+    private String input = "";
+    private List<Object> args = new ArrayList<>();
+    private ClueType clue = null;
 
     // files needed to be set up before test
-    public Map<String, String> files = new HashMap<>();
+    private Map<String, String> files = new HashMap<>();
 
     public TestCase() {
-    }
-
-    public TestCase(ClueType clue, String consoleInput, Object... methodArguments) {
-        this.input = consoleInput;
-        this.args = new ArrayList<>();
-        this.clue = clue;
-        Collections.addAll(this.args, methodArguments);
-    }
-
-    /**
-     * Static factory method that generates tests with a given input
-     */
-    public static TestCase newTestCaseWithInput(String input) {
-        TestCase testCase = new TestCase();
-        testCase.input = input;
-        return testCase;
-    }
-
-    public static PredefinedIOTestCase newTestCaseWithPredefinedIO(String input, String output) {
-        return new PredefinedIOTestCase(input, output);
+        // use methods to configure TestCase
     }
 
     public TestCase<ClueType> setInput(String input) {
