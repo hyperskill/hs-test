@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public final class Utils {
@@ -74,5 +77,26 @@ public final class Utils {
             Thread.sleep(ms);
         }
         catch (InterruptedException ignored) {}
+    }
+
+    public static ExecutorService startThreads(List<Runnable> processes) {
+        int poolSize = processes.size();
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+        for (Runnable process : processes) {
+            executor.submit(process);
+        }
+        return executor;
+    }
+
+    public static void stopThreads(ExecutorService executor) {
+        try {
+            executor.shutdown();
+            boolean terminated = executor.awaitTermination(60, TimeUnit.MILLISECONDS);
+            if (!terminated) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            // ignored
+        }
     }
 }

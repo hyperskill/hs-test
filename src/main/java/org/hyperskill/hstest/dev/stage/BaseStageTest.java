@@ -16,6 +16,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 
 import static org.hyperskill.hstest.dev.common.Utils.*;
 import static org.junit.Assert.*;
@@ -179,8 +180,10 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             test.addArgument(new String[]{});
         }
         createFiles(test.getFiles());
+        ExecutorService pool = startThreads(test.getProcesses());
         testedMethod.invoke(testedObject, test.getArgs().toArray());
         StaticFieldsManager.resetStaticFields();
+        stopThreads(pool);
         deleteFiles(test.getFiles());
         return systemOut.getLogWithNormalizedLineSeparator();
     }

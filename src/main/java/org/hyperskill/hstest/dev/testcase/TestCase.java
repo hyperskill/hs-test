@@ -58,4 +58,8 @@ public class TestCase<AttachType> {
     public Map<String, String> getFiles() {
         return files;
     }
+
+    public List<Runnable> getProcesses() {
+        return processes;
+    }
 }
