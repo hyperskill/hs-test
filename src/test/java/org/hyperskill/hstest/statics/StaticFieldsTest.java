@@ -88,7 +88,7 @@ public class StaticFieldsTest {
             assertEquals(StaticTestClass.ref1.size(), 0);
             assertEquals(StaticTestClass.ref2.size(), 0);
 
-            /* Part below fails
+            /* TODO Part below fails, should work the same way as before
 
             StaticTestClass.ref1.add("1");
             assertEquals(StaticTestClass.ref1.size(), 1);
