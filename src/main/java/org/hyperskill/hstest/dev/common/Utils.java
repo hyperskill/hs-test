@@ -81,6 +81,9 @@ public final class Utils {
 
     public static ExecutorService startThreads(List<Runnable> processes) {
         int poolSize = processes.size();
+        if (poolSize == 0) {
+            return null;
+        }
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
         for (Runnable process : processes) {
             executor.submit(process);
@@ -89,6 +92,9 @@ public final class Utils {
     }
 
     public static void stopThreads(ExecutorService executor) {
+        if (executor == null) {
+            return;
+        }
         try {
             executor.shutdown();
             boolean terminated = executor.awaitTermination(60, TimeUnit.MILLISECONDS);
