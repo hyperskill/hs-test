@@ -86,7 +86,7 @@ public final class Utils {
             return null;
         }
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
-        for (Runnable process : processes) {
+        for (Process process : processes) {
             executor.submit(process);
         }
         return executor;
