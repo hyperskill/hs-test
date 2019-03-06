@@ -66,4 +66,42 @@ public class StaticFieldsTest {
             fail();
         }
     }
+
+    @Test
+    public void TestReferences() {
+        try {
+            saveStaticFields(StaticTestClass.class.getPackageName());
+
+            assertEquals(StaticTestClass.ref1.size(), 0);
+            assertEquals(StaticTestClass.ref2.size(), 0);
+
+            StaticTestClass.ref1.add("1");
+            assertEquals(StaticTestClass.ref1.size(), 1);
+            assertEquals(StaticTestClass.ref2.size(), 1);
+
+            StaticTestClass.ref2.add("2");
+            assertEquals(StaticTestClass.ref1.size(), 2);
+            assertEquals(StaticTestClass.ref2.size(), 2);
+
+            resetStaticFields();
+
+            assertEquals(StaticTestClass.ref1.size(), 0);
+            assertEquals(StaticTestClass.ref2.size(), 0);
+
+            /* Part below fails
+
+            StaticTestClass.ref1.add("1");
+            assertEquals(StaticTestClass.ref1.size(), 1);
+            assertEquals(StaticTestClass.ref2.size(), 1);
+
+            StaticTestClass.ref2.add("2");
+            assertEquals(StaticTestClass.ref1.size(), 2);
+            assertEquals(StaticTestClass.ref2.size(), 2);
+
+            */
+
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 }

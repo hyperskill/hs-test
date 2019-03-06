@@ -25,6 +25,9 @@ public class StaticTestClass {
     private   static       int int7 = 0;
               static       int int8 = 0;
 
+    public static List<String> ref1 = new ArrayList<>();
+    public static List<String> ref2 = ref1;
+
     public static List<String> getList(int num) {
         switch (num) {
             case 1: return list1;
