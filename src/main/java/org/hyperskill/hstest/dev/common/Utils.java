@@ -97,7 +97,7 @@ public final class Utils {
         }
         try {
             executor.shutdown();
-            boolean terminated = executor.awaitTermination(60, TimeUnit.MILLISECONDS);
+            boolean terminated = executor.awaitTermination(100, TimeUnit.MILLISECONDS);
             if (!terminated) {
                 executor.shutdownNow();
             }
