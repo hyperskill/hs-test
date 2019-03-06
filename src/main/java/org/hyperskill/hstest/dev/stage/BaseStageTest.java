@@ -183,7 +183,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         ExecutorService pool = startThreads(test.getProcesses());
         testedMethod.invoke(testedObject, test.getArgs().toArray());
         StaticFieldsManager.resetStaticFields();
-        stopThreads(pool);
+        stopThreads(test.getProcesses(), pool);
         deleteFiles(test.getFiles());
         return systemOut.getLogWithNormalizedLineSeparator();
     }

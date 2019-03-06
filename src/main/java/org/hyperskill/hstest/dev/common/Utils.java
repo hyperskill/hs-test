@@ -1,9 +1,10 @@
 package org.hyperskill.hstest.dev.common;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import org.hyperskill.hstest.dev.testcase.Process;
+
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -72,14 +73,14 @@ public final class Utils {
         return "";
     }
 
-    public void sleep(int ms) {
+    public static void sleep(int ms) {
         try {
             Thread.sleep(ms);
         }
         catch (InterruptedException ignored) {}
     }
 
-    public static ExecutorService startThreads(List<Runnable> processes) {
+    public static ExecutorService startThreads(List<Process> processes) {
         int poolSize = processes.size();
         if (poolSize == 0) {
             return null;
@@ -91,18 +92,51 @@ public final class Utils {
         return executor;
     }
 
-    public static void stopThreads(ExecutorService executor) {
+    public static void stopThreads(List<Process> processes, ExecutorService executor) {
         if (executor == null) {
             return;
         }
         try {
+            for (Process process : processes) {
+                try {
+                    process.close();
+                } catch (IOException ignored) {}
+            }
             executor.shutdown();
             boolean terminated = executor.awaitTermination(100, TimeUnit.MILLISECONDS);
             if (!terminated) {
                 executor.shutdownNow();
+                terminated = executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+                if (!terminated) {
+                    System.err.println("NOT TERMINATED");
+                }
             }
         } catch (InterruptedException ex) {
             // ignored
         }
+    }
+
+    public static String getUrlPage(String url) {
+        try {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "http://" + url;
+            }
+            InputStream inputStream = new URL(url).openStream();
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder stringBuilder = new StringBuilder();
+            String nextLine;
+            String newLine = System.getProperty("line.separator");
+            while ((nextLine = reader.readLine()) != null) {
+                stringBuilder.append(nextLine);
+                stringBuilder.append(newLine);
+            }
+            return stringBuilder.toString()
+                .replaceAll("\r\n", "\n")
+                .replaceAll("\r", "\n").strip();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
     }
 }

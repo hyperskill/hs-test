@@ -12,7 +12,7 @@ public class TestCase<AttachType> {
     private Map<String, String> files = new HashMap<>();
 
     // runnables that should be run before test
-    private List<Runnable> processes = new ArrayList<>();
+    private List<Process> processes = new ArrayList<>();
 
     public TestCase() {
         // use methods to configure TestCase
@@ -38,7 +38,7 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> runWith(Runnable process) {
+    public TestCase<AttachType> runWith(Process process) {
         processes.add(process);
         return this;
     }
@@ -59,7 +59,7 @@ public class TestCase<AttachType> {
         return files;
     }
 
-    public List<Runnable> getProcesses() {
+    public List<Process> getProcesses() {
         return processes;
     }
 }
