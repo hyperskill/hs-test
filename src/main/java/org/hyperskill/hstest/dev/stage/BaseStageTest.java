@@ -24,6 +24,7 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emp
 
 public abstract class BaseStageTest<AttachType> implements StageTest {
 
+    private final Class userClass;
     private final Object testedObject;
     private final Method testedMethod;
     protected boolean isTestingMain = false; // TODO potentially it is possible to make it final
@@ -49,6 +50,12 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         if (!isMethodStatic && testedObject == null) {
             throw new IllegalArgumentException("Provided method is not static " +
                 "and object is not provided");
+        }
+
+        if (testedObject != null) {
+            userClass = testedObject.getClass();
+        } else {
+            userClass = testedMethod.getDeclaringClass();
         }
 
         // TODO below is a custom polymorphic behaviour implemented that may be skipped in future
@@ -121,9 +128,8 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-            //String topPackage = StaticFieldsManager.getTopPackage(testedMethod.getDeclaringClass());
-            //StaticFieldsManager.saveStaticFields(topPackage);
-            StaticFieldsManager.saveStaticFields(testedMethod.getDeclaringClass().getPackageName());
+            String topPackage = StaticFieldsManager.getTopPackage(userClass);
+            StaticFieldsManager.saveStaticFields(topPackage);
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
