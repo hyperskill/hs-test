@@ -90,6 +90,8 @@ public class WebServerMock implements Process {
 
     @Override
     public void close() throws IOException {
-        serverSocket.close();
+        if (serverSocket != null) {
+            serverSocket.close();
+        }
     }
 }
