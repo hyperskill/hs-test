@@ -121,8 +121,9 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     public void start() {
         int currTest = 0;
         try {
-            String topPackage = StaticFieldsManager.getTopPackage(testedMethod.getDeclaringClass());
-            StaticFieldsManager.saveStaticFields(topPackage);
+            //String topPackage = StaticFieldsManager.getTopPackage(testedMethod.getDeclaringClass());
+            //StaticFieldsManager.saveStaticFields(topPackage);
+            StaticFieldsManager.saveStaticFields(testedMethod.getDeclaringClass().getPackageName());
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
