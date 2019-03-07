@@ -11,6 +11,7 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -154,8 +155,8 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             String errorText;
             String stackTraceInfo;
             if (ex.getCause() != null &&
-                ex.toString().equals("java.lang.reflect.InvocationTargetException")) {
-                // If user failed then ex == reflect.InvocationTargetException
+                ex instanceof InvocationTargetException) {
+                // If user failed then ex == InvocationTargetException
                 // and ex.getCause() == Actual user exception
                 errorText = "Exception in test #" + currTest;
                 stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
