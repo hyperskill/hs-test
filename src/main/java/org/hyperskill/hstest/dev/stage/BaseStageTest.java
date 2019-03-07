@@ -186,7 +186,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         StaticFieldsManager.resetStaticFields();
         stopThreads(test.getProcesses(), pool);
         deleteFiles(test.getFiles());
-        return systemOut.getLogWithNormalizedLineSeparator();
+        return normalizeLineEndings(systemOut.getLog());
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {

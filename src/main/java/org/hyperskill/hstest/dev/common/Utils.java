@@ -139,4 +139,10 @@ public final class Utils {
         }
         return "";
     }
+
+    public static String normalizeLineEndings(String str) {
+        return str
+            .replaceAll("\r\n", "\n")
+            .replaceAll("\r", "\n");
+    }
 }

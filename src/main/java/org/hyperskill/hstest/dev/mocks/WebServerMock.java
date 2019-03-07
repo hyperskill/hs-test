@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.mocks;
 
+import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.testcase.Process;
 
 import java.io.*;
@@ -53,11 +54,7 @@ public class WebServerMock implements Process {
             buffer.appendCodePoint(input.read());
         }
 
-        String header = buffer.toString();
-        header = header
-            .replaceAll("\r\n", "\n")
-            .replaceAll("\r", "\n");
-
+        String header = Utils.normalizeLineEndings(buffer.toString());;
         String query = header.split("\n")[0];
         return query.split(" ")[1];
     }
