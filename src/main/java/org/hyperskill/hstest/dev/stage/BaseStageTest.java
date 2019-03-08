@@ -181,7 +181,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         }
     }
 
-    private String run(TestCase test) throws Exception {
+    private String run(TestCase<?> test) throws Exception {
         systemIn.provideLines(test.getInput());
         systemOut.clearLog();
         if (test.getArgs().size() == 0 && isTestingMain) {
