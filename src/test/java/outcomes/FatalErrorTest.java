@@ -1,4 +1,4 @@
-package exceptions;
+package outcomes;
 
 import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
@@ -10,9 +10,9 @@ import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
-public class WithFatalErrorTest extends MainMethodTest {
+public class FatalErrorTest extends MainMethodTest {
 
-    public WithFatalErrorTest() throws Exception {
+    public FatalErrorTest() throws Exception {
         super(WithoutException.class);
     }
 

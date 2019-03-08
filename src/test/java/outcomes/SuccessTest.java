@@ -1,4 +1,4 @@
-package exceptions;
+package outcomes;
 
 import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
@@ -7,9 +7,9 @@ import org.hyperskill.hstest.dev.testcase.TestCase;
 
 import java.util.List;
 
-public class WithoutExceptionTest extends MainMethodTest {
+public class SuccessTest extends MainMethodTest {
 
-    public WithoutExceptionTest() throws Exception {
+    public SuccessTest() throws Exception {
         super(WithoutException.class);
     }
 

@@ -1,4 +1,4 @@
-package exceptions;
+package outcomes;
 
 import mock.WithException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
@@ -10,9 +10,9 @@ import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
-public class WithExceptionTest extends MainMethodTest {
+public class ExceptionTest extends MainMethodTest {
 
-    public WithExceptionTest() throws Exception {
+    public ExceptionTest() throws Exception {
         super(WithException.class);
     }
 
