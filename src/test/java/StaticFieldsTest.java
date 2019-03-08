@@ -1,7 +1,4 @@
-package org.hyperskill.hstest.statics;
-
-
-import org.hyperskill.hstest.statics.StaticPackage.StaticTestClass;
+import mock.StaticTestClass;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

@@ -1,5 +1,3 @@
-package org.hyperskill.hstest;
-
 import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.mocks.WebServerMock;
 import org.hyperskill.hstest.dev.testcase.Process;

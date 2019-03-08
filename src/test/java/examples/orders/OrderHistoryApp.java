@@ -1,17 +1,17 @@
-package org.hyperskill.hstest.examples.orders;
+package examples.orders;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * An example: this application stores a history of orders and print to a user.
+ * An example: this application stores a history of qw.orders and print to a user.
  */
 public class OrderHistoryApp {
     private static final String HELLO_STRING = "Welcome in the personal order list!";
 
     private static final String EXIT_COMMAND = "/exit";
-    private static final String ORDERS_COMMAND = "/orders";
+    private static final String ORDERS_COMMAND = "/qw/orders";
 
     private static final List<Order> history = new ArrayList<>();
 
@@ -40,8 +40,8 @@ public class OrderHistoryApp {
 
     private static void printOrderHistory() {
         history.forEach(order ->
-                System.out.printf("order: %s, cost: %d\n",
-                        order.getDescription(),
-                        order.getCost()));
+            System.out.printf("order: %s, cost: %d\n",
+                order.getDescription(),
+                order.getCost()));
     }
 }

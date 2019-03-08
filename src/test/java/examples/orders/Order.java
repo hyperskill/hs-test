@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.examples.orders;
+package examples.orders;
 
 public class Order {
 
@@ -18,3 +18,4 @@ public class Order {
         return cost;
     }
 }
+

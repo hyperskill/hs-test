@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.statics.StaticPackage;
+package mock;
 
 import java.util.ArrayList;
 import java.util.List;
