@@ -81,4 +81,4 @@ If you would not use Gradle, you may just download the sources in place them in 
 
 ## Examples
 
-Examples are available within the test directory: https://github.com/hyperskill/hs-test/tree/master/src/test/java/org/hyperskill/hstest.
+Examples are available within the test directory: https://github.com/hyperskill/hs-test/tree/master/src/test/java/examples.
