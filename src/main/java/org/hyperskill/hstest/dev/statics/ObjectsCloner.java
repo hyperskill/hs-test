@@ -16,6 +16,9 @@ public class ObjectsCloner {
     }
 
     public static Object cloneObject(Object obj) {
+        if (obj == null) {
+            return null;
+        }
         String serialized = serializeObject(obj);
         Object cloned = deserializeObject(serialized, obj.getClass());
         return cloned;

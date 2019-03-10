@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.resetStaticFields;
 import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.saveStaticFields;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class StaticFieldsTest {
 
@@ -68,6 +67,34 @@ public class StaticFieldsTest {
                 assertEquals(1, StaticTestClass.getInt(i));
                 resetStaticFields();
                 assertEquals(0, StaticTestClass.getInt(i));
+            }
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void TestSavingNulls() {
+        try {
+            for (int i = 1; i <= 8; i++) {
+                assertNull(StaticTestClass.getNull(i));
+                resetStaticFields();
+                assertNull(StaticTestClass.getNull(i));
+            }
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void TestReplacingNulls() {
+        try {
+            for (int i = 5; i <= 8; i++) {
+                assertNull(StaticTestClass.getNull(i));
+                StaticTestClass.setNull(i, new ArrayList<>());
+                assertNotNull(StaticTestClass.getNull(i));
+                resetStaticFields();
+                assertNull(StaticTestClass.getNull(i));
             }
         } catch (Exception ex) {
             fail();
