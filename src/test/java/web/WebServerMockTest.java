@@ -1,3 +1,5 @@
+package web;
+
 import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.mocks.web.WebPage;
 import org.hyperskill.hstest.dev.mocks.web.WebServerMock;
