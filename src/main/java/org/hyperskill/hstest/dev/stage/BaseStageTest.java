@@ -135,8 +135,17 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
+
+                    createFiles(test.getFiles());
+                    ExecutorService pool = startThreads(test.getProcesses());
+
                     String output = run(test);
                     CheckResult result = checkSolved(output, test.getAttach());
+
+                    stopThreads(test.getProcesses(), pool);
+                    deleteFiles(test.getFiles());
+                    StaticFieldsManager.resetStaticFields();
+
                     String errorMessage = "Wrong answer in test #" + currTest;
                     assertTrue(errorMessage, result.isCorrect());
                 }
@@ -144,8 +153,17 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             if (overrodeTestCases) {
                 for (TestCase<AttachType> test : testCases) {
                     currTest++;
+
+                    createFiles(test.getFiles());
+                    ExecutorService pool = startThreads(test.getProcesses());
+
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
+
+                    stopThreads(test.getProcesses(), pool);
+                    deleteFiles(test.getFiles());
+                    StaticFieldsManager.resetStaticFields();
+
                     String errorMessage = "Wrong answer in test #" + currTest
                         + "\n\n" + result.getFeedback().trim();
                     assertTrue(errorMessage, result.isCorrect());
@@ -187,12 +205,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         if (test.getArgs().size() == 0 && isTestingMain) {
             test.addArgument(new String[]{});
         }
-        createFiles(test.getFiles());
-        ExecutorService pool = startThreads(test.getProcesses());
         testedMethod.invoke(testedObject, test.getArgs().toArray());
-        StaticFieldsManager.resetStaticFields();
-        stopThreads(test.getProcesses(), pool);
-        deleteFiles(test.getFiles());
         return normalizeLineEndings(systemOut.getLog());
     }
 

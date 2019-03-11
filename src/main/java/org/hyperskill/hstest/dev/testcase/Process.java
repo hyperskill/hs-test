@@ -1,7 +1,8 @@
 package org.hyperskill.hstest.dev.testcase;
 
-import java.io.Closeable;
-
-public interface Process extends Runnable, Closeable {
-
+public interface Process extends Runnable {
+    void start();
+    void stop();
+    boolean isStarted();
+    boolean isStopped();
 }

@@ -13,7 +13,8 @@ public class WebServerMock implements Process {
     private Map<String, String> pages = new HashMap<>();
     private int port;
 
-
+    private boolean isStarted = false;
+    private boolean isStopped = false;
 
     public WebServerMock(int port) {
         this.port = port;
@@ -63,19 +64,40 @@ public class WebServerMock implements Process {
     }
 
     @Override
-    public void run() {
+    public void start() {
         try {
             serverSocket = new ServerSocket(port);
-            while (true) {
-                handle(serverSocket.accept());
-            }
-        } catch (Exception ignored) { }
+        }
+        catch (IOException ignored) { }
     }
 
     @Override
-    public void close() throws IOException {
-        if (serverSocket != null) {
-            serverSocket.close();
-        }
+    public void run() {
+        try {
+            while (serverSocket != null && !serverSocket.isClosed()) {
+                isStarted = true;
+                handle(serverSocket.accept());
+            }
+        } catch (Exception ignored) { }
+        isStopped = true;
+    }
+
+    @Override
+    public void stop() {
+        try {
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+        } catch (IOException ignored) { }
+    }
+
+    @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    @Override
+    public boolean isStopped() {
+        return isStopped;
     }
 }

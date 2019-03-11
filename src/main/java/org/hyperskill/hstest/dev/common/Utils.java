@@ -87,7 +87,11 @@ public final class Utils {
         }
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
         for (Process process : processes) {
+            process.start();
             executor.submit(process);
+            while (!process.isStarted()) {
+                sleep(10);
+            }
         }
         return executor;
     }
@@ -98,9 +102,7 @@ public final class Utils {
         }
         try {
             for (Process process : processes) {
-                try {
-                    process.close();
-                } catch (IOException ignored) {}
+                process.stop();
             }
             executor.shutdown();
             boolean terminated = executor.awaitTermination(100, TimeUnit.MILLISECONDS);
