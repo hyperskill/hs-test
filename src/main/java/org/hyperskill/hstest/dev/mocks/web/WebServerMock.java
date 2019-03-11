@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.mocks;
+package org.hyperskill.hstest.dev.mocks.web;
 
 import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.testcase.Process;
@@ -13,33 +13,17 @@ public class WebServerMock implements Process {
     private Map<String, String> pages = new HashMap<>();
     private int port;
 
-    private static final String request =
-        "GET __path__ HTTP/1.1\r\n" +
-        "Host: __host__\r\n\r\n";
 
-    private static final String notFound =
-        "HTTP/1.1 404 Not Found\r\n" +
-        "Content-Length: 0\r\n\r\n";
-
-    private static final String response =
-        "HTTP/1.1 200 OK\r\n" +
-        "Content-Length: __length__\r\n\r\n";
 
     public WebServerMock(int port) {
         this.port = port;
     }
 
-    private String contentWithHeader(String content) {
-        String size = Integer.toString(content.length());
-        String header = response.replaceAll("__length__", size);
-        return header + content;
-    }
-
-    public WebServerMock setPage(String url, String content) {
+    public WebServerMock setPage(String url, WebPage page) {
         if (!url.startsWith("/")) {
             url = "/" + url;
         }
-        pages.put(url, contentWithHeader(content));
+        pages.put(url, page.contentWithHeader());
         return this;
     }
 
@@ -63,7 +47,7 @@ public class WebServerMock implements Process {
         if (!path.startsWith("/")) {
             path = "/" + path;
         }
-        String response = pages.getOrDefault(path, notFound);
+        String response = pages.getOrDefault(path, WebPage.notFound);
         for (char c : response.toCharArray()) {
             output.write(c);
         }
