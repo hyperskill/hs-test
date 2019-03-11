@@ -1,3 +1,5 @@
+package statics;
+
 import mock.StaticTestClass;
 import org.junit.After;
 import org.junit.BeforeClass;
