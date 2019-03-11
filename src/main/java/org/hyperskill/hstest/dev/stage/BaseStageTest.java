@@ -146,7 +146,8 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                     deleteFiles(test.getFiles());
                     StaticFieldsManager.resetStaticFields();
 
-                    String errorMessage = "Wrong answer in test #" + currTest;
+                    String errorMessage = "Wrong answer in test #" + currTest
+                        + "\n\n" + result.getFeedback().trim();
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
