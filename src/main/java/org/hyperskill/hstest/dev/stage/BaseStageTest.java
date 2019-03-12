@@ -135,6 +135,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
+                    System.err.println("Start test " + currTest);
 
                     createFiles(test.getFiles());
                     ExecutorService pool = startThreads(test.getProcesses());
@@ -154,6 +155,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             if (overrodeTestCases) {
                 for (TestCase<AttachType> test : testCases) {
                     currTest++;
+                    System.err.println("Start test " + currTest);
 
                     createFiles(test.getFiles());
                     ExecutorService pool = startThreads(test.getProcesses());
