@@ -154,7 +154,8 @@ public abstract class BaseStageTest<ClueType> implements StageTest {
                 errorText = "Exception in test #" + currTest;
                 stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
 
-                if (ex.getCause() instanceof NoSuchElementException) {
+                if (ex.getCause() instanceof NoSuchElementException
+                    && stackTraceInfo.contains("java.util.Scanner")) {
                     stackTraceInfo = "Maybe you created more than one instance of Scanner? " +
                         "You should use a single Scanner in program.\n\n" + stackTraceInfo;
                 }
