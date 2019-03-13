@@ -189,7 +189,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                         "You should use a single Scanner in program.\n\n" + stackTraceInfo;
                 }
 
-                if (stackTraceInfo.contains("java.lang.System.exit")) {
+                if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
                     errorText = "Error in test #" + currTest + " - Tried to exit";
                 }
             }
