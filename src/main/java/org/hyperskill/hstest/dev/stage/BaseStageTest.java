@@ -17,6 +17,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
 import static org.hyperskill.hstest.dev.common.Utils.*;
@@ -181,6 +182,11 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                 // and ex.getCause() == Actual user exception
                 errorText = "Exception in test #" + currTest;
                 stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
+
+                if (ex.getCause() instanceof NoSuchElementException) {
+                    stackTraceInfo = "Maybe you created more than one instance of Scanner? " +
+                        "You should use a single Scanner in program.\n\n" + stackTraceInfo;
+                }
 
                 if (stackTraceInfo.contains("java.lang.System.exit")) {
                     errorText = "Error in test #" + currTest + " - Tried to exit";
