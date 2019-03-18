@@ -124,6 +124,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     @BeforeClass
     public static void setUp() {
         Locale.setDefault(Locale.US);
+        System.setProperty("line.separator", "\n");
     }
 
     @Test
@@ -131,7 +132,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         int currTest = 0;
         try {
             String topPackage = StaticFieldsManager.getTopPackage(userClass);
-            StaticFieldsManager.saveStaticFields(topPackage);
+            StaticFieldsManager.saveStaticFields(userClass.getPackageName());
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
@@ -160,7 +161,6 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
 
                     createFiles(test.getFiles());
                     ExecutorService pool = startThreads(test.getProcesses());
-
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
 
@@ -210,7 +210,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     }
 
     private String run(TestCase<?> test) throws Exception {
-        systemIn.provideLines(test.getInput());
+        systemIn.provideLines(normalizeLineEndings(test.getInput()).strip());
         systemOut.clearLog();
         if (test.getArgs().size() == 0 && isTestingMain) {
             test.addArgument(new String[]{});
