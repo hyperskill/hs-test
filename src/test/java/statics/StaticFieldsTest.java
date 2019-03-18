@@ -7,6 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.resetStaticFields;
 import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.saveStaticFields;
@@ -132,6 +133,18 @@ public class StaticFieldsTest {
             assertEquals(2, StaticTestClass.ref1.size());
             assertEquals(2, StaticTestClass.ref2.size());
 
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void TestScanner() {
+        try {
+            Scanner before = StaticTestClass.scanner;
+            resetStaticFields();
+            Scanner after = StaticTestClass.scanner;
+            assertSame(before, after);
         } catch (Exception ex) {
             fail();
         }

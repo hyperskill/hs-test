@@ -2,6 +2,7 @@ package mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class StaticTestClass {
 
@@ -34,6 +35,8 @@ public class StaticTestClass {
 
     public static List<String> ref1 = new ArrayList<>();
     public static List<String> ref2 = ref1;
+
+    public static Scanner scanner = new Scanner(System.in);
 
     public static List<String> getList(int num) {
         switch (num) {
