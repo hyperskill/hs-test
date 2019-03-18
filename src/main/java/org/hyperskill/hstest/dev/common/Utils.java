@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 
 public final class Utils {
     private static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
+
+    private static final String TEMP_FILE_PREFIX = "hyperskill-temp-file-";
 
     private Utils() {}
 
@@ -61,6 +64,36 @@ public final class Utils {
                 ex.printStackTrace();
             }
         });
+    }
+
+    private static String normalizeFileExtension(final String extension) {
+        if (extension == null || "".equals(extension)) {
+            return "";
+        }
+
+        if (extension.charAt(0) != '.') {
+            return "." + extension;
+        }
+
+        return extension;
+    }
+
+    public static File getNonexistentFile(String extension) {
+        extension = normalizeFileExtension(extension);
+
+        long i = 0;
+
+        while (true) {
+            final String fileName = TEMP_FILE_PREFIX + i + extension;
+
+            final Path path = Paths.get(CURRENT_DIR + fileName);
+
+            if (!Files.exists(path)) {
+                return path.toFile();
+            } else {
+                ++i;
+            }
+        }
     }
 
     public static String readFile(String name) {
