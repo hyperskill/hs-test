@@ -110,7 +110,13 @@ public final class Utils {
                 executor.shutdownNow();
                 terminated = executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
                 if (!terminated) {
-                    System.err.println("NOT TERMINATED");
+                    System.err.println("SOME PROCESSES ARE NOT TERMINATED");
+                }
+            }
+            for (int i = 1; i <= processes.size(); i++) {
+                Process process = processes.get(i - 1);
+                if (!process.isStopped()) {
+                    System.err.println("PROCESS #" + i + " IS NOT TERMINATED");
                 }
             }
         } catch (InterruptedException ex) {
