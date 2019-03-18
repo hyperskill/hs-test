@@ -2,6 +2,8 @@ package org.hyperskill.hstest.dev.statics;
 
 import com.google.gson.Gson;
 
+import java.util.Scanner;
+
 public class ObjectsCloner {
     private static String serializeObject(Object object) {
         Gson gson = new Gson();
@@ -16,6 +18,9 @@ public class ObjectsCloner {
     }
 
     public static Object cloneObject(Object obj) {
+        if (obj instanceof Scanner) {
+            return obj;
+        }
         if (obj == null) {
             return null;
         }
