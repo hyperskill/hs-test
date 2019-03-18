@@ -32,7 +32,9 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
     @Before
     public void setUpUI() {
         window = new FrameFixture(GuiActionRunner.execute(() -> frame));
+        Rectangle savedFrameBounds = frame.getBounds();
         window.show();
+        frame.setBounds(savedFrameBounds);
         frame.setAlwaysOnTop(true);
     }
 
