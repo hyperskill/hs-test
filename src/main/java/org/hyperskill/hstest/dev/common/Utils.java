@@ -8,9 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +17,8 @@ import java.util.stream.Collectors;
 public final class Utils {
     private static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
     private static final String TEMP_FILE_PREFIX = "hyperskill-temp-file-";
+
+    private static final Set<String> RETURNED_NONEXISTENT_FILES = new HashSet<>();
 
     private Utils() {}
 
@@ -86,7 +86,8 @@ public final class Utils {
             final String fileName = TEMP_FILE_PREFIX + i + extension;
             final Path path = Paths.get(CURRENT_DIR + fileName);
 
-            if (!Files.exists(path)) {
+            if (!RETURNED_NONEXISTENT_FILES.contains(fileName) && !Files.exists(path)) {
+                RETURNED_NONEXISTENT_FILES.add(fileName);
                 return path.toFile();
             } else {
                 ++i;

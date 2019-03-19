@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GetNonexistentFileTest {
     @Test
@@ -23,6 +22,19 @@ public class GetNonexistentFileTest {
         assertTrue("The second file has been returned does exist", !secondFile.exists());
 
         assertTrue("Can't delete the first file", firstFile.delete());
+    }
+
+    @Test
+    public void TestGetNonexistentFileReturnsUniqueFiles() {
+        final String extension = ".txt";
+
+        final File firstFile = Utils.getNonexistentFile(extension);
+        assertTrue("The first file has been returned does exist", !firstFile.exists());
+
+        final File secondFile = Utils.getNonexistentFile(extension);
+        assertTrue("The second file has been returned does exist", !secondFile.exists());
+
+        assertNotEquals("Two paths are identical", firstFile.getAbsolutePath(), secondFile.getAbsolutePath());
     }
 
     @Test
