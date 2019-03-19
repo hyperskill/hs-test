@@ -32,6 +32,9 @@ public class GetNonexistentFileTest {
 
         file = Utils.getNonexistentFile(null);
         assertTrue("The file exists", !file.exists());
+
+        file = Utils.getNonexistentFile();
+        assertTrue("The file exists", !file.exists());
     }
 
     @Test

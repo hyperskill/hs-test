@@ -94,6 +94,10 @@ public final class Utils {
         }
     }
 
+    public static File getNonexistentFile() {
+        return getNonexistentFile(null);
+    }
+
     public static String readFile(String name) {
         try {
             return Files.readString(Paths.get(CURRENT_DIR + name));
