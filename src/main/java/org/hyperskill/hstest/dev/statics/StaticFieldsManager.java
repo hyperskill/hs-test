@@ -4,10 +4,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StaticFieldsManager {
 
@@ -49,7 +46,7 @@ public class StaticFieldsManager {
                 }
             }
         } catch (IllegalAccessException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
             throw ex;
         }
         return savedFields;
