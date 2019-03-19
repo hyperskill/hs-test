@@ -20,6 +20,10 @@ public class WebServerMock implements Process {
         this.port = port;
     }
 
+    public WebServerMock setPage(String url, String content) {
+        return setPage(url, new WebPage().setContent(content));
+    }
+
     public WebServerMock setPage(String url, WebPage page) {
         if (!url.startsWith("/")) {
             url = "/" + url;
