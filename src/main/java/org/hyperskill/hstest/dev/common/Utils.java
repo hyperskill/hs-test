@@ -139,9 +139,7 @@ public final class Utils {
                 stringBuilder.append(nextLine);
                 stringBuilder.append(newLine);
             }
-            return stringBuilder.toString()
-                .replaceAll("\r\n", "\n")
-                .replaceAll("\r", "\n").strip();
+            return normalizeLineEndings(stringBuilder.toString()).strip();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
