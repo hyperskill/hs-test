@@ -22,21 +22,16 @@ public class WebServerMockTest {
     public void setUp() {
         processes = List.of(
             new WebServerMock(12345)
-                .setPage("/", new WebPage()
-                    .setContent("123\n456"))
-
-                .setPage("/page1", new WebPage()
-                    .setContent("342\n678"))
-
-                .setPage("/page2", new WebPage()
-                    .setContent("0987\n5432"))
+                .setPage("/", "123\n456")
+                .setPage("/page1", "342\n678")
+                .setPage("/page2", "0987\n5432")
 
                 .setPage("/type1", new WebPage()
                     .setContent("type1")
                     .setContentType("text/html"))
 
-                .setPage("/type2", new WebPage().
-                    setContent("type2")
+                .setPage("/type2", new WebPage()
+                    .setContent("type2")
                     .setContentType("text/json"))
 
                 .setPage("/page3", new WebPage()
@@ -68,5 +63,11 @@ public class WebServerMockTest {
         assertEquals("123\n456", Utils.getUrlPage("127.0.0.1:12345/"));
         assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3"));
         assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4"));
+    }
+
+    @Test
+    public void testWithGetParams() {
+        assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3?type=123"));
+        assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4?abc=def&1=2"));
     }
 }

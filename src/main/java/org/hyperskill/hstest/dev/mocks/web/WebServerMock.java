@@ -43,9 +43,13 @@ public class WebServerMock implements Process {
             buffer.appendCodePoint(input.read());
         }
 
-        String header = Utils.normalizeLineEndings(buffer.toString());;
+        String header = Utils.normalizeLineEndings(buffer.toString());
         String query = header.split("\n")[0];
-        return query.split(" ")[1];
+        String path = query.split(" ")[1];
+        if (path.contains("?")) {
+            path = path.substring(0, path.indexOf("?"));
+        }
+        return path;
     }
 
     private void sendResponse(String path, DataOutputStream output) throws Exception {
