@@ -84,9 +84,11 @@ public class WebServerMock implements Process {
         try {
             while (serverSocket != null && !serverSocket.isClosed()) {
                 isStarted = true;
+                isStopped = false;
                 handle(serverSocket.accept());
             }
         } catch (Exception ignored) { }
+        isStarted = false;
         isStopped = true;
     }
 
