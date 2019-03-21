@@ -88,7 +88,7 @@ public final class Utils {
 
             if (!RETURNED_NONEXISTENT_FILES.contains(fileName) && Files.notExists(path)) {
                 RETURNED_NONEXISTENT_FILES.add(fileName);
-                return path.toFile().getAbsolutePath();
+                return path.toAbsolutePath().toString();
             } else {
                 ++i;
             }
