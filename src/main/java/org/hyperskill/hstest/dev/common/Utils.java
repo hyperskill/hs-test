@@ -80,7 +80,7 @@ public final class Utils {
     public static File getNonexistentFile(String extension) {
         extension = normalizeFileExtension(extension);
 
-        long i = 0;
+        int i = 0;
 
         while (true) {
             final String fileName = TEMP_FILE_PREFIX + i + extension;
