@@ -86,7 +86,7 @@ public final class Utils {
             final String fileName = TEMP_FILE_PREFIX + i + extension;
             final Path path = Paths.get(CURRENT_DIR + fileName);
 
-            if (!RETURNED_NONEXISTENT_FILES.contains(fileName) && !Files.exists(path)) {
+            if (!RETURNED_NONEXISTENT_FILES.contains(fileName) && Files.notExists(path)) {
                 RETURNED_NONEXISTENT_FILES.add(fileName);
                 return path.toFile().getAbsolutePath();
             } else {

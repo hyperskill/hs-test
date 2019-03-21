@@ -52,10 +52,12 @@ public class GetNonexistentFileTest {
 
         File file = new File(Utils.getNonexistentFilePath(extension));
         String fileName = file.getName();
-        assertEquals("Extension is wrong", extension, fileName.substring(fileName.lastIndexOf('.') + 1));
+        String actualExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        assertEquals("Extension is wrong", extension, actualExtension);
 
         file = new File(Utils.getNonexistentFilePath("." + extension));
         fileName = file.getName();
-        assertEquals("Extension is wrong", extension, fileName.substring(fileName.lastIndexOf('.') + 1));
+        actualExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        assertEquals("Extension is wrong", extension, actualExtension);
     }
 }
