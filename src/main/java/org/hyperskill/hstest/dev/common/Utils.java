@@ -77,7 +77,7 @@ public final class Utils {
         return extension;
     }
 
-    public static File getNonexistentFile(String extension) {
+    public static String getNonexistentFilePath(String extension) {
         extension = normalizeFileExtension(extension);
 
         int i = 0;
@@ -88,15 +88,15 @@ public final class Utils {
 
             if (!RETURNED_NONEXISTENT_FILES.contains(fileName) && !Files.exists(path)) {
                 RETURNED_NONEXISTENT_FILES.add(fileName);
-                return path.toFile();
+                return path.toFile().getAbsolutePath();
             } else {
                 ++i;
             }
         }
     }
 
-    public static File getNonexistentFile() {
-        return getNonexistentFile(null);
+    public static String getNonexistentFilePath() {
+        return getNonexistentFilePath(null);
     }
 
     public static String readFile(String name) {

@@ -13,12 +13,12 @@ public class GetNonexistentFileTest {
     public void TestGetNonexistentFileDoesNotExist() throws IOException {
         final String extension = ".txt";
 
-        final File firstFile = Utils.getNonexistentFile(extension);
+        final File firstFile = new File(Utils.getNonexistentFilePath(extension));
         assertTrue("The first file has been returned does exist", !firstFile.exists());
 
         assertTrue("Can't create the first file in the user dir", firstFile.createNewFile());
 
-        final File secondFile = Utils.getNonexistentFile(extension);
+        final File secondFile = new File(Utils.getNonexistentFilePath(extension));
         assertTrue("The second file has been returned does exist", !secondFile.exists());
 
         assertTrue("Can't delete the first file", firstFile.delete());
@@ -28,24 +28,21 @@ public class GetNonexistentFileTest {
     public void TestGetNonexistentFileReturnsUniqueFiles() {
         final String extension = ".txt";
 
-        final File firstFile = Utils.getNonexistentFile(extension);
-        assertTrue("The first file has been returned does exist", !firstFile.exists());
+        final String firstFilePath = Utils.getNonexistentFilePath(extension);
+        final String secondFilePath = Utils.getNonexistentFilePath(extension);
 
-        final File secondFile = Utils.getNonexistentFile(extension);
-        assertTrue("The second file has been returned does exist", !secondFile.exists());
-
-        assertNotEquals("Two paths are identical", firstFile.getAbsolutePath(), secondFile.getAbsolutePath());
+        assertNotEquals("Two paths are identical", firstFilePath, secondFilePath);
     }
 
     @Test
     public void TestGetNonexistentFileWithEmptyExtensionDoesNotFail() {
-        File file = Utils.getNonexistentFile("");
+        File file = new File(Utils.getNonexistentFilePath(""));
         assertTrue("The file exists", !file.exists());
 
-        file = Utils.getNonexistentFile(null);
+        file = new File(Utils.getNonexistentFilePath(null));
         assertTrue("The file exists", !file.exists());
 
-        file = Utils.getNonexistentFile();
+        file = new File(Utils.getNonexistentFilePath());
         assertTrue("The file exists", !file.exists());
     }
 
@@ -53,11 +50,11 @@ public class GetNonexistentFileTest {
     public void TestGetNonexistentFileExtensionNormalization() {
         final String extension = "dat";
 
-        File file = Utils.getNonexistentFile(extension);
+        File file = new File(Utils.getNonexistentFilePath(extension));
         String fileName = file.getName();
         assertEquals("Extension is wrong", extension, fileName.substring(fileName.lastIndexOf('.') + 1));
 
-        file = Utils.getNonexistentFile("." + extension);
+        file = new File(Utils.getNonexistentFilePath("." + extension));
         fileName = file.getName();
         assertEquals("Extension is wrong", extension, fileName.substring(fileName.lastIndexOf('.') + 1));
     }
