@@ -137,6 +137,7 @@ public abstract class StageTest<ClueType> {
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
                     currTest++;
+                    System.err.println("Start test " + currTest);
                     String output = run(test);
                     boolean result = checkPredefinedIO(output, test.clue);
                     String errorMessage = "Wrong answer in test #" + currTest;
@@ -146,6 +147,7 @@ public abstract class StageTest<ClueType> {
             if (overrodeTestCases) {
                 for (TestCase<ClueType> test : testCases) {
                     currTest++;
+                    System.err.println("Start test " + currTest);
                     String output = run(test);
                     CheckResult result = checkSolution(test, output);
                     String errorMessage = "Wrong answer in test #" + currTest
