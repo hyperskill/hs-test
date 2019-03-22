@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.stage;
+package org.hyperskill.hstest.v3.stage;
 
 public interface StageTest {
 

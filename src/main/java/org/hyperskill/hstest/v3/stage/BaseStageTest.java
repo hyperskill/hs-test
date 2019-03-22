@@ -1,9 +1,9 @@
-package org.hyperskill.hstest.dev.stage;
+package org.hyperskill.hstest.v3.stage;
 
-import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
-import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
-import org.hyperskill.hstest.dev.testcase.TestCase;
+import org.hyperskill.hstest.v3.statics.StaticFieldsManager;
+import org.hyperskill.hstest.v3.testcase.CheckResult;
+import org.hyperskill.hstest.v3.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.v3.testcase.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
-import static org.hyperskill.hstest.dev.common.Utils.*;
+import static org.hyperskill.hstest.v3.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 

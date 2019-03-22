@@ -1,6 +1,6 @@
-package org.hyperskill.hstest.dev.common;
+package org.hyperskill.hstest.v3.common;
 
-import org.hyperskill.hstest.dev.testcase.Process;
+import org.hyperskill.hstest.v3.testcase.Process;
 
 import java.io.*;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.statics;
+package org.hyperskill.hstest.v3.statics;
 
 import java.io.File;
 import java.io.IOException;

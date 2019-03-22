@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.mocks.web;
+package org.hyperskill.hstest.v3.mocks.web;
 
 public class WebPage {
 
