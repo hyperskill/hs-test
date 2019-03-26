@@ -2,6 +2,7 @@ package org.hyperskill.hstest.dev.statics;
 
 import com.google.gson.Gson;
 
+import java.awt.*;
 import java.util.Scanner;
 
 public class ObjectsCloner {
@@ -21,7 +22,8 @@ public class ObjectsCloner {
         // GSON gives StackOverFlow exception serializing Scanner
         // but since user can't use multiple Scanner's in program
         // it's really not necessary to clone Scanner
-        if (obj instanceof Scanner) {
+        // also when testing swing don't need to clone Component objects
+        if (obj instanceof Scanner || obj instanceof Component) {
             return obj;
         }
         if (obj == null) {
