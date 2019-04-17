@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class WrongAnswerTest2 extends MainMethodTest<Boolean> {
@@ -27,7 +28,7 @@ public class WrongAnswerTest2 extends MainMethodTest<Boolean> {
 
     @Override
     public List<TestCase<Boolean>> generateTestCases() {
-        return List.of(
+        return Arrays.asList(
             new TestCase<Boolean>().setAttach(true),
             new TestCase<Boolean>().setAttach(false)
         );

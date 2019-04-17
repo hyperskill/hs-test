@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,7 +35,7 @@ public class NoSuchElementTest1 extends MainMethodTest {
 
     @Override
     public List<TestCase> generateTestCases() {
-        return List.of(
+        return Arrays.asList(
             new TestCase()
         );
     }

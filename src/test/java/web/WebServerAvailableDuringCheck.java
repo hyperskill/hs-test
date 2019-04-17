@@ -7,6 +7,7 @@ import org.hyperskill.hstest.v3.stage.MainMethodTest;
 import org.hyperskill.hstest.v3.testcase.CheckResult;
 import org.hyperskill.hstest.v3.testcase.TestCase;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class WebServerAvailableDuringCheck extends MainMethodTest {
@@ -21,7 +22,7 @@ public class WebServerAvailableDuringCheck extends MainMethodTest {
 
     @Override
     public List<TestCase> generateTestCases() {
-        return List.of(
+        return Arrays.asList(
             new TestCase()
             .runWith(new WebServerMock(45678)
                 .setPage("/123", new WebPage().setContent("234")))

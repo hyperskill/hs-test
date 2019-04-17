@@ -132,7 +132,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         int currTest = 0;
         try {
             String topPackage = StaticFieldsManager.getTopPackage(userClass);
-            StaticFieldsManager.saveStaticFields(userClass.getPackageName());
+            StaticFieldsManager.saveStaticFields(userClass.getPackage().getName());
             // TODO both loops look very similar
             if (overrodePredefinedIO) {
                 for (PredefinedIOTestCase test : predefinedIOTestCases) {
@@ -210,7 +210,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     }
 
     private String run(TestCase<?> test) throws Exception {
-        systemIn.provideLines(normalizeLineEndings(test.getInput()).strip());
+        systemIn.provideLines(normalizeLineEndings(test.getInput()).trim());
         systemOut.clearLog();
         if (test.getArgs().size() == 0 && isTestingMain) {
             test.addArgument(new String[]{});
@@ -238,11 +238,11 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     }
 
     public List<TestCase<AttachType>> generateTestCases() {
-        return List.of();
+        return new ArrayList<>();
     }
 
     public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
-        return List.of();
+        return new ArrayList<>();
     }
 
     public CheckResult check(String reply, AttachType clue) {

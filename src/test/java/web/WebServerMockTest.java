@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -20,7 +21,7 @@ public class WebServerMockTest {
 
     @Before
     public void setUp() {
-        processes = List.of(
+        processes = Arrays.asList(
             new WebServerMock(12345)
                 .setPage("/", "123\n456")
                 .setPage("/page1", "342\n678")

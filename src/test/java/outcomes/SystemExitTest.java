@@ -9,6 +9,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SystemExitTest extends MainMethodTest {
@@ -34,7 +35,7 @@ public class SystemExitTest extends MainMethodTest {
 
     @Override
     public List<TestCase> generateTestCases() {
-        return List.of(
+        return Arrays.asList(
             new TestCase()
         );
     }

@@ -17,7 +17,7 @@ public class StaticFieldsTest {
 
     @BeforeClass
     public static void saveFields() throws Exception {
-        saveStaticFields(StaticTestClass.class.getPackageName());
+        saveStaticFields(StaticTestClass.class.getPackage().getName());
     }
 
     @After

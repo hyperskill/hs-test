@@ -67,7 +67,10 @@ public class ClientSocketMock implements Process {
     @Override
     public void run() {
         try {
-            String[] requests = requestsToServer.toArray(String[]::new);
+            String[] requests = new String[requestsToServer.size()];
+            for (int i = 0; i < requestsToServer.size(); i++) {
+                requests[i] = requestsToServer.get(i);
+            }
             DataInputStream input;
             DataOutputStream output;
             Socket socket;

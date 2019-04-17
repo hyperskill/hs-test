@@ -36,10 +36,16 @@ public final class Utils {
      * We're showing all user's stack trace up to our reflect methods.
      */
     public static String filterStackTrace(final String stackTrace) {
-        List<String> linesToShow = Arrays.stream(stackTrace.split("\\n"))
-                .filter(line -> !line.contains("org.junit."))
-                .takeWhile(line -> !line.contains("at java.base/jdk.internal.reflect"))
-                .collect(Collectors.toList());
+        List<String> linesToShow = new ArrayList<>();
+        for (String line : stackTrace.split("\n")) {
+            if (line.contains("org.junit.")) {
+                continue;
+            }
+            if (line.contains("at java.base/jdk.internal.reflect")) {
+                break;
+            }
+            linesToShow.add(line);
+        }
         return String.join("\n", linesToShow).trim();
     }
 
@@ -101,7 +107,9 @@ public final class Utils {
 
     public static String readFile(String name) {
         try {
-            return Files.readString(Paths.get(CURRENT_DIR + name));
+            Path path = Paths.get(CURRENT_DIR + name);
+            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+            //return Files.readString(path); <- Java 11
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -175,7 +183,7 @@ public final class Utils {
                 stringBuilder.append(nextLine);
                 stringBuilder.append(newLine);
             }
-            return normalizeLineEndings(stringBuilder.toString()).strip();
+            return normalizeLineEndings(stringBuilder.toString()).trim();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

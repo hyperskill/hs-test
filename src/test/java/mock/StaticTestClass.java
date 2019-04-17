@@ -34,74 +34,74 @@ public class StaticTestClass {
               static       ArrayList<String> implicitList8 = new ArrayList<>();
 
 
-    public    static final List<Integer> homoList1 = List.of(1, 2, 3);
-    protected static final List<Integer> homoList2 = List.of(1, 2, 3);
-    private   static final List<Integer> homoList3 = List.of(1, 2, 3);
-              static final List<Integer> homoList4 = List.of(1, 2, 3);
-    public    static       List<Integer> homoList5 = List.of(1, 2, 3);
-    protected static       List<Integer> homoList6 = List.of(1, 2, 3);
-    private   static       List<Integer> homoList7 = List.of(1, 2, 3);
-              static       List<Integer> homoList8 = List.of(1, 2, 3);
+    public    static final List<Integer> homoList1 = Arrays.asList(1, 2, 3);
+    protected static final List<Integer> homoList2 = Arrays.asList(1, 2, 3);
+    private   static final List<Integer> homoList3 = Arrays.asList(1, 2, 3);
+              static final List<Integer> homoList4 = Arrays.asList(1, 2, 3);
+    public    static       List<Integer> homoList5 = Arrays.asList(1, 2, 3);
+    protected static       List<Integer> homoList6 = Arrays.asList(1, 2, 3);
+    private   static       List<Integer> homoList7 = Arrays.asList(1, 2, 3);
+              static       List<Integer> homoList8 = Arrays.asList(1, 2, 3);
 
 
-    public    static final List homoNoTypeList1 = List.of(1, 2, 3);
-    protected static final List homoNoTypeList2 = List.of(1, 2, 3);
-    private   static final List homoNoTypeList3 = List.of(1, 2, 3);
-              static final List homoNoTypeList4 = List.of(1, 2, 3);
-    public    static       List homoNoTypeList5 = List.of(1, 2, 3);
-    protected static       List homoNoTypeList6 = List.of(1, 2, 3);
-    private   static       List homoNoTypeList7 = List.of(1, 2, 3);
-              static       List homoNoTypeList8 = List.of(1, 2, 3);
+    public    static final List homoNoTypeList1 = Arrays.asList(1, 2, 3);
+    protected static final List homoNoTypeList2 = Arrays.asList(1, 2, 3);
+    private   static final List homoNoTypeList3 = Arrays.asList(1, 2, 3);
+              static final List homoNoTypeList4 = Arrays.asList(1, 2, 3);
+    public    static       List homoNoTypeList5 = Arrays.asList(1, 2, 3);
+    protected static       List homoNoTypeList6 = Arrays.asList(1, 2, 3);
+    private   static       List homoNoTypeList7 = Arrays.asList(1, 2, 3);
+              static       List homoNoTypeList8 = Arrays.asList(1, 2, 3);
 
 
-    public    static final Object objectList1 = List.of(1, 2, 3);
-    protected static final Object objectList2 = List.of(1, 2, 3);
-    private   static final Object objectList3 = List.of(1, 2, 3);
-              static final Object objectList4 = List.of(1, 2, 3);
-    public    static       Object objectList5 = List.of(1, 2, 3);
-    protected static       Object objectList6 = List.of(1, 2, 3);
-    private   static       Object objectList7 = List.of(1, 2, 3);
-              static       Object objectList8 = List.of(1, 2, 3);
+    public    static final Object objectList1 = Arrays.asList(1, 2, 3);
+    protected static final Object objectList2 = Arrays.asList(1, 2, 3);
+    private   static final Object objectList3 = Arrays.asList(1, 2, 3);
+              static final Object objectList4 = Arrays.asList(1, 2, 3);
+    public    static       Object objectList5 = Arrays.asList(1, 2, 3);
+    protected static       Object objectList6 = Arrays.asList(1, 2, 3);
+    private   static       Object objectList7 = Arrays.asList(1, 2, 3);
+              static       Object objectList8 = Arrays.asList(1, 2, 3);
 
 
-    public    static final List<Integer> homoImplicitList1 = List.of(1, 2, 3);
-    protected static final List<Integer> homoImplicitList2 = List.of(1, 2, 3);
-    private   static final List<Integer> homoImplicitList3 = List.of(1, 2, 3);
-              static final List<Integer> homoImplicitList4 = List.of(1, 2, 3);
-    public    static       List<Integer> homoImplicitList5 = List.of(1, 2, 3);
-    protected static       List<Integer> homoImplicitList6 = List.of(1, 2, 3);
-    private   static       List<Integer> homoImplicitList7 = List.of(1, 2, 3);
-              static       List<Integer> homoImplicitList8 = List.of(1, 2, 3);
+    public    static final List<Integer> homoImplicitList1 = Arrays.asList(1, 2, 3);
+    protected static final List<Integer> homoImplicitList2 = Arrays.asList(1, 2, 3);
+    private   static final List<Integer> homoImplicitList3 = Arrays.asList(1, 2, 3);
+              static final List<Integer> homoImplicitList4 = Arrays.asList(1, 2, 3);
+    public    static       List<Integer> homoImplicitList5 = Arrays.asList(1, 2, 3);
+    protected static       List<Integer> homoImplicitList6 = Arrays.asList(1, 2, 3);
+    private   static       List<Integer> homoImplicitList7 = Arrays.asList(1, 2, 3);
+              static       List<Integer> homoImplicitList8 = Arrays.asList(1, 2, 3);
 
 
-    public    static final List<Object> heteroList1 = List.of(10, "123", new ArrayList<>());
-    protected static final List<Object> heteroList2 = List.of(10, "123", new ArrayList<>());
-    private   static final List<Object> heteroList3 = List.of(10, "123", new ArrayList<>());
-              static final List<Object> heteroList4 = List.of(10, "123", new ArrayList<>());
-    public    static       List<Object> heteroList5 = List.of(10, "123", new ArrayList<>());
-    protected static       List<Object> heteroList6 = List.of(10, "123", new ArrayList<>());
-    private   static       List<Object> heteroList7 = List.of(10, "123", new ArrayList<>());
-              static       List<Object> heteroList8 = List.of(10, "123", new ArrayList<>());
+    public    static final List<Object> heteroList1 = Arrays.asList(10, "123", new ArrayList<>());
+    protected static final List<Object> heteroList2 = Arrays.asList(10, "123", new ArrayList<>());
+    private   static final List<Object> heteroList3 = Arrays.asList(10, "123", new ArrayList<>());
+              static final List<Object> heteroList4 = Arrays.asList(10, "123", new ArrayList<>());
+    public    static       List<Object> heteroList5 = Arrays.asList(10, "123", new ArrayList<>());
+    protected static       List<Object> heteroList6 = Arrays.asList(10, "123", new ArrayList<>());
+    private   static       List<Object> heteroList7 = Arrays.asList(10, "123", new ArrayList<>());
+              static       List<Object> heteroList8 = Arrays.asList(10, "123", new ArrayList<>());
 
 
-    public    static final List heteroNoTypeList1 = List.of(10, "123", new ArrayList<>());
-    protected static final List heteroNoTypeList2 = List.of(10, "123", new ArrayList<>());
-    private   static final List heteroNoTypeList3 = List.of(10, "123", new ArrayList<>());
-              static final List heteroNoTypeList4 = List.of(10, "123", new ArrayList<>());
-    public    static       List heteroNoTypeList5 = List.of(10, "123", new ArrayList<>());
-    protected static       List heteroNoTypeList6 = List.of(10, "123", new ArrayList<>());
-    private   static       List heteroNoTypeList7 = List.of(10, "123", new ArrayList<>());
-              static       List heteroNoTypeList8 = List.of(10, "123", new ArrayList<>());
+    public    static final List heteroNoTypeList1 = Arrays.asList(10, "123", new ArrayList<>());
+    protected static final List heteroNoTypeList2 = Arrays.asList(10, "123", new ArrayList<>());
+    private   static final List heteroNoTypeList3 = Arrays.asList(10, "123", new ArrayList<>());
+              static final List heteroNoTypeList4 = Arrays.asList(10, "123", new ArrayList<>());
+    public    static       List heteroNoTypeList5 = Arrays.asList(10, "123", new ArrayList<>());
+    protected static       List heteroNoTypeList6 = Arrays.asList(10, "123", new ArrayList<>());
+    private   static       List heteroNoTypeList7 = Arrays.asList(10, "123", new ArrayList<>());
+              static       List heteroNoTypeList8 = Arrays.asList(10, "123", new ArrayList<>());
 
 
-    public    static final List listOfLists1 = List.of(List.of(), List.of(), List.of());
-    protected static final List listOfLists2 = List.of(List.of(), List.of(), List.of());
-    private   static final List listOfLists3 = List.of(List.of(), List.of(), List.of());
-              static final List listOfLists4 = List.of(List.of(), List.of(), List.of());
-    public    static       List listOfLists5 = List.of(List.of(), List.of(), List.of());
-    protected static       List listOfLists6 = List.of(List.of(), List.of(), List.of());
-    private   static       List listOfLists7 = List.of(List.of(), List.of(), List.of());
-              static       List listOfLists8 = List.of(List.of(), List.of(), List.of());
+    public    static final List listOfLists1 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+    protected static final List listOfLists2 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+    private   static final List listOfLists3 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+              static final List listOfLists4 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+    public    static       List listOfLists5 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+    protected static       List listOfLists6 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+    private   static       List listOfLists7 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
+              static       List listOfLists8 = Arrays.asList(Arrays.asList(), Arrays.asList(), Arrays.asList());
 
 
     public    static final List<String> null1 = null;
@@ -122,6 +122,18 @@ public class StaticTestClass {
     private   static       int int7 = 0;
               static       int int8 = 0;
 
+    public static Collection unmodCollection = Collections.unmodifiableCollection(new ArrayList<>());
+
+    public static List unmodList = Collections.unmodifiableList(new ArrayList<>());
+
+    public static Set unmodSet = Collections.unmodifiableSet(new TreeSet<>());
+    public static Set unmodNavSet = Collections.unmodifiableNavigableSet(new TreeSet<>());
+    public static Set unmodSortedSet = Collections.unmodifiableSortedSet(new TreeSet<>());
+
+    public static Map unmodMap = Collections.unmodifiableMap(new TreeMap<>());
+    public static Map unmodNavMap = Collections.unmodifiableNavigableMap(new TreeMap<>());
+    public static Map unmodSortedMap = Collections.unmodifiableSortedMap(new TreeMap<>());
+
     public static class Node {
         public Node next;
     }
@@ -129,10 +141,6 @@ public class StaticTestClass {
     public static Node node1 = new Node();
     public static Node node2 = new Node();
     public static Node node3 = new Node();
-
-    public static List unmodList = List.of();
-    public static Set unmodSet = Set.of();
-    public static Map unmodMap = Map.of();
 
     static {
         node1.next = node2;
