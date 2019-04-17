@@ -138,9 +138,17 @@ public class StaticTestClass {
         public Node next;
     }
 
+    public static class Node2 {
+        public String s = "qwerty";
+        public Integer q = 123;
+        public Object[] o = new Object[] {"123", 123};
+    }
+
     public static Node node1 = new Node();
     public static Node node2 = new Node();
     public static Node node3 = new Node();
+
+    public static Node2 node4 = new Node2();
 
     static {
         node1.next = node2;
