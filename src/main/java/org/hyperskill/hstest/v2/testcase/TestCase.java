@@ -31,7 +31,7 @@ public class TestCase<ClueType> {
         return this;
     }
 
-    public TestCase<ClueType> setClue(ClueType clue) {
+    public TestCase<ClueType> setAttach(ClueType clue) {
         this.clue = clue;
         return this;
     }

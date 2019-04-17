@@ -1,8 +1,6 @@
 package mock;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class StaticTestClass {
 
@@ -14,6 +12,97 @@ public class StaticTestClass {
     protected static       List<String> list6 = new ArrayList<>();
     private   static       List<String> list7 = new ArrayList<>();
               static       List<String> list8 = new ArrayList<>();
+
+
+    public    static final List noTypeList1 = new ArrayList<>();
+    protected static final List noTypeList2 = new ArrayList<>();
+    private   static final List noTypeList3 = new ArrayList<>();
+              static final List noTypeList4 = new ArrayList<>();
+    public    static       List noTypeList5 = new ArrayList<>();
+    protected static       List noTypeList6 = new ArrayList<>();
+    private   static       List noTypeList7 = new ArrayList<>();
+              static       List noTypeList8 = new ArrayList<>();
+
+
+    public    static final ArrayList<String> implicitList1 = new ArrayList<>();
+    protected static final ArrayList<String> implicitList2 = new ArrayList<>();
+    private   static final ArrayList<String> implicitList3 = new ArrayList<>();
+              static final ArrayList<String> implicitList4 = new ArrayList<>();
+    public    static       ArrayList<String> implicitList5 = new ArrayList<>();
+    protected static       ArrayList<String> implicitList6 = new ArrayList<>();
+    private   static       ArrayList<String> implicitList7 = new ArrayList<>();
+              static       ArrayList<String> implicitList8 = new ArrayList<>();
+
+
+    public    static final List<Integer> homoList1 = List.of(1, 2, 3);
+    protected static final List<Integer> homoList2 = List.of(1, 2, 3);
+    private   static final List<Integer> homoList3 = List.of(1, 2, 3);
+              static final List<Integer> homoList4 = List.of(1, 2, 3);
+    public    static       List<Integer> homoList5 = List.of(1, 2, 3);
+    protected static       List<Integer> homoList6 = List.of(1, 2, 3);
+    private   static       List<Integer> homoList7 = List.of(1, 2, 3);
+              static       List<Integer> homoList8 = List.of(1, 2, 3);
+
+
+    public    static final List homoNoTypeList1 = List.of(1, 2, 3);
+    protected static final List homoNoTypeList2 = List.of(1, 2, 3);
+    private   static final List homoNoTypeList3 = List.of(1, 2, 3);
+              static final List homoNoTypeList4 = List.of(1, 2, 3);
+    public    static       List homoNoTypeList5 = List.of(1, 2, 3);
+    protected static       List homoNoTypeList6 = List.of(1, 2, 3);
+    private   static       List homoNoTypeList7 = List.of(1, 2, 3);
+              static       List homoNoTypeList8 = List.of(1, 2, 3);
+
+
+    public    static final Object objectList1 = List.of(1, 2, 3);
+    protected static final Object objectList2 = List.of(1, 2, 3);
+    private   static final Object objectList3 = List.of(1, 2, 3);
+              static final Object objectList4 = List.of(1, 2, 3);
+    public    static       Object objectList5 = List.of(1, 2, 3);
+    protected static       Object objectList6 = List.of(1, 2, 3);
+    private   static       Object objectList7 = List.of(1, 2, 3);
+              static       Object objectList8 = List.of(1, 2, 3);
+
+
+    public    static final List<Integer> homoImplicitList1 = List.of(1, 2, 3);
+    protected static final List<Integer> homoImplicitList2 = List.of(1, 2, 3);
+    private   static final List<Integer> homoImplicitList3 = List.of(1, 2, 3);
+              static final List<Integer> homoImplicitList4 = List.of(1, 2, 3);
+    public    static       List<Integer> homoImplicitList5 = List.of(1, 2, 3);
+    protected static       List<Integer> homoImplicitList6 = List.of(1, 2, 3);
+    private   static       List<Integer> homoImplicitList7 = List.of(1, 2, 3);
+              static       List<Integer> homoImplicitList8 = List.of(1, 2, 3);
+
+
+    public    static final List<Object> heteroList1 = List.of(10, "123", new ArrayList<>());
+    protected static final List<Object> heteroList2 = List.of(10, "123", new ArrayList<>());
+    private   static final List<Object> heteroList3 = List.of(10, "123", new ArrayList<>());
+              static final List<Object> heteroList4 = List.of(10, "123", new ArrayList<>());
+    public    static       List<Object> heteroList5 = List.of(10, "123", new ArrayList<>());
+    protected static       List<Object> heteroList6 = List.of(10, "123", new ArrayList<>());
+    private   static       List<Object> heteroList7 = List.of(10, "123", new ArrayList<>());
+              static       List<Object> heteroList8 = List.of(10, "123", new ArrayList<>());
+
+
+    public    static final List heteroNoTypeList1 = List.of(10, "123", new ArrayList<>());
+    protected static final List heteroNoTypeList2 = List.of(10, "123", new ArrayList<>());
+    private   static final List heteroNoTypeList3 = List.of(10, "123", new ArrayList<>());
+              static final List heteroNoTypeList4 = List.of(10, "123", new ArrayList<>());
+    public    static       List heteroNoTypeList5 = List.of(10, "123", new ArrayList<>());
+    protected static       List heteroNoTypeList6 = List.of(10, "123", new ArrayList<>());
+    private   static       List heteroNoTypeList7 = List.of(10, "123", new ArrayList<>());
+              static       List heteroNoTypeList8 = List.of(10, "123", new ArrayList<>());
+
+
+    public    static final List listOfLists1 = List.of(List.of(), List.of(), List.of());
+    protected static final List listOfLists2 = List.of(List.of(), List.of(), List.of());
+    private   static final List listOfLists3 = List.of(List.of(), List.of(), List.of());
+              static final List listOfLists4 = List.of(List.of(), List.of(), List.of());
+    public    static       List listOfLists5 = List.of(List.of(), List.of(), List.of());
+    protected static       List listOfLists6 = List.of(List.of(), List.of(), List.of());
+    private   static       List listOfLists7 = List.of(List.of(), List.of(), List.of());
+              static       List listOfLists8 = List.of(List.of(), List.of(), List.of());
+
 
     public    static final List<String> null1 = null;
     protected static final List<String> null2 = null;
@@ -32,6 +121,20 @@ public class StaticTestClass {
     protected static       int int6 = 0;
     private   static       int int7 = 0;
               static       int int8 = 0;
+
+    public static class Node {
+        public Node next;
+    }
+
+    public static Node node1 = new Node();
+    public static Node node2 = new Node();
+    public static Node node3 = new Node();
+
+    static {
+        node1.next = node2;
+        node2.next = node1;
+        node3.next = node3;
+    }
 
     public static List<String> ref1 = new ArrayList<>();
     public static List<String> ref2 = ref1;

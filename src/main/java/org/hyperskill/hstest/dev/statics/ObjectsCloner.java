@@ -1,21 +1,27 @@
 package org.hyperskill.hstest.dev.statics;
 
-import com.google.gson.Gson;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ObjectsCloner {
+
     private static String serializeObject(Object object) {
-        Gson gson = new Gson();
-        String serialized = gson.toJson(object);
-        return serialized;
+        try {
+            return JsonSerialization.serializeUsingJackson(object);
+        } catch (IOException ex) {
+            return JsonSerialization.serializeUsingJsonIo(object);
+        }
     }
 
     private static Object deserializeObject(String serialized, Class<?> clazz) {
-        Gson gson = new Gson();
-        Object deserialized = gson.fromJson(serialized, clazz);
-        return deserialized;
+        try {
+            return JsonDeserialization.deserializeUsingJackson(serialized, clazz);
+        } catch (IOException ex) {
+            return JsonDeserialization.deserializeUsingJsonIo(serialized, clazz);
+        }
+
     }
 
     public static Object cloneObject(Object obj) {

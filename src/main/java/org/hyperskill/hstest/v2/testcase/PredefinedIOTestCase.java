@@ -11,7 +11,7 @@ public class PredefinedIOTestCase extends TestCase<String> {
     }
 
     public PredefinedIOTestCase setConsoleOutput(String output) {
-        setClue(output);
+        setAttach(output);
         return this;
     }
 

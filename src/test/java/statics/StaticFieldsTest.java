@@ -1,5 +1,6 @@
 package statics;
 
+import com.sun.source.tree.AssertTree;
 import mock.StaticTestClass;
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -9,8 +10,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static org.hyperskill.hstest.v3.statics.StaticFieldsManager.resetStaticFields;
-import static org.hyperskill.hstest.v3.statics.StaticFieldsManager.saveStaticFields;
+import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.resetStaticFields;
+import static org.hyperskill.hstest.dev.statics.StaticFieldsManager.saveStaticFields;
 import static org.junit.Assert.*;
 
 public class StaticFieldsTest {
@@ -145,6 +146,29 @@ public class StaticFieldsTest {
             resetStaticFields();
             Scanner after = StaticTestClass.scanner;
             assertSame(before, after);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Ignore
+    @Test
+    public void TestCircularReferences() {
+        try {
+            assertSame(StaticTestClass.node1.next, StaticTestClass.node2);
+            assertSame(StaticTestClass.node1, StaticTestClass.node2.next);
+            assertSame(StaticTestClass.node3.next, StaticTestClass.node3);
+
+            StaticTestClass.node1.next = StaticTestClass.node3;
+            StaticTestClass.node2.next = StaticTestClass.node2;
+            StaticTestClass.node3.next = StaticTestClass.node1;
+
+            resetStaticFields();
+
+            assertSame(StaticTestClass.node1.next, StaticTestClass.node2);
+            assertSame(StaticTestClass.node1, StaticTestClass.node2.next);
+            assertSame(StaticTestClass.node3.next, StaticTestClass.node3);
+
         } catch (Exception ex) {
             fail();
         }
