@@ -1,9 +1,9 @@
 package outcomes;
 
 import mock.WithoutException;
-import org.hyperskill.hstest.v3.stage.MainMethodTest;
-import org.hyperskill.hstest.v3.testcase.CheckResult;
-import org.hyperskill.hstest.v3.testcase.TestCase;
+import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
