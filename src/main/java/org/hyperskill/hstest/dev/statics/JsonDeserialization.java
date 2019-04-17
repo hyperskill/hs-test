@@ -17,7 +17,6 @@ class JsonDeserialization {
     }
 
     static Object deserializeUsingJsonIo(String serialized, Class<?> clazz) {
-        System.out.println(serialized);
         Object deserialized = JsonReader.jsonToJava(serialized);
         return deserialized;
     }

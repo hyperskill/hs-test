@@ -1,6 +1,5 @@
 package statics;
 
-import com.sun.source.tree.AssertTree;
 import mock.StaticTestClass;
 import org.junit.After;
 import org.junit.BeforeClass;
