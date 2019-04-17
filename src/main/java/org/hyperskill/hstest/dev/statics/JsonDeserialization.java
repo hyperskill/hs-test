@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class JsonDeserialization {
 
@@ -28,14 +30,18 @@ class JsonDeserialization {
 
         try {
             // Convert JSON string to Object
-            Object object = mapper.readValue(serialized, clazz);
-            return object;
+            return mapper.readValue(serialized, clazz);
         } catch (Exception e) { }
 
         try {
             if (List.class.isAssignableFrom(clazz)) {
-                Object object = mapper.readValue(serialized, List.class);
-                return object;
+                return mapper.readValue(serialized, List.class);
+            }
+            if (Set.class.isAssignableFrom(clazz)) {
+                return mapper.readValue(serialized, Set.class);
+            }
+            if (Map.class.isAssignableFrom(clazz)) {
+                return mapper.readValue(serialized, Map.class);
             }
         } catch (Exception e) { }
 

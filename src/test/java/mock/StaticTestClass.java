@@ -130,6 +130,10 @@ public class StaticTestClass {
     public static Node node2 = new Node();
     public static Node node3 = new Node();
 
+    public static List unmodList = List.of();
+    public static Set unmodSet = Set.of();
+    public static Map unmodMap = Map.of();
+
     static {
         node1.next = node2;
         node2.next = node1;
