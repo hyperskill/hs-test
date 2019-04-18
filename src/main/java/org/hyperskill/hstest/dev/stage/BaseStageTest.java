@@ -194,7 +194,14 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                 }
             }
             else {
-                errorText = "Fatal error in test #" + currTest +
+                String whenErrorHappened;
+                if (currTest == 0) {
+                    whenErrorHappened = "during testing";
+                } else {
+                    whenErrorHappened = "in test #" + currTest;
+                }
+
+                errorText = "Fatal error " + whenErrorHappened +
                     ", please send the report to Hyperskill team.";
                 if (ex.getCause() == null) {
                     stackTraceInfo = getStackTrace(ex);
