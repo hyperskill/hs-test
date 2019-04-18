@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
+import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
@@ -11,13 +12,11 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
 import static org.hyperskill.hstest.dev.common.Utils.*;
@@ -174,45 +173,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                 }
             }
         } catch (Exception ex) {
-            String errorText;
-            String stackTraceInfo;
-            if (ex.getCause() != null &&
-                ex instanceof InvocationTargetException) {
-                // If user failed then ex == InvocationTargetException
-                // and ex.getCause() == Actual user exception
-                errorText = "Exception in test #" + currTest;
-                stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
-
-                if (ex.getCause() instanceof NoSuchElementException
-                    && stackTraceInfo.contains("java.util.Scanner")) {
-                    stackTraceInfo = "Maybe you created more than one instance of Scanner? " +
-                        "You should use a single Scanner in program.\n\n" + stackTraceInfo;
-                }
-
-                if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
-                    errorText = "Error in test #" + currTest + " - Tried to exit";
-                }
-            }
-            else {
-                String whenErrorHappened;
-                if (currTest == 0) {
-                    whenErrorHappened = "during testing";
-                } else {
-                    whenErrorHappened = "in test #" + currTest;
-                }
-
-                errorText = "Fatal error " + whenErrorHappened +
-                    ", please send the report to Hyperskill team.";
-                if (ex.getCause() == null) {
-                    stackTraceInfo = getStackTrace(ex);
-                }
-                else {
-                    stackTraceInfo = getStackTrace(ex) +
-                        "\n" + getStackTrace(ex.getCause());
-                }
-            }
-
-            fail(errorText + "\n\n" + stackTraceInfo);
+            fail(FailureHandler.getFeedback(ex, currTest));
         }
     }
 
