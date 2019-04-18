@@ -14,6 +14,7 @@ public class ObjectsCloner {
 
     public static List<Serialized> cantSerialize = new ArrayList<>();
     public static List<Serialized> cantDeserialize = new ArrayList<>();
+    public static List<Serialized> circularLinks = new ArrayList<>();
 
     private static Serialized serializeObject(Object object) {
         Serialized serialized = new Serialized();
@@ -33,7 +34,7 @@ public class ObjectsCloner {
         try {
             serialized.jsonio = JsonSerialization.serializeUsingJsonIo(object);
         } catch (Exception ex) {
-            serialized.jacksonSerialized = ex;
+            serialized.jsonioSerialized = ex;
         }
 
         try {
@@ -79,6 +80,7 @@ public class ObjectsCloner {
 
         // Serialization breaks circular links between objects so we shouldn't serialize them
         if (serialized.isCircular) {
+            circularLinks.add(serialized);
             return obj;
         }
 
