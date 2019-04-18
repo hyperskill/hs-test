@@ -47,14 +47,20 @@ public class ObjectsCloner {
     }
 
     private static Object deserializeObject(Serialized serialized, Class<?> clazz) {
-
+        System.err.println();
+        System.err.println(serialized);
+        System.err.println(clazz);
         try {
+            Object o = JsonDeserialization.deserializeUsingJsonIo(serialized.jsonio, clazz);
+            System.err.println(o.getClass());
             return JsonDeserialization.deserializeUsingJsonIo(serialized.jsonio, clazz);
         } catch (Exception ex) {
             serialized.jsonioDeserialized = ex;
         }
 
         try {
+            Object o = JsonDeserialization.deserializeUsingJackson(serialized.jackson, clazz);
+            System.err.println(o.getClass());
             return JsonDeserialization.deserializeUsingJackson(serialized.jackson, clazz);
         } catch (Exception ex) {
             serialized.jacksonDeserialized = ex;
