@@ -6,16 +6,35 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class JsonDeserialization {
 
-    static Object deserializeUsingGson(String serialized, Class<?> clazz) {
+    static Object deserializeUsingGson(String serialized, Class<?> clazz) throws IOException {
         Gson gson = new Gson();
-        Object deserialized = gson.fromJson(serialized, clazz);
-        return deserialized;
+        try {
+            return gson.fromJson(serialized, clazz);
+        } catch (ClassCastException ex) { }
+
+        try {
+            if (List.class.isAssignableFrom(clazz)) {
+                return gson.fromJson(serialized, List.class);
+            }
+            if (Set.class.isAssignableFrom(clazz)) {
+                return gson.fromJson(serialized, Set.class);
+            }
+            if (Map.class.isAssignableFrom(clazz)) {
+                return gson.fromJson(serialized, Map.class);
+            }
+            if (Collection.class.isAssignableFrom(clazz)) {
+                return gson.fromJson(serialized, Collection.class);
+            }
+        } catch (Exception e) { }
+
+        throw new IOException("Can't deserialize object " + clazz);
     }
 
     static Object deserializeUsingJsonIo(String serialized, Class<?> clazz) {
@@ -42,6 +61,9 @@ class JsonDeserialization {
             }
             if (Map.class.isAssignableFrom(clazz)) {
                 return mapper.readValue(serialized, Map.class);
+            }
+            if (Collection.class.isAssignableFrom(clazz)) {
+                return mapper.readValue(serialized, Collection.class);
             }
         } catch (Exception e) { }
 

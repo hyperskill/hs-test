@@ -13,19 +13,26 @@ public class ObjectsCloner {
     public static List<Class<?>> cantDeserialize = new ArrayList<>();
 
     private static String serializeObject(Object object) {
-        try {
-            return JsonSerialization.serializeUsingJackson(object);
-        } catch (IOException ex) {
-            return null;
-        }
+        //try {
+            return JsonSerialization.serializeUsingJsonIo(object);
+        //} catch (IOException ex) {
+        //    return null;
+        //}
     }
 
     private static Object deserializeObject(String serialized, Class<?> clazz) {
-        try {
-            return JsonDeserialization.deserializeUsingJackson(serialized, clazz);
-        } catch (IOException ex) {
-            return null;
-        }
+        System.out.println();
+        System.out.println(serialized);
+        System.out.println(clazz);
+        //try {
+            Object o =JsonDeserialization.deserializeUsingJsonIo(serialized, clazz);
+            System.out.println(o.getClass());
+            System.out.println();
+            return JsonDeserialization.deserializeUsingJsonIo(serialized, clazz);
+        //} catch (IOException ex) {
+        //    ex.printStackTrace();
+        //    return null;
+        //}
 
     }
 

@@ -144,17 +144,35 @@ public class StaticTestClass {
         public Object[] o = new Object[] {"123", 123};
     }
 
-    public static Node node1 = new Node();
-    public static Node node2 = new Node();
-    public static Node node3 = new Node();
+    //public static Node node1 = new Node();
+    //public static Node node2 = new Node();
+    //public static Node node3 = new Node();
 
     public static Node2 node4 = new Node2();
 
     static {
-        node1.next = node2;
-        node2.next = node1;
-        node3.next = node3;
+        //node1.next = node2;
+        //node2.next = node1;
+        //node3.next = node3;
     }
+
+    public static class Parent {
+        String name;
+        Parent(String name) {
+            this.name = name;
+        }
+    }
+
+    public static class Child extends Parent {
+        String name;
+        Child(String name) {
+            super(name + name);
+            this.name = name;
+        }
+    }
+
+    public static Child inheritanceTest = new Child("Child");
+
 
     public static List<String> ref1 = new ArrayList<>();
     public static List<String> ref2 = ref1;
