@@ -52,7 +52,7 @@ public class FailureHandler {
             }
         }
 
-        StringBuilder cantDeserialize = new StringBuilder("Cant deserialize: ");
+        StringBuilder cantDeserialize = new StringBuilder("Cannot deserialize: ");
 
         if (ObjectsCloner.cantDeserialize.isEmpty()) {
             cantDeserialize.append("nothing");
@@ -83,7 +83,7 @@ public class FailureHandler {
             }
         }
 
-        StringBuilder cantSerialize = new StringBuilder("Cant serialize: ");
+        StringBuilder cantSerialize = new StringBuilder("Cannot serialize: ");
 
         if (ObjectsCloner.cantSerialize.isEmpty()) {
             cantSerialize.append("nothing");
