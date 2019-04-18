@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.statics;
+package org.hyperskill.hstest.dev.statics.serialization;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-class JsonDeserialization {
+public class JsonDeserialization {
 
-    static Object deserializeUsingGson(String serialized, Class<?> clazz) throws IOException {
+    public static Object deserializeUsingGson(String serialized, Class<?> clazz) throws IOException {
         Gson gson = new Gson();
         try {
             return gson.fromJson(serialized, clazz);
@@ -37,12 +37,12 @@ class JsonDeserialization {
         throw new IOException("Can't deserialize object " + clazz);
     }
 
-    static Object deserializeUsingJsonIo(String serialized, Class<?> clazz) {
+    public static Object deserializeUsingJsonIo(String serialized, Class<?> clazz) {
         Object deserialized = JsonReader.jsonToJava(serialized);
         return deserialized;
     }
 
-    static Object deserializeUsingJackson(String serialized, Class<?> clazz) throws IOException {
+    public static Object deserializeUsingJackson(String serialized, Class<?> clazz) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);

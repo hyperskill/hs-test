@@ -1,39 +1,65 @@
 package org.hyperskill.hstest.dev.statics;
 
 
+import org.hyperskill.hstest.dev.statics.serialization.JsonDeserialization;
+import org.hyperskill.hstest.dev.statics.serialization.JsonSerialization;
+import org.hyperskill.hstest.dev.statics.serialization.Serialized;
+
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class ObjectsCloner {
 
-    public static List<Class<?>> cantSerialize = new ArrayList<>();
-    public static List<Class<?>> cantDeserialize = new ArrayList<>();
+    public static List<Serialized> cantSerialize = new ArrayList<>();
+    public static List<Serialized> cantDeserialize = new ArrayList<>();
 
-    private static String serializeObject(Object object) {
-        //try {
-            return JsonSerialization.serializeUsingJsonIo(object);
-        //} catch (IOException ex) {
-        //    return null;
-        //}
+    private static Serialized serializeObject(Object object) {
+        Serialized serialized = new Serialized();
+
+        serialized.objectToSerialize = object;
+        serialized.sourceClass = object.getClass();
+
+        try {
+            serialized.gson = JsonSerialization.serializeUsingGson(object);
+        } catch (StackOverflowError ex) {
+            serialized.isCircular = true;
+            return serialized;
+        } catch (Exception ex) {
+            serialized.gsonSerialized = ex;
+        }
+
+        try {
+            serialized.jsonio = JsonSerialization.serializeUsingJsonIo(object);
+        } catch (Exception ex) {
+            serialized.jacksonSerialized = ex;
+        }
+
+        try {
+            serialized.jackson = JsonSerialization.serializeUsingJackson(object);
+        } catch (Exception ex) {
+            serialized.jacksonSerialized = ex;
+        }
+
+        return serialized;
     }
 
-    private static Object deserializeObject(String serialized, Class<?> clazz) {
-        System.out.println();
-        System.out.println(serialized);
-        System.out.println(clazz);
-        //try {
-            Object o =JsonDeserialization.deserializeUsingJsonIo(serialized, clazz);
-            System.out.println(o.getClass());
-            System.out.println();
-            return JsonDeserialization.deserializeUsingJsonIo(serialized, clazz);
-        //} catch (IOException ex) {
-        //    ex.printStackTrace();
-        //    return null;
-        //}
+    private static Object deserializeObject(Serialized serialized, Class<?> clazz) {
 
+        try {
+            return JsonDeserialization.deserializeUsingJsonIo(serialized.jsonio, clazz);
+        } catch (Exception ex) {
+            serialized.jsonioDeserialized = ex;
+        }
+
+        try {
+            return JsonDeserialization.deserializeUsingJackson(serialized.jackson, clazz);
+        } catch (Exception ex) {
+            serialized.jacksonDeserialized = ex;
+        }
+
+        return null;
     }
 
     public static Object cloneObject(Object obj) {
@@ -49,15 +75,21 @@ public class ObjectsCloner {
             return null;
         }
 
-        String serialized = serializeObject(obj);
-        if (serialized == null) {
-            cantSerialize.add(obj.getClass());
+        Serialized serialized = serializeObject(obj);
+
+        // Serialization breaks circular links between objects so we shouldn't serialize them
+        if (serialized.isCircular) {
+            return obj;
+        }
+
+        if (serialized.cantSerialize()) {
+            cantSerialize.add(serialized);
             return obj;
         }
 
         Object cloned = deserializeObject(serialized, obj.getClass());
         if (cloned == null) {
-            cantDeserialize.add(obj.getClass());
+            cantDeserialize.add(serialized);
             return obj;
         }
 
