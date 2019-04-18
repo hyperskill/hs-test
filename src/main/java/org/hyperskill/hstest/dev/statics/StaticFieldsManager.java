@@ -9,6 +9,7 @@ import java.util.*;
 public class StaticFieldsManager {
 
     private static Map<Class, Map<Field, Object>> savedFields = new LinkedHashMap<>();
+    public static Map<Class, Exception> cantClone = new LinkedHashMap<>();
 
     public static String getTopPackage(Class userMainClass) {
         String className = userMainClass.getCanonicalName();
@@ -24,9 +25,7 @@ public class StaticFieldsManager {
             Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
             Field logger = cls.getDeclaredField("logger");
             u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
-        } catch (Exception e) {
-            // ignore
-        }
+        } catch (Exception ignore) { }
     }
 
     private static Map<Field, Object> saveFieldsForClass(Class clazz) throws Exception {
@@ -41,11 +40,15 @@ public class StaticFieldsManager {
                         Field modifiersField = Field.class.getDeclaredField("modifiers");
                         modifiersField.setAccessible(true);
                         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-                    } catch (NoSuchFieldException ex) {
-
+                    } catch (NoSuchFieldException ignore) { }
+                    try {
+                        Object value = ObjectsCloner.cloneObject(field.get(null));
+                        savedFields.put(field, value);
+                    } catch (Exception ex) {
+                        if (!cantClone.containsKey(field.get(null).getClass())) {
+                            cantClone.put(field.get(null).getClass(), ex);
+                        }
                     }
-                    Object value = ObjectsCloner.cloneObject(field.get(null));
-                    savedFields.put(field, value);
                 }
             }
         } catch (IllegalAccessException ex) {
