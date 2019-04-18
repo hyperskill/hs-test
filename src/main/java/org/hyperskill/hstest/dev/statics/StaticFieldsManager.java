@@ -37,9 +37,13 @@ public class StaticFieldsManager {
                 boolean isStatic = Modifier.isStatic(field.getModifiers());
                 if (isStatic) {
                     field.setAccessible(true);
-                    Field modifiersField = Field.class.getDeclaredField("modifiers");
-                    modifiersField.setAccessible(true);
-                    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                    try {
+                        Field modifiersField = Field.class.getDeclaredField("modifiers");
+                        modifiersField.setAccessible(true);
+                        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                    } catch (NoSuchFieldException ex) {
+
+                    }
                     Object value = ObjectsCloner.cloneObject(field.get(null));
                     savedFields.put(field, value);
                 }
