@@ -40,3 +40,11 @@ classes/
 
 src/main/java/solutions/*
 src/test/java/solutiontests/*
+
+# gradle
+
+build/*
+gradle/*
+.gradle/*
+gradlew
+gradlew.bat
