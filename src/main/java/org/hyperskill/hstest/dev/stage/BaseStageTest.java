@@ -150,6 +150,11 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
 
                     String errorMessage = "Wrong answer in test #" + currTest
                         + "\n\n" + result.getFeedback().trim();
+
+                    if (FailureHandler.detectStaticCloneFails()) {
+                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
+                    }
+
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
@@ -169,6 +174,11 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
 
                     String errorMessage = "Wrong answer in test #" + currTest
                         + "\n\n" + result.getFeedback().trim();
+
+                    if (FailureHandler.detectStaticCloneFails()) {
+                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
+                    }
+
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }

@@ -1,8 +1,8 @@
 package outcomes;
 
-import org.hyperskill.hstest.v3.stage.MainMethodTest;
-import org.hyperskill.hstest.v3.testcase.CheckResult;
-import org.hyperskill.hstest.v3.testcase.TestCase;
+import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -27,10 +27,7 @@ public class NoSuchElementTest1 extends MainMethodTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1\n\n" +
-            "Maybe you created more than one instance of Scanner? " +
-            "You should use a single Scanner in program.\n\n" +
-            "java.util.NoSuchElementException");
+        exception.expectMessage("Exception in test #1");
     }
 
     @Override

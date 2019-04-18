@@ -33,4 +33,16 @@ public class StackTraceUtils {
         }
         return String.join("\n", linesToShow).trim();
     }
+
+    public static String removeNonLibraryClasses(final String stackTrace) {
+        List<String> linesToShow = new ArrayList<>();
+        int index = 0;
+        for (String line : stackTrace.split("\n")) {
+            if (index < 3 || line.contains("at org.hyperskill.hstest")) {
+                linesToShow.add(line);
+            }
+            index++;
+        }
+        return String.join("\n", linesToShow).trim();
+    }
 }
