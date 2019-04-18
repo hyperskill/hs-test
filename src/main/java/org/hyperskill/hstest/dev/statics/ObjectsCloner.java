@@ -64,8 +64,7 @@ public class ObjectsCloner {
     }
 
     public static Object cloneObject(Object obj) {
-        // Jackson gives StackOverFlow exception serializing Scanner
-        // but since user can't use multiple Scanner's in program
+        // Since user can't use multiple Scanner's in program
         // it's really not necessary to clone Scanner
         // also when testing swing don't need to clone Component objects
         if (obj instanceof Scanner || obj instanceof Component) {
