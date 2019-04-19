@@ -1,10 +1,12 @@
 package org.hyperskill.hstest.dev.exception;
 
+import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystemException;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
@@ -168,7 +170,26 @@ public class FailureHandler {
                 errorText += "\n\n" + avoidStaticsMsg;
             }
 
+        } else if (ex instanceof FileSystemException) {
+
+            errorText = "Error in test #" + currTest ;
+            stackTraceInfo = "";
+
+            // without "class "
+            String exceptionName = ex.getClass().toString().substring(6);
+
+            String file = ((FileSystemException) ex).getFile();
+
+            if (file.startsWith(Utils.CURRENT_DIR)) {
+                file = file.substring(Utils.CURRENT_DIR.length());
+            }
+
+            errorText += "\n\n" + exceptionName + "\n\nThe file " + file +
+                " can't be deleted after the end of the test. " +
+                "Probably you didn't close File or Scanner.";
+
         } else {
+
             String whenErrorHappened;
             if (currTest == 0) {
                 whenErrorHappened = "during testing";

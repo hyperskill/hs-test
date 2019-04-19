@@ -12,36 +12,28 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public final class Utils {
-    private static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
+    public static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
     private static final String TEMP_FILE_PREFIX = "hyperskill-temp-file-";
 
     private static final Set<String> RETURNED_NONEXISTENT_FILES = new HashSet<>();
 
     private Utils() {}
 
-    public static void createFiles(Map<String, String> files) {
-        files.forEach((filename, content) -> {
-            try {
-                Files.write(Paths.get(CURRENT_DIR + filename), content.getBytes());
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+    public static void createFiles(Map<String, String> files) throws IOException {
+        for (Map.Entry<String, String> fileEntry : files.entrySet()) {
+            String filename = fileEntry.getKey();
+            String content = fileEntry.getValue();
+            Files.write(Paths.get(CURRENT_DIR + filename), content.getBytes());
+        }
     }
 
-    public static void deleteFiles(Map<String, String> files) {
-        files.forEach((filename, content) -> {
-            try {
-                Files.deleteIfExists(Paths.get(CURRENT_DIR + filename));
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+    public static void deleteFiles(Map<String, String> files) throws IOException {
+        for (Map.Entry<String, String> fileEntry : files.entrySet()) {
+            String filename = fileEntry.getKey();
+            Files.deleteIfExists(Paths.get(CURRENT_DIR + filename));
+        }
     }
 
     private static String normalizeFileExtension(final String extension) {
