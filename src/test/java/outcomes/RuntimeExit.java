@@ -6,28 +6,31 @@ import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-public class NoSuchElementTest2 extends MainMethodTest {
+public class RuntimeExit extends MainMethodTest {
 
     public static void main(String[] args) {
-        throw new NoSuchElementException();
+        Runtime.getRuntime().exit(0);
     }
 
-    public NoSuchElementTest2() throws Exception {
-        super(NoSuchElementTest2.class);
+    public RuntimeExit() throws Exception {
+        super(RuntimeExit.class);
     }
+
+    public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public final ExpectedException exception = ExpectedException.none();
+    public TestRule allRules = RuleChain.outerRule(exception).around(exit);
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1");
+        exception.expectMessage("Error in test #1 - Tried to exit");
     }
 
     @Override
@@ -42,3 +45,4 @@ public class NoSuchElementTest2 extends MainMethodTest {
         return CheckResult.FALSE;
     }
 }
+

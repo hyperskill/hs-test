@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class WrongAnswerTest1 extends MainMethodTest {
+public class WrongAnswerInTest2 extends MainMethodTest<Boolean> {
 
-    public WrongAnswerTest1() throws Exception {
+    public WrongAnswerInTest2() throws Exception {
         super(WithoutException.class);
     }
 
@@ -23,18 +23,19 @@ public class WrongAnswerTest1 extends MainMethodTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1");
+        exception.expectMessage("Wrong answer in test #2");
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase<Boolean>> generateTestCases() {
         return Arrays.asList(
-            new TestCase()
+            new TestCase<Boolean>().setAttach(true),
+            new TestCase<Boolean>().setAttach(false)
         );
     }
 
     @Override
-    public CheckResult check(String reply, Object clue) {
-        return CheckResult.FALSE;
+    public CheckResult check(String reply, Boolean clue) {
+        return new CheckResult(clue);
     }
 }

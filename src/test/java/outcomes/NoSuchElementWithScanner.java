@@ -6,31 +6,30 @@ import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
-public class RuntimeExitTest extends MainMethodTest {
+public class NoSuchElementWithScanner extends MainMethodTest {
 
     public static void main(String[] args) {
-        Runtime.getRuntime().exit(0);
+        new Scanner(System.in).nextInt();
     }
 
-    public RuntimeExitTest() throws Exception {
-        super(RuntimeExitTest.class);
+    public NoSuchElementWithScanner() throws Exception {
+        super(NoSuchElementWithScanner.class);
     }
-
-    public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public TestRule allRules = RuleChain.outerRule(exception).around(exit);
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Error in test #1 - Tried to exit");
+        exception.expectMessage("Exception in test #1");
+        exception.expectMessage("Maybe you created more than one instance of Scanner? " +
+            "You should use a single Scanner in program.");
     }
 
     @Override
@@ -45,4 +44,3 @@ public class RuntimeExitTest extends MainMethodTest {
         return CheckResult.FALSE;
     }
 }
-

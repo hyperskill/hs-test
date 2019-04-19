@@ -1,36 +1,29 @@
 package outcomes;
 
+import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SystemExitTest extends MainMethodTest {
+public class FatalErrorDuringChecking extends MainMethodTest {
 
-    public static void main(String[] args) {
-        System.exit(0);
+    public FatalErrorDuringChecking() throws Exception {
+        super(WithoutException.class);
     }
-
-    public SystemExitTest() throws Exception {
-        super(SystemExitTest.class);
-    }
-
-    public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public TestRule allRules = RuleChain.outerRule(exception).around(exit);
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Error in test #1 - Tried to exit");
+        exception.expectMessage("Fatal error in test #1, please send the report to Hyperskill team.");
     }
 
     @Override
@@ -42,7 +35,7 @@ public class SystemExitTest extends MainMethodTest {
 
     @Override
     public CheckResult check(String reply, Object clue) {
-        return CheckResult.FALSE;
+        System.out.println(1 / 0);
+        return CheckResult.TRUE;
     }
 }
-

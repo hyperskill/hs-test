@@ -1,6 +1,6 @@
 package outcomes;
 
-import mock.WithoutException;
+import mock.WithException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -11,10 +11,10 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class WrongAnswerTest2 extends MainMethodTest<Boolean> {
+public class ExceptionInUserCode extends MainMethodTest {
 
-    public WrongAnswerTest2() throws Exception {
-        super(WithoutException.class);
+    public ExceptionInUserCode() throws Exception {
+        super(WithException.class);
     }
 
     @Rule
@@ -23,19 +23,19 @@ public class WrongAnswerTest2 extends MainMethodTest<Boolean> {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #2");
+        exception.expectMessage("Exception in test #1");
+        exception.expectMessage("at mock.WithException.main");
     }
 
     @Override
-    public List<TestCase<Boolean>> generateTestCases() {
+    public List<TestCase> generateTestCases() {
         return Arrays.asList(
-            new TestCase<Boolean>().setAttach(true),
-            new TestCase<Boolean>().setAttach(false)
+            new TestCase()
         );
     }
 
     @Override
-    public CheckResult check(String reply, Boolean clue) {
-        return new CheckResult(clue);
+    public CheckResult check(String reply, Object clue) {
+        return CheckResult.TRUE;
     }
 }

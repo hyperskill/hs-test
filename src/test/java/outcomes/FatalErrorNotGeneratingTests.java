@@ -1,5 +1,6 @@
 package outcomes;
 
+import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -9,16 +10,11 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
-public class NoSuchElementTest1 extends MainMethodTest {
+public class FatalErrorNotGeneratingTests extends MainMethodTest {
 
-    public static void main(String[] args) {
-        new Scanner(System.in).nextInt();
-    }
-
-    public NoSuchElementTest1() throws Exception {
-        super(NoSuchElementTest1.class);
+    public FatalErrorNotGeneratingTests() throws Exception {
+        super(WithoutException.class);
     }
 
     @Rule
@@ -27,18 +23,13 @@ public class NoSuchElementTest1 extends MainMethodTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1");
-    }
-
-    @Override
-    public List<TestCase> generateTestCases() {
-        return Arrays.asList(
-            new TestCase()
-        );
+        exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
+        exception.expectMessage("No tests found");
     }
 
     @Override
     public CheckResult check(String reply, Object clue) {
-        return CheckResult.FALSE;
+        return CheckResult.TRUE;
     }
+
 }

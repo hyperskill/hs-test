@@ -3,7 +3,7 @@ package outcomes;
 import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.MainMethodTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.TestCase;
+import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorTest extends MainMethodTest {
+public class FatalErrorEmptyPredefinedTests extends MainMethodTest {
 
-    public FatalErrorTest() throws Exception {
+    public FatalErrorEmptyPredefinedTests() throws Exception {
         super(WithoutException.class);
     }
 
@@ -23,19 +23,17 @@ public class FatalErrorTest extends MainMethodTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to Hyperskill team.");
+        exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
+        exception.expectMessage("No tests provided by generatePredefinedInputOutput method");
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
-        return Arrays.asList(
-            new TestCase()
-        );
+    public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
+        return Arrays.asList();
     }
 
     @Override
     public CheckResult check(String reply, Object clue) {
-        System.out.println(1 / 0);
         return CheckResult.TRUE;
     }
 }
