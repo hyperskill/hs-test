@@ -75,8 +75,7 @@ public final class Utils {
             Path path = Paths.get(CURRENT_DIR + name);
             return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
             //return Files.readString(path); <- Java 11
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return "";
@@ -85,8 +84,7 @@ public final class Utils {
     public static void sleep(int ms) {
         try {
             Thread.sleep(ms);
-        }
-        catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {}
     }
 
     public static ExecutorService startThreads(List<Process> processes) {

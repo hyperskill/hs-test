@@ -61,8 +61,7 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
         try {
             JComponentFixture component = func.get();
             return component != null;
-        }
-        catch (ComponentLookupException ex) {
+        } catch (ComponentLookupException ex) {
             return false;
         }
     }
