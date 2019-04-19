@@ -27,7 +27,8 @@ public class NoSuchElementWithoutScanner extends MainMethodTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1\n\njava.util.NoSuchElementException");
+        exception.expectMessage("Exception in test #1");
+        exception.expectMessage("java.util.NoSuchElementException");
     }
 
     @Override
