@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 import static org.hyperskill.hstest.dev.exception.StackTraceUtils.*;
@@ -143,8 +144,18 @@ public class FailureHandler {
             errorText = "Exception in test #" + currTest;
             stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
 
-            if (ex.getCause() instanceof NoSuchElementException
+            Throwable cause = ex.getCause();
+
+            if (cause instanceof InputMismatchException
                 && stackTraceInfo.contains("java.util.Scanner")) {
+
+                errorText += "\n\nProbably you have nextInt() (or similar Scanner method) " +
+                    "followed by nextLine() - in this situation nextLine() often gives an " +
+                    "empty string and the second nextLine() gives correct string.";
+
+            } else if (cause instanceof NoSuchElementException
+                && stackTraceInfo.contains("java.util.Scanner")) {
+
                 errorText += "\n\nMaybe you created more than one instance of Scanner? " +
                     "You should use a single Scanner in program.";
             }
