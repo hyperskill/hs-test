@@ -25,27 +25,44 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emp
 
 public abstract class BaseStageTest<AttachType> implements StageTest {
 
-    private final Class userClass;
+    private Class userClass;
     private final Object testedObject;
     private final Method testedMethod;
     protected boolean isTestingMain = false; // TODO potentially it is possible to make it final
 
-    private final boolean overrodeTestCases;
-    private final boolean overrodePredefinedIO;
-    private final boolean overrodeCheck;
-    private final boolean overrodeSolve;
+    private boolean overrodeTestCases;
+    private boolean overrodePredefinedIO;
+    private boolean overrodeCheck;
+    private boolean overrodeSolve;
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
-    public BaseStageTest(Method testedMethod) throws Exception {
+    public BaseStageTest(Method testedMethod) {
         this(testedMethod, null);
     }
 
-    public BaseStageTest(Method testedMethod, Object testedObject) throws Exception {
+    public BaseStageTest(Method testedMethod, Object testedObject) {
         this.testedMethod = testedMethod;
         this.testedObject = testedObject;
+    }
 
+    @Rule
+    public SystemOutRule systemOut = new SystemOutRule().enableLog();
+
+    @Rule
+    public TextFromStandardInputStream systemIn = emptyStandardInputStream();
+
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+    @BeforeClass
+    public static void setUp() {
+        Locale.setDefault(Locale.US);
+        System.setProperty("line.separator", "\n");
+    }
+
+    private void initTests() throws Exception {
         boolean isMethodStatic = Modifier.isStatic(testedMethod.getModifiers());
 
         if (!isMethodStatic && testedObject == null) {
@@ -104,32 +121,21 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             }
         }
 
+        if (!overrodeTestCases && !overrodePredefinedIO) {
+            throw new Exception("No tests found");
+        }
+
         if (overrodeTestCases && !overrodeSolve && !overrodeCheck) {
             throw new Exception("Can't check TestCases: " +
                 "override solve and/or check");
         }
-
-    }
-
-    @Rule
-    public SystemOutRule systemOut = new SystemOutRule().enableLog();
-
-    @Rule
-    public TextFromStandardInputStream systemIn = emptyStandardInputStream();
-
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-    @BeforeClass
-    public static void setUp() {
-        Locale.setDefault(Locale.US);
-        System.setProperty("line.separator", "\n");
     }
 
     @Test
     public void start() {
         int currTest = 0;
         try {
+            initTests();
             String topPackage = StaticFieldsManager.getTopPackage(userClass);
             StaticFieldsManager.saveStaticFields(userClass.getPackage().getName());
             // TODO both loops look very similar
