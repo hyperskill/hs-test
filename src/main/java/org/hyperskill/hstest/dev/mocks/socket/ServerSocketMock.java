@@ -1,6 +1,6 @@
-package org.hyperskill.hstest.v3.mocks.socket;
+package org.hyperskill.hstest.dev.mocks.socket;
 
-import org.hyperskill.hstest.v3.testcase.Process;
+import org.hyperskill.hstest.dev.testcase.Process;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

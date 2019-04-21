@@ -1,6 +1,6 @@
-package org.hyperskill.hstest.v3.common;
+package org.hyperskill.hstest.dev.common;
 
-import org.hyperskill.hstest.v3.testcase.Process;
+import org.hyperskill.hstest.dev.testcase.Process;
 
 import java.io.*;
 import java.net.URL;
@@ -12,63 +12,28 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public final class Utils {
-    private static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
+    public static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
     private static final String TEMP_FILE_PREFIX = "hyperskill-temp-file-";
 
     private static final Set<String> RETURNED_NONEXISTENT_FILES = new HashSet<>();
 
     private Utils() {}
 
-    public static String getStackTrace(final Throwable throwable) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
-    }
-
-    /**
-     * It prepares a given stacktrace to display it for learners.
-     *
-     * If user calls System.exit(0) the stacktrace starts with org.junit that should be skipped.
-     * We're showing all user's stack trace up to our reflect methods.
-     */
-    public static String filterStackTrace(final String stackTrace) {
-        List<String> linesToShow = new ArrayList<>();
-        for (String line : stackTrace.split("\n")) {
-            if (line.contains("org.junit.")) {
-                continue;
-            }
-            if (line.contains("at java.base/jdk.internal.reflect")) {
-                break;
-            }
-            linesToShow.add(line);
+    public static void createFiles(Map<String, String> files) throws IOException {
+        for (Map.Entry<String, String> fileEntry : files.entrySet()) {
+            String filename = fileEntry.getKey();
+            String content = fileEntry.getValue();
+            Files.write(Paths.get(CURRENT_DIR + filename), content.getBytes());
         }
-        return String.join("\n", linesToShow).trim();
     }
 
-    public static void createFiles(Map<String, String> files) {
-        files.forEach((filename, content) -> {
-            try {
-                Files.write(Paths.get(CURRENT_DIR + filename), content.getBytes());
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
-    }
-
-    public static void deleteFiles(Map<String, String> files) {
-        files.forEach((filename, content) -> {
-            try {
-                Files.deleteIfExists(Paths.get(CURRENT_DIR + filename));
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+    public static void deleteFiles(Map<String, String> files) throws IOException {
+        for (Map.Entry<String, String> fileEntry : files.entrySet()) {
+            String filename = fileEntry.getKey();
+            Files.deleteIfExists(Paths.get(CURRENT_DIR + filename));
+        }
     }
 
     private static String normalizeFileExtension(final String extension) {
@@ -110,8 +75,7 @@ public final class Utils {
             Path path = Paths.get(CURRENT_DIR + name);
             return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
             //return Files.readString(path); <- Java 11
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return "";
@@ -120,8 +84,7 @@ public final class Utils {
     public static void sleep(int ms) {
         try {
             Thread.sleep(ms);
-        }
-        catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {}
     }
 
     public static ExecutorService startThreads(List<Process> processes) {

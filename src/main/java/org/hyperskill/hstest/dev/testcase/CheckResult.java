@@ -1,9 +1,17 @@
-package org.hyperskill.hstest.v3.testcase;
+package org.hyperskill.hstest.dev.testcase;
 
 public class CheckResult {
 
     public static final CheckResult FALSE = new CheckResult(false);
     public static final CheckResult TRUE = new CheckResult(true);
+
+    public static CheckResult FALSE(String feedback) {
+        return new CheckResult(false, feedback);
+    }
+
+    public static CheckResult TRUE(String feedback) {
+        return new CheckResult(true, feedback);
+    }
 
     private final boolean isCorrect;
     private final String feedback;

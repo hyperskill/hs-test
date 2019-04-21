@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v3.stage;
+package org.hyperskill.hstest.dev.stage;
 
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
@@ -61,8 +61,7 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
         try {
             JComponentFixture component = func.get();
             return component != null;
-        }
-        catch (ComponentLookupException ex) {
+        } catch (ComponentLookupException ex) {
             return false;
         }
     }

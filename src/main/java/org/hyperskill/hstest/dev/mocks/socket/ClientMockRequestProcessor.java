@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v3.mocks.socket;
+package org.hyperskill.hstest.dev.mocks.socket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

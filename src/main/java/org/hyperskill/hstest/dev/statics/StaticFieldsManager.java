@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v3.statics;
+package org.hyperskill.hstest.dev.statics;
 
 import sun.misc.Unsafe;
 
@@ -8,8 +8,8 @@ import java.util.*;
 
 public class StaticFieldsManager {
 
-    private static Map<String, Class> nameToClass = new LinkedHashMap<>();
-    private static Map<String, Map<Field, Object>> savedFields = new LinkedHashMap<>();
+    private static Map<Class, Map<Field, Object>> savedFields = new LinkedHashMap<>();
+    public static Map<Class, Exception> cantClone = new LinkedHashMap<>();
 
     public static String getTopPackage(Class userMainClass) {
         String className = userMainClass.getCanonicalName();
@@ -25,9 +25,7 @@ public class StaticFieldsManager {
             Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
             Field logger = cls.getDeclaredField("logger");
             u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
-        } catch (Exception e) {
-            // ignore
-        }
+        } catch (Exception ignore) { }
     }
 
     private static Map<Field, Object> saveFieldsForClass(Class clazz) throws Exception {
@@ -38,11 +36,19 @@ public class StaticFieldsManager {
                 boolean isStatic = Modifier.isStatic(field.getModifiers());
                 if (isStatic) {
                     field.setAccessible(true);
-                    Field modifiersField = Field.class.getDeclaredField("modifiers");
-                    modifiersField.setAccessible(true);
-                    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-                    Object value = ObjectsCloner.cloneObject(field.get(null));
-                    savedFields.put(field, value);
+                    try {
+                        Field modifiersField = Field.class.getDeclaredField("modifiers");
+                        modifiersField.setAccessible(true);
+                        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                    } catch (NoSuchFieldException ignore) { }
+                    try {
+                        Object value = ObjectsCloner.cloneObject(field.get(null));
+                        savedFields.put(field, value);
+                    } catch (Exception ex) {
+                        if (!cantClone.containsKey(field.get(null).getClass())) {
+                            cantClone.put(field.get(null).getClass(), ex);
+                        }
+                    }
                 }
             }
         } catch (IllegalAccessException ex) {
@@ -56,16 +62,13 @@ public class StaticFieldsManager {
         disableWarning();
         List<Class<?>> userClasses = ClassSearcher.getClassesForPackage(packageName);
         for (Class clazz : userClasses) {
-            String className = clazz.getCanonicalName();
-            nameToClass.put(className, clazz);
-            savedFields.put(className, saveFieldsForClass(clazz));
+            savedFields.put(clazz, saveFieldsForClass(clazz));
         }
     }
 
     public static void resetStaticFields() throws Exception {
-        for (Map.Entry<String, Class> classEntry : nameToClass.entrySet()) {
-            String className = classEntry.getKey();
-            for (Map.Entry<Field, Object> fieldEntry : savedFields.get(className).entrySet()) {
+        for (Map.Entry<Class, Map<Field, Object>> classEntry : savedFields.entrySet()) {
+            for (Map.Entry<Field, Object> fieldEntry : classEntry.getValue().entrySet()) {
                 Field field = fieldEntry.getKey();
                 Object value = fieldEntry.getValue();
                 field.set(null, ObjectsCloner.cloneObject(value));

@@ -1,9 +1,10 @@
-package org.hyperskill.hstest.v3.stage;
+package org.hyperskill.hstest.dev.stage;
 
-import org.hyperskill.hstest.v3.statics.StaticFieldsManager;
-import org.hyperskill.hstest.v3.testcase.CheckResult;
-import org.hyperskill.hstest.v3.testcase.PredefinedIOTestCase;
-import org.hyperskill.hstest.v3.testcase.TestCase;
+import org.hyperskill.hstest.dev.exception.FailureHandler;
+import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,42 +12,57 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
-import static org.hyperskill.hstest.v3.common.Utils.*;
+import static org.hyperskill.hstest.dev.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 public abstract class BaseStageTest<AttachType> implements StageTest {
 
-    private final Class userClass;
+    private Class userClass;
     private final Object testedObject;
     private final Method testedMethod;
     protected boolean isTestingMain = false; // TODO potentially it is possible to make it final
 
-    private final boolean overrodeTestCases;
-    private final boolean overrodePredefinedIO;
-    private final boolean overrodeCheck;
-    private final boolean overrodeSolve;
+    private boolean overrodeTestCases;
+    private boolean overrodePredefinedIO;
+    private boolean overrodeCheck;
+    private boolean overrodeSolve;
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
-    public BaseStageTest(Method testedMethod) throws Exception {
+    public BaseStageTest(Method testedMethod) {
         this(testedMethod, null);
     }
 
-    public BaseStageTest(Method testedMethod, Object testedObject) throws Exception {
+    public BaseStageTest(Method testedMethod, Object testedObject) {
         this.testedMethod = testedMethod;
         this.testedObject = testedObject;
+    }
 
+    @Rule
+    public SystemOutRule systemOut = new SystemOutRule().enableLog();
+
+    @Rule
+    public TextFromStandardInputStream systemIn = emptyStandardInputStream();
+
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+    @BeforeClass
+    public static void setUp() {
+        Locale.setDefault(Locale.US);
+        System.setProperty("line.separator", "\n");
+    }
+
+    private void initTests() throws Exception {
         boolean isMethodStatic = Modifier.isStatic(testedMethod.getModifiers());
 
         if (!isMethodStatic && testedObject == null) {
@@ -105,32 +121,21 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             }
         }
 
+        if (!overrodeTestCases && !overrodePredefinedIO) {
+            throw new Exception("No tests found");
+        }
+
         if (overrodeTestCases && !overrodeSolve && !overrodeCheck) {
             throw new Exception("Can't check TestCases: " +
                 "override solve and/or check");
         }
-
-    }
-
-    @Rule
-    public SystemOutRule systemOut = new SystemOutRule().enableLog();
-
-    @Rule
-    public TextFromStandardInputStream systemIn = emptyStandardInputStream();
-
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-    @BeforeClass
-    public static void setUp() {
-        Locale.setDefault(Locale.US);
-        System.setProperty("line.separator", "\n");
     }
 
     @Test
     public void start() {
         int currTest = 0;
         try {
+            initTests();
             String topPackage = StaticFieldsManager.getTopPackage(userClass);
             StaticFieldsManager.saveStaticFields(userClass.getPackage().getName());
             // TODO both loops look very similar
@@ -151,6 +156,11 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
 
                     String errorMessage = "Wrong answer in test #" + currTest
                         + "\n\n" + result.getFeedback().trim();
+
+                    if (FailureHandler.detectStaticCloneFails()) {
+                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
+                    }
+
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
@@ -170,42 +180,16 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
 
                     String errorMessage = "Wrong answer in test #" + currTest
                         + "\n\n" + result.getFeedback().trim();
+
+                    if (FailureHandler.detectStaticCloneFails()) {
+                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
+                    }
+
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
         } catch (Exception ex) {
-            String errorText;
-            String stackTraceInfo;
-            if (ex.getCause() != null &&
-                ex instanceof InvocationTargetException) {
-                // If user failed then ex == InvocationTargetException
-                // and ex.getCause() == Actual user exception
-                errorText = "Exception in test #" + currTest;
-                stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
-
-                if (ex.getCause() instanceof NoSuchElementException
-                    && stackTraceInfo.contains("java.util.Scanner")) {
-                    stackTraceInfo = "Maybe you created more than one instance of Scanner? " +
-                        "You should use a single Scanner in program.\n\n" + stackTraceInfo;
-                }
-
-                if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
-                    errorText = "Error in test #" + currTest + " - Tried to exit";
-                }
-            }
-            else {
-                errorText = "Fatal error in test #" + currTest +
-                    ", please send the report to Hyperskill team.";
-                if (ex.getCause() == null) {
-                    stackTraceInfo = getStackTrace(ex);
-                }
-                else {
-                    stackTraceInfo = getStackTrace(ex) +
-                        "\n" + getStackTrace(ex.getCause());
-                }
-            }
-
-            fail(errorText + "\n\n" + stackTraceInfo);
+            fail(FailureHandler.getFeedback(ex, currTest));
         }
     }
 

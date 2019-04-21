@@ -1,7 +1,7 @@
-package org.hyperskill.hstest.v3.mocks.web;
+package org.hyperskill.hstest.dev.mocks.web;
 
-import org.hyperskill.hstest.v3.common.Utils;
-import org.hyperskill.hstest.v3.testcase.Process;
+import org.hyperskill.hstest.dev.common.Utils;
+import org.hyperskill.hstest.dev.testcase.Process;
 
 import java.io.*;
 import java.net.*;

@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v3.stage;
+package org.hyperskill.hstest.dev.stage;
 
 public abstract class MainMethodTest<AttachType> extends BaseStageTest<AttachType> {
 

@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v3.testcase;
+package org.hyperskill.hstest.dev.testcase;
 
 import java.util.*;
 
@@ -10,6 +10,8 @@ public class TestCase<AttachType> {
 
     // files needed to be set up before test
     private Map<String, String> files = new HashMap<>();
+
+    private Map<Class<? extends Exception>, String> ex;
 
     // runnables that should be run before test
     private List<Process> processes = new ArrayList<>();
@@ -40,6 +42,11 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> runWith(Process process) {
         processes.add(process);
+        return this;
+    }
+
+    public TestCase<AttachType> feedbackOnExcaption(Class<? extends Exception> clazz, String feedback) {
+        ex.put(clazz, feedback);
         return this;
     }
 
