@@ -160,7 +160,9 @@ public class FailureHandler {
                 && stackTraceInfo.contains("java.util.Scanner")) {
 
                 errorText += "\n\nMaybe you created more than one instance of Scanner? " +
-                    "You should use a single Scanner in program.";
+                    "You should use a single Scanner in program. " +
+                    "If not, this type of exception also happens if you " +
+                    "run out of input (tried to read more than expected).";
             }
 
             if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
