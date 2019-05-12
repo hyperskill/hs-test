@@ -28,7 +28,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     private Class userClass;
     private final Object testedObject;
     private final Method testedMethod;
-    protected final boolean isTestingMain;
+    private final boolean isTestingMain;
 
     private boolean overrodeTestCases;
     private boolean overrodePredefinedIO;
