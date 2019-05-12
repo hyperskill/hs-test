@@ -216,7 +216,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
         }
 
         boolean isCorrect = byChecking.isCorrect() && bySolving.isCorrect();
-        String resultFeedback = byChecking.getFeedback() + "\n" + bySolving.getFeedback().trim();
+        String resultFeedback = (byChecking.getFeedback() + "\n" + bySolving.getFeedback()).trim();
 
         return new CheckResult(isCorrect, resultFeedback);
     }
