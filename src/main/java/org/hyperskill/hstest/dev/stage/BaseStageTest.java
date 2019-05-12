@@ -28,7 +28,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     private Class userClass;
     private final Object testedObject;
     private final Method testedMethod;
-    protected boolean isTestingMain = false; // TODO potentially it is possible to make it final
+    private final boolean isTestingMain;
 
     private boolean overrodeTestCases;
     private boolean overrodePredefinedIO;
@@ -38,13 +38,14 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
-    public BaseStageTest(Method testedMethod) {
-        this(testedMethod, null);
+    public BaseStageTest(Method testedMethod, boolean isTestingMain) {
+        this(testedMethod, null, isTestingMain);
     }
 
-    public BaseStageTest(Method testedMethod, Object testedObject) {
+    public BaseStageTest(Method testedMethod, Object testedObject, boolean isTestingMain) {
         this.testedMethod = testedMethod;
         this.testedObject = testedObject;
+        this.isTestingMain = isTestingMain;
     }
 
     @Rule
