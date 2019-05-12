@@ -45,7 +45,7 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> feedbackOnExcaption(Class<? extends Exception> clazz, String feedback) {
+    public TestCase<AttachType> feedbackOnException(Class<? extends Exception> clazz, String feedback) {
         ex.put(clazz, feedback);
         return this;
     }
