@@ -212,7 +212,13 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             byChecking = check(output, test.getAttach());
         }
         if (overrodeSolve) {
-            String solution = solve(test.getInput());
+            String solution;
+            try {
+                solution = solve(test.getInput());
+            } catch (AssertionError solveError) {
+                String message = "Fatal error during solving, please send the report to Hyperskill team.";
+                throw new AssertionError(message, solveError);
+            }
             bySolving = checkSolved(output, solution);
         }
 
