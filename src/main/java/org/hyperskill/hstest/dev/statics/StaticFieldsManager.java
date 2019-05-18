@@ -13,6 +13,9 @@ public class StaticFieldsManager {
 
     public static String getTopPackage(Class userMainClass) {
         String className = userMainClass.getCanonicalName();
+        if (!className.contains(".")) {
+            return className;
+        }
         return className.substring(0, className.indexOf("."));
     }
 
