@@ -65,16 +65,22 @@ public class StaticFieldsManager {
         disableWarning();
         List<Class<?>> userClasses = ClassSearcher.getClassesForPackage(packageName);
         for (Class clazz : userClasses) {
-            savedFields.put(clazz, saveFieldsForClass(clazz));
+            if (clazz != StaticFieldsManager.class) {
+                savedFields.put(clazz, saveFieldsForClass(clazz));
+            }
         }
     }
 
     public static void resetStaticFields() throws Exception {
         for (Map.Entry<Class, Map<Field, Object>> classEntry : savedFields.entrySet()) {
             for (Map.Entry<Field, Object> fieldEntry : classEntry.getValue().entrySet()) {
-                Field field = fieldEntry.getKey();
-                Object value = fieldEntry.getValue();
-                field.set(null, ObjectsCloner.cloneObject(value));
+                try {
+                    Field field = fieldEntry.getKey();
+                    Object value = fieldEntry.getValue();
+                    field.set(null, ObjectsCloner.cloneObject(value));
+                } catch (ClassCastException ex) {
+                    System.out.println("123");
+                }
             }
         }
     }
