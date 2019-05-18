@@ -83,7 +83,9 @@ public class ClassSearcher {
                 name = name.substring(0, name.length() - 6).replace('/', '.');
 
                 if (name.contains(pckgname)) {
-                    classes.add(Class.forName(name));
+                    try {
+                        classes.add(Class.forName(name));
+                    } catch (NoClassDefFoundError ignored) { }
                 }
             }
         }

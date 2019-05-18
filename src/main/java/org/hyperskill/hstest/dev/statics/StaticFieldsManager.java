@@ -10,6 +10,7 @@ public class StaticFieldsManager {
 
     private static Map<Class, Map<Field, Object>> savedFields = new LinkedHashMap<>();
     public static Map<Class, Exception> cantClone = new LinkedHashMap<>();
+    public static Map<Field, Exception> cantReset = new LinkedHashMap<>();
 
     public static String getTopPackage(Class userMainClass) {
         String className = userMainClass.getCanonicalName();
@@ -71,15 +72,15 @@ public class StaticFieldsManager {
         }
     }
 
-    public static void resetStaticFields() throws Exception {
+    public static void resetStaticFields() {
         for (Map.Entry<Class, Map<Field, Object>> classEntry : savedFields.entrySet()) {
             for (Map.Entry<Field, Object> fieldEntry : classEntry.getValue().entrySet()) {
                 try {
                     Field field = fieldEntry.getKey();
                     Object value = fieldEntry.getValue();
                     field.set(null, ObjectsCloner.cloneObject(value));
-                } catch (ClassCastException ex) {
-                    System.out.println("123");
+                } catch (IllegalAccessException ex) {
+                    cantReset.put(fieldEntry.getKey(), ex);
                 }
             }
         }

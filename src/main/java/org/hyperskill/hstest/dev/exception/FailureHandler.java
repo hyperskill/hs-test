@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileSystemException;
 import java.util.InputMismatchException;
@@ -17,6 +18,7 @@ public class FailureHandler {
 
     public static boolean detectStaticCloneFails() {
         return !StaticFieldsManager.cantClone.isEmpty()
+            || !StaticFieldsManager.cantReset.isEmpty()
             || !ObjectsCloner.circularLinks.isEmpty()
             || !ObjectsCloner.cantDeserialize.isEmpty()
             || !ObjectsCloner.cantSerialize.isEmpty();
@@ -53,6 +55,23 @@ public class FailureHandler {
                 cantClone.append(clazz.toString());
                 cantClone.append("\n");
                 cantClone.append(filteredStackTrace);
+            }
+        }
+
+        StringBuilder cantReset = new StringBuilder("Cannot be reset: ");
+
+        if (StaticFieldsManager.cantReset.isEmpty()) {
+            cantReset.append("nothing");
+        } else {
+            for (Field field : StaticFieldsManager.cantReset.keySet()) {
+                Exception exception = StaticFieldsManager.cantReset.get(field);
+                String stackTrace = getStackTrace(exception);
+                String filteredStackTrace = removeNonLibraryClasses(stackTrace);
+
+                cantReset.append("\n");
+                cantReset.append(field.toString());
+                cantReset.append("\n");
+                cantReset.append(filteredStackTrace);
             }
         }
 
@@ -131,6 +150,7 @@ public class FailureHandler {
 
         return info + "\n\n" +
             cantClone.toString() + "\n" +
+            cantReset.toString() + "\n" +
             cantDeserialize.toString() + "\n" +
             cantSerialize.toString() + "\n" +
             circularLinks.toString() + "\n";
