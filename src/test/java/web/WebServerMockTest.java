@@ -1,9 +1,9 @@
 package web;
 
-import org.hyperskill.hstest.dev.common.Utils;
-import org.hyperskill.hstest.dev.mocks.web.WebPage;
-import org.hyperskill.hstest.dev.mocks.web.WebServerMock;
-import org.hyperskill.hstest.dev.testcase.Process;
+import org.hyperskill.hstest.android.common.Utils;
+import org.hyperskill.hstest.android.mocks.web.WebPage;
+import org.hyperskill.hstest.android.mocks.web.WebServerMock;
+import org.hyperskill.hstest.android.testcase.Process;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
