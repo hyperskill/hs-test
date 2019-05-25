@@ -194,8 +194,8 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
-        } catch (Throwable ex) {
-            fail(FailureHandler.getFeedback(ex, currTest));
+        } catch (Throwable t) {
+            fail(FailureHandler.getFeedback(t, currTest));
         }
     }
 
