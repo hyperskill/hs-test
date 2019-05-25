@@ -20,7 +20,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
 import static org.hyperskill.hstest.dev.common.Utils.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 public abstract class BaseStageTest<AttachType> implements StageTest {
@@ -194,7 +195,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
                     assertTrue(errorMessage, result.isCorrect());
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception | Error ex) {
             fail(FailureHandler.getFeedback(ex, currTest));
         }
     }

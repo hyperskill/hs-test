@@ -156,7 +156,7 @@ public class FailureHandler {
             circularLinks.toString() + "\n";
     }
 
-    public static String getFeedback(Exception ex, int currTest) {
+    public static String getFeedback(Throwable ex, int currTest) {
 
         String errorText;
         String stackTraceInfo;
