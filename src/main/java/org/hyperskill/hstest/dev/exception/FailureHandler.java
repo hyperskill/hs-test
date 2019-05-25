@@ -156,18 +156,18 @@ public class FailureHandler {
             circularLinks.toString() + "\n";
     }
 
-    public static String getFeedback(Throwable ex, int currTest) {
+    public static String getFeedback(Throwable t, int currTest) {
 
         String errorText;
         String stackTraceInfo;
-        if (ex.getCause() != null &&
-            ex instanceof InvocationTargetException) {
-            // If user failed then ex == InvocationTargetException
-            // and ex.getCause() == Actual user exception
+        if (t.getCause() != null &&
+            t instanceof InvocationTargetException) {
+            // If user failed then t == InvocationTargetException
+            // and t.getCause() == Actual user exception
             errorText = "Exception in test #" + currTest;
-            stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
+            stackTraceInfo = filterStackTrace(getStackTrace(t.getCause()));
 
-            Throwable cause = ex.getCause();
+            Throwable cause = t.getCause();
 
             if (cause instanceof InputMismatchException
                 && stackTraceInfo.contains("java.util.Scanner")) {
@@ -193,15 +193,15 @@ public class FailureHandler {
                 errorText += "\n\n" + avoidStaticsMsg;
             }
 
-        } else if (ex instanceof FileSystemException) {
+        } else if (t instanceof FileSystemException) {
 
             errorText = "Error in test #" + currTest ;
             stackTraceInfo = "";
 
             // without "class "
-            String exceptionName = ex.getClass().toString().substring(6);
+            String exceptionName = t.getClass().toString().substring(6);
 
-            String file = ((FileSystemException) ex).getFile();
+            String file = ((FileSystemException) t).getFile();
 
             if (file.startsWith(Utils.CURRENT_DIR)) {
                 file = file.substring(Utils.CURRENT_DIR.length());
@@ -222,11 +222,11 @@ public class FailureHandler {
 
             errorText = "Fatal error " + whenErrorHappened +
                 ", please send the report to Hyperskill team.\n\n" + getReport();
-            if (ex.getCause() == null) {
-                stackTraceInfo = getStackTrace(ex);
+            if (t.getCause() == null) {
+                stackTraceInfo = getStackTrace(t);
             } else {
-                stackTraceInfo = getStackTrace(ex) +
-                    "\n" + getStackTrace(ex.getCause());
+                stackTraceInfo = getStackTrace(t) +
+                    "\n" + getStackTrace(t.getCause());
             }
         }
 
