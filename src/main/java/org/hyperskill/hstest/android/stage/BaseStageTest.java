@@ -30,8 +30,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             stopThreads(testCase.getProcesses(), pool);
             deleteFiles(testCase.getFiles());
 
-            String errorMessage = "Wrong answer during testing"
-                + "\n\n" + result.getFeedback().trim();
+            String errorMessage = result.getFeedback().trim();
 
             assertTrue(errorMessage, result.isCorrect());
 
