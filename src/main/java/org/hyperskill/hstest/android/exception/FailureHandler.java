@@ -24,7 +24,7 @@ public class FailureHandler {
             "Testing library version: android";
     }
 
-    public static String getFeedback(Exception ex, int currTest) {
+    public static String getFeedback(Exception ex) {
 
         String errorText;
         String stackTraceInfo;
@@ -32,7 +32,7 @@ public class FailureHandler {
             ex instanceof InvocationTargetException) {
             // If user failed then ex == InvocationTargetException
             // and ex.getCause() == Actual user exception
-            errorText = "Exception in test #" + currTest;
+            errorText = "Exception during testing";
             stackTraceInfo = filterStackTrace(getStackTrace(ex.getCause()));
 
             Throwable cause = ex.getCause();
@@ -54,12 +54,12 @@ public class FailureHandler {
             }
 
             if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
-                errorText = "Error in test #" + currTest + " - Tried to exit";
+                errorText = "Error during testing - Tried to exit";
             }
 
         } else if (ex instanceof FileSystemException) {
 
-            errorText = "Error in test #" + currTest ;
+            errorText = "Error during testing";
             stackTraceInfo = "";
 
             // without "class "
@@ -77,14 +77,7 @@ public class FailureHandler {
 
         } else {
 
-            String whenErrorHappened;
-            if (currTest == 0) {
-                whenErrorHappened = "during testing";
-            } else {
-                whenErrorHappened = "in test #" + currTest;
-            }
-
-            errorText = "Fatal error " + whenErrorHappened +
+            errorText = "Fatal error during testing" +
                 ", please send the report to Hyperskill team.\n\n" + getReport();
             if (ex.getCause() == null) {
                 stackTraceInfo = getStackTrace(ex);

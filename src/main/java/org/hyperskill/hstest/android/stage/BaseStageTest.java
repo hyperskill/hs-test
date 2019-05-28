@@ -35,7 +35,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             assertTrue(errorMessage, result.isCorrect());
 
         } catch (Exception ex) {
-            fail(FailureHandler.getFeedback(ex, 0));
+            fail(FailureHandler.getFeedback(ex));
         }
     }
 
