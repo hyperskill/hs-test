@@ -186,7 +186,12 @@ public class AndroidTest extends BaseStageTest {
 
             }
 
-            return CheckResult.TRUE;
+            return CheckResult.FALSE(
+                fatalError + "\n\n" +
+                    "Unknown error.\n\n" +
+                    "stdout:\n\n" + stdout + "\n\n" +
+                    "stderr:\n\n" + stderr
+            );
         }
 
         return CheckResult.TRUE;
