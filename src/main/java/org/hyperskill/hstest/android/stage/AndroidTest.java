@@ -85,7 +85,7 @@ public class AndroidTest extends BaseStageTest {
     }
 
     @Override
-    public CheckResult check(Object clue) {
+    final public CheckResult check(Object clue) {
 
         execInShell(
             "gradlew.bat " + getGradleTask(),
