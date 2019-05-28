@@ -6,6 +6,36 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+class StreamFetcher implements Runnable {
+
+    StringBuilder sb = new StringBuilder();
+    InputStream stream;
+
+    StreamFetcher(InputStream stream) {
+        this.stream = stream;
+    }
+
+    private void fetchStream() {
+        InputStreamReader isr = new InputStreamReader(stream);
+        BufferedReader br = new BufferedReader(isr);
+
+        String line;
+        try {
+            while ( (line = br.readLine()) != null) {
+                sb.append(line);
+                sb.append("\n");
+                System.out.println(line);
+            }
+        } catch (IOException ignored) { }
+    }
+
+    @Override
+    public void run() {
+        fetchStream();
+    }
+}
+
 public class AndroidTest extends BaseStageTest {
 
     private static String stdout = "";
@@ -18,24 +48,6 @@ public class AndroidTest extends BaseStageTest {
             reason + ".\n\n" +
             "stdout:\n\n" + stdout + "\n\n" +
             "stderr:\n\n" + stderr;
-    }
-
-
-    private static String fetchStream(InputStream stream) {
-        InputStreamReader isr = new InputStreamReader(stream);
-        BufferedReader br = new BufferedReader(isr);
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-            while ( (line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
-                System.out.println(line);
-            }
-        } catch (IOException ignored) { }
-
-        return sb.toString();
     }
 
     private static Process startProcess(String winCommand, String linuxCommand) {
@@ -63,8 +75,22 @@ public class AndroidTest extends BaseStageTest {
         Process process = startProcess(winCommand, linuxCommand);
         if (process == null) return;
 
-        stdout = fetchStream(process.getInputStream());
-        stderr = fetchStream(process.getErrorStream());
+        StreamFetcher sfout = new StreamFetcher(process.getInputStream());
+        StreamFetcher sferr = new StreamFetcher(process.getErrorStream());
+
+        Thread tout = new Thread(sfout);
+        Thread terr = new Thread(sferr);
+
+        tout.start();
+        terr.start();
+
+        try {
+            tout.join();
+            terr.join();
+        } catch (InterruptedException ignored) { }
+
+        stdout = sfout.sb.toString();
+        stderr = sferr.sb.toString();
 
         try {
             process.waitFor();
@@ -95,6 +121,17 @@ public class AndroidTest extends BaseStageTest {
         //System.out.println(stdout);
         System.err.println(stderr);
 
+        stdout = stdout.trim();
+        stderr = stderr.trim();
+
+        stdout = stdout
+            .replace("\r\n", "\n")
+            .replace("\r", "\n");
+
+        stderr = stderr
+            .replace("\r\n", "\n")
+            .replace("\r", "\n");
+
         if (!stderr.isEmpty()) {
             if (stderr.contains(".DeviceException: No connected devices!")) {
                 return CheckResult.FALSE(
@@ -114,12 +151,6 @@ public class AndroidTest extends BaseStageTest {
             if (stderr.contains("> There were failing tests.")) {
 
                 try {
-                    stdout = stdout.trim();
-                    stderr = stderr.trim();
-
-                    stdout = stdout
-                        .replace("\r\n", "\n")
-                        .replace("\r", "\n");
 
                     String[] lines = stdout.split("\n");
 
@@ -183,6 +214,28 @@ public class AndroidTest extends BaseStageTest {
                         fatalError("Error parsing Android tests output")
                     );
                 }
+
+            }
+
+            if (stderr.contains("> Compilation failed;")) {
+
+                StringBuilder sb = new StringBuilder();
+                String[] lines = stderr.split("\n");
+
+                for (String line : lines) {
+                    if (line.startsWith("FAILURE:")) {
+                        break;
+                    }
+                    sb.append(line);
+                    sb.append("\n");
+                }
+
+                return CheckResult.FALSE(
+                    "Compilation failed\n\n" +
+                        "Check if your activities and views " +
+                        "named as stated in the description.\n\n" +
+                        sb.toString().trim()
+                );
 
             }
 
