@@ -8,11 +8,17 @@ import java.util.List;
 
 public class AndroidTest extends BaseStageTest {
 
-    static String stdout = "";
-    static String stderr = "";
+    private static String stdout = "";
+    private static String stderr = "";
 
-    static String fatalError = "Fatal error during testing" +
-        ", please send the report to Hyperskill team.";
+    private static String fatalError(String reason) {
+        String msg = "Fatal error during testing" +
+            ", please send the report to Hyperskill team.";
+        return msg + "\n\n" +
+            reason + ".\n\n" +
+            "stdout:\n\n" + stdout + "\n\n" +
+            "stderr:\n\n" + stderr;
+    }
 
 
     private static String fetchStream(InputStream stream) {
@@ -146,10 +152,7 @@ public class AndroidTest extends BaseStageTest {
 
                     if (testNum == 0) {
                         return CheckResult.FALSE(
-                            fatalError + "\n\n" +
-                                "Can't find failed test.\n\n" +
-                                "stdout:\n\n" + stdout + "\n\n" +
-                                "stderr:\n\n" + stderr
+                            fatalError("Can't find failed test")
                         );
                     }
 
@@ -177,20 +180,14 @@ public class AndroidTest extends BaseStageTest {
                     );
                 } catch (Exception ex) {
                     return CheckResult.FALSE(
-                        fatalError + "\n\n" +
-                            "Error parsing Android tests output.\n\n" +
-                            "stdout:\n\n" + stdout + "\n\n" +
-                            "stderr:\n\n" + stderr
+                        fatalError("Error parsing Android tests output")
                     );
                 }
 
             }
 
             return CheckResult.FALSE(
-                fatalError + "\n\n" +
-                    "Unknown error.\n\n" +
-                    "stdout:\n\n" + stdout + "\n\n" +
-                    "stderr:\n\n" + stderr
+                fatalError("Unknown error")
             );
         }
 
