@@ -3,6 +3,10 @@ package mock;
 import java.util.*;
 import java.util.concurrent.*;
 
+enum StaticEnum {
+    ONE, TWO, THREE
+}
+
 public class StaticTestClass {
 
     public    static final List<String> list1 = new ArrayList<>();

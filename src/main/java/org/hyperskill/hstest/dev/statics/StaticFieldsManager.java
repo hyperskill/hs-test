@@ -66,7 +66,8 @@ public class StaticFieldsManager {
         disableWarning();
         List<Class<?>> userClasses = ClassSearcher.getClassesForPackage(packageName);
         for (Class clazz : userClasses) {
-            if (clazz != StaticFieldsManager.class) {
+            if (clazz != StaticFieldsManager.class
+                    && Enum.class.isAssignableFrom(clazz)) {
                 savedFields.put(clazz, saveFieldsForClass(clazz));
             }
         }
