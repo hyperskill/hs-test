@@ -1,6 +1,7 @@
 package mock;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class StaticTestClass {
 
@@ -32,6 +33,26 @@ public class StaticTestClass {
     protected static       ArrayList<String> implicitList6 = new ArrayList<>();
     private   static       ArrayList<String> implicitList7 = new ArrayList<>();
               static       ArrayList<String> implicitList8 = new ArrayList<>();
+
+
+    public    static final CopyOnWriteArrayList<String> concurrentList1 = new CopyOnWriteArrayList<>();
+    protected static final CopyOnWriteArrayList<String> concurrentList2 = new CopyOnWriteArrayList<>();
+    private   static final CopyOnWriteArrayList<String> concurrentList3 = new CopyOnWriteArrayList<>();
+              static final CopyOnWriteArrayList<String> concurrentList4 = new CopyOnWriteArrayList<>();
+    public    static       CopyOnWriteArrayList<String> concurrentList5 = new CopyOnWriteArrayList<>();
+    protected static       CopyOnWriteArrayList<String> concurrentList6 = new CopyOnWriteArrayList<>();
+    private   static       CopyOnWriteArrayList<String> concurrentList7 = new CopyOnWriteArrayList<>();
+              static       CopyOnWriteArrayList<String> concurrentList8 = new CopyOnWriteArrayList<>();
+
+
+    public    static final List noTypeconcurrentList1 = new CopyOnWriteArrayList<>();
+    protected static final List noTypeConcurrentList2 = new CopyOnWriteArrayList<>();
+    private   static final List noTypeConcurrentList3 = new CopyOnWriteArrayList<>();
+              static final List noTypeConcurrentList4 = new CopyOnWriteArrayList<>();
+    public    static       List noTypeConcurrentList5 = new CopyOnWriteArrayList<>();
+    protected static       List noTypeConcurrentList6 = new CopyOnWriteArrayList<>();
+    private   static       List noTypeConcurrentList7 = new CopyOnWriteArrayList<>();
+              static       List noTypeConcurrentList8 = new CopyOnWriteArrayList<>();
 
 
     public    static final List<Integer> homoList1 = Arrays.asList(1, 2, 3);
