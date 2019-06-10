@@ -16,6 +16,8 @@ import java.util.function.Supplier;
 
 public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
 
+    public static void main(String[] args) { }
+
     protected JFrame frame;
     protected FrameFixture window;
 
@@ -42,8 +44,6 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
     public void tearDown() {
         window.cleanUp();
     }
-
-    public static void mockMethod() {}
 
     public static List<Component> getAllComponents(final Container c) {
         Component[] comps = c.getComponents();
