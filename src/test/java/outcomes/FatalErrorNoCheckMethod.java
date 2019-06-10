@@ -1,6 +1,5 @@
 package outcomes;
 
-import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -12,8 +11,12 @@ import java.util.List;
 
 public class FatalErrorNoCheckMethod extends BaseStageTest {
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+
     public FatalErrorNoCheckMethod() {
-        super(WithoutException.class);
+        super(FatalErrorNoCheckMethod.class);
     }
 
     @Rule

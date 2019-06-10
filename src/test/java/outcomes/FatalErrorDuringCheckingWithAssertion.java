@@ -1,6 +1,5 @@
 package outcomes;
 
-import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -13,11 +12,15 @@ import java.util.List;
 
 public class FatalErrorDuringCheckingWithAssertion extends BaseStageTest {
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     public FatalErrorDuringCheckingWithAssertion() {
-        super(WithoutException.class);
+        super(FatalErrorDuringCheckingWithAssertion.class);
     }
 
     @Before

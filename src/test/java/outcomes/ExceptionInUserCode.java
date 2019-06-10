@@ -1,6 +1,5 @@
 package outcomes;
 
-import mock.WithException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -13,8 +12,13 @@ import java.util.List;
 
 public class ExceptionInUserCode extends BaseStageTest {
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+        System.out.println(1 / 0);
+    }
+
     public ExceptionInUserCode() {
-        super(WithException.class);
+        super(ExceptionInUserCode.class);
     }
 
     @Rule
@@ -24,7 +28,7 @@ public class ExceptionInUserCode extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Exception in test #1");
-        exception.expectMessage("at mock.WithException.main");
+        exception.expectMessage("at outcomes.ExceptionInUserCode.main");
     }
 
     @Override

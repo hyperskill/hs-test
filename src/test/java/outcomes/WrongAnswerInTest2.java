@@ -1,6 +1,5 @@
 package outcomes;
 
-import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -13,8 +12,12 @@ import java.util.List;
 
 public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+
     public WrongAnswerInTest2() {
-        super(WithoutException.class);
+        super(WrongAnswerInTest2.class);
     }
 
     @Rule

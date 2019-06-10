@@ -1,6 +1,5 @@
 package outcomes;
 
-import mock.WithoutException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -10,8 +9,12 @@ import java.util.List;
 
 public class Success extends BaseStageTest<String> {
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+
     public Success() {
-        super(WithoutException.class);
+        super(Success.class);
     }
 
     String succ = "123";

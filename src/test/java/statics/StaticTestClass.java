@@ -1,7 +1,7 @@
-package mock;
+package statics;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 enum StaticEnum {
     ONE, TWO, THREE
