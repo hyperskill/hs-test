@@ -67,7 +67,7 @@ public class StaticFieldsManager {
         List<Class<?>> userClasses = ClassSearcher.getClassesForPackage(packageName);
         for (Class clazz : userClasses) {
             if (clazz != StaticFieldsManager.class
-                    && Enum.class.isAssignableFrom(clazz)) {
+                    && !Enum.class.isAssignableFrom(clazz)) {
                 savedFields.put(clazz, saveFieldsForClass(clazz));
             }
         }
