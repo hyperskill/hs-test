@@ -1,7 +1,7 @@
 package outcomes;
 
 import mock.WithoutException;
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.junit.Before;
@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorEmptyPredefinedTests extends MainMethodTest {
+public class FatalErrorEmptyPredefinedTests extends BaseStageTest {
 
-    public FatalErrorEmptyPredefinedTests() throws Exception {
+    public FatalErrorEmptyPredefinedTests() {
         super(WithoutException.class);
     }
 

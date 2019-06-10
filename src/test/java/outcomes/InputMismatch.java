@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class InputMismatch extends MainMethodTest {
+public class InputMismatch extends BaseStageTest {
 
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class InputMismatch extends MainMethodTest {
         System.out.println(s.nextInt());
     }
 
-    public InputMismatch() throws Exception {
+    public InputMismatch() {
         super(InputMismatch.class);
     }
 

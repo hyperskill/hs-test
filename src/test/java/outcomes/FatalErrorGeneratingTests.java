@@ -1,7 +1,7 @@
 package outcomes;
 
 import mock.WithoutException;
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorGeneratingTests extends MainMethodTest {
+public class FatalErrorGeneratingTests extends BaseStageTest {
 
-    public FatalErrorGeneratingTests() throws Exception {
+    public FatalErrorGeneratingTests() {
         super(WithoutException.class);
     }
 

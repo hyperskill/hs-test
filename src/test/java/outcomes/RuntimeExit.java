@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -12,7 +12,7 @@ import org.junit.rules.TestRule;
 import java.util.Arrays;
 import java.util.List;
 
-public class RuntimeExit extends MainMethodTest {
+public class RuntimeExit extends BaseStageTest {
 
     public static void main(String[] args) {
         Runtime.getRuntime().exit(0);

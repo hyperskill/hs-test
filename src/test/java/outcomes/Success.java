@@ -1,16 +1,16 @@
 package outcomes;
 
 import mock.WithoutException;
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Success extends MainMethodTest<String> {
+public class Success extends BaseStageTest<String> {
 
-    public Success() throws Exception {
+    public Success() {
         super(WithoutException.class);
     }
 

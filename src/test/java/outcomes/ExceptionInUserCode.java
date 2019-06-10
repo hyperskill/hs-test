@@ -1,7 +1,7 @@
 package outcomes;
 
 import mock.WithException;
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExceptionInUserCode extends MainMethodTest {
+public class ExceptionInUserCode extends BaseStageTest {
 
-    public ExceptionInUserCode() throws Exception {
+    public ExceptionInUserCode() {
         super(WithException.class);
     }
 

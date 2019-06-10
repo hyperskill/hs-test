@@ -19,8 +19,8 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
     protected JFrame frame;
     protected FrameFixture window;
 
-    public SwingTest(JFrame frame) throws Exception {
-        super(SwingTest.class.getMethod("mockMethod"), frame, false);
+    public SwingTest(JFrame frame) {
+        super(SwingTest.class, frame);
         this.frame = frame;
     }
 

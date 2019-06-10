@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
@@ -11,13 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class NoSuchElementWithScanner extends MainMethodTest {
+public class NoSuchElementWithScanner extends BaseStageTest {
 
     public static void main(String[] args) {
         new Scanner(System.in).nextInt();
     }
 
-    public NoSuchElementWithScanner() throws Exception {
+    public NoSuchElementWithScanner() {
         super(NoSuchElementWithScanner.class);
     }
 

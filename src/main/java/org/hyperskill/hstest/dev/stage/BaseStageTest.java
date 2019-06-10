@@ -23,12 +23,13 @@ import static org.hyperskill.hstest.dev.common.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
-public abstract class BaseStageTest<AttachType> implements StageTest {
+public abstract class BaseStageTest<AttachType> {
 
+    private final Class<?> testedClass;
     private Class userClass;
+
     private final Object testedObject;
-    private final Method testedMethod;
-    private final boolean isTestingMain;
+    private Method mainMethod;
 
     private boolean overrodeTestCases;
     private boolean overrodePredefinedIO;
@@ -38,14 +39,13 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
     private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
-    public BaseStageTest(Method testedMethod, boolean isTestingMain) {
-        this(testedMethod, null, isTestingMain);
+    public BaseStageTest(Class<?> testedClass) {
+        this(testedClass, null);
     }
 
-    public BaseStageTest(Method testedMethod, Object testedObject, boolean isTestingMain) {
-        this.testedMethod = testedMethod;
+    public BaseStageTest(Class<?> testedClass, Object testedObject) {
+        this.testedClass = testedClass;
         this.testedObject = testedObject;
-        this.isTestingMain = isTestingMain;
     }
 
     @Rule
@@ -64,17 +64,23 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     }
 
     private void initTests() throws Exception {
-        boolean isMethodStatic = Modifier.isStatic(testedMethod.getModifiers());
 
-        if (!isMethodStatic && testedObject == null) {
-            throw new IllegalArgumentException("Provided method is not static " +
-                "and object is not provided");
+        try {
+            mainMethod = testedClass.getMethod("main", String[].class);
+        } catch (NoSuchMethodException ex) {
+            throw new Exception("No main method found");
+        }
+
+        boolean isMethodStatic = Modifier.isStatic(mainMethod.getModifiers());
+
+        if (!isMethodStatic) {
+            throw new IllegalArgumentException("Main method is not static");
         }
 
         if (testedObject != null) {
             userClass = testedObject.getClass();
         } else {
-            userClass = testedMethod.getDeclaringClass();
+            userClass = mainMethod.getDeclaringClass();
         }
 
         // TODO below is a custom polymorphic behaviour implemented that may be skipped in future
@@ -202,10 +208,10 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
     private String run(TestCase<?> test) throws Exception {
         systemIn.provideLines(normalizeLineEndings(test.getInput()).trim());
         systemOut.clearLog();
-        if (test.getArgs().size() == 0 && isTestingMain) {
+        if (test.getArgs().size() == 0) {
             test.addArgument(new String[]{});
         }
-        testedMethod.invoke(testedObject, test.getArgs().toArray());
+        mainMethod.invoke(testedObject, test.getArgs().toArray());
         return normalizeLineEndings(systemOut.getLog());
     }
 

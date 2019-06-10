@@ -6,11 +6,11 @@ import java.util.List;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 
-public class AndroidTest extends MainMethodTest {
+public class AndroidTest extends BaseStageTest {
 
     public static void main(String[] args) { }
 
-    public AndroidTest() throws Exception {
+    public AndroidTest() {
         super(AndroidTest.class);
     }
 

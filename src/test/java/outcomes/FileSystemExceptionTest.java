@@ -1,7 +1,7 @@
 package outcomes;
 
 import org.hyperskill.hstest.dev.common.Utils;
-import org.hyperskill.hstest.dev.stage.MainMethodTest;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.After;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class FileSystemExceptionTest extends MainMethodTest {
+public class FileSystemExceptionTest extends BaseStageTest {
 
     private static Scanner scanner;
 
@@ -26,7 +26,7 @@ public class FileSystemExceptionTest extends MainMethodTest {
         System.out.println(scanner.nextInt());
     }
 
-    public FileSystemExceptionTest() throws Exception {
+    public FileSystemExceptionTest() {
         super(FileSystemExceptionTest.class);
     }
 
