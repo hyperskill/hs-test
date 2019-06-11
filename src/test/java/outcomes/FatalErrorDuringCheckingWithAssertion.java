@@ -30,7 +30,7 @@ public class FatalErrorDuringCheckingWithAssertion extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         return Arrays.asList(
                 new TestCase()
         );

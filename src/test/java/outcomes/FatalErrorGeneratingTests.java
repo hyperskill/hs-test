@@ -30,7 +30,7 @@ public class FatalErrorGeneratingTests extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         System.out.println(1 / 0);
         return Arrays.asList(
             new TestCase()

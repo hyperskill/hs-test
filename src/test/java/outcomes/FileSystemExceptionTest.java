@@ -43,7 +43,7 @@ public class FileSystemExceptionTest extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         return Arrays.asList(
             new TestCase().addFile("in.txt", "123")
         );

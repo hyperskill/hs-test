@@ -30,7 +30,7 @@ public class FatalErrorGeneratingTestsWithAssertion extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         assert false;
         return Arrays.asList(
                 new TestCase()

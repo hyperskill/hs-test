@@ -109,7 +109,7 @@ public abstract class BaseStageTest<AttachType> implements StageTest {
             testCases.addAll(generateTestCases());
             if (testCases.size() == 0) {
                 throw new Exception("No tests provided by " +
-                    "generateTestCases method");
+                    "generate method");
             }
         }
 

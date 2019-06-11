@@ -4,12 +4,14 @@ import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Ignore
 public class FatalErrorEmptyPredefinedTests extends BaseStageTest {
 
     public static void main(String[] args) {
@@ -30,7 +32,7 @@ public class FatalErrorEmptyPredefinedTests extends BaseStageTest {
         exception.expectMessage("No tests provided by generatePredefinedInputOutput method");
     }
 
-    @Override
+    //@Override
     public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
         return Arrays.asList();
     }

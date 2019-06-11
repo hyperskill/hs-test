@@ -3,7 +3,6 @@ package org.hyperskill.hstest.dev.stage;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -31,13 +30,10 @@ public abstract class BaseStageTest<AttachType> {
     private final Object testedObject;
     private Method mainMethod;
 
-    private boolean overrodeTestCases;
-    private boolean overrodePredefinedIO;
+    private boolean overrodeGenerate;
     private boolean overrodeCheck;
-    private boolean overrodeSolve;
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
-    private final List<PredefinedIOTestCase> predefinedIOTestCases = new ArrayList<>();
 
     public BaseStageTest(Class<?> testedClass) {
         this(testedClass, null);
@@ -87,13 +83,8 @@ public abstract class BaseStageTest<AttachType> {
 
         String myName = BaseStageTest.class.getName();
 
-        String testCasesOwner = getClass()
-            .getMethod("generateTestCases")
-            .getDeclaringClass()
-            .getName();
-
-        String predefinedIOOwner = getClass()
-            .getMethod("generatePredefinedInputOutput")
+        String generateOwner = getClass()
+            .getMethod("generate")
             .getDeclaringClass()
             .getName();
 
@@ -102,39 +93,21 @@ public abstract class BaseStageTest<AttachType> {
             .getDeclaringClass()
             .getName();
 
-        String solveOwner = getClass()
-            .getMethod("solve", String.class)
-            .getDeclaringClass()
-            .getName();
-
-        overrodeTestCases = !myName.equals(testCasesOwner);
-        overrodePredefinedIO = !myName.equals(predefinedIOOwner);
+        overrodeGenerate = !myName.equals(generateOwner);
         overrodeCheck = !myName.equals(checkOwner);
-        overrodeSolve = !myName.equals(solveOwner);
 
-        if (overrodeTestCases) {
-            testCases.addAll(generateTestCases());
+        if (overrodeGenerate) {
+            testCases.addAll(generate());
             if (testCases.size() == 0) {
                 throw new Exception("No tests provided by " +
-                    "generateTestCases method");
+                    "generate method");
             }
-        }
-
-        if (overrodePredefinedIO) {
-            predefinedIOTestCases.addAll(generatePredefinedInputOutput());
-            if (predefinedIOTestCases.size() == 0) {
-                throw new Exception("No tests provided by " +
-                    "generatePredefinedInputOutput method");
-            }
-        }
-
-        if (!overrodeTestCases && !overrodePredefinedIO) {
+        } else {
             throw new Exception("No tests found");
         }
 
-        if (overrodeTestCases && !overrodeSolve && !overrodeCheck) {
-            throw new Exception("Can't check TestCases: " +
-                "override solve and/or check");
+        if (!overrodeCheck) {
+            throw new Exception("Can't check TestCases: override check");
         }
     }
 
@@ -150,33 +123,8 @@ public abstract class BaseStageTest<AttachType> {
                 savingPackage = StaticFieldsManager.getTopPackage(userClass);
             }
             StaticFieldsManager.saveStaticFields(savingPackage);
-            // TODO both loops look very similar
-            if (overrodePredefinedIO) {
-                for (PredefinedIOTestCase test : predefinedIOTestCases) {
-                    currTest++;
-                    System.err.println("Start test " + currTest);
 
-                    createFiles(test.getFiles());
-                    ExecutorService pool = startThreads(test.getProcesses());
-
-                    String output = run(test);
-                    CheckResult result = checkSolved(output, test.getAttach());
-
-                    stopThreads(test.getProcesses(), pool);
-                    deleteFiles(test.getFiles());
-                    StaticFieldsManager.resetStaticFields();
-
-                    String errorMessage = "Wrong answer in test #" + currTest
-                        + "\n\n" + result.getFeedback().trim();
-
-                    if (FailureHandler.detectStaticCloneFails()) {
-                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
-                    }
-
-                    assertTrue(errorMessage, result.isCorrect());
-                }
-            }
-            if (overrodeTestCases) {
+            if (overrodeGenerate) {
                 for (TestCase<AttachType> test : testCases) {
                     currTest++;
                     System.err.println("Start test " + currTest);
@@ -222,10 +170,6 @@ public abstract class BaseStageTest<AttachType> {
         if (overrodeCheck) {
             byChecking = check(output, test.getAttach());
         }
-        if (overrodeSolve) {
-            String solution = solve(test.getInput());
-            bySolving = checkSolved(output, solution);
-        }
 
         boolean isCorrect = byChecking.isCorrect() && bySolving.isCorrect();
         String resultFeedback = (byChecking.getFeedback() + "\n" + bySolving.getFeedback()).trim();
@@ -233,24 +177,24 @@ public abstract class BaseStageTest<AttachType> {
         return new CheckResult(isCorrect, resultFeedback);
     }
 
-    public List<TestCase<AttachType>> generateTestCases() {
+    public List<TestCase<AttachType>> generate() {
         return new ArrayList<>();
     }
 
-    public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
+    /*public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
         return new ArrayList<>();
-    }
+    }*/
 
     public CheckResult check(String reply, AttachType clue) {
         return CheckResult.FALSE;
     }
 
-    public String solve(String input) {
+    /*public String solve(String input) {
         return "";
     }
 
     public CheckResult checkSolved(String reply, String clue) {
         boolean isCorrect = reply.trim().equals(clue.trim());
         return new CheckResult(isCorrect);
-    }
+    }*/
 }

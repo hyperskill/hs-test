@@ -21,7 +21,7 @@ public class WebServerAvailableDuringRun extends BaseStageTest<String> {
     }
 
     @Override
-    public List<TestCase<String>> generateTestCases() {
+    public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>()
                 .setAttach("test web server")

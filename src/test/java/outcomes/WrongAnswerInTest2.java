@@ -30,7 +30,7 @@ public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
     }
 
     @Override
-    public List<TestCase<Boolean>> generateTestCases() {
+    public List<TestCase<Boolean>> generate() {
         return Arrays.asList(
             new TestCase<Boolean>().setAttach(true),
             new TestCase<Boolean>().setAttach(false)

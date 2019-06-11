@@ -21,7 +21,7 @@ public class WebServerAvailableDuringCheck extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         return Arrays.asList(
             new TestCase()
             .runWith(new WebServerMock(45678)

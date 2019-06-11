@@ -38,7 +38,7 @@ public class InputMismatch extends BaseStageTest {
     }
 
     @Override
-    public List<TestCase> generateTestCases() {
+    public List<TestCase> generate() {
         return Arrays.asList(
             new TestCase().setInput("234\nqwe\n345")
         );

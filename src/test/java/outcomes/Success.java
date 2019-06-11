@@ -20,7 +20,7 @@ public class Success extends BaseStageTest<String> {
     String succ = "123";
 
     @Override
-    public List<TestCase<String>> generateTestCases() {
+    public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>().setAttach(succ)
         );
