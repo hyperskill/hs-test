@@ -23,7 +23,7 @@ public class FatalErrorNotGeneratingTests extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
-        exception.expectMessage("No tests found");
+        exception.expectMessage("Can't create tests: override \"generate\" method");
     }
 
     @Override

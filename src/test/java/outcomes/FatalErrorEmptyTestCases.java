@@ -27,7 +27,7 @@ public class FatalErrorEmptyTestCases extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
-        exception.expectMessage("No tests provided by generate method");
+        exception.expectMessage("No tests provided by \"generate\" method");
     }
 
     @Override

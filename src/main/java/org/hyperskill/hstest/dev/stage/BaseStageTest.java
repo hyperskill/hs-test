@@ -99,15 +99,14 @@ public abstract class BaseStageTest<AttachType> {
         if (overrodeGenerate) {
             testCases.addAll(generate());
             if (testCases.size() == 0) {
-                throw new Exception("No tests provided by " +
-                    "generate method");
+                throw new Exception("No tests provided by \"generate\" method");
             }
         } else {
-            throw new Exception("No tests found");
+            throw new Exception("Can't create tests: override \"generate\" method");
         }
 
         if (!overrodeCheck) {
-            throw new Exception("Can't check TestCases: override check");
+            throw new Exception("Can't check result: override \"check\" method");
         }
     }
 

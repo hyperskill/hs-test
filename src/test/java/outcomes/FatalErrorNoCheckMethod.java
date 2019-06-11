@@ -26,7 +26,7 @@ public class FatalErrorNoCheckMethod extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
-        exception.expectMessage("Can't check TestCases: override check");
+        exception.expectMessage("Can't check result: override \"check\" method");
     }
 
     @Override
