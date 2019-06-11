@@ -29,8 +29,8 @@ public class TestCommandLineArgumentsPassing extends BaseStageTest<String> {
 
             new TestCase<String>()
                 .addArguments("-in", "435")
-                .addArguments("-out", "567")
-                .setAttach("4\n-in\n435\n-out\n567\n")
+                .addArguments("-out", "567", "789")
+                .setAttach("5\n-in\n435\n-out\n567\n789\n")
         );
     }
 
