@@ -32,7 +32,7 @@ public class TestPredefinedIOFail extends BaseStageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #2");
+        exception.expectMessage("Wrong answer in test #1");
         exception.expectMessage(not(containsString("Fatal error")));
     }
 
