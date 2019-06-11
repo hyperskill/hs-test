@@ -30,9 +30,6 @@ public abstract class BaseStageTest<AttachType> {
     private final Object testedObject;
     private Method mainMethod;
 
-    private boolean overrodeGenerate;
-    private boolean overrodeCheck;
-
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
 
     public BaseStageTest(Class testedClass) {
@@ -91,8 +88,8 @@ public abstract class BaseStageTest<AttachType> {
             .getDeclaringClass()
             .getName();
 
-        overrodeGenerate = !myName.equals(generateOwner);
-        overrodeCheck = !myName.equals(checkOwner);
+        boolean overrodeGenerate = !myName.equals(generateOwner);
+        boolean overrodeCheck = !myName.equals(checkOwner);
 
         if (overrodeGenerate) {
             testCases.addAll(generate());
