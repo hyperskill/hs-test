@@ -33,8 +33,8 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> addArgument(String argument) {
-        args.add(argument);
+    public TestCase<AttachType> addArguments(String... arguments) {
+        args.addAll(Arrays.asList(arguments));
         return this;
     }
 
