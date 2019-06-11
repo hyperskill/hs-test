@@ -10,6 +10,9 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+
 public class WrongAnswerInTest1 extends BaseStageTest {
 
     public static void main(String[] args) {
@@ -27,6 +30,7 @@ public class WrongAnswerInTest1 extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1");
+        exception.expectMessage(not(containsString("Fatal error")));
     }
 
     @Override

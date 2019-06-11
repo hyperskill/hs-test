@@ -1,7 +1,7 @@
 package outcomes;
 
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
-import org.hyperskill.hstest.dev.testcase.CheckResult;
+import org.hyperskill.hstest.dev.testcase.PredefinedIOTestCase;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,18 +9,21 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
+public class TestPredefinedIOFail extends BaseStageTest {
 
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        System.out.println(n);
     }
 
-    public WrongAnswerInTest2() {
-        super(WrongAnswerInTest2.class);
+    public TestPredefinedIOFail() {
+        super(TestPredefinedIOFail.class);
     }
 
     @Rule
@@ -34,15 +37,13 @@ public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
     }
 
     @Override
-    public List<TestCase<Boolean>> generate() {
+    public List<TestCase> generate() {
         return Arrays.asList(
-            new TestCase<Boolean>().setAttach(true),
-            new TestCase<Boolean>().setAttach(false)
-        );
-    }
+            new PredefinedIOTestCase("123", "123\n123")
+                .setFeedback("You should output a number twice"),
 
-    @Override
-    public CheckResult check(String reply, Boolean clue) {
-        return new CheckResult(clue);
+            new PredefinedIOTestCase("567", "567\n567")
+                .setFeedback("You should output this number twice")
+        );
     }
 }

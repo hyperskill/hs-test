@@ -160,7 +160,19 @@ public class FailureHandler {
 
         String errorText;
         String stackTraceInfo;
-        if (t.getCause() != null &&
+
+        if (t instanceof WrongAnswerException) {
+
+            errorText = "Wrong answer in test #" + currTest
+                + "\n\n" + t.getMessage().trim();
+
+            if (FailureHandler.detectStaticCloneFails()) {
+                errorText += "\n\n" + FailureHandler.avoidStaticsMsg;
+            }
+
+            stackTraceInfo = "";
+
+        } else if (t.getCause() != null &&
             t instanceof InvocationTargetException) {
             // If user failed then t == InvocationTargetException
             // and t.getCause() == Actual user exception
@@ -230,6 +242,6 @@ public class FailureHandler {
             }
         }
 
-        return errorText + "\n\n" + stackTraceInfo;
+        return (errorText + "\n\n" + stackTraceInfo).trim();
     }
 }

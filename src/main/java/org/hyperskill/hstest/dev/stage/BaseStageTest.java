@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dev.stage;
 
 import org.hyperskill.hstest.dev.exception.FailureHandler;
+import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -142,14 +143,9 @@ public abstract class BaseStageTest<AttachType> {
 
                 StaticFieldsManager.resetStaticFields();
 
-                String errorMessage = "Wrong answer in test #" + currTest
-                    + "\n\n" + result.getFeedback().trim();
-
-                if (FailureHandler.detectStaticCloneFails()) {
-                    errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
+                if (!result.isCorrect()) {
+                    throw new WrongAnswerException(result.getFeedback());
                 }
-
-                assertTrue(errorMessage, result.isCorrect());
             }
         } catch (Throwable t) {
             fail(FailureHandler.getFeedback(t, currTest));
