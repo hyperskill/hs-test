@@ -35,11 +35,11 @@ public abstract class BaseStageTest<AttachType> {
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
 
-    public BaseStageTest(Class<?> testedClass) {
+    public BaseStageTest(Class testedClass) {
         this(testedClass, null);
     }
 
-    public BaseStageTest(Class<?> testedClass, Object testedObject) {
+    public BaseStageTest(Class testedClass, Object testedObject) {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
