@@ -113,7 +113,7 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     @Test
-    public void start() {
+    public final void start() {
         int currTest = 0;
         try {
             initTests();
