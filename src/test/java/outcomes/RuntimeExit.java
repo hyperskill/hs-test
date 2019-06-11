@@ -18,7 +18,7 @@ public class RuntimeExit extends BaseStageTest {
         Runtime.getRuntime().exit(0);
     }
 
-    public RuntimeExit() throws Exception {
+    public RuntimeExit() {
         super(RuntimeExit.class);
     }
 
