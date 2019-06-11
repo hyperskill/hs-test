@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 public class TestCase<AttachType> {
 
     private String input = "";
-    private List<Object> args = new ArrayList<>();
+    private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
@@ -33,7 +33,7 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> addArgument(Object argument) {
+    public TestCase<AttachType> addArgument(String argument) {
         args.add(argument);
         return this;
     }
@@ -62,7 +62,7 @@ public class TestCase<AttachType> {
         return input;
     }
 
-    public List<Object> getArgs() {
+    public List<String> getArgs() {
         return args;
     }
 

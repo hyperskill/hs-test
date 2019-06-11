@@ -70,7 +70,7 @@ public abstract class BaseStageTest<AttachType> {
         boolean isMethodStatic = Modifier.isStatic(mainMethod.getModifiers());
 
         if (!isMethodStatic) {
-            throw new IllegalArgumentException("Main method is not static");
+            throw new Exception("Main method is not static");
         }
 
         if (testedObject != null) {
@@ -78,8 +78,6 @@ public abstract class BaseStageTest<AttachType> {
         } else {
             userClass = mainMethod.getDeclaringClass();
         }
-
-        // TODO below is a custom polymorphic behaviour implemented that may be skipped in future
 
         String myName = BaseStageTest.class.getName();
 
@@ -105,8 +103,13 @@ public abstract class BaseStageTest<AttachType> {
             throw new Exception("Can't create tests: override \"generate\" method");
         }
 
-        if (!overrodeCheck) {
-            throw new Exception("Can't check result: override \"check\" method");
+        for (TestCase<AttachType> testCase : testCases) {
+            if (testCase.getCheckFunc() == null) {
+                if (!overrodeCheck) {
+                    throw new Exception("Can't check result: override \"check\" method");
+                }
+                testCase.setCheckFunc(this::check);
+            }
         }
     }
 
@@ -116,36 +119,38 @@ public abstract class BaseStageTest<AttachType> {
         try {
             initTests();
             String savingPackage;
+
             if (userClass.getPackage() != null) {
                 savingPackage = userClass.getPackage().getName();
             } else {
                 savingPackage = StaticFieldsManager.getTopPackage(userClass);
             }
+
             StaticFieldsManager.saveStaticFields(savingPackage);
 
-            if (overrodeGenerate) {
-                for (TestCase<AttachType> test : testCases) {
-                    currTest++;
-                    System.err.println("Start test " + currTest);
+            for (TestCase<AttachType> test : testCases) {
+                currTest++;
+                System.err.println("Start test " + currTest);
 
-                    createFiles(test.getFiles());
-                    ExecutorService pool = startThreads(test.getProcesses());
-                    String output = run(test);
-                    CheckResult result = checkSolution(test, output);
+                createFiles(test.getFiles());
+                ExecutorService pool = startThreads(test.getProcesses());
 
-                    stopThreads(test.getProcesses(), pool);
-                    deleteFiles(test.getFiles());
-                    StaticFieldsManager.resetStaticFields();
+                String output = run(test);
+                CheckResult result = checkSolution(test, output);
 
-                    String errorMessage = "Wrong answer in test #" + currTest
-                        + "\n\n" + result.getFeedback().trim();
+                stopThreads(test.getProcesses(), pool);
+                deleteFiles(test.getFiles());
 
-                    if (FailureHandler.detectStaticCloneFails()) {
-                        errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
-                    }
+                StaticFieldsManager.resetStaticFields();
 
-                    assertTrue(errorMessage, result.isCorrect());
+                String errorMessage = "Wrong answer in test #" + currTest
+                    + "\n\n" + result.getFeedback().trim();
+
+                if (FailureHandler.detectStaticCloneFails()) {
+                    errorMessage += "\n\n" + FailureHandler.avoidStaticsMsg;
                 }
+
+                assertTrue(errorMessage, result.isCorrect());
             }
         } catch (Throwable t) {
             fail(FailureHandler.getFeedback(t, currTest));
@@ -155,25 +160,12 @@ public abstract class BaseStageTest<AttachType> {
     private String run(TestCase<?> test) throws Exception {
         systemIn.provideLines(normalizeLineEndings(test.getInput()).trim());
         systemOut.clearLog();
-        if (test.getArgs().size() == 0) {
-            test.addArgument(new String[]{});
-        }
-        mainMethod.invoke(testedObject, test.getArgs().toArray());
+        mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         return normalizeLineEndings(systemOut.getLog());
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {
-        CheckResult byChecking = new CheckResult(true);
-        CheckResult bySolving = new CheckResult(true);
-
-        if (overrodeCheck) {
-            byChecking = check(output, test.getAttach());
-        }
-
-        boolean isCorrect = byChecking.isCorrect() && bySolving.isCorrect();
-        String resultFeedback = (byChecking.getFeedback() + "\n" + bySolving.getFeedback()).trim();
-
-        return new CheckResult(isCorrect, resultFeedback);
+        return test.getCheckFunc().apply(output, test.getAttach());
     }
 
     public List<TestCase<AttachType>> generate() {
