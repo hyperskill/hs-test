@@ -5,7 +5,6 @@ public class PredefinedIOTestCase extends TestCase<String> {
     private String feedback = "";
 
     public PredefinedIOTestCase(String input, String output) {
-        super();
         setInput(input);
         setAttach(output);
         setCheckFunc(this::customCheck);
