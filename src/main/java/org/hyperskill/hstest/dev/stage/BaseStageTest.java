@@ -24,6 +24,8 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emp
 
 public abstract class BaseStageTest<AttachType> {
 
+    // testedClass may not be user class
+    // for example, in Swing testing it's SwingTest class, not JFrame
     private final Class<?> testedClass;
     private Class userClass;
 
