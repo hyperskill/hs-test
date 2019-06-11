@@ -184,7 +184,7 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     public CheckResult checkSolved(String reply, String clue) {
-        boolean isCorrect = reply.trim().equals(clue.trim());
+
         return new CheckResult(isCorrect);
     }*/
 }
