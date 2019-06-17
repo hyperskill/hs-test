@@ -167,20 +167,7 @@ public abstract class BaseStageTest<AttachType> {
         return new ArrayList<>();
     }
 
-    /*public List<PredefinedIOTestCase> generatePredefinedInputOutput() {
-        return new ArrayList<>();
-    }*/
-
     public CheckResult check(String reply, AttachType clue) {
         return CheckResult.FALSE;
     }
-
-    /*public String solve(String input) {
-        return "";
-    }
-
-    public CheckResult checkSolved(String reply, String clue) {
-
-        return new CheckResult(isCorrect);
-    }*/
 }
