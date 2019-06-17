@@ -6,7 +6,7 @@ It is required to use for Hyperskill projects. Main features:
 - multiple types of tests in a simple unified way (without stdin, with stdin, files, swing)
 - generating learner-friendly feedback (filtering stack-traces, hints)
 
-For the documentation you can go here:
+To learn how to use this library you can go here:
 
 
 ## Requirements and build
