@@ -7,6 +7,7 @@ It is required to use for Hyperskill projects. Main features:
 - generating learner-friendly feedback (filtering stack-traces, hints)
 
 To learn how to use this library you can go here:
+https://github.com/hyperskill/hs-test/wiki
 
 
 ## Requirements and build
