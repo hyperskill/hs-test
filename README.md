@@ -1,5 +1,5 @@
 # hs-test
-It is a small framework that simplifies testing educational projects for Hyperskill. It is built on top of JUnit.
+It is a small framework that simplifies testing educational projects for [Hyperskill](https://hyperskill.org). It is built on top of JUnit.
 
 It is required to use for Hyperskill projects. Main features:
 - black box testing (only need to know user's main method)
