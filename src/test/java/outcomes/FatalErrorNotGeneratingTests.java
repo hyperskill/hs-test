@@ -1,7 +1,7 @@
 package outcomes;
 
-import org.hyperskill.hstest.v5.stage.BaseStageTest;
-import org.hyperskill.hstest.v5.testcase.CheckResult;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
