@@ -167,7 +167,7 @@ public abstract class BaseStageTest<AttachType> {
         return new ArrayList<>();
     }
 
-    public CheckResult check(String reply, AttachType clue) {
+    public CheckResult check(String reply, AttachType attach) {
         return CheckResult.FALSE;
     }
 }

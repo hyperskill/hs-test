@@ -15,8 +15,8 @@ public class PredefinedIOTestCase extends TestCase<String> {
         return this;
     }
 
-    private CheckResult customCheck(String output, String attach) {
-        boolean isCorrect = output.trim().equals(attach.trim());
+    private CheckResult customCheck(String reply, String expected) {
+        boolean isCorrect = reply.trim().equals(expected.trim());
         return new CheckResult(isCorrect, feedback);
     }
 }
