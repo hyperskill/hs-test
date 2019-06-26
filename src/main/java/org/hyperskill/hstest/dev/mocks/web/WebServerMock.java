@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dev.mocks.web;
 
-import org.hyperskill.hstest.dev.common.Utils;
+import org.hyperskill.hstest.dev.mocks.web.request.HttpRequest;
+import org.hyperskill.hstest.dev.mocks.web.request.HttpRequestParser;
 import org.hyperskill.hstest.dev.testcase.Process;
 
 import java.io.*;
@@ -8,6 +9,12 @@ import java.net.*;
 import java.util.*;
 
 public class WebServerMock implements Process {
+
+    public static void main(String[] args) { // for testing
+        WebServerMock ws = new WebServerMock(12345);
+        ws.start();
+        ws.run();
+    }
 
     private ServerSocket serverSocket;
     private Map<String, String> pages = new HashMap<>();
@@ -32,31 +39,21 @@ public class WebServerMock implements Process {
         return this;
     }
 
-    private String resolveRequest(DataInputStream input) throws Exception {
-
-        StringBuilder buffer = new StringBuilder();
-        while (buffer.length() < 4 ||
-              !(buffer.charAt(buffer.length() - 4) == '\r' &&
-                buffer.charAt(buffer.length() - 3) == '\n' &&
-                buffer.charAt(buffer.length() - 2) == '\r' &&
-                buffer.charAt(buffer.length() - 1) == '\n')) {
-            buffer.appendCodePoint(input.read());
-        }
-
-        String header = Utils.normalizeLineEndings(buffer.toString());
-        String query = header.split("\n")[0];
-        String path = query.split(" ")[1];
-        if (path.contains("?")) {
-            path = path.substring(0, path.indexOf("?"));
-        }
-        return path;
+    private String resolveRequest(DataInputStream input) {
+        HttpRequest request = HttpRequestParser.parse(input);
+        return request != null ? request.getUri() : null;
     }
 
     private void sendResponse(String path, DataOutputStream output) throws Exception {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
+        String response;
+        if (path == null) {
+            response = WebPage.notFound;
+        } else {
+            if (!path.startsWith("/")) {
+                path = "/" + path;
+            }
+            response = pages.getOrDefault(path, WebPage.notFound);
         }
-        String response = pages.getOrDefault(path, WebPage.notFound);
         for (char c : response.toCharArray()) {
             output.write(c);
         }
