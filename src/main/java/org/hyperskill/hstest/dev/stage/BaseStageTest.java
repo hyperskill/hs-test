@@ -13,7 +13,6 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +38,8 @@ public abstract class BaseStageTest<AttachType> {
     private Method mainMethod;
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
+
+    protected boolean needResetStaticFields = true;
 
     public BaseStageTest(Class testedClass) {
         this(testedClass, null);
@@ -113,15 +114,18 @@ public abstract class BaseStageTest<AttachType> {
         int currTest = 0;
         try {
             initTests();
-            String savingPackage;
 
-            if (userClass.getPackage() != null) {
-                savingPackage = userClass.getPackage().getName();
-            } else {
-                savingPackage = StaticFieldsManager.getTopPackage(userClass);
+            if (needResetStaticFields) {
+                String savingPackage;
+
+                if (userClass.getPackage() != null) {
+                    savingPackage = userClass.getPackage().getName();
+                } else {
+                    savingPackage = StaticFieldsManager.getTopPackage(userClass);
+                }
+
+                StaticFieldsManager.saveStaticFields(savingPackage);
             }
-
-            StaticFieldsManager.saveStaticFields(savingPackage);
 
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
@@ -136,7 +140,9 @@ public abstract class BaseStageTest<AttachType> {
                 stopThreads(test.getProcesses(), pool);
                 deleteFiles(test.getFiles());
 
-                StaticFieldsManager.resetStaticFields();
+                if (needResetStaticFields) {
+                    StaticFieldsManager.resetStaticFields();
+                }
 
                 if (!result.isCorrect()) {
                     throw new WrongAnswerException(result.getFeedback());
