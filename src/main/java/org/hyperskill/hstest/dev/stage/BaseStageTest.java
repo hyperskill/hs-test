@@ -23,6 +23,7 @@ import static org.hyperskill.hstest.dev.common.FileUtils.createFiles;
 import static org.hyperskill.hstest.dev.common.FileUtils.deleteFiles;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.stopThreads;
+import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
@@ -65,17 +66,7 @@ public abstract class BaseStageTest<AttachType> {
 
     private void initTests() throws Exception {
 
-        try {
-            mainMethod = testedClass.getMethod("main", String[].class);
-        } catch (NoSuchMethodException ex) {
-            throw new Exception("No main method found");
-        }
-
-        boolean isMethodStatic = Modifier.isStatic(mainMethod.getModifiers());
-
-        if (!isMethodStatic) {
-            throw new Exception("Main method is not static");
-        }
+        mainMethod = getMainMethod(testedClass);
 
         if (testedObject != null) {
             userClass = testedObject.getClass();
