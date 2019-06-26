@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dev.exception;
 
-import org.hyperskill.hstest.dev.common.Utils;
+import org.hyperskill.hstest.dev.common.FileUtils;
 import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
@@ -215,8 +215,8 @@ public class FailureHandler {
 
             String file = ((FileSystemException) t).getFile();
 
-            if (file.startsWith(Utils.CURRENT_DIR)) {
-                file = file.substring(Utils.CURRENT_DIR.length());
+            if (file.startsWith(FileUtils.CURRENT_DIR)) {
+                file = file.substring(FileUtils.CURRENT_DIR.length());
             }
 
             errorText += "\n\n" + exceptionName + "\n\nThe file " + file +

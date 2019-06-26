@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.common.Utils;
+import org.hyperskill.hstest.dev.common.FileUtils;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -57,7 +57,7 @@ public class FileSystemExceptionTest extends BaseStageTest {
     @After
     public void deleteFile() throws Exception {
         scanner.close();
-        Files.deleteIfExists(Paths.get(Utils.CURRENT_DIR + "in.txt"));
+        Files.deleteIfExists(Paths.get(FileUtils.CURRENT_DIR + "in.txt"));
     }
 
 }

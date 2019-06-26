@@ -1,5 +1,6 @@
 package web;
 
+import org.hyperskill.hstest.dev.common.ProcessUtils;
 import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.mocks.web.WebPage;
 import org.hyperskill.hstest.dev.mocks.web.WebServerMock;
@@ -43,12 +44,12 @@ public class WebServerMockTest {
                     .setContent("page4")
                     .setContentType("text/json"))
         );
-        service = Utils.startThreads(processes);
+        service = ProcessUtils.startThreads(processes);
     }
 
     @After
     public void tearDown() {
-        Utils.stopThreads(processes, service);
+        ProcessUtils.stopThreads(processes, service);
     }
 
     @Test

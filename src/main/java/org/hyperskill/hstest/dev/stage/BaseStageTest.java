@@ -19,7 +19,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
-import static org.hyperskill.hstest.dev.common.Utils.*;
+import static org.hyperskill.hstest.dev.common.FileUtils.createFiles;
+import static org.hyperskill.hstest.dev.common.FileUtils.deleteFiles;
+import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
+import static org.hyperskill.hstest.dev.common.ProcessUtils.stopThreads;
+import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
