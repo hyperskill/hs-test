@@ -103,6 +103,10 @@ public class SpringTest extends BaseStageTest {
         return executeRequest(post);
     }
 
+    public HttpResponse POST(String address, String content) {
+        return POST(address, content, ContentType.APPLICATION_JSON);
+    }
+
     public HttpResponse POST(String address, Map<String, String> formParams) {
         return POST(address, packUrlParams(formParams), ContentType.APPLICATION_FORM_URLENCODED);
     }
@@ -113,6 +117,10 @@ public class SpringTest extends BaseStageTest {
         return executeRequest(put);
     }
 
+    public HttpResponse PUT(String address, String content) {
+        return PUT(address, content, ContentType.APPLICATION_JSON);
+    }
+
     public HttpResponse PUT(String address, Map<String, String> formParams) {
         return PUT(address, packUrlParams(formParams), ContentType.APPLICATION_FORM_URLENCODED);
     }
@@ -121,6 +129,4 @@ public class SpringTest extends BaseStageTest {
         HttpDelete delete = new HttpDelete(constructUrl(address));
         return executeRequest(delete);
     }
-
-
 }
