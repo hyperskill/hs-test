@@ -7,6 +7,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hyperskill.hstest.dev.common.Utils;
 import org.hyperskill.hstest.dev.mocks.web.response.HttpResponse;
+import org.junit.After;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +38,11 @@ public class SpringTest extends BaseStageTest {
         this.port = port;
     }
 
+    @After
+    public void stopSpring() {
+        POST("/actuator/shutdown", "");
+    }
+
     private String constructUrl(String address) {
         if (!address.startsWith("/")) {
             address = "/" + address;
@@ -48,7 +54,6 @@ public class SpringTest extends BaseStageTest {
         try {
             HttpClient client = HttpClientBuilder.create().build();
             org.apache.http.HttpResponse httpResponse = client.execute(request);
-            request.releaseConnection();
 
             int statusCode = httpResponse.getStatusLine().getStatusCode();
 
@@ -62,6 +67,7 @@ public class SpringTest extends BaseStageTest {
             }
 
             String content = Utils.normalizeLineEndings(contentBuilder.toString());
+            request.releaseConnection();
 
             return new HttpResponse(statusCode, content);
         } catch (IOException e) {
@@ -70,7 +76,7 @@ public class SpringTest extends BaseStageTest {
     }
 
     private String packUrlParams(Map<String, String> getParams) {
-        if (getParams.isEmpty()) {
+        if (getParams == null || getParams.isEmpty()) {
             return "";
         }
         StringBuilder paramsBuilder = new StringBuilder();
