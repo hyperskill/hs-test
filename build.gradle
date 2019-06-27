@@ -21,6 +21,7 @@ dependencies {
 
     implementation 'org.assertj:assertj-swing-junit:3.8.0'
     implementation 'com.github.stefanbirkner:system-rules:1.19.0'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.9'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.cedarsoftware:json-io:4.10.1'
