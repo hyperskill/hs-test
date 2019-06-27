@@ -17,7 +17,7 @@ import java.util.Map;
 
 import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 
-public class SpringTest extends BaseStageTest {
+public abstract class SpringTest extends BaseStageTest {
 
     private static boolean springRunning = false;
     private static Class<?> springClass;
