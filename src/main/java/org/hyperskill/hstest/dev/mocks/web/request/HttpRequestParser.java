@@ -14,18 +14,6 @@ public class HttpRequestParser {
         request = new HttpRequest();
     }
 
-    private int parseContentLength() {
-        for (String line : request.header.trim().split("\n")) {
-            if (line.trim().startsWith("Content-Length")) {
-                try {
-                    String number = line.split(":")[1].trim();
-                    return Integer.parseInt(number);
-                } catch (Exception ignored) { }
-            }
-        }
-        return 0;
-    }
-
     private String getStartLine() throws Exception {
         StringBuilder buffer = new StringBuilder();
         while (buffer.length() < 4 ||
@@ -36,7 +24,24 @@ public class HttpRequestParser {
         return Utils.normalizeLineEndings(buffer.toString()).trim();
     }
 
-    private String getHeader() throws Exception {
+    private void parseGetParams() {
+        if (request.uri.contains("?")) {
+            int index = request.uri.indexOf("?");
+            String strGetParams = request.uri.substring(index + 1);
+            String[] params = strGetParams.split("&");
+
+            for (String param : params) {
+                String[] parts = param.split("=");
+                String key = parts[0];
+                String value = parts.length == 1 ? "" : parts[1];
+                request.getParams.put(key, value);
+            }
+
+            request.uri = request.uri.substring(0, index);
+        }
+    }
+
+    private String getRawHeaders() throws Exception {
         StringBuilder buffer = new StringBuilder();
         while (buffer.length() < 4 ||
             !(buffer.charAt(buffer.length() - 4) == '\r' &&
@@ -45,7 +50,23 @@ public class HttpRequestParser {
                 buffer.charAt(buffer.length() - 1) == '\n')) {
             buffer.appendCodePoint(input.read());
         }
-        return Utils.normalizeLineEndings(buffer.toString());
+        return Utils.normalizeLineEndings(buffer.toString()).trim();
+    }
+
+    private void parseHeaders() throws Exception {
+        String rawHeaders = getRawHeaders();
+        String[] lines = rawHeaders.split("\n");
+
+        for (String line : lines) {
+            String[] parts = line.split(":");
+            String key = parts[0].trim();
+            String value = parts[1].trim();
+            request.headers.put(key, value);
+
+            if (key.equals("Content-Length")) {
+                request.contentLength = Integer.parseInt(value);
+            }
+        }
     }
 
     private String getContent() throws Exception {
@@ -66,15 +87,8 @@ public class HttpRequestParser {
         request.uri = opts[1];
         request.version = opts[2];
 
-        if (request.uri.contains("?")) {
-            int index = request.uri.indexOf("?");
-            request.getParams = request.uri.substring(index + 1);
-            request.uri = request.uri.substring(0, index);
-        }
-
-        request.header = getHeader();
-        request.contentLength = parseContentLength();
-
+        parseGetParams();
+        parseHeaders();
         request.content = getContent();
     }
 

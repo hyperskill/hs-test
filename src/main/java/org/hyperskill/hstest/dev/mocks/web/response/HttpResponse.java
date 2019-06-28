@@ -1,11 +1,33 @@
 package org.hyperskill.hstest.dev.mocks.web.response;
 
-public class HttpResponse {
-    public final int statusCode;
-    public final String content;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-    public HttpResponse(int statusCode, String content) {
+public class HttpResponse {
+    private final int statusCode;
+
+    private final Map<String, String> headers;
+    private final byte[] rawContent;
+
+    public HttpResponse(int statusCode, Map<String, String> headers, byte[] rawContent) {
         this.statusCode = statusCode;
-        this.content = content;
+        this.headers = headers;
+        this.rawContent = rawContent;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public byte[] getRawContent() {
+        return rawContent;
+    }
+
+    public String getContent() {
+        return new String(rawContent, StandardCharsets.UTF_8);
     }
 }
