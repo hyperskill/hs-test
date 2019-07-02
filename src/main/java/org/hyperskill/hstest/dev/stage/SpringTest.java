@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 
-public abstract class SpringTest extends BaseStageTest {
+public abstract class SpringTest<T> extends BaseStageTest<T> {
 
     private static boolean springRunning = false;
     private static Class<?> springClass;
