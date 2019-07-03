@@ -63,7 +63,7 @@ public class HttpRequest {
     }
 
     public HttpRequest addHeader(String header, String value) {
-        getParams.put(header, value);
+        headers.put(header, value);
         return this;
     }
 
