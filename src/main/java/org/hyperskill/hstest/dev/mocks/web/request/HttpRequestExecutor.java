@@ -35,7 +35,7 @@ public class HttpRequestExecutor {
                 rawContent = new byte[Integer.parseInt(headers.get("Content-Length"))];
                 input.read(rawContent);
             } else {
-                rawContent = new byte[32];
+                rawContent = new byte[1024];
                 input.read(rawContent);
             }
 
