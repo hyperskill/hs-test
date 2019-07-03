@@ -1,11 +1,14 @@
 package org.hyperskill.hstest.dev.mocks.web.response;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HttpResponse {
-    private final int statusCode;
 
+    private final int statusCode;
     private final Map<String, String> headers;
     private final byte[] rawContent;
 
@@ -29,5 +32,10 @@ public class HttpResponse {
 
     public String getContent() {
         return new String(rawContent, StandardCharsets.UTF_8);
+    }
+
+    public JsonElement getJson() {
+        String content = getContent();
+        return new JsonParser().parse(content);
     }
 }
