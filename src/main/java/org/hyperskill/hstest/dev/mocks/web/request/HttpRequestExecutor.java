@@ -30,8 +30,14 @@ public class HttpRequestExecutor {
             DataInputStream input = new DataInputStream(
                 httpResponse.getEntity().getContent());
 
-            byte[] rawContent = new byte[Integer.parseInt(headers.get("Content-Length"))];
-            input.read(rawContent);
+            byte[] rawContent;
+            if (headers.containsKey("Content-Length")) {
+                rawContent = new byte[Integer.parseInt(headers.get("Content-Length"))];
+                input.read(rawContent);
+            } else {
+                rawContent = new byte[32];
+                input.read(rawContent);
+            }
 
             request.releaseConnection();
 
