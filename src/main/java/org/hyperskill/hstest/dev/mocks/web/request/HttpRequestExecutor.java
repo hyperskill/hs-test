@@ -10,10 +10,18 @@ import org.hyperskill.hstest.dev.mocks.web.response.HttpResponse;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestExecutor {
+
+    private static class BufferPortion {
+        final byte[] buffer;
+        BufferPortion(byte[] buffer) {
+            this.buffer = buffer;
+        }
+    }
 
     private static HttpResponse executeRequest(HttpRequestBase request) {
         try {
@@ -30,13 +38,30 @@ public class HttpRequestExecutor {
             DataInputStream input = new DataInputStream(
                 httpResponse.getEntity().getContent());
 
-            byte[] rawContent;
-            if (headers.containsKey("Content-Length")) {
-                rawContent = new byte[Integer.parseInt(headers.get("Content-Length"))];
-                input.read(rawContent);
-            } else {
-                rawContent = new byte[1024];
-                input.read(rawContent);
+            ArrayList<BufferPortion> buffer = new ArrayList<>();
+
+            int readPortion = 1024;
+            int contentLength = 0;
+            while (true) {
+                byte[] rawPortion = new byte[readPortion];
+                int readBytes = input.read(rawPortion);
+                contentLength += readBytes;
+                if (readBytes != readPortion) {
+                    byte[] lastRawPortion = new byte[readBytes];
+                    System.arraycopy(rawPortion, 0, lastRawPortion, 0, readBytes);
+                    buffer.add(new BufferPortion(lastRawPortion));
+                    break;
+                }
+                buffer.add(new BufferPortion(rawPortion));
+            }
+
+            byte[] rawContent = new byte[contentLength];
+            for (int i = 0; i < buffer.size(); i++) {
+                BufferPortion portion = buffer.get(i);
+                System.arraycopy(
+                    portion.buffer, 0,
+                    rawContent, i * readPortion,
+                    portion.buffer.length);
             }
 
             request.releaseConnection();
