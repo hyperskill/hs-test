@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
+import org.hyperskill.hstest.dev.dynamic.OutputStreamHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
@@ -9,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import java.lang.reflect.Method;
@@ -49,9 +49,6 @@ public abstract class BaseStageTest<AttachType> {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
-
-    @Rule
-    public SystemOutRule systemOut = new SystemOutRule().enableLog();
 
     @Rule
     public TextFromStandardInputStream systemIn = emptyStandardInputStream();
@@ -114,6 +111,7 @@ public abstract class BaseStageTest<AttachType> {
         int currTest = 0;
         try {
             initTests();
+            OutputStreamHandler.replaceSystemOut();
 
             if (needResetStaticFields) {
                 String savingPackage;
@@ -155,9 +153,9 @@ public abstract class BaseStageTest<AttachType> {
 
     private String run(TestCase<?> test) throws Exception {
         systemIn.provideLines(normalizeLineEndings(test.getInput()).trim());
-        systemOut.clearLog();
+        OutputStreamHandler.resetOutput();
         mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
-        return normalizeLineEndings(systemOut.getLog());
+        return normalizeLineEndings(OutputStreamHandler.getOutput());
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {
