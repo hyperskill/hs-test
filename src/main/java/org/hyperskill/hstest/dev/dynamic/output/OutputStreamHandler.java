@@ -20,9 +20,16 @@ public class OutputStreamHandler {
 
     public static void resetOutput() {
         clonedSystemOut.clonedStream.reset();
+        clonedSystemOut.dynamicStream.reset();
     }
 
     public static String getOutput() {
         return clonedSystemOut.clonedStream.toString();
+    }
+
+    public static String getDynamicOutput() {
+        String output = clonedSystemOut.dynamicStream.toString();
+        clonedSystemOut.dynamicStream.reset();
+        return output;
     }
 }
