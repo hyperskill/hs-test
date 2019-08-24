@@ -2,14 +2,15 @@ package org.hyperskill.hstest.dev.testcase;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class TestCase<AttachType> {
 
-    private String input = "";
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
+    private List<Function<String, String>> inputFuncs = new LinkedList<>();
 
     // files needed to be set up before test
     private Map<String, String> files = new HashMap<>();
@@ -24,7 +25,13 @@ public class TestCase<AttachType> {
     }
 
     public TestCase<AttachType> setInput(String input) {
-        this.input = input;
+        inputFuncs.clear();
+        inputFuncs.add(o -> input);
+        return this;
+    }
+
+    public TestCase<AttachType> addInput(Function<String, String> inputFunc) {
+        inputFuncs.add(inputFunc);
         return this;
     }
 
@@ -58,8 +65,8 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public String getInput() {
-        return input;
+    public List<Function<String, String>> getInputFuncs() {
+        return inputFuncs;
     }
 
     public List<String> getArgs() {

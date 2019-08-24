@@ -5,12 +5,13 @@ import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
-    private List<Function<String, String>> inputTextFuncs;
+    private List<Function<String, String>> inputTextFuncs = new LinkedList<>();
 
     void provideText(String text) {
         currentReader = new StringReader(text);

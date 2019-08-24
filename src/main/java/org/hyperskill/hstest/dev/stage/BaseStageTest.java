@@ -154,7 +154,7 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     private String run(TestCase<?> test) throws Exception {
-        InputStreamHandler.setInput(normalizeLineEndings(test.getInput()).trim());
+        InputStreamHandler.setInputFuncs(test.getInputFuncs());
         OutputStreamHandler.resetOutput();
         mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         return normalizeLineEndings(OutputStreamHandler.getOutput());
