@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import static java.lang.System.getProperty;
-
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
 
