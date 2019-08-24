@@ -146,7 +146,10 @@ public abstract class BaseStageTest<AttachType> {
                     throw new WrongAnswerException(result.getFeedback());
                 }
             }
+            OutputStreamHandler.revertSystemOut();
+
         } catch (Throwable t) {
+            OutputStreamHandler.revertSystemOut();
             fail(FailureHandler.getFeedback(t, currTest));
         }
     }

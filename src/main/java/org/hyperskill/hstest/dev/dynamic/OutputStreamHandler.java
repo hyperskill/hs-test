@@ -13,6 +13,11 @@ public class OutputStreamHandler {
             clonedSystemOut, true, Charset.defaultCharset().name()));
     }
 
+    public static void revertSystemOut() {
+        resetOutput();
+        System.setOut(realOut);
+    }
+
     public static void resetOutput() {
         clonedSystemOut.clonedStream.reset();
     }
