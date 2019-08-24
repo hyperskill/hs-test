@@ -37,7 +37,7 @@ public class FatalErrorDuringChecking extends BaseStageTest {
     }
 
     @Override
-    public CheckResult check(String reply, Object clue) {
+    public CheckResult check(String reply, Object attach) {
         System.out.println(1 / 0);
         return CheckResult.TRUE;
     }

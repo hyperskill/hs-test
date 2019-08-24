@@ -34,7 +34,7 @@ public class NoMainMethodFound extends BaseStageTest {
     }
 
     @Override
-    public CheckResult check(String reply, Object clue) {
+    public CheckResult check(String reply, Object attach) {
         return CheckResult.TRUE;
     }
 

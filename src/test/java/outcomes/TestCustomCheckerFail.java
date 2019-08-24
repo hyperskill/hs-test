@@ -48,7 +48,7 @@ public class TestCustomCheckerFail extends BaseStageTest<String> {
         );
     }
 
-    private CheckResult customCheck(String reply, String clue) {
-        return new CheckResult(reply.equals(clue));
+    private CheckResult customCheck(String reply, String attach) {
+        return new CheckResult(reply.equals(attach));
     }
 }

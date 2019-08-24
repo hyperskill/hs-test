@@ -42,7 +42,7 @@ public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
     }
 
     @Override
-    public CheckResult check(String reply, Boolean clue) {
-        return new CheckResult(clue);
+    public CheckResult check(String reply, Boolean attach) {
+        return new CheckResult(attach);
     }
 }

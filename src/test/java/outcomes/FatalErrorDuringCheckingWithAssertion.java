@@ -37,7 +37,7 @@ public class FatalErrorDuringCheckingWithAssertion extends BaseStageTest {
     }
 
     @Override
-    public CheckResult check(String reply, Object clue) {
+    public CheckResult check(String reply, Object attach) {
         assert false;
         return CheckResult.TRUE;
     }

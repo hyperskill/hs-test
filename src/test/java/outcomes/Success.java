@@ -27,8 +27,8 @@ public class Success extends BaseStageTest<String> {
     }
 
     @Override
-    public CheckResult check(String reply, String clue) {
-        if (clue == null) {
+    public CheckResult check(String reply, String attach) {
+        if (attach == null) {
             System.out.println(0 / 0);
         }
         return CheckResult.TRUE;

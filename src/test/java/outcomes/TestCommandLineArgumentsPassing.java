@@ -35,7 +35,7 @@ public class TestCommandLineArgumentsPassing extends BaseStageTest<String> {
     }
 
     @Override
-    public CheckResult check(String reply, String clue) {
-        return new CheckResult(reply.equals(clue));
+    public CheckResult check(String reply, String attach) {
+        return new CheckResult(reply.equals(attach));
     }
 }
