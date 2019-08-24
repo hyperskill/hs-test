@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.dev.dynamic;
+package org.hyperskill.hstest.dev.dynamic.output;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

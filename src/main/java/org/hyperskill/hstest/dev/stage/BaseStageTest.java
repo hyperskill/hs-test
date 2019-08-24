@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
-import org.hyperskill.hstest.dev.dynamic.OutputStreamHandler;
+import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
