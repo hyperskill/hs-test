@@ -10,8 +10,7 @@ import java.util.function.Function;
 
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
-
-    List<Function<String, String>> inputTextFuncs;
+    private List<Function<String, String>> inputTextFuncs;
 
     void provideText(String text) {
         currentReader = new StringReader(text);
