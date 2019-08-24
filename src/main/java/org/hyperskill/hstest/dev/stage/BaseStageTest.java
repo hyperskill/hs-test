@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
+import org.hyperskill.hstest.dev.dynamic.input.InputStreamHandler;
 import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
@@ -10,7 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import static org.hyperskill.hstest.dev.common.ProcessUtils.stopThreads;
 import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
 import static org.junit.Assert.*;
-import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 public abstract class BaseStageTest<AttachType> {
 
@@ -49,9 +48,6 @@ public abstract class BaseStageTest<AttachType> {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
-
-    @Rule
-    public TextFromStandardInputStream systemIn = emptyStandardInputStream();
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -112,6 +108,7 @@ public abstract class BaseStageTest<AttachType> {
         try {
             initTests();
             OutputStreamHandler.replaceSystemOut();
+            InputStreamHandler.replaceSystemIn();
 
             if (needResetStaticFields) {
                 String savingPackage;
@@ -147,15 +144,17 @@ public abstract class BaseStageTest<AttachType> {
                 }
             }
             OutputStreamHandler.revertSystemOut();
+            InputStreamHandler.revertSystemIn();
 
         } catch (Throwable t) {
             OutputStreamHandler.revertSystemOut();
+            InputStreamHandler.revertSystemIn();
             fail(FailureHandler.getFeedback(t, currTest));
         }
     }
 
     private String run(TestCase<?> test) throws Exception {
-        systemIn.provideLines(normalizeLineEndings(test.getInput()).trim());
+        InputStreamHandler.setInput(normalizeLineEndings(test.getInput()).trim());
         OutputStreamHandler.resetOutput();
         mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         return normalizeLineEndings(OutputStreamHandler.getOutput());
