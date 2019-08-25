@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 public class OutputStreamHandler {
 
     public static final PrintStream realOut = System.out;
-    public static final ClonedOutputStream clonedSystemOut = new ClonedOutputStream(realOut);
+    public static final SystemOutMock clonedSystemOut = new SystemOutMock(realOut);
 
     public static void replaceSystemOut() throws Exception {
         System.setOut(new PrintStream(

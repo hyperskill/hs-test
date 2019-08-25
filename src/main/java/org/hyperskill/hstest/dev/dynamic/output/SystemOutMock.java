@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ClonedOutputStream extends OutputStream {
+public class SystemOutMock extends OutputStream {
 
     // original stream used to actually see
     // the test in the console and nothing else
