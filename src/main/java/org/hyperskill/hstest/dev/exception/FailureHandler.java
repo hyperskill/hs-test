@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dev.exception;
 
 import org.hyperskill.hstest.dev.common.FileUtils;
+import org.hyperskill.hstest.dev.outcomes.*;
 import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
@@ -30,7 +31,7 @@ public class FailureHandler {
         "It might happen that if you try to avoid using " +
         "them you will pass this stage.";
 
-    private static String getReport() {
+    public static String getReport() {
         String os = System.getProperty("os.name");
         String java = System.getProperty("java.version");
         String vendor = System.getProperty("java.vendor");
@@ -156,88 +157,21 @@ public class FailureHandler {
             circularLinks.toString() + "\n";
     }
 
-    public static String getFeedback(Throwable t, int currTest) {
-
-        String errorText;
-        String stackTraceInfo;
-
+    public static Outcome getOutcome(Throwable t, int currTest) {
         if (t instanceof WrongAnswerException) {
-
-            errorText = "Wrong answer in test #" + currTest
-                + "\n\n" + t.getMessage().trim();
-
-            if (FailureHandler.detectStaticCloneFails()) {
-                errorText += "\n\n" + FailureHandler.avoidStaticsMsg;
-            }
-
-            stackTraceInfo = "";
+            return new WrongAnswerOutcome(currTest, t.getMessage().trim());
 
         } else if (t.getCause() != null &&
             t instanceof InvocationTargetException) {
             // If user failed then t == InvocationTargetException
             // and t.getCause() == Actual user exception
-            errorText = "Exception in test #" + currTest;
-            stackTraceInfo = filterStackTrace(getStackTrace(t.getCause()));
-
-            Throwable cause = t.getCause();
-
-            if (cause instanceof InputMismatchException
-                && stackTraceInfo.contains("java.util.Scanner")) {
-
-                errorText += "\n\nProbably you have nextInt() (or similar Scanner method) " +
-                    "followed by nextLine() - in this situation nextLine() often gives an " +
-                    "empty string and the second nextLine() gives correct string.";
-
-            } else if (cause instanceof NoSuchElementException
-                && stackTraceInfo.contains("java.util.Scanner")) {
-
-                errorText += "\n\nMaybe you created more than one instance of Scanner? " +
-                    "You should use a single Scanner in program. " +
-                    "If not, this type of exception also happens if you " +
-                    "run out of input (tried to read more than expected).";
-            }
-
-            if (detectStaticCloneFails()) {
-                errorText += "\n\n" + avoidStaticsMsg;
-            }
+            return new ExceptionOutcome(currTest, t.getCause());
 
         } else if (t instanceof FileSystemException) {
-
-            errorText = "Error in test #" + currTest ;
-            stackTraceInfo = "";
-
-            // without "class "
-            String exceptionName = t.getClass().toString().substring(6);
-
-            String file = ((FileSystemException) t).getFile();
-
-            if (file.startsWith(FileUtils.CURRENT_DIR)) {
-                file = file.substring(FileUtils.CURRENT_DIR.length());
-            }
-
-            errorText += "\n\n" + exceptionName + "\n\nThe file " + file +
-                " can't be deleted after the end of the test. " +
-                "Probably you didn't close File or Scanner.";
+            return new ErrorOutcome(currTest, t);
 
         } else {
-
-            String whenErrorHappened;
-            if (currTest == 0) {
-                whenErrorHappened = "during testing";
-            } else {
-                whenErrorHappened = "in test #" + currTest;
-            }
-
-            errorText = "Fatal error " + whenErrorHappened +
-                ", please send the report to Hyperskill team.\n\n" + getReport();
-            if (t.getCause() == null) {
-                stackTraceInfo = getStackTrace(t);
-            } else {
-                stackTraceInfo = getStackTrace(t) +
-                    "\n" + getStackTrace(t.getCause());
-            }
+            return new FatalErrorOutcome(currTest, t);
         }
-
-        return (errorText + "\n\n" + stackTraceInfo).trim();
     }
 }

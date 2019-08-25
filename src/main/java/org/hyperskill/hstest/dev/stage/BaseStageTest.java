@@ -4,6 +4,7 @@ import org.hyperskill.hstest.dev.dynamic.input.InputStreamHandler;
 import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
+import org.hyperskill.hstest.dev.outcomes.Outcome;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
@@ -160,7 +161,8 @@ public abstract class BaseStageTest<AttachType> {
             tearDownSystem();
         } catch (Throwable t) {
             tearDownSystem();
-            fail(FailureHandler.getFeedback(t, currTest));
+            Outcome outcome = FailureHandler.getOutcome(t, currTest);
+            fail(outcome.toString());
         }
     }
 
