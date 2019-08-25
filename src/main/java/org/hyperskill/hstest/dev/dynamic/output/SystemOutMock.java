@@ -18,7 +18,12 @@ public class SystemOutMock extends OutputStream {
     // dynamic input calls in SystemInMock
     final ByteArrayOutputStream dynamicStream = new ByteArrayOutputStream();
 
-    ClonedOutputStream(OutputStream originalStream) {
+    // this stream contains not only output
+    // but also injected input from the test
+    final ByteArrayOutputStream
+        withInputInjectedStream = new ByteArrayOutputStream();
+
+    SystemOutMock(OutputStream originalStream) {
         this.originalStream = originalStream;
     }
 
@@ -27,6 +32,7 @@ public class SystemOutMock extends OutputStream {
         originalStream.write(b);
         clonedStream.write(b);
         dynamicStream.write(b);
+        withInputInjectedStream.write(b);
     }
 
     @Override
@@ -39,4 +45,11 @@ public class SystemOutMock extends OutputStream {
         originalStream.close();
     }
 
+    public void injectInput(String input) {
+        byte[] inputBytes = input.getBytes();
+        try {
+            originalStream.write(inputBytes);
+            withInputInjectedStream.write(inputBytes);
+        } catch (IOException ignored) { }
+    }
 }

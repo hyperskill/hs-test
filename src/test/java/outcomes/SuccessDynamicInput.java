@@ -29,7 +29,7 @@ public class SuccessDynamicInput extends BaseStageTest<String> {
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>()
-                .addInput(o -> o)
+                .addInput(out -> out)
                 .setAttach("Hello\nHello\n"),
 
             new TestCase<String>()
@@ -37,9 +37,14 @@ public class SuccessDynamicInput extends BaseStageTest<String> {
                 .setAttach("Hello\nHi\n"),
 
             new TestCase<String>()
+                .addInput(o -> "Hihi1")
+                .addInput(o -> "Hihi2")
+                .setAttach("Hello\nHihi1\n"),
+
+            new TestCase<String>()
                 .addInput(o -> "")
-                .addInput(o -> "Hihi")
-                .setAttach("Hello\nHihi\n"),
+                .addInput(o -> "Hihi3")
+                .setAttach("Hello\n\n"),
 
             new TestCase<String>()
                 .addInput(o -> "1\n")
@@ -49,7 +54,12 @@ public class SuccessDynamicInput extends BaseStageTest<String> {
             new TestCase<String>()
                 .addInput(o -> "2")
                 .addInput(o -> "Hey")
-                .setAttach("Hello\n2Hey\n")
+                .setAttach("Hello\n2\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "Hi before\nHi after")
+                .addInput(o -> "Hey")
+                .setAttach("Hello\nHi before\n")
         );
     }
 

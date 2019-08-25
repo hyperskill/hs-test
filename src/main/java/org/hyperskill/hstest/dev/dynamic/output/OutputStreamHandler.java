@@ -21,6 +21,7 @@ public class OutputStreamHandler {
     public static void resetOutput() {
         mockOut.clonedStream.reset();
         mockOut.dynamicStream.reset();
+        mockOut.withInputInjectedStream.reset();
     }
 
     public static String getOutput() {
@@ -31,5 +32,13 @@ public class OutputStreamHandler {
         String output = mockOut.dynamicStream.toString();
         mockOut.dynamicStream.reset();
         return output;
+    }
+
+    public static String getOutputWithInputInjected() {
+        return mockOut.withInputInjectedStream.toString();
+    }
+
+    public static void injectInput(String input) {
+        mockOut.injectInput(input);
     }
 }
