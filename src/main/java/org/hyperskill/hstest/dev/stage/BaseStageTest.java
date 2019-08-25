@@ -8,9 +8,7 @@ import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 
