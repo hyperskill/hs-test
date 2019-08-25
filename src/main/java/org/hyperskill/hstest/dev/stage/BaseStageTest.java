@@ -11,13 +11,17 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
+import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
+import static java.lang.System.getSecurityManager;
 import static org.hyperskill.hstest.dev.common.FileUtils.createFiles;
 import static org.hyperskill.hstest.dev.common.FileUtils.deleteFiles;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
@@ -39,6 +43,7 @@ public abstract class BaseStageTest<AttachType> {
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
 
     protected boolean needResetStaticFields = true;
+    private SecurityManager oldSecurityManager;
 
     public BaseStageTest(Class testedClass) {
         this(testedClass, null);
@@ -48,9 +53,6 @@ public abstract class BaseStageTest<AttachType> {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
-
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     @BeforeClass
     public static void setUp() {
@@ -109,6 +111,10 @@ public abstract class BaseStageTest<AttachType> {
             initTests();
             OutputStreamHandler.replaceSystemOut();
             InputStreamHandler.replaceSystemIn();
+            oldSecurityManager = getSecurityManager();
+            System.setSecurityManager(
+                new NoExitSecurityManager(oldSecurityManager)
+            );
 
             if (needResetStaticFields) {
                 String savingPackage;
@@ -145,10 +151,12 @@ public abstract class BaseStageTest<AttachType> {
             }
             OutputStreamHandler.revertSystemOut();
             InputStreamHandler.revertSystemIn();
+            System.setSecurityManager(oldSecurityManager);
 
         } catch (Throwable t) {
             OutputStreamHandler.revertSystemOut();
             InputStreamHandler.revertSystemIn();
+            System.setSecurityManager(oldSecurityManager);
             fail(FailureHandler.getFeedback(t, currTest));
         }
     }
@@ -156,7 +164,14 @@ public abstract class BaseStageTest<AttachType> {
     private String run(TestCase<?> test) throws Exception {
         InputStreamHandler.setInputFuncs(test.getInputFuncs());
         OutputStreamHandler.resetOutput();
-        mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
+        try {
+            mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
+        } catch (InvocationTargetException ex) {
+            if (!(ex.getCause() instanceof CheckExitCalled)) {
+                throw ex;
+            }
+            // consider System.exit() like normal exit
+        }
         return normalizeLineEndings(OutputStreamHandler.getOutput());
     }
 
