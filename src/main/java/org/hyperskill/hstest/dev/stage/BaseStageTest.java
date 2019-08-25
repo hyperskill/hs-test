@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.dev.stage;
 
-import org.hyperskill.hstest.dev.dynamic.input.InputStreamHandler;
-import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
+import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
+import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.outcomes.Outcome;
@@ -104,8 +104,8 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     private void setUpSystem() throws Exception {
-        OutputStreamHandler.replaceSystemOut();
-        InputStreamHandler.replaceSystemIn();
+        SystemOutHandler.replaceSystemOut();
+        SystemInHandler.replaceSystemIn();
         oldSecurityManager = getSecurityManager();
         System.setSecurityManager(
             new NoExitSecurityManager(oldSecurityManager)
@@ -113,8 +113,8 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     private void tearDownSystem() {
-        OutputStreamHandler.revertSystemOut();
-        InputStreamHandler.revertSystemIn();
+        SystemOutHandler.revertSystemOut();
+        SystemInHandler.revertSystemIn();
         System.setSecurityManager(oldSecurityManager);
     }
 
@@ -167,8 +167,8 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     private String run(TestCase<?> test) throws Exception {
-        InputStreamHandler.setInputFuncs(test.getInputFuncs());
-        OutputStreamHandler.resetOutput();
+        SystemInHandler.setInputFuncs(test.getInputFuncs());
+        SystemOutHandler.resetOutput();
         try {
             mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         } catch (InvocationTargetException ex) {
@@ -177,7 +177,7 @@ public abstract class BaseStageTest<AttachType> {
             }
             // consider System.exit() like normal exit
         }
-        return normalizeLineEndings(OutputStreamHandler.getOutput());
+        return normalizeLineEndings(SystemOutHandler.getOutput());
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {

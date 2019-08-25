@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.function.Function;
 
-public class InputStreamHandler {
+public class SystemInHandler {
 
     public static InputStream realIn = System.in;
     public static SystemInMock mockIn = new SystemInMock();

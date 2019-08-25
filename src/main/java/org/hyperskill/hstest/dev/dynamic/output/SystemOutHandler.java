@@ -3,7 +3,7 @@ package org.hyperskill.hstest.dev.dynamic.output;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
-public class OutputStreamHandler {
+public class SystemOutHandler {
 
     public static final PrintStream realOut = System.out;
     public static final SystemOutMock mockOut = new SystemOutMock(realOut);

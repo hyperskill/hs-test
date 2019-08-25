@@ -1,6 +1,6 @@
 package dynamic;
 
-import org.hyperskill.hstest.dev.dynamic.input.InputStreamHandler;
+import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,18 +15,18 @@ public class TestInputHandler {
 
     @Before
     public void setUp() {
-        InputStreamHandler.replaceSystemIn();
+        SystemInHandler.replaceSystemIn();
         scanner = new Scanner(System.in);
     }
 
     @After
     public void tearDown() {
-        InputStreamHandler.revertSystemIn();
+        SystemInHandler.revertSystemIn();
     }
 
     @Test
     public void testNumbers() {
-        InputStreamHandler.setInput("123 234 345\n456 567 678");
+        SystemInHandler.setInput("123 234 345\n456 567 678");
         assertEquals(123, scanner.nextInt());
         assertEquals(234, scanner.nextInt());
         assertEquals(345, scanner.nextInt());
@@ -37,7 +37,7 @@ public class TestInputHandler {
 
     @Test
     public void testLines() {
-        InputStreamHandler.setInput("123 234\n 345 456\n 567 678 \n");
+        SystemInHandler.setInput("123 234\n 345 456\n 567 678 \n");
         assertEquals("123 234", scanner.nextLine());
         assertEquals(" 345 456", scanner.nextLine());
         assertEquals(" 567 678 ", scanner.nextLine());
@@ -45,7 +45,7 @@ public class TestInputHandler {
 
     @Test
     public void testWords() {
-        InputStreamHandler.setInput("123 234\n w345 456\n w567 678e \n");
+        SystemInHandler.setInput("123 234\n w345 456\n w567 678e \n");
         assertEquals("123", scanner.next());
         assertEquals("234", scanner.next());
         assertEquals("w345", scanner.next());
@@ -56,7 +56,7 @@ public class TestInputHandler {
 
     @Test
     public void testCombo() {
-        InputStreamHandler.setInput("123 234\n w345 456\n w567 678 \n");
+        SystemInHandler.setInput("123 234\n w345 456\n w567 678 \n");
         assertEquals(123, scanner.nextInt());
         assertEquals("234", scanner.next());
         assertEquals("", scanner.nextLine());

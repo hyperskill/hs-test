@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dev.dynamic.input;
 
-import org.hyperskill.hstest.dev.dynamic.output.OutputStreamHandler;
+import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,7 @@ public class SystemInMock extends InputStream {
 
         if (needInject) {
             needInject = false;
-            OutputStreamHandler.injectInput(">" + injectionString);
+            SystemOutHandler.injectInput(">" + injectionString);
         }
 
         if (character == -1) {
@@ -57,7 +57,7 @@ public class SystemInMock extends InputStream {
             }
 
             if (!inputTextFuncs.isEmpty()) {
-                String currOutput = OutputStreamHandler.getDynamicOutput();
+                String currOutput = SystemOutHandler.getDynamicOutput();
                 Function<String, String> nextFunc = inputTextFuncs.remove(0);
                 String newInput = nextFunc.apply(currOutput);
                 newInput = normalizeLineEndings(newInput).trim();
