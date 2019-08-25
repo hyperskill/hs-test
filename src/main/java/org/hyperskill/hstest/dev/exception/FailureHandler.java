@@ -197,10 +197,6 @@ public class FailureHandler {
                     "run out of input (tried to read more than expected).";
             }
 
-            if (stackTraceInfo.contains("java.lang.Runtime.exit")) {
-                errorText = "Error in test #" + currTest + " - Tried to exit";
-            }
-
             if (detectStaticCloneFails()) {
                 errorText += "\n\n" + avoidStaticsMsg;
             }
