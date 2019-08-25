@@ -6,31 +6,31 @@ import org.hyperskill.hstest.dev.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SystemExit extends BaseStageTest {
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+
+public class TestRuntimeExit extends BaseStageTest {
 
     public static void main(String[] args) {
-        System.exit(0);
+        Runtime.getRuntime().exit(0);
     }
 
-    public SystemExit() {
-        super(SystemExit.class);
+    public TestRuntimeExit() {
+        super(TestRuntimeExit.class);
     }
-
-    public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public TestRule allRules = RuleChain.outerRule(exception).around(exit);
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Error in test #1 - Tried to exit");
+        exception.expectMessage("Wrong answer in test #1");
+        exception.expectMessage(not(containsString("Fatal error")));
     }
 
     @Override
@@ -45,4 +45,3 @@ public class SystemExit extends BaseStageTest {
         return CheckResult.FALSE;
     }
 }
-
