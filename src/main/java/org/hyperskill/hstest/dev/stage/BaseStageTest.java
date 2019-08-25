@@ -104,17 +104,27 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
+    private void setUpSystem() throws Exception {
+        OutputStreamHandler.replaceSystemOut();
+        InputStreamHandler.replaceSystemIn();
+        oldSecurityManager = getSecurityManager();
+        System.setSecurityManager(
+            new NoExitSecurityManager(oldSecurityManager)
+        );
+    }
+
+    private void tearDownSystem() {
+        OutputStreamHandler.revertSystemOut();
+        InputStreamHandler.revertSystemIn();
+        System.setSecurityManager(oldSecurityManager);
+    }
+
     @Test
     public final void start() {
         int currTest = 0;
         try {
+            setUpSystem();
             initTests();
-            OutputStreamHandler.replaceSystemOut();
-            InputStreamHandler.replaceSystemIn();
-            oldSecurityManager = getSecurityManager();
-            System.setSecurityManager(
-                new NoExitSecurityManager(oldSecurityManager)
-            );
 
             if (needResetStaticFields) {
                 String savingPackage;
@@ -149,14 +159,9 @@ public abstract class BaseStageTest<AttachType> {
                     throw new WrongAnswerException(result.getFeedback());
                 }
             }
-            OutputStreamHandler.revertSystemOut();
-            InputStreamHandler.revertSystemIn();
-            System.setSecurityManager(oldSecurityManager);
-
+            tearDownSystem();
         } catch (Throwable t) {
-            OutputStreamHandler.revertSystemOut();
-            InputStreamHandler.revertSystemIn();
-            System.setSecurityManager(oldSecurityManager);
+            tearDownSystem();
             fail(FailureHandler.getFeedback(t, currTest));
         }
     }
