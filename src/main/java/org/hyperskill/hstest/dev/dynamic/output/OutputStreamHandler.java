@@ -6,11 +6,11 @@ import java.nio.charset.Charset;
 public class OutputStreamHandler {
 
     public static final PrintStream realOut = System.out;
-    public static final SystemOutMock clonedSystemOut = new SystemOutMock(realOut);
+    public static final SystemOutMock mockOut = new SystemOutMock(realOut);
 
     public static void replaceSystemOut() throws Exception {
         System.setOut(new PrintStream(
-            clonedSystemOut, true, Charset.defaultCharset().name()));
+            mockOut, true, Charset.defaultCharset().name()));
     }
 
     public static void revertSystemOut() {
@@ -19,17 +19,17 @@ public class OutputStreamHandler {
     }
 
     public static void resetOutput() {
-        clonedSystemOut.clonedStream.reset();
-        clonedSystemOut.dynamicStream.reset();
+        mockOut.clonedStream.reset();
+        mockOut.dynamicStream.reset();
     }
 
     public static String getOutput() {
-        return clonedSystemOut.clonedStream.toString();
+        return mockOut.clonedStream.toString();
     }
 
     public static String getDynamicOutput() {
-        String output = clonedSystemOut.dynamicStream.toString();
-        clonedSystemOut.dynamicStream.reset();
+        String output = mockOut.dynamicStream.toString();
+        mockOut.dynamicStream.reset();
         return output;
     }
 }
