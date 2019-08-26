@@ -160,8 +160,8 @@ public abstract class BaseStageTest<AttachType> {
             }
             tearDownSystem();
         } catch (Throwable t) {
-            tearDownSystem();
             Outcome outcome = FailureHandler.getOutcome(t, currTest);
+            tearDownSystem();
             fail(outcome.toString());
         }
     }
