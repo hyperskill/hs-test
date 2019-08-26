@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.outcomes;
 
+import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 
 public abstract class Outcome {
@@ -44,6 +45,12 @@ public abstract class Outcome {
         if (!stackTrace.isEmpty()) {
             result += "\n\n" + stackTrace;
         }
+
+        result += "\n\nYou're lucky! " +
+            "We saved output of your program. \n" +
+            "Notice, that '>' symbol means the start of the input:\n\n";
+
+        result += SystemOutHandler.getOutputWithInputInjected();
 
         return result.trim();
     }
