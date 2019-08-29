@@ -141,12 +141,12 @@ public abstract class BaseStageTest<AttachType> {
                 stopThreads(test.getProcesses(), pool);
                 deleteFiles(test.getFiles());
 
-                if (needResetStaticFields) {
-                    StaticFieldsManager.resetStaticFields();
-                }
-
                 if (!result.isCorrect()) {
                     throw new WrongAnswerException(result.getFeedback());
+                }
+
+                if (needResetStaticFields) {
+                    StaticFieldsManager.resetStaticFields();
                 }
             }
             SystemHandler.tearDownSystem();
