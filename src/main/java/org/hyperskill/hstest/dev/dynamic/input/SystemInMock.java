@@ -58,6 +58,7 @@ public class SystemInMock extends InputStream {
 
             if (!inputTextFuncs.isEmpty()) {
                 String currOutput = SystemOutHandler.getDynamicOutput();
+                currOutput = normalizeLineEndings(currOutput);
                 Function<String, String> nextFunc = inputTextFuncs.remove(0);
                 String newInput = nextFunc.apply(currOutput);
                 newInput = normalizeLineEndings(newInput).trim();
