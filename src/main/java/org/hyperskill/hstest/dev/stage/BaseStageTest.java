@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dev.stage;
 
+import org.hyperskill.hstest.dev.dynamic.SystemHandler;
 import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
@@ -12,7 +13,6 @@ import org.hyperskill.hstest.dev.testcase.TestRun;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
-import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
-import static java.lang.System.getSecurityManager;
 import static org.hyperskill.hstest.dev.common.FileUtils.createFiles;
 import static org.hyperskill.hstest.dev.common.FileUtils.deleteFiles;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
@@ -43,7 +42,6 @@ public abstract class BaseStageTest<AttachType> {
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
 
     protected boolean needResetStaticFields = true;
-    private SecurityManager oldSecurityManager;
 
     private static TestRun currTestRun;
 
@@ -110,26 +108,11 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private void setUpSystem() throws Exception {
-        SystemOutHandler.replaceSystemOut();
-        SystemInHandler.replaceSystemIn();
-        oldSecurityManager = getSecurityManager();
-        System.setSecurityManager(
-            new NoExitSecurityManager(oldSecurityManager)
-        );
-    }
-
-    private void tearDownSystem() {
-        SystemOutHandler.revertSystemOut();
-        SystemInHandler.revertSystemIn();
-        System.setSecurityManager(oldSecurityManager);
-    }
-
     @Test
     public final void start() {
         int currTest = 0;
         try {
-            setUpSystem();
+            SystemHandler.setUpSystem();
             initTests();
 
             if (needResetStaticFields) {
@@ -166,11 +149,11 @@ public abstract class BaseStageTest<AttachType> {
                     throw new WrongAnswerException(result.getFeedback());
                 }
             }
-            tearDownSystem();
+            SystemHandler.tearDownSystem();
         } catch (Throwable t) {
             Outcome outcome = FailureHandler.getOutcome(t, currTest);
             String failText = outcome.toString();
-            tearDownSystem();
+            SystemHandler.tearDownSystem();
             fail(failText);
         }
     }
