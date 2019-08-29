@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 public class SystemInHandler {
 
-    public static InputStream realIn = System.in;
-    public static SystemInMock mockIn = new SystemInMock();
+    private static InputStream realIn = System.in;
+    private static SystemInMock mockIn = new SystemInMock();
 
     public static void replaceSystemIn() {
         System.setIn(mockIn);

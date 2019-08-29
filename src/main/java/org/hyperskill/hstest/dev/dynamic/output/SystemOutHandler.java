@@ -5,8 +5,8 @@ import java.nio.charset.Charset;
 
 public class SystemOutHandler {
 
-    public static final PrintStream realOut = System.out;
-    public static final SystemOutMock mockOut = new SystemOutMock(realOut);
+    private static final PrintStream realOut = System.out;
+    private static final SystemOutMock mockOut = new SystemOutMock(realOut);
 
     public static void replaceSystemOut() throws Exception {
         System.setOut(new PrintStream(
