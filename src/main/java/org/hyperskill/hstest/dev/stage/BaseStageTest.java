@@ -44,6 +44,12 @@ public abstract class BaseStageTest<AttachType> {
     protected boolean needResetStaticFields = true;
     private SecurityManager oldSecurityManager;
 
+    private static TestCase currTestCase;
+
+    public static TestCase getCurrTestCase() {
+        return currTestCase;
+    }
+
     public BaseStageTest(Class testedClass) {
         this(testedClass, null);
     }
@@ -140,6 +146,7 @@ public abstract class BaseStageTest<AttachType> {
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
                 System.err.println("Start test " + currTest);
+                currTestCase = test;
 
                 createFiles(test.getFiles());
                 ExecutorService pool = startThreads(test.getProcesses());
