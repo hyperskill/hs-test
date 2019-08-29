@@ -40,7 +40,7 @@ public class SystemInMock extends InputStream {
 
         // provide no more input if there was an exception
         TestRun testRun = BaseStageTest.getCurrTestRun();
-        if (testRun != null && testRun.getThrowable() != null) {
+        if (testRun != null && testRun.getErrorInTest() != null) {
             return -1;
         }
 
@@ -75,7 +75,7 @@ public class SystemInMock extends InputStream {
                 try {
                     newInput = nextFunc.apply(currOutput);
                 } catch (Throwable throwable) {
-                    BaseStageTest.getCurrTestRun().setThrowable(throwable);
+                    BaseStageTest.getCurrTestRun().setErrorInTest(throwable);
                     return -1;
                 }
 

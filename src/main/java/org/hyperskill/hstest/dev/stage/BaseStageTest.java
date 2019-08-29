@@ -161,12 +161,12 @@ public abstract class BaseStageTest<AttachType> {
     private String run(TestCase<?> test) throws Throwable {
         SystemInHandler.setInputFuncs(test.getInputFuncs());
         SystemOutHandler.resetOutput();
-        currTestRun.setThrowable(null);
+        currTestRun.setErrorInTest(null);
         try {
             mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         } catch (InvocationTargetException ex) {
-            if (currTestRun.getThrowable() != null) {
-                throw currTestRun.getThrowable();
+            if (currTestRun.getErrorInTest() != null) {
+                throw currTestRun.getErrorInTest();
             }
             if (!(ex.getCause() instanceof CheckExitCalled)) {
                 throw ex;

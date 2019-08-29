@@ -5,7 +5,7 @@ public class TestRun {
     private int testNum;
     private TestCase testCase;
 
-    private Throwable throwable;
+    private Throwable errorInTest;
 
     public TestRun(int testNum, TestCase testCase) {
         this.testNum = testNum;
@@ -20,11 +20,11 @@ public class TestRun {
         return testCase;
     }
 
-    public Throwable getThrowable() {
-        return throwable;
+    public Throwable getErrorInTest() {
+        return errorInTest;
     }
 
-    public void setThrowable(Throwable throwable) {
-        this.throwable = throwable;
+    public void setErrorInTest(Throwable errorInTest) {
+        this.errorInTest = errorInTest;
     }
 }
