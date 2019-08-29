@@ -28,7 +28,7 @@ import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.stopThreads;
 import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 public abstract class BaseStageTest<AttachType> {
 
