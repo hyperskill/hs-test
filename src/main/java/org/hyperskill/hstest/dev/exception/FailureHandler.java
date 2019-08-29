@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.dev.exception;
 
-import org.hyperskill.hstest.dev.common.FileUtils;
 import org.hyperskill.hstest.dev.outcomes.*;
 import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
@@ -9,8 +8,6 @@ import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileSystemException;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 
 import static org.hyperskill.hstest.dev.exception.StackTraceUtils.*;
 
