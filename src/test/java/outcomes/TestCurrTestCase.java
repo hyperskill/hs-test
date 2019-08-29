@@ -13,7 +13,7 @@ public class TestCurrTestCase extends BaseStageTest<Integer> {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         int test = s.nextInt();
-        TestCase testCase = BaseStageTest.getCurrTestCase();
+        TestCase testCase = BaseStageTest.getCurrTestRun().getTestCase();
         if (test == 1 && testCase != test1
             || test == 2 && testCase != test2) {
             throw new NullPointerException();
@@ -39,7 +39,7 @@ public class TestCurrTestCase extends BaseStageTest<Integer> {
 
     @Override
     public CheckResult check(String reply, Integer attach) {
-        TestCase testCase = BaseStageTest.getCurrTestCase();
+        TestCase testCase = BaseStageTest.getCurrTestRun().getTestCase();
         if (attach == 1 && testCase != test1
             || attach == 2 && testCase != test2) {
             throw new NullPointerException();

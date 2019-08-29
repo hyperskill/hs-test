@@ -8,6 +8,7 @@ import org.hyperskill.hstest.dev.outcomes.Outcome;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestCase;
+import org.hyperskill.hstest.dev.testcase.TestRun;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
@@ -44,10 +45,10 @@ public abstract class BaseStageTest<AttachType> {
     protected boolean needResetStaticFields = true;
     private SecurityManager oldSecurityManager;
 
-    private static TestCase currTestCase;
+    private static TestRun currTestRun;
 
-    public static TestCase getCurrTestCase() {
-        return currTestCase;
+    public static TestRun getCurrTestRun() {
+        return currTestRun;
     }
 
     public BaseStageTest(Class testedClass) {
@@ -146,7 +147,7 @@ public abstract class BaseStageTest<AttachType> {
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
                 System.err.println("Start test " + currTest);
-                currTestCase = test;
+                currTestRun = new TestRun(currTest, test);
 
                 createFiles(test.getFiles());
                 ExecutorService pool = startThreads(test.getProcesses());
@@ -174,12 +175,16 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private String run(TestCase<?> test) throws Exception {
+    private String run(TestCase<?> test) throws Throwable {
         SystemInHandler.setInputFuncs(test.getInputFuncs());
         SystemOutHandler.resetOutput();
+        currTestRun.setThrowable(null);
         try {
             mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
         } catch (InvocationTargetException ex) {
+            if (currTestRun.getThrowable() != null) {
+                throw currTestRun.getThrowable();
+            }
             if (!(ex.getCause() instanceof CheckExitCalled)) {
                 throw ex;
             }

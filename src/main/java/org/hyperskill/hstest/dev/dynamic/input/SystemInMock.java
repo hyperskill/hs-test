@@ -1,6 +1,8 @@
 package org.hyperskill.hstest.dev.dynamic.input;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.stage.BaseStageTest;
+import org.hyperskill.hstest.dev.testcase.TestRun;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +37,20 @@ public class SystemInMock extends InputStream {
 
     @Override
     public int read() throws IOException {
-        int character = currentReader.read();
 
+        // provide no more input if there was an exception
+        TestRun testRun = BaseStageTest.getCurrTestRun();
+        if (testRun != null && testRun.getThrowable() != null) {
+            return -1;
+        }
+
+        // need to inject precisely when this input is needed
         if (needInject) {
             needInject = false;
             SystemOutHandler.injectInput(">" + injectionString);
         }
+
+        int character = currentReader.read();
 
         if (character == -1) {
 
@@ -60,7 +70,15 @@ public class SystemInMock extends InputStream {
                 String currOutput = SystemOutHandler.getDynamicOutput();
                 currOutput = normalizeLineEndings(currOutput);
                 Function<String, String> nextFunc = inputTextFuncs.remove(0);
-                String newInput = nextFunc.apply(currOutput);
+
+                String newInput;
+                try {
+                    newInput = nextFunc.apply(currOutput);
+                } catch (Throwable throwable) {
+                    BaseStageTest.getCurrTestRun().setThrowable(throwable);
+                    return -1;
+                }
+
                 newInput = normalizeLineEndings(newInput).trim();
                 inputLines.addAll(Arrays.asList(newInput.split("\n")));
                 return read();
