@@ -29,6 +29,7 @@ public class FatalErrorAddInput extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error in test #1, please send the report to Hyperskill team.");
+        exception.expectMessage("java.lang.ArithmeticException: / by zero");
     }
 
     @Override
