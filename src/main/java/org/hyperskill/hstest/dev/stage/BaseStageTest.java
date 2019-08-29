@@ -158,7 +158,7 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private String run(TestCase<?> test) throws Throwable {
+    private String run(TestCase<AttachType> test) throws Throwable {
         SystemInHandler.setInputFuncs(test.getInputFuncs());
         SystemOutHandler.resetOutput();
         currTestRun.setErrorInTest(null);
