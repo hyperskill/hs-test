@@ -50,8 +50,8 @@ public abstract class Outcome {
             result += "\n\n" + stackTrace;
         }
 
-        result += "\n\nYou're lucky! " +
-            "We saved output of your program. \n" +
+        result += "\n\n" +
+            "We saved output of your program. You can see it below\n" +
             "Notice, that '>' symbol means the start of the input:\n\n";
 
         result += SystemOutHandler.getOutputWithInputInjected();
