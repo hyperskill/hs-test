@@ -37,7 +37,7 @@ public class FailureHandler {
             "OS " + os + "\n" +
             "Java " + java + "\n" +
             "Vendor " + vendor + "\n" +
-            "Testing library version 5";
+            "Testing library version 6";
 
         StringBuilder cantClone = new StringBuilder("Cannot be cloned: ");
 
