@@ -2,6 +2,10 @@ package org.hyperskill.hstest.dev.outcomes;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
+import org.hyperskill.hstest.dev.exception.WrongAnswerException;
+
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystemException;
 
 public abstract class Outcome {
 
@@ -53,5 +57,23 @@ public abstract class Outcome {
         result += SystemOutHandler.getOutputWithInputInjected();
 
         return result.trim();
+    }
+
+    public static Outcome getOutcome(Throwable t, int currTest) {
+        if (t instanceof WrongAnswerException) {
+            return new WrongAnswerOutcome(currTest, t.getMessage().trim());
+
+        } else if (t.getCause() != null &&
+            t instanceof InvocationTargetException) {
+            // If user failed then t == InvocationTargetException
+            // and t.getCause() == Actual user exception
+            return new ExceptionOutcome(currTest, t.getCause());
+
+        } else if (t instanceof FileSystemException) {
+            return new ErrorOutcome(currTest, t);
+
+        } else {
+            return new FatalErrorOutcome(currTest, t);
+        }
     }
 }

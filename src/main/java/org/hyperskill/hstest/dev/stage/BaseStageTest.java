@@ -151,7 +151,7 @@ public abstract class BaseStageTest<AttachType> {
             }
             SystemHandler.tearDownSystem();
         } catch (Throwable t) {
-            Outcome outcome = FailureHandler.getOutcome(t, currTest);
+            Outcome outcome = Outcome.getOutcome(t, currTest);
             String failText = outcome.toString();
             SystemHandler.tearDownSystem();
             fail(failText);

@@ -1,13 +1,10 @@
 package org.hyperskill.hstest.dev.exception;
 
-import org.hyperskill.hstest.dev.outcomes.*;
 import org.hyperskill.hstest.dev.statics.ObjectsCloner;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.FileSystemException;
 
 import static org.hyperskill.hstest.dev.exception.StackTraceUtils.*;
 
@@ -152,23 +149,5 @@ public class FailureHandler {
             cantDeserialize.toString() + "\n" +
             cantSerialize.toString() + "\n" +
             circularLinks.toString() + "\n";
-    }
-
-    public static Outcome getOutcome(Throwable t, int currTest) {
-        if (t instanceof WrongAnswerException) {
-            return new WrongAnswerOutcome(currTest, t.getMessage().trim());
-
-        } else if (t.getCause() != null &&
-            t instanceof InvocationTargetException) {
-            // If user failed then t == InvocationTargetException
-            // and t.getCause() == Actual user exception
-            return new ExceptionOutcome(currTest, t.getCause());
-
-        } else if (t instanceof FileSystemException) {
-            return new ErrorOutcome(currTest, t);
-
-        } else {
-            return new FatalErrorOutcome(currTest, t);
-        }
     }
 }
