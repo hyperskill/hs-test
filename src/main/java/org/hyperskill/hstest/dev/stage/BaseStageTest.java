@@ -173,6 +173,9 @@ public abstract class BaseStageTest<AttachType> {
             }
             // consider System.exit() like normal exit
         }
+        if (currTestRun.getErrorInTest() != null) {
+            throw currTestRun.getErrorInTest();
+        }
         return normalizeLineEndings(SystemOutHandler.getOutput());
     }
 
