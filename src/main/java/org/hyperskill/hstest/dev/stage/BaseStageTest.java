@@ -3,7 +3,6 @@ package org.hyperskill.hstest.dev.stage;
 import org.hyperskill.hstest.dev.dynamic.SystemHandler;
 import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.outcomes.Outcome;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
