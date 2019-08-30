@@ -18,9 +18,6 @@ public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
         System.out.println("5");
         String line4 = scanner.nextLine();
         System.out.println("6");
-        if (!line3.equals("3") || !line4.equals("4")) {
-            int x = 0/0;
-        }
     }
 
     public TestNotRunNotNeededInputFuncs() {
@@ -32,9 +29,6 @@ public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
         return Arrays.asList(
             new TestCase<String>()
                 .addInput(out -> {
-                    if (!out.equals("1\n2\n")) {
-                        int x = 0/0;
-                    }
                     return "3\n4";
                 })
                 .addInput(out -> {
