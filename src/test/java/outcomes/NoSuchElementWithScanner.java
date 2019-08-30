@@ -28,8 +28,8 @@ public class NoSuchElementWithScanner extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Exception in test #1");
-        exception.expectMessage("Maybe you created more than one instance of Scanner? " +
-            "You should use a single Scanner in program.");
+        exception.expectMessage("you created more than one Scanner object " +
+            "(it is preferred to use a single Scanner in program)");
     }
 
     @Override

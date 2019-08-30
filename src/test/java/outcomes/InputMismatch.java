@@ -33,8 +33,8 @@ public class InputMismatch extends BaseStageTest {
         exception.expectMessage("Exception in test #1");
         exception.expectMessage("Probably you have nextInt() " +
             "(or similar Scanner method) followed by nextLine() - " +
-            "in this situation nextLine() often gives an empty string " +
-            "and the second nextLine() gives correct string.");
+            "in this situation nextLine() often gives an " +
+            "empty string and another one nextLine() call gives correct string.");
     }
 
     @Override

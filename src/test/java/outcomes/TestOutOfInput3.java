@@ -34,7 +34,8 @@ public class TestOutOfInput3 extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Exception in test #1");
-        exception.expectMessage("Maybe you created more than one instance of Scanner?");
+        exception.expectMessage("Probably your program run out of input " +
+            "(Scanner tried to read more than expected)");
         exception.expectMessage("java.util.NoSuchElementException");
         exception.expectMessage(not(containsString("Fatal error")));
     }
