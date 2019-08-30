@@ -1,7 +1,9 @@
 package org.hyperskill.hstest.dev.dynamic.input;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
+import org.hyperskill.hstest.dev.testcase.CheckResult;
 import org.hyperskill.hstest.dev.testcase.TestRun;
 
 import java.io.IOException;
@@ -84,7 +86,21 @@ public class SystemInMock extends InputStream {
 
         String newInput;
         try {
-            newInput = (String) nextFunc.apply(currOutput);
+            Object obj = nextFunc.apply(currOutput);
+            if (obj instanceof String) {
+                newInput = (String) obj;
+            } else if (obj instanceof CheckResult) {
+                CheckResult result = (CheckResult) obj;
+                if (result.isCorrect()) {
+                    newInput = result.getFeedback();
+                } else {
+                    String errorText = result.getFeedback();
+                    throw new WrongAnswerException(errorText);
+                }
+            } else {
+                throw new Exception("Dynamic input should return " +
+                    "String or CheckResult objects only. Found: " + obj.getClass());
+            }
         } catch (Throwable throwable) {
             BaseStageTest.getCurrTestRun().setErrorInTest(throwable);
             return;
