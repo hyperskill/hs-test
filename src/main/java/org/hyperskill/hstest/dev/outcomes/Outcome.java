@@ -51,7 +51,7 @@ public abstract class Outcome {
         }
 
         result += "\n\n" +
-            "We saved output of your program. You can see it below\n" +
+            "We saved output of your program during this test. You can see it below\n" +
             "Notice, that '>' symbol means the start of the input:\n\n";
 
         result += SystemOutHandler.getOutputWithInputInjected();
