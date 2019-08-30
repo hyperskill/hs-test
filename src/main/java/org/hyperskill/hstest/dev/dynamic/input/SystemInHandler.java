@@ -2,7 +2,6 @@ package org.hyperskill.hstest.dev.dynamic.input;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.function.Function;
 
 public class SystemInHandler {
 
@@ -17,7 +16,7 @@ public class SystemInHandler {
         mockIn.provideText(input);
     }
 
-    public static void setInputFuncs(List<Function<String, String>> inputFuncs) {
+    public static void setInputFuncs(List<DynamicInputFunction> inputFuncs) {
         mockIn.setTexts(inputFuncs);
     }
 

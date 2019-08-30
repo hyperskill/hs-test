@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.dev.testcase;
 
+import org.hyperskill.hstest.dev.dynamic.input.DynamicInputFunction;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -10,7 +12,7 @@ public class TestCase<AttachType> {
     private AttachType attach = null;
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
-    private List<Function<String, String>> inputFuncs = new LinkedList<>();
+    private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
 
     // files needed to be set up before test
     private Map<String, String> files = new HashMap<>();
@@ -26,12 +28,22 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> setInput(String input) {
         inputFuncs.clear();
-        inputFuncs.add(o -> input);
+        addInput(1, o -> input);
         return this;
     }
 
-    public TestCase<AttachType> addInput(Function<String, String> inputFunc) {
-        inputFuncs.add(inputFunc);
+    public TestCase<AttachType> addInput(Function<String, Object> inputFunc) {
+        addInput(1, inputFunc);
+        return this;
+    }
+
+    public TestCase<AttachType> addInput(int triggerCount, Function<String, Object> inputFunc) {
+        inputFuncs.add(new DynamicInputFunction(triggerCount, inputFunc));
+        return this;
+    }
+
+    public TestCase<AttachType> addInfInput(Function<String, Object> inputFunc) {
+        addInput(-1, inputFunc);
         return this;
     }
 
@@ -65,7 +77,7 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public List<Function<String, String>> getInputFuncs() {
+    public List<DynamicInputFunction> getInputFuncs() {
         return inputFuncs;
     }
 

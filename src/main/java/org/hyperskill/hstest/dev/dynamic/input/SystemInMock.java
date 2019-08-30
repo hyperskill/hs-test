@@ -17,7 +17,7 @@ import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
     private List<String> inputLines = new LinkedList<>();
-    private List<Function<String, String>> inputTextFuncs = new LinkedList<>();
+    private List<DynamicInputFunction> inputTextFuncs = new LinkedList<>();
 
     private boolean firstTime = false;
     private boolean needInject = false;
@@ -27,7 +27,7 @@ public class SystemInMock extends InputStream {
         currentReader = new StringReader(text);
     }
 
-    void setTexts(List<Function<String, String>> texts) {
+    void setTexts(List<DynamicInputFunction> texts) {
         inputTextFuncs = texts;
         inputLines.clear();
         firstTime = true;
@@ -67,16 +67,27 @@ public class SystemInMock extends InputStream {
             }
 
             if (!inputTextFuncs.isEmpty()) {
+
+                DynamicInputFunction inputFunction = inputTextFuncs.get(0);
+                int triggerCount = inputFunction.getTriggerCount();
+                if (triggerCount > 0) {
+                    inputFunction.trigger();
+                }
+
                 String currOutput = SystemOutHandler.getDynamicOutput();
                 currOutput = normalizeLineEndings(currOutput);
-                Function<String, String> nextFunc = inputTextFuncs.remove(0);
+                Function<String, Object> nextFunc = inputTextFuncs.get(0).getInputFunction();
 
                 String newInput;
                 try {
-                    newInput = nextFunc.apply(currOutput);
+                    newInput = (String) nextFunc.apply(currOutput);
                 } catch (Throwable throwable) {
                     BaseStageTest.getCurrTestRun().setErrorInTest(throwable);
                     return -1;
+                }
+
+                if (inputFunction.getTriggerCount() == 0) {
+                    inputTextFuncs.remove(0);
                 }
 
                 newInput = normalizeLineEndings(newInput).trim();
