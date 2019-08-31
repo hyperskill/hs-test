@@ -8,6 +8,10 @@ public class SystemOutHandler {
     private static final PrintStream realOut = System.out;
     private static final SystemOutMock mockOut = new SystemOutMock(realOut);
 
+    public static PrintStream getRealOut() {
+        return realOut;
+    }
+
     public static void replaceSystemOut() throws Exception {
         System.setOut(new PrintStream(
             mockOut, true, Charset.defaultCharset().name()));

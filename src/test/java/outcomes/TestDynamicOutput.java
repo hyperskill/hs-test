@@ -43,14 +43,12 @@ public class TestDynamicOutput extends BaseStageTest<String> {
         return Arrays.asList(
             new TestCase<String>()
                 .addInput(out -> {
-                    System.err.println("in1");
                     if (!out.equals("1\n2\n")) {
                         int x = 0/0;
                     }
                     return "3\n4";
                 })
                 .addInput(out -> {
-                    System.err.println("in2");
                     if (!out.equals("5\n6\n")) {
                         int x = 0/0;
                     }
