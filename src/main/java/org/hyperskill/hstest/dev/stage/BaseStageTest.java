@@ -3,6 +3,7 @@ package org.hyperskill.hstest.dev.stage;
 import org.hyperskill.hstest.dev.dynamic.SystemHandler;
 import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.exception.TimeLimitException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.outcomes.Outcome;
 import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
@@ -19,7 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static org.hyperskill.hstest.dev.common.FileUtils.createFiles;
 import static org.hyperskill.hstest.dev.common.FileUtils.deleteFiles;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
@@ -138,7 +143,7 @@ public abstract class BaseStageTest<AttachType> {
                 createFiles(test.getFiles());
                 ExecutorService pool = startThreads(test.getProcesses());
 
-                String output = run(test);
+                String output = runTest(test);
                 CheckResult result = checkSolution(test, output);
 
                 stopThreads(test.getProcesses(), pool);
@@ -162,25 +167,59 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private String run(TestCase<AttachType> test) throws Throwable {
+    private String runTest(TestCase<AttachType> test) throws Throwable {
         SystemInHandler.setInputFuncs(test.getInputFuncs());
         SystemOutHandler.resetOutput();
         currTestRun.setErrorInTest(null);
-        try {
-            mainMethod.invoke(testedObject, new Object[] { test.getArgs().toArray(new String[0]) });
-        } catch (InvocationTargetException ex) {
-            if (currTestRun.getErrorInTest() != null) {
-                throw currTestRun.getErrorInTest();
-            }
-            if (!(ex.getCause() instanceof CheckExitCalled)) {
-                throw ex;
-            }
-            // consider System.exit() like normal exit
-        }
+
+        runMain(test.getArgs(), test.getTimeLimit());
+
         if (currTestRun.getErrorInTest() != null) {
             throw currTestRun.getErrorInTest();
         }
+
         return normalizeLineEndings(SystemOutHandler.getOutput());
+    }
+
+    private void runMain(List<String> args, int timeLimit) {
+        ExecutorService executorService = newSingleThreadExecutor();
+
+        try {
+            Future future = executorService.submit(() -> {
+                invokeMain(args);
+                return null;
+            });
+
+            try {
+                future.get(timeLimit, TimeUnit.MILLISECONDS);
+            } catch (TimeoutException ex) {
+                currTestRun.setErrorInTest(
+                    new TimeLimitException(timeLimit)
+                );
+            } catch (Throwable ex) {
+                currTestRun.setErrorInTest(ex);
+            }
+        } finally {
+            executorService.shutdownNow();
+        }
+    }
+
+    private void invokeMain(List<String> args) {
+        try {
+            mainMethod.invoke(testedObject, new Object[] {
+                args.toArray(new String[0])
+            });
+        } catch (InvocationTargetException ex) {
+            if (currTestRun.getErrorInTest() == null) {
+                // CheckExitCalled is thrown in case of System.exit()
+                // consider System.exit() like normal exit
+                if (!(ex.getCause() instanceof CheckExitCalled)) {
+                    currTestRun.setErrorInTest(ex);
+                }
+            }
+        } catch (IllegalAccessException ex) {
+            currTestRun.setErrorInTest(ex);
+        }
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {

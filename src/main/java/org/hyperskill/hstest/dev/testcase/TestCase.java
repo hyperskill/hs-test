@@ -11,6 +11,8 @@ public class TestCase<AttachType> {
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
+    private int timeLimit = 15000;
+
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
     private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
 
@@ -62,6 +64,11 @@ public class TestCase<AttachType> {
         return this;
     }
 
+    public TestCase<AttachType> setTimeLimit(int timeLimitMs) {
+        timeLimit = timeLimitMs;
+        return this;
+    }
+
     public TestCase<AttachType> runWith(Process process) {
         processes.add(process);
         return this;
@@ -91,6 +98,10 @@ public class TestCase<AttachType> {
 
     public Map<String, String> getFiles() {
         return files;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
     }
 
     public List<Process> getProcesses() {

@@ -2,6 +2,7 @@ package org.hyperskill.hstest.dev.outcomes;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
+import org.hyperskill.hstest.dev.exception.TimeLimitException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -69,7 +70,9 @@ public abstract class Outcome {
             // and t.getCause() == Actual user exception
             return new ExceptionOutcome(currTest, t.getCause());
 
-        } else if (t instanceof FileSystemException) {
+        } else if (t instanceof FileSystemException
+            || t instanceof TimeLimitException) {
+
             return new ErrorOutcome(currTest, t);
 
         } else {
