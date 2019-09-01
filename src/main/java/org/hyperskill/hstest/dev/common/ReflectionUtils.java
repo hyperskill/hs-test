@@ -11,7 +11,8 @@ public class ReflectionUtils {
 
         Method mainMethod;
         try {
-            mainMethod = clazz.getMethod("main", String[].class);
+            mainMethod = clazz.getDeclaredMethod("main", String[].class);
+            mainMethod.setAccessible(true);
         } catch (NoSuchMethodException ex) {
             throw new Exception("No main method found");
         }
