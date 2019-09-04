@@ -135,9 +135,7 @@ public abstract class BaseStageTest<AttachType> {
 
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
-                SystemOutHandler.getRealOut().println(
-                    RED_BOLD + "\nStart test " + currTest + RESET
-                );
+                System.err.println("\nStart test " + currTest);
                 currTestRun = new TestRun(currTest, test);
 
                 createFiles(test.getFiles());
