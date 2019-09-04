@@ -51,11 +51,15 @@ public abstract class Outcome {
             result += "\n\n" + stackTrace;
         }
 
-        result += "\n\n" +
-            "We saved output of your program during this test. You can see it below\n" +
-            "Notice, that '>' symbol means the start of the input:\n\n";
+        String fullLog = SystemOutHandler.getOutputWithInputInjected();
 
-        result += SystemOutHandler.getOutputWithInputInjected();
+        if (fullLog.trim().length() != 0) {
+            result += "\n\n" +
+                "We saved output of your program during this test. You can see it below\n" +
+                "Notice, that '>' symbol means the start of the input:\n\n";
+
+            result += SystemOutHandler.getOutputWithInputInjected();
+        }
 
         return result.trim();
     }
