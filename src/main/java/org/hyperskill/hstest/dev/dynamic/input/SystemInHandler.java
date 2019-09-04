@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dev.dynamic.input;
 
 import java.io.InputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SystemInHandler {
@@ -17,7 +18,8 @@ public class SystemInHandler {
     }
 
     public static void setInputFuncs(List<DynamicInputFunction> inputFuncs) {
-        mockIn.setTexts(inputFuncs);
+        List<DynamicInputFunction> newFuncs = new LinkedList<>(inputFuncs);
+        mockIn.setTexts(newFuncs);
     }
 
     public static void revertSystemIn() {
