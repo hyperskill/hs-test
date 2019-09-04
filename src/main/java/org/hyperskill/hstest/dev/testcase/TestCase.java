@@ -30,7 +30,22 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> setInput(String input) {
         inputFuncs.clear();
-        addInput(1, o -> input);
+        addInput(1, out -> input);
+        return this;
+    }
+
+    public TestCase<AttachType> addInput(String input) {
+        addInput(1, input);
+        return this;
+    }
+
+    public TestCase<AttachType> addInput(int triggerCount, String input) {
+        addInput(triggerCount, out -> input);
+        return this;
+    }
+
+    public TestCase<AttachType> addInfInput(String input) {
+        addInput(-1, input);
         return this;
     }
 
