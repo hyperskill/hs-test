@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dev.dynamic.input;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.exception.TestPassedException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.stage.BaseStageTest;
 import org.hyperskill.hstest.dev.testcase.CheckResult;
@@ -82,7 +83,7 @@ public class SystemInMock extends InputStream {
 
         String currOutput = SystemOutHandler.getDynamicOutput();
         currOutput = normalizeLineEndings(currOutput);
-        Function<String, Object> nextFunc = inputTextFuncs.get(0).getInputFunction();
+        Function<String, Object> nextFunc = inputFunction.getInputFunction();
 
         String newInput;
         try {
@@ -92,7 +93,7 @@ public class SystemInMock extends InputStream {
             } else if (obj instanceof CheckResult) {
                 CheckResult result = (CheckResult) obj;
                 if (result.isCorrect()) {
-                    newInput = result.getFeedback();
+                    throw new TestPassedException();
                 } else {
                     String errorText = result.getFeedback();
                     throw new WrongAnswerException(errorText);

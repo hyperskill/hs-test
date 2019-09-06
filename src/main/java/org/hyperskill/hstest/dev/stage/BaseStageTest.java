@@ -4,6 +4,7 @@ import org.hyperskill.hstest.dev.dynamic.SystemHandler;
 import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.dev.exception.ExceptionWithFeedback;
+import org.hyperskill.hstest.dev.exception.TestPassedException;
 import org.hyperskill.hstest.dev.exception.TimeLimitException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.outcomes.Outcome;
@@ -224,6 +225,10 @@ public abstract class BaseStageTest<AttachType> {
 
             Throwable errorInTest = currTestRun.getErrorInTest();
 
+            if (errorInTest instanceof TestPassedException) {
+                return;
+            }
+
             if (isUserFailed(errorInTest)) {
                 Throwable userException = getUserException(errorInTest);
                 Map<Class<? extends Throwable>, String> feedbackOnExceptions =
@@ -243,6 +248,10 @@ public abstract class BaseStageTest<AttachType> {
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {
+        if (currTestRun.getErrorInTest() != null
+            && currTestRun.getErrorInTest() instanceof TestPassedException) {
+            return CheckResult.TRUE;
+        }
         return test.getCheckFunc().apply(output, test.getAttach());
     }
 
