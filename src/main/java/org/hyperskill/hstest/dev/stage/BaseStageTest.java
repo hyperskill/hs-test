@@ -231,7 +231,8 @@ public abstract class BaseStageTest<AttachType> {
 
                 for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
                     String feedback = feedbackOnExceptions.get(exClass);
-                    if (errorInTest.getClass().isAssignableFrom(exClass)) {
+                    if (userException != null &&
+                        exClass.isAssignableFrom(userException.getClass())) {
                         throw new ExceptionWithFeedback(feedback, userException);
                     }
                 }
