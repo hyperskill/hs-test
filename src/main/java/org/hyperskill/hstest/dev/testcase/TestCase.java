@@ -17,10 +17,10 @@ public class TestCase<AttachType> {
     private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
 
     // files needed to be set up before test
-    private Map<String, String> files = new HashMap<>();
+    private Map<String, String> files = new LinkedHashMap<>();
 
     private Map<Class<? extends Throwable>, String>
-        feedbackOnExceptions = new HashMap<>();
+        feedbackOnExceptions = new LinkedHashMap<>();
 
     // runnables that should be run before test
     private List<Process> processes = new ArrayList<>();
