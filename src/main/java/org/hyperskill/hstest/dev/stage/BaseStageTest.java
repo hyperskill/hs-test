@@ -3,6 +3,7 @@ package org.hyperskill.hstest.dev.stage;
 import org.hyperskill.hstest.dev.dynamic.SystemHandler;
 import org.hyperskill.hstest.dev.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.exception.ExceptionWithFeedback;
 import org.hyperskill.hstest.dev.exception.TimeLimitException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 import org.hyperskill.hstest.dev.outcomes.Outcome;
@@ -19,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +33,8 @@ import static org.hyperskill.hstest.dev.common.ProcessUtils.startThreads;
 import static org.hyperskill.hstest.dev.common.ProcessUtils.stopThreads;
 import static org.hyperskill.hstest.dev.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.dev.common.Utils.normalizeLineEndings;
-import static org.hyperskill.hstest.dev.dynamic.output.ColoredOutput.RED_BOLD;
-import static org.hyperskill.hstest.dev.dynamic.output.ColoredOutput.RESET;
+import static org.hyperskill.hstest.dev.exception.FailureHandler.getUserException;
+import static org.hyperskill.hstest.dev.exception.FailureHandler.isUserFailed;
 import static org.junit.Assert.fail;
 
 public abstract class BaseStageTest<AttachType> {
@@ -171,10 +173,7 @@ public abstract class BaseStageTest<AttachType> {
         currTestRun.setErrorInTest(null);
 
         runMain(test.getArgs(), test.getTimeLimit());
-
-        if (currTestRun.getErrorInTest() != null) {
-            throw currTestRun.getErrorInTest();
-        }
+        checkErrors(test);
 
         return normalizeLineEndings(SystemOutHandler.getOutput());
     }
@@ -217,6 +216,28 @@ public abstract class BaseStageTest<AttachType> {
             }
         } catch (IllegalAccessException ex) {
             currTestRun.setErrorInTest(ex);
+        }
+    }
+
+    private void checkErrors(TestCase<AttachType> test) throws Throwable {
+        if (currTestRun.getErrorInTest() != null) {
+
+            Throwable errorInTest = currTestRun.getErrorInTest();
+
+            if (isUserFailed(errorInTest)) {
+                Throwable userException = getUserException(errorInTest);
+                Map<Class<? extends Throwable>, String> feedbackOnExceptions =
+                    test.getFeedbackOnExceptions();
+
+                for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
+                    String feedback = feedbackOnExceptions.get(exClass);
+                    if (errorInTest.getClass().isAssignableFrom(exClass)) {
+                        throw new ExceptionWithFeedback(feedback, userException);
+                    }
+                }
+            }
+
+            throw errorInTest;
         }
     }
 

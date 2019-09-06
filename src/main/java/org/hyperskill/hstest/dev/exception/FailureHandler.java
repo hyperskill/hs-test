@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dev.statics.StaticFieldsManager;
 import org.hyperskill.hstest.dev.statics.serialization.Serialized;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.hyperskill.hstest.dev.exception.StackTraceUtils.*;
 
@@ -19,11 +20,19 @@ public class FailureHandler {
             || !ObjectsCloner.cantSerialize.isEmpty();
     }
 
-    public static final String avoidStaticsMsg =
-        "We detected that you are using static variables, " +
-        "but they are not fully supported in testing. " +
-        "It might happen that if you try to avoid using " +
-        "them you will pass this stage.";
+    public static boolean isUserFailed(Throwable t) {
+        // If user failed then t == InvocationTargetException
+        // and t.getCause() == Actual user exception
+        return t.getCause() != null
+            && t instanceof InvocationTargetException;
+    }
+
+    public static Throwable getUserException(Throwable t) {
+        if (isUserFailed(t)) {
+            return t.getCause();
+        }
+        return null;
+    }
 
     public static String getReport() {
         String os = System.getProperty("os.name");

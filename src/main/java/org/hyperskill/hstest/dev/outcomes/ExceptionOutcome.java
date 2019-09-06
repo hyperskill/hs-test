@@ -8,21 +8,23 @@ import static org.hyperskill.hstest.dev.exception.StackTraceUtils.getStackTrace;
 
 public class ExceptionOutcome extends Outcome {
 
-    public ExceptionOutcome(int testNum, Throwable cause) {
+    public ExceptionOutcome(int testNum, Throwable cause, String feedback) {
         testNumber = testNum;
         stackTrace = filterStackTrace(getStackTrace(cause));
+
+        errorText = feedback;
 
         if (cause instanceof InputMismatchException
             && stackTrace.contains("java.util.Scanner")) {
 
-            errorText = "Probably you have nextInt() (or similar Scanner method) " +
+            errorText += "\n\nProbably you have nextInt() (or similar Scanner method) " +
                 "followed by nextLine() - in this situation nextLine() often gives an " +
                 "empty string and another one nextLine() call gives correct string.";
 
         } else if (cause instanceof NoSuchElementException
             && stackTrace.contains("java.util.Scanner")) {
 
-            errorText = "Probably your program run out of input " +
+            errorText = "\n\nProbably your program run out of input " +
                 "(Scanner tried to read more than expected). " +
                 "If you are sure it's not, this type of exception " +
                 "also happens if you created more than one Scanner object " +

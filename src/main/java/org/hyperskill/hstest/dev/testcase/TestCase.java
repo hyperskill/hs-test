@@ -19,7 +19,8 @@ public class TestCase<AttachType> {
     // files needed to be set up before test
     private Map<String, String> files = new HashMap<>();
 
-    private Map<Class<? extends Exception>, String> ex;
+    private Map<Class<? extends Throwable>, String>
+        feedbackOnExceptions = new HashMap<>();
 
     // runnables that should be run before test
     private List<Process> processes = new ArrayList<>();
@@ -89,8 +90,8 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> feedbackOnException(Class<? extends Exception> clazz, String feedback) {
-        ex.put(clazz, feedback);
+    public TestCase<AttachType> feedbackOnException(Class<? extends Throwable> clazz, String feedback) {
+        feedbackOnExceptions.put(clazz, feedback);
         return this;
     }
 
@@ -125,5 +126,9 @@ public class TestCase<AttachType> {
 
     public BiFunction<String, AttachType, CheckResult> getCheckFunc() {
         return checkFunction;
+    }
+
+    public Map<Class<? extends Throwable>, String> getFeedbackOnExceptions() {
+        return feedbackOnExceptions;
     }
 }

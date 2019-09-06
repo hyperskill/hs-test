@@ -1,12 +1,16 @@
 package org.hyperskill.hstest.dev.outcomes;
 
 import org.hyperskill.hstest.dev.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dev.exception.ExceptionWithFeedback;
 import org.hyperskill.hstest.dev.exception.FailureHandler;
 import org.hyperskill.hstest.dev.exception.TimeLimitException;
 import org.hyperskill.hstest.dev.exception.WrongAnswerException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileSystemException;
+
+import static org.hyperskill.hstest.dev.exception.FailureHandler.getUserException;
+import static org.hyperskill.hstest.dev.exception.FailureHandler.isUserFailed;
 
 public abstract class Outcome {
 
@@ -40,7 +44,7 @@ public abstract class Outcome {
             getType() + whenErrorHappened + getTypeSuffix();
 
         if (!errorText.isEmpty()) {
-            result += "\n\n" + errorText;
+            result += "\n\n" + errorText.trim();
         }
 
         if (FailureHandler.detectStaticCloneFails()) {
@@ -68,11 +72,14 @@ public abstract class Outcome {
         if (t instanceof WrongAnswerException) {
             return new WrongAnswerOutcome(currTest, t.getMessage().trim());
 
-        } else if (t.getCause() != null &&
-            t instanceof InvocationTargetException) {
-            // If user failed then t == InvocationTargetException
-            // and t.getCause() == Actual user exception
-            return new ExceptionOutcome(currTest, t.getCause());
+        } else if (t instanceof ExceptionWithFeedback) {
+            ExceptionWithFeedback ex = (ExceptionWithFeedback) t;
+            Throwable realUserException = ex.getRealException();
+            String errorText = ex.getErrorText();
+            return new ExceptionOutcome(currTest, realUserException, errorText);
+
+        } else if (isUserFailed(t)) {
+            return new ExceptionOutcome(currTest, getUserException(t), "");
 
         } else if (t instanceof FileSystemException
             || t instanceof TimeLimitException) {
