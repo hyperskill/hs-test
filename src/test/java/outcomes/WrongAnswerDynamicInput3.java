@@ -68,13 +68,13 @@ public class WrongAnswerDynamicInput3 extends BaseStageTest<String> {
             new TestCase<String>()
                 .addInput(out -> {
                     if (out.equals(""))  {
-                        return CheckResult.TRUE("3");
+                        return "3";
                     }
                     return CheckResult.FALSE("WA TEST 3");
                 })
                 .addInfInput(out-> {
                     if (out.equals("3\n"))  {
-                        return CheckResult.TRUE("4");
+                        return "4";
                     }
                     return CheckResult.FALSE("WA TEST 3");
                 })

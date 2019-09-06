@@ -8,33 +8,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class SuccessButNotUsedInput extends BaseStageTest<String> {
+public class SuccessButNotUsedInput2 extends BaseStageTest<String> {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String firstLine = scanner.nextLine().trim();
-        int firstInt = Integer.parseInt(firstLine);
-        System.out.println(firstInt);
-        if (firstInt != 1) {
-            String secondLine = scanner.nextLine().trim();
-            System.out.println(secondLine);
-        }
+        System.out.println("HELLO");
+        System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
     }
 
-    public SuccessButNotUsedInput() {
-        super(SuccessButNotUsedInput.class);
+    public SuccessButNotUsedInput2() {
+        super(SuccessButNotUsedInput2.class);
     }
 
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>()
-                .setInput("1\nnotnum\n")
-                .setAttach("1\n"),
-
-            new TestCase<String>()
-                .setInput("2\nnotnum\n")
-                .setAttach("2\nnotnum\n")
+                .addInput(out -> {
+                    if (out.equals("HELLO\n")) {
+                        return CheckResult.TRUE;
+                    }
+                    return "";
+                })
+                .setAttach("NO")
         );
     }
 
