@@ -59,7 +59,7 @@ public abstract class Outcome {
 
         if (fullLog.trim().length() != 0) {
             result += "\n\n" +
-                "We saved output of your program during this test. You can see it below\n" +
+                "Below you can see the output of your program during this test\n" +
                 "Notice, that '>' symbol means the start of the input:\n\n";
 
             result += fullLog;
