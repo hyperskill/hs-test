@@ -15,6 +15,7 @@ public class TestCase<AttachType> {
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
     private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
+    private String staticInput = null;
 
     // files needed to be set up before test
     private Map<String, String> files = new LinkedHashMap<>();
@@ -29,8 +30,13 @@ public class TestCase<AttachType> {
         // use methods to configure TestCase
     }
 
+    public String getInput() {
+        return staticInput;
+    }
+
     public TestCase<AttachType> setInput(String input) {
         inputFuncs.clear();
+        staticInput = input;
         addInput(1, out -> input);
         return this;
     }
