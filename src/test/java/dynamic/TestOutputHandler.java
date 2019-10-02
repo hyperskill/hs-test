@@ -1,6 +1,6 @@
 package dynamic;
 
-import org.hyperskill.hstest.v6.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

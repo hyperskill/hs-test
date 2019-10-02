@@ -8,8 +8,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static org.hyperskill.hstest.v6.statics.StaticFieldsManager.resetStaticFields;
-import static org.hyperskill.hstest.v6.statics.StaticFieldsManager.saveStaticFields;
+import static org.hyperskill.hstest.v7.statics.StaticFieldsManager.resetStaticFields;
+import static org.hyperskill.hstest.v7.statics.StaticFieldsManager.saveStaticFields;
 import static org.junit.Assert.*;
 
 public class StaticFieldsTest {

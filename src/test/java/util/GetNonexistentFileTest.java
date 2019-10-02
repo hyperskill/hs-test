@@ -1,6 +1,6 @@
 package util;
 
-import org.hyperskill.hstest.v6.common.FileUtils;
+import org.hyperskill.hstest.v7.common.FileUtils;
 import org.junit.Test;
 
 import java.io.File;

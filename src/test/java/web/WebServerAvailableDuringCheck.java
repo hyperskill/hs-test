@@ -1,11 +1,11 @@
 package web;
 
-import org.hyperskill.hstest.v6.common.Utils;
-import org.hyperskill.hstest.v6.mocks.web.WebPage;
-import org.hyperskill.hstest.v6.mocks.web.WebServerMock;
-import org.hyperskill.hstest.v6.stage.BaseStageTest;
-import org.hyperskill.hstest.v6.testcase.CheckResult;
-import org.hyperskill.hstest.v6.testcase.TestCase;
+import org.hyperskill.hstest.v7.common.Utils;
+import org.hyperskill.hstest.v7.mocks.web.WebPage;
+import org.hyperskill.hstest.v7.mocks.web.WebServerMock;
+import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.testcase.CheckResult;
+import org.hyperskill.hstest.v7.testcase.TestCase;
 
 import java.util.Arrays;
 import java.util.List;
