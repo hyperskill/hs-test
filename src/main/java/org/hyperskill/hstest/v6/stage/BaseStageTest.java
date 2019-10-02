@@ -34,6 +34,8 @@ import static org.hyperskill.hstest.v6.common.ProcessUtils.startThreads;
 import static org.hyperskill.hstest.v6.common.ProcessUtils.stopThreads;
 import static org.hyperskill.hstest.v6.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v6.common.Utils.normalizeLineEndings;
+import static org.hyperskill.hstest.v6.dynamic.output.ColoredOutput.RED_BOLD;
+import static org.hyperskill.hstest.v6.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.v6.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.v6.exception.FailureHandler.isUserFailed;
 import static org.junit.Assert.fail;
@@ -138,7 +140,10 @@ public abstract class BaseStageTest<AttachType> {
 
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
-                System.err.println("\nStart test " + currTest);
+                SystemOutHandler.getRealOut().println(
+                    RED_BOLD + "\nStart test " + currTest + RESET
+                );
+
                 currTestRun = new TestRun(currTest, test);
 
                 createFiles(test.getFiles());
