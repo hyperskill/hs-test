@@ -1,8 +1,8 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.stage.BaseStageTest;
-import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.TestCase;
+import org.hyperskill.hstest.v6.stage.BaseStageTest;
+import org.hyperskill.hstest.v6.testcase.CheckResult;
+import org.hyperskill.hstest.v6.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hyperskill.hstest.dev.common.Utils.sleep;
+import static org.hyperskill.hstest.v6.common.Utils.sleep;
 
 public class TestTimeout1 extends BaseStageTest {
 

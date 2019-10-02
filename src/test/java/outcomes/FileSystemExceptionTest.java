@@ -1,9 +1,9 @@
 package outcomes;
 
-import org.hyperskill.hstest.dev.common.FileUtils;
-import org.hyperskill.hstest.dev.stage.BaseStageTest;
-import org.hyperskill.hstest.dev.testcase.CheckResult;
-import org.hyperskill.hstest.dev.testcase.TestCase;
+import org.hyperskill.hstest.v6.common.FileUtils;
+import org.hyperskill.hstest.v6.stage.BaseStageTest;
+import org.hyperskill.hstest.v6.testcase.CheckResult;
+import org.hyperskill.hstest.v6.testcase.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
