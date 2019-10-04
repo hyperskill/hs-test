@@ -58,9 +58,11 @@ public abstract class Outcome {
 
         if (fullLog.trim().length() != 0) {
             result += "\n\n" +
-                "Below you can see the output of your program during this test\n" +
-                "Notice, that '>' symbol means the start of the input:\n\n";
-
+                "Please find below the output of your program during this failed test.\n";
+            if (fullLog.matches('.*\n>.*')) {
+                result += "The '>' symbol corresponds to input lines.\n";
+            }
+            result += "\n---\n\n";
             result += fullLog;
         }
 
