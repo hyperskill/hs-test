@@ -1,14 +1,16 @@
 package statics;
 
-import java.util.*;
+import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.testcase.CheckResult;
+import org.hyperskill.hstest.v7.testcase.TestCase;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-enum StaticEnum {
-    ONE, TWO, THREE
-}
-
-public class StaticTestClass {
-
+class Static1 {
     public    static final List<String> list1 = new ArrayList<>();
     protected static final List<String> list2 = new ArrayList<>();
     private   static final List<String> list3 = new ArrayList<>();
@@ -138,138 +140,71 @@ public class StaticTestClass {
     private   static       List<String> null7 = null;
               static       List<String> null8 = null;
 
-    public    static final int int1 = 0;
-    protected static final int int2 = 0;
-    private   static final int int3 = 0;
-              static final int int4 = 0;
-    public    static       int int5 = 0;
-    protected static       int int6 = 0;
-    private   static       int int7 = 0;
-              static       int int8 = 0;
+    static void print() throws Exception {
+        List<List> lists = new ArrayList<>();
 
-    public static Collection unmodCollection = Collections.unmodifiableCollection(new ArrayList<>());
+        for (Field f : Static1.class.getDeclaredFields()) {
+            lists.add((List) f.get(null));
+        }
 
-    public static List unmodList = Collections.unmodifiableList(new ArrayList<>());
+        for (List list : lists) {
+            System.out.println(list == null);
+            if (list == null) {
+                continue;
+            }
 
-    public static Set unmodSet = Collections.unmodifiableSet(new TreeSet<>());
-    public static Set unmodNavSet = Collections.unmodifiableNavigableSet(new TreeSet<>());
-    public static Set unmodSortedSet = Collections.unmodifiableSortedSet(new TreeSet<>());
+            System.out.println(list.getClass());
+            System.out.println(list.size());
+            for (Object obj : list) {
+                System.out.println(obj.getClass());
+                System.out.println(obj);
+            }
 
-    public static Map unmodMap = Collections.unmodifiableMap(new TreeMap<>());
-    public static Map unmodNavMap = Collections.unmodifiableNavigableMap(new TreeMap<>());
-    public static Map unmodSortedMap = Collections.unmodifiableSortedMap(new TreeMap<>());
+            try {
+                list.add("123");
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
 
-    public static class Node {
-        public Node next;
-    }
-
-    public static class Node2 {
-        public String s = "qwerty";
-        public Integer q = 123;
-        public Object[] o = new Object[] {"123", 123};
-    }
-
-    public static Node node1 = new Node();
-    public static Node node2 = new Node();
-    public static Node node3 = new Node();
-
-    public static Node2 node4 = new Node2();
-
-    static {
-        node1.next = node2;
-        node2.next = node1;
-        node3.next = node3;
-    }
-
-    public static class Parent {
-        String name;
-        Parent(String name) {
-            this.name = name;
+            System.out.println(list.size());
         }
     }
 
-    public static class Child extends Parent {
-        String name;
-        Child(String name) {
-            super(name + name);
-            this.name = name;
-        }
+    public static void main(String[] args) throws Exception {
+        print();
+        null5 = new ArrayList<>();
+        null6 = new ArrayList<>();
+        null7 = new ArrayList<>();
+        null8 = new ArrayList<>();
+        print();
+    }
+}
+
+public class TestChangingObjects extends BaseStageTest {
+
+    public TestChangingObjects() {
+        super(Static1.class);
     }
 
-    public static Child inheritanceTest = new Child("Child");
+    private String output;
 
-
-    public static List<String> ref1 = new ArrayList<>();
-    public static List<String> ref2 = ref1;
-
-    public static Scanner scanner = new Scanner(System.in);
-
-    public static List<String> getList(int num) {
-        switch (num) {
-            case 1: return list1;
-            case 2: return list2;
-            case 3: return list3;
-            case 4: return list4;
-            case 5: return list5;
-            case 6: return list6;
-            case 7: return list7;
-            case 8: return list8;
-        }
-        throw new IllegalArgumentException();
+    @Override
+    public List<TestCase<String>> generate() {
+        return Arrays.asList(
+            new TestCase<>(),
+            new TestCase<>(),
+            new TestCase<>(),
+            new TestCase<>(),
+            new TestCase<>()
+        );
     }
 
-    public static List<String> getNull(int num) {
-        switch (num) {
-            case 1: return null1;
-            case 2: return null2;
-            case 3: return null3;
-            case 4: return null4;
-            case 5: return null5;
-            case 6: return null6;
-            case 7: return null7;
-            case 8: return null8;
+    @Override
+    public CheckResult check(String reply, Object attach) {
+        if (output == null) {
+            output = reply;
+            return CheckResult.TRUE;
         }
-        throw new IllegalArgumentException();
-    }
-
-    public static void setList(int num, List<String> list) {
-        switch (num) {
-            case 5: list5 = list; break;
-            case 6: list6 = list; break;
-            case 7: list7 = list; break;
-            case 8: list8 = list; break;
-        }
-    }
-
-    public static void setNull(int num, List<String> list) {
-        switch (num) {
-            case 5: null5 = list; break;
-            case 6: null6 = list; break;
-            case 7: null7 = list; break;
-            case 8: null8 = list; break;
-        }
-    }
-
-    public static int getInt(int num) {
-        switch (num) {
-            case 1: return int1;
-            case 2: return int2;
-            case 3: return int3;
-            case 4: return int4;
-            case 5: return int5;
-            case 6: return int6;
-            case 7: return int7;
-            case 8: return int8;
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public static void setInt(int num, int newInt) {
-        switch (num) {
-            case 5: int5 = newInt; break;
-            case 6: int6 = newInt; break;
-            case 7: int7 = newInt; break;
-            case 8: int8 = newInt; break;
-        }
+        return new CheckResult(reply.equals(output));
     }
 }
