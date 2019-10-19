@@ -192,17 +192,20 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private void invokeMain(List<String> args) throws Exception {
+    private void invokeMain(List<String> args) {
         try {
             Method methodToInvoke = mainMethod;
 
             if (needReloadClass) {
-                Class<?> myClass = testedClass;
-                URL[] urls = { myClass.getProtectionDomain().getCodeSource().getLocation() };
-                ClassLoader delegateParent = myClass.getClassLoader().getParent();
+                URL[] urls = { testedClass.getProtectionDomain().getCodeSource().getLocation() };
+                ClassLoader delegateParent = testedClass.getClassLoader().getParent();
                 URLClassLoader cl = new URLClassLoader(urls, delegateParent);
-                Class<?> reloaded = cl.loadClass(myClass.getName());
-                methodToInvoke = getMainMethod(reloaded);
+                try {
+                    Class<?> reloaded = cl.loadClass(testedClass.getName());
+                    methodToInvoke = getMainMethod(reloaded);
+                } catch (Exception ex) {
+                    currTestRun.setErrorInTest(ex);
+                }
             }
 
             methodToInvoke.invoke(testedObject, new Object[] {
