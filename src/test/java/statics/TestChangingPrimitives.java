@@ -41,7 +41,7 @@ public class TestChangingPrimitives extends BaseStageTest {
         super(Static3.class);
     }
 
-    private String output;
+    private String rightOutput = "0000000000001111";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -56,10 +56,6 @@ public class TestChangingPrimitives extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

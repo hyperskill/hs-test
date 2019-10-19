@@ -51,6 +51,10 @@ class Static4 {
 
         Node[] nodes = new Node[] {node1, node2, node3, node1.next, node2.next, node3.next};
 
+        System.out.println(node1.next == node2);
+        System.out.println(node2.next == node1);
+        System.out.println(node3.next == node3);
+
         for (Node node1 : nodes) {
             for (Node node2 : nodes) {
                 System.out.println(node1 == node2);
@@ -66,7 +70,9 @@ class Static4 {
         printNode4();
 
         printConnections();
-        node1 = node2;
+        node1.next = node3;
+        node3.next = node1;
+        node2.next = node2;
         printConnections();
     }
 }
@@ -77,7 +83,109 @@ public class TestCircularReferences extends BaseStageTest {
         super(Static4.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "true\n" +
+        "class statics.Static4$Node2\n" +
+        "class java.lang.String\n" +
+        "qwerty\n" +
+        "class java.lang.Integer\n" +
+        "123\n" +
+        "class [Ljava.lang.Object;\n" +
+        "class java.lang.String\n" +
+        "123\n" +
+        "class java.lang.Integer\n" +
+        "123\n" +
+        "true\n" +
+        "class statics.Static4$Node2\n" +
+        "class java.lang.String\n" +
+        "657\n" +
+        "class java.lang.Integer\n" +
+        "234\n" +
+        "class [Ljava.lang.Object;\n" +
+        "class java.util.ArrayList\n" +
+        "[]\n" +
+        "class java.lang.Integer\n" +
+        "123\n" +
+        "\n" +
+        "true\n" +
+        "true\n" +
+        "true\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "true\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "false\n" +
+        "true\n";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -92,10 +200,6 @@ public class TestCircularReferences extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

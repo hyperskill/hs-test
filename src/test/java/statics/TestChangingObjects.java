@@ -148,22 +148,22 @@ class Static1 {
         }
 
         for (List list : lists) {
-            System.out.println(list == null);
+            System.out.print(list == null);
             if (list == null) {
                 continue;
             }
 
-            System.out.println(list.getClass());
-            System.out.println(list.size());
+            System.out.print(list.getClass());
+            System.out.print(list.size());
             for (Object obj : list) {
-                System.out.println(obj.getClass());
-                System.out.println(obj);
+                System.out.print(obj.getClass());
+                System.out.print(obj);
             }
 
             try {
                 list.add("123");
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.print(ex.getMessage());
             }
 
             System.out.println(list.size());
@@ -176,7 +176,6 @@ class Static1 {
         null6 = new ArrayList<>();
         null7 = new ArrayList<>();
         null8 = new ArrayList<>();
-        print();
     }
 }
 
@@ -186,7 +185,104 @@ public class TestChangingObjects extends BaseStageTest {
         super(Static1.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.ArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.concurrent.CopyOnWriteArrayList01\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer1class java.lang.Integer2class java.lang.Integer3null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.lang.Integer10class java.lang.String123class java.util.ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "falseclass java.util.Arrays$ArrayList3class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]class java.util.Arrays$ArrayList[]null3\n" +
+        "truetruetruetruetruetruetruetrue";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -201,10 +297,6 @@ public class TestChangingObjects extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

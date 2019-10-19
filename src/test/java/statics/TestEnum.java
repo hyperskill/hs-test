@@ -28,7 +28,13 @@ public class TestEnum extends BaseStageTest {
         super(Static7.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "ONE\n" +
+        "TWO\n" +
+        "THREE\n" +
+        "class statics.StaticEnum\n" +
+        "class statics.StaticEnum\n" +
+        "class statics.StaticEnum\n";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -43,10 +49,6 @@ public class TestEnum extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

@@ -39,7 +39,10 @@ public class TestInheritance extends BaseStageTest {
         super(Static6.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "class statics.Static6$Child\n" +
+        "Child\n" +
+        "234\n";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -54,10 +57,6 @@ public class TestInheritance extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

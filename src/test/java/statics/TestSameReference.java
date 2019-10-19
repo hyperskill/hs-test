@@ -16,6 +16,7 @@ class Static5 {
         System.out.println(list1 != null);
         System.out.println(list2 != null);
         System.out.println(list1 == list2);
+
         System.out.println(list1.getClass());
         System.out.println(list2.getClass());
         System.out.println(list1.size());
@@ -37,7 +38,18 @@ public class TestSameReference extends BaseStageTest {
         super(Static5.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "true\n" +
+        "true\n" +
+        "true\n" +
+        "class java.util.ArrayList\n" +
+        "class java.util.ArrayList\n" +
+        "0\n" +
+        "0\n" +
+        "1\n" +
+        "1\n" +
+        "2\n" +
+        "2\n";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -52,10 +64,6 @@ public class TestSameReference extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }

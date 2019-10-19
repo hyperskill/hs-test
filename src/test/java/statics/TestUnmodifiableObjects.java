@@ -82,7 +82,41 @@ public class TestUnmodifiableObjects extends BaseStageTest {
         super(Static2.class);
     }
 
-    private String output;
+    private String rightOutput =
+        "false\n" +
+        "class java.util.Collections$UnmodifiableCollection\n" +
+        "0\n" +
+        "null\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableRandomAccessList\n" +
+        "0\n" +
+        "null\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableSet\n" +
+        "0\n" +
+        "null\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableNavigableSet\n" +
+        "0\n" +
+        "null\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableSortedSet\n" +
+        "0\n" +
+        "null\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableMap\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableNavigableMap\n" +
+        "0\n" +
+        "false\n" +
+        "class java.util.Collections$UnmodifiableSortedMap\n" +
+        "0\n";
 
     @Override
     public List<TestCase<String>> generate() {
@@ -97,10 +131,6 @@ public class TestUnmodifiableObjects extends BaseStageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        if (output == null) {
-            output = reply;
-            return CheckResult.TRUE;
-        }
-        return new CheckResult(reply.equals(output));
+        return new CheckResult(reply.equals(rightOutput));
     }
 }
