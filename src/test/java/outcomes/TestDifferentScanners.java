@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class TestDifferentScanners extends BaseStageTest<String> {
-
+class TestDifferentScannersMain {
     static int readNum() {
         Scanner scanner = new Scanner(System.in);
         return Integer.parseInt(scanner.nextLine());
@@ -19,9 +18,12 @@ public class TestDifferentScanners extends BaseStageTest<String> {
     public static void main(String[] args) {
         System.out.println(readNum() + readNum());
     }
+}
+
+public class TestDifferentScanners extends BaseStageTest<String> {
 
     public TestDifferentScanners() {
-        super(TestDifferentScanners.class);
+        super(TestDifferentScannersMain.class);
     }
 
     @Override

@@ -13,17 +13,21 @@ import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hyperskill.hstest.v7.common.Utils.sleep;
+
+
+class TestTimeout2Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            Thread.sleep(scanner.nextInt());
+        } catch (Exception ignored) { }
+    }
+}
 
 public class TestTimeout2 extends BaseStageTest {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        sleep(scanner.nextInt());
-    }
-
     public TestTimeout2() {
-        super(TestTimeout2.class);
+        super(TestTimeout2Main.class);
     }
 
     @Rule

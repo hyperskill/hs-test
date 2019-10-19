@@ -7,7 +7,7 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-class Static6 {
+class TestInheritanceMain {
     public static class Parent {
         String name;
         Parent(String name) {
@@ -36,11 +36,11 @@ class Static6 {
 public class TestInheritance extends BaseStageTest {
 
     public TestInheritance() {
-        super(Static6.class);
+        super(TestInheritanceMain.class);
     }
 
     private String rightOutput =
-        "class statics.Static6$Child\n" +
+        "class statics.TestInheritanceMain$Child\n" +
         "Child\n" +
         "234\n";
 

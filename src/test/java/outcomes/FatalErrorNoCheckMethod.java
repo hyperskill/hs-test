@@ -9,14 +9,17 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorNoCheckMethod extends BaseStageTest {
 
+class FatalErrorNoCheckMethodMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class FatalErrorNoCheckMethod extends BaseStageTest {
 
     public FatalErrorNoCheckMethod() {
-        super(FatalErrorNoCheckMethod.class);
+        super(FatalErrorNoCheckMethodMain.class);
     }
 
     @Rule

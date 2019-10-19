@@ -11,15 +11,18 @@ import java.lang.ArithmeticException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FeedbackOnExceptionTest1 extends BaseStageTest {
 
+class FeedbackOnExceptionTest1Main {
     public static void main(String[] args) {
         System.out.println("Hello World");
         System.out.println(1 / 0);
     }
+}
+
+public class FeedbackOnExceptionTest1 extends BaseStageTest {
 
     public FeedbackOnExceptionTest1() {
-        super(FeedbackOnExceptionTest1.class);
+        super(FeedbackOnExceptionTest1Main.class);
     }
 
     @Rule

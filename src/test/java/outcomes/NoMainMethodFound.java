@@ -10,10 +10,15 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
+
+class NoMainMethodFoundMain {
+
+}
+
 public class NoMainMethodFound extends BaseStageTest {
 
     public NoMainMethodFound() {
-        super(NoMainMethodFound.class);
+        super(NoMainMethodFoundMain.class);
     }
 
     @Rule

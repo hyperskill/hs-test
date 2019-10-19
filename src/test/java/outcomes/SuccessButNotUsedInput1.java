@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class SuccessButNotUsedInput1 extends BaseStageTest<String> {
 
+class SuccessButNotUsedInput1Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String firstLine = scanner.nextLine().trim();
@@ -20,9 +20,12 @@ public class SuccessButNotUsedInput1 extends BaseStageTest<String> {
             System.out.println(secondLine);
         }
     }
+}
+
+public class SuccessButNotUsedInput1 extends BaseStageTest<String> {
 
     public SuccessButNotUsedInput1() {
-        super(SuccessButNotUsedInput1.class);
+        super(SuccessButNotUsedInput1Main.class);
     }
 
     @Override

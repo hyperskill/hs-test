@@ -10,14 +10,17 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainMethodNotStatic extends BaseStageTest {
 
+class MainMethodNotStaticMain {
     public void main(String[] args) {
         System.out.println("Hello World!");
     }
+}
+
+public class MainMethodNotStatic extends BaseStageTest {
 
     public MainMethodNotStatic() {
-        super(MainMethodNotStatic.class);
+        super(MainMethodNotStaticMain.class);
     }
 
     @Rule

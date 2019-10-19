@@ -8,17 +8,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestPredefinedIO extends BaseStageTest {
 
+class TestPredefinedIOMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
         System.out.println(n);
         System.out.println(n);
     }
+}
+
+public class TestPredefinedIO extends BaseStageTest {
 
     public TestPredefinedIO() {
-        super(TestPredefinedIO.class);
+        super(TestPredefinedIOMain.class);
     }
 
     @Override

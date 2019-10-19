@@ -7,14 +7,17 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-public class Success extends BaseStageTest<String> {
 
+class SuccessMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class Success extends BaseStageTest<String> {
 
     public Success() {
-        super(Success.class);
+        super(SuccessMain.class);
     }
 
     String succ = "123";

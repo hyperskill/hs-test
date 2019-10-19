@@ -10,14 +10,17 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorEmptyTestCases extends BaseStageTest {
 
+class FatalErrorEmptyTestCasesMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class FatalErrorEmptyTestCases extends BaseStageTest {
 
     public FatalErrorEmptyTestCases() {
-        super(FatalErrorEmptyTestCases.class);
+        super(FatalErrorEmptyTestCasesMain.class);
     }
 
     @Rule

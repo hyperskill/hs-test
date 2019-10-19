@@ -11,17 +11,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class InputMismatch extends BaseStageTest {
 
+class InputMismatchMain {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         System.out.println(s.nextInt());
         System.out.println(s.nextLine());
         System.out.println(s.nextInt());
     }
+}
+
+public class InputMismatch extends BaseStageTest {
 
     public InputMismatch() {
-        super(InputMismatch.class);
+        super(InputMismatchMain.class);
     }
 
     @Rule

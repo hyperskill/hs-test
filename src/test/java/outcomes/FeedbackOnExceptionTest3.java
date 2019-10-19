@@ -11,15 +11,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FeedbackOnExceptionTest3 extends BaseStageTest {
 
+class FeedbackOnExceptionTest3Main {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello World");
         throw new Exception();
     }
+}
+
+public class FeedbackOnExceptionTest3 extends BaseStageTest {
 
     public FeedbackOnExceptionTest3() {
-        super(FeedbackOnExceptionTest3.class);
+        super(FeedbackOnExceptionTest3Main.class);
     }
 
     @Rule

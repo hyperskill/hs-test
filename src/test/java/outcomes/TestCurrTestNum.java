@@ -8,19 +8,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestCurrTestNum extends BaseStageTest<Integer> {
 
+class TestCurrTestNumMain {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         int test = s.nextInt();
-        int testNum = BaseStageTest.getCurrTestRun().getTestNum();
-        if (test != testNum) {
-            throw new NullPointerException();
-        }
+        System.out.print(test);
     }
+}
+
+public class TestCurrTestNum extends BaseStageTest<Integer> {
 
     public TestCurrTestNum() {
-        super(TestCurrTestNum.class);
+        super(TestCurrTestNumMain.class);
     }
 
     @Override
@@ -39,9 +39,10 @@ public class TestCurrTestNum extends BaseStageTest<Integer> {
     @Override
     public CheckResult check(String reply, Integer attach) {
         int testNum = BaseStageTest.getCurrTestRun().getTestNum();
-        if (attach != testNum) {
-            throw new NullPointerException();
+        if (reply.equals("1") && attach == 1
+            || reply.equals("2") && attach == 2) {
+            return CheckResult.TRUE;
         }
-        return CheckResult.TRUE;
+        throw new NullPointerException();
     }
 }

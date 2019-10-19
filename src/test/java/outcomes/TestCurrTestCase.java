@@ -8,24 +8,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestCurrTestCase extends BaseStageTest<Integer> {
 
+class TestCurrTestCaseMain {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
-        int test = s.nextInt();
-        TestCase testCase = BaseStageTest.getCurrTestRun().getTestCase();
-        if (test == 1 && testCase != test1
-            || test == 2 && testCase != test2) {
-            throw new NullPointerException();
-        }
+        System.out.print(s.nextInt());
     }
+}
+
+public class TestCurrTestCase extends BaseStageTest<Integer> {
 
     public TestCurrTestCase() {
-        super(TestCurrTestCase.class);
+        super(TestCurrTestCaseMain.class);
     }
 
-    private static TestCase<Integer> test1;
-    private static TestCase<Integer> test2;
+    static TestCase<Integer> test1;
+    static TestCase<Integer> test2;
 
     @Override
     public List<TestCase<Integer>> generate() {
@@ -40,10 +38,11 @@ public class TestCurrTestCase extends BaseStageTest<Integer> {
     @Override
     public CheckResult check(String reply, Integer attach) {
         TestCase testCase = BaseStageTest.getCurrTestRun().getTestCase();
-        if (attach == 1 && testCase != test1
-            || attach == 2 && testCase != test2) {
-            throw new NullPointerException();
+        if (reply.equals("1") && attach == 1 && testCase == test1
+            || reply.equals("2") && attach == 2 && testCase == test2) {
+            return CheckResult.TRUE;
+
         }
-        return CheckResult.TRUE;
+        throw new NullPointerException();
     }
 }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-class Static3 {
+class TestChangingPrimitivesMain {
 
     public    static final int int1 = 0;
     protected static final int int2 = 0;
@@ -38,7 +38,7 @@ class Static3 {
 public class TestChangingPrimitives extends BaseStageTest {
 
     public TestChangingPrimitives() {
-        super(Static3.class);
+        super(TestChangingPrimitivesMain.class);
     }
 
     private String rightOutput = "0000000000001111";

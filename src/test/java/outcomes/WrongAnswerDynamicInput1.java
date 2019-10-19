@@ -14,16 +14,19 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class WrongAnswerDynamicInput1 extends BaseStageTest {
 
+class WrongAnswerDynamicInput1Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("1");
         scanner.nextLine();
     }
+}
+
+public class WrongAnswerDynamicInput1 extends BaseStageTest {
 
     public WrongAnswerDynamicInput1() {
-        super(WrongAnswerDynamicInput1.class);
+        super(WrongAnswerDynamicInput1Main.class);
     }
 
     @Rule

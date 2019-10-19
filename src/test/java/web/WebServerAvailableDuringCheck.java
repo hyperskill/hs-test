@@ -10,14 +10,17 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-public class WebServerAvailableDuringCheck extends BaseStageTest {
 
+class WebServerAvailableDuringCheckMain {
     public static void main(String[] args) {
 
     }
+}
+
+public class WebServerAvailableDuringCheck extends BaseStageTest {
 
     public WebServerAvailableDuringCheck() {
-        super(WebServerAvailableDuringCheck.class);
+        super(WebServerAvailableDuringCheckMain.class);
     }
 
     @Override

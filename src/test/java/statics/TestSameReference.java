@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class Static5 {
+class TestSameReferenceMain {
     static List list1 = new ArrayList();
     static List list2 = list1;
 
@@ -35,7 +35,7 @@ class Static5 {
 public class TestSameReference extends BaseStageTest {
 
     public TestSameReference() {
-        super(Static5.class);
+        super(TestSameReferenceMain.class);
     }
 
     private String rightOutput =

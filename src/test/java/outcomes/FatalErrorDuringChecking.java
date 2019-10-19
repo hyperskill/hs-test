@@ -10,14 +10,17 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorDuringChecking extends BaseStageTest {
-
+class FatalErrorDuringCheckingMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+
+public class FatalErrorDuringChecking extends BaseStageTest {
 
     public FatalErrorDuringChecking() {
-        super(FatalErrorDuringChecking.class);
+        super(FatalErrorDuringCheckingMain.class);
     }
 
     @Rule

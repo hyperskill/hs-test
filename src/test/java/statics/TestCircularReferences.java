@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class Static4 {
+class TestCircularReferencesMain {
     public static class Node {
         public Node next;
     }
@@ -80,12 +80,12 @@ class Static4 {
 public class TestCircularReferences extends BaseStageTest {
 
     public TestCircularReferences() {
-        super(Static4.class);
+        super(TestCircularReferencesMain.class);
     }
 
     private String rightOutput =
         "true\n" +
-        "class statics.Static4$Node2\n" +
+        "class statics.TestCircularReferencesMain$Node2\n" +
         "class java.lang.String\n" +
         "qwerty\n" +
         "class java.lang.Integer\n" +
@@ -96,7 +96,7 @@ public class TestCircularReferences extends BaseStageTest {
         "class java.lang.Integer\n" +
         "123\n" +
         "true\n" +
-        "class statics.Static4$Node2\n" +
+        "class statics.TestCircularReferencesMain$Node2\n" +
         "class java.lang.String\n" +
         "657\n" +
         "class java.lang.Integer\n" +

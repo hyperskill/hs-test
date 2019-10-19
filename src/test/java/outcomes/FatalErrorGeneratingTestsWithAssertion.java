@@ -10,18 +10,21 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorGeneratingTestsWithAssertion extends BaseStageTest {
 
+class FatalErrorGeneratingTestsWithAssertionMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
+    }
+}
+
+public class FatalErrorGeneratingTestsWithAssertion extends BaseStageTest {
+
+    public FatalErrorGeneratingTestsWithAssertion() {
+        super(FatalErrorGeneratingTestsWithAssertionMain.class);
     }
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-
-    public FatalErrorGeneratingTestsWithAssertion() {
-        super(FatalErrorGeneratingTestsWithAssertion.class);
-    }
 
     @Before
     public void before() {

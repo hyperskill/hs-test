@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class SuccessDynamicInput extends BaseStageTest<String> {
 
+class SuccessDynamicInputMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello");
@@ -20,9 +20,12 @@ public class SuccessDynamicInput extends BaseStageTest<String> {
             System.out.println(line);
         }
     }
+}
+
+public class SuccessDynamicInput extends BaseStageTest<String> {
 
     public SuccessDynamicInput() {
-        super(SuccessDynamicInput.class);
+        super(SuccessDynamicInputMain.class);
     }
 
     @Override

@@ -7,17 +7,20 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCustomChecker extends BaseStageTest<String> {
 
+class TestCustomCheckerMain {
     public static void main(String[] args) {
         System.out.println(args.length);
         for (String arg : args) {
             System.out.println(arg);
         }
     }
+}
+
+public class TestCustomChecker extends BaseStageTest<String> {
 
     public TestCustomChecker() {
-        super(TestCustomChecker.class);
+        super(TestCustomCheckerMain.class);
     }
 
     @Override

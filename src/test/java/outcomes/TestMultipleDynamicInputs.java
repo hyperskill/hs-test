@@ -8,17 +8,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestMultipleDynamicInputs extends BaseStageTest<String> {
 
+class TestMultipleDynamicInputsMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < 5; i++) {
             System.out.println(scanner.nextInt());
         }
     }
+}
+
+public class TestMultipleDynamicInputs extends BaseStageTest<String> {
 
     public TestMultipleDynamicInputs() {
-        super(TestMultipleDynamicInputs.class);
+        super(TestMultipleDynamicInputsMain.class);
     }
 
     @Override

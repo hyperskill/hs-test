@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class UserClass {
+
+class TestStaticScannerMain {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -20,7 +21,7 @@ class UserClass {
 public class TestStaticScanner extends BaseStageTest<String> {
 
     public TestStaticScanner() {
-        super(UserClass.class);
+        super(TestStaticScannerMain.class);
     }
 
     @Override

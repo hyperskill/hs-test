@@ -14,16 +14,19 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class TestPredefinedIOFail extends BaseStageTest {
 
+class TestPredefinedIOFailMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
         System.out.println(n);
     }
+}
+
+public class TestPredefinedIOFail extends BaseStageTest {
 
     public TestPredefinedIOFail() {
-        super(TestPredefinedIOFail.class);
+        super(TestPredefinedIOFailMain.class);
     }
 
     @Rule

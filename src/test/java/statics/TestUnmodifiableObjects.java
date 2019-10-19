@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 
-class Static2 {
+class TestUnmodifiableObjectsMain {
 
     public static Collection unmodCollection = Collections.unmodifiableCollection(new ArrayList<>());
 
@@ -27,7 +27,7 @@ class Static2 {
         List<Collection> lists = new ArrayList<>();
         List<Map> maps = new ArrayList<>();
 
-        for (Field f : Static2.class.getDeclaredFields()) {
+        for (Field f : TestUnmodifiableObjectsMain.class.getDeclaredFields()) {
             Object obj = f.get(null);
             if (obj instanceof Collection) {
                 lists.add((Collection) obj);
@@ -79,7 +79,7 @@ class Static2 {
 public class TestUnmodifiableObjects extends BaseStageTest {
 
     public TestUnmodifiableObjects() {
-        super(Static2.class);
+        super(TestUnmodifiableObjectsMain.class);
     }
 
     private String rightOutput =

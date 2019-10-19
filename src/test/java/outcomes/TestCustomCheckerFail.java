@@ -10,17 +10,20 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCustomCheckerFail extends BaseStageTest<String> {
 
+class TestCustomCheckerFailMain {
     public static void main(String[] args) {
         System.out.println(args.length);
         for (String arg : args) {
             System.out.println(arg);
         }
     }
+}
+
+public class TestCustomCheckerFail extends BaseStageTest<String> {
 
     public TestCustomCheckerFail() {
-        super(TestCustomCheckerFail.class);
+        super(TestCustomCheckerFailMain.class);
     }
 
     @Rule

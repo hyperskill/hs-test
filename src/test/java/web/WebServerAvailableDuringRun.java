@@ -7,17 +7,56 @@ import org.hyperskill.hstest.v7.stage.BaseStageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-public class WebServerAvailableDuringRun extends BaseStageTest<String> {
 
-    public static void main(String[] args) {
-        System.out.println(Utils.getUrlPage("http://127.0.0.1:45678/123"));
+class UrlDownloader {
+    public static String normalizeLineEndings(String str) {
+        return str
+            .replaceAll("\r\n", "\n")
+            .replaceAll("\r", "\n");
     }
 
+    public static String getUrlPage(String url) {
+        try {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "http://" + url;
+            }
+            InputStream inputStream = new URL(url).openStream();
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder stringBuilder = new StringBuilder();
+            String nextLine;
+            String newLine = System.getProperty("line.separator");
+            while ((nextLine = reader.readLine()) != null) {
+                stringBuilder.append(nextLine);
+                stringBuilder.append(newLine);
+            }
+            return normalizeLineEndings(stringBuilder.toString()).trim();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
+    }
+}
+
+
+class WebServerAvailableDuringRunMain {
+    public static void main(String[] args) {
+        System.out.println(UrlDownloader.getUrlPage("http://127.0.0.1:45678/123"));
+    }
+}
+
+public class WebServerAvailableDuringRun extends BaseStageTest<String> {
+
     public WebServerAvailableDuringRun() {
-        super(WebServerAvailableDuringRun.class);
+        super(WebServerAvailableDuringRunMain.class);
     }
 
     @Override

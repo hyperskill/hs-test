@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
 
+class TestNotRunNotNeededInputFuncsMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("1");
@@ -19,9 +19,12 @@ public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
         String line4 = scanner.nextLine();
         System.out.println("6");
     }
+}
+
+public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
 
     public TestNotRunNotNeededInputFuncs() {
-        super(TestNotRunNotNeededInputFuncs.class);
+        super(TestNotRunNotNeededInputFuncsMain.class);
     }
 
     @Override

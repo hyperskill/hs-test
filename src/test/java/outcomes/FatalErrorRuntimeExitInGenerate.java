@@ -10,14 +10,17 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FatalErrorRuntimeExitInGenerate extends BaseStageTest {
 
+class FatalErrorRuntimeExitInGenerateMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class FatalErrorRuntimeExitInGenerate extends BaseStageTest {
 
     public FatalErrorRuntimeExitInGenerate() {
-        super(FatalErrorRuntimeExitInGenerate.class);
+        super(FatalErrorRuntimeExitInGenerateMain.class);
     }
 
     @Rule

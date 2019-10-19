@@ -7,17 +7,20 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCommandLineArgumentsPassing extends BaseStageTest<String> {
 
+class TestCommandLineArgumentsPassingMain {
     public static void main(String[] args) {
         System.out.println(args.length);
         for (String arg : args) {
             System.out.println(arg);
         }
     }
+}
+
+public class TestCommandLineArgumentsPassing extends BaseStageTest<String> {
 
     public TestCommandLineArgumentsPassing() {
-        super(TestCommandLineArgumentsPassing.class);
+        super(TestCommandLineArgumentsPassingMain.class);
     }
 
     @Override

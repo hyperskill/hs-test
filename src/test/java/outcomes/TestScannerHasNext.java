@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class UserClass2 {
+
+class TestScannerHasNextMain {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -21,7 +22,7 @@ class UserClass2 {
 public class TestScannerHasNext extends BaseStageTest<String> {
 
     public TestScannerHasNext() {
-        super(UserClass2.class);
+        super(TestScannerHasNextMain.class);
     }
 
     @Override

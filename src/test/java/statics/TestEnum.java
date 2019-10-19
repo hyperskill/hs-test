@@ -11,7 +11,7 @@ enum StaticEnum {
     ONE, TWO, THREE
 }
 
-class Static7 {
+class TestEnumMain {
     public static void main(String[] args) {
         System.out.println(StaticEnum.ONE);
         System.out.println(StaticEnum.TWO);
@@ -25,7 +25,7 @@ class Static7 {
 public class TestEnum extends BaseStageTest {
 
     public TestEnum() {
-        super(Static7.class);
+        super(TestEnumMain.class);
     }
 
     private String rightOutput =

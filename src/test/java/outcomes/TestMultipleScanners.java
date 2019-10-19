@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestMultipleScanners extends BaseStageTest<String> {
 
+class TestMultipleScannersMain {
     private static void in(String s) {
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
@@ -32,9 +32,12 @@ public class TestMultipleScanners extends BaseStageTest<String> {
         in("7");
         in("8");
     }
+}
+
+public class TestMultipleScanners extends BaseStageTest<String> {
 
     public TestMultipleScanners() {
-        super(TestMultipleScanners.class);
+        super(TestMultipleScannersMain.class);
     }
 
     @Override

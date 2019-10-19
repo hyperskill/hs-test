@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class Static1 {
+class TestChangingObjectsMain {
     public    static final List<String> list1 = new ArrayList<>();
     protected static final List<String> list2 = new ArrayList<>();
     private   static final List<String> list3 = new ArrayList<>();
@@ -143,7 +143,7 @@ class Static1 {
     static void print() throws Exception {
         List<List> lists = new ArrayList<>();
 
-        for (Field f : Static1.class.getDeclaredFields()) {
+        for (Field f : TestChangingObjectsMain.class.getDeclaredFields()) {
             lists.add((List) f.get(null));
         }
 
@@ -182,7 +182,7 @@ class Static1 {
 public class TestChangingObjects extends BaseStageTest {
 
     public TestChangingObjects() {
-        super(Static1.class);
+        super(TestChangingObjectsMain.class);
     }
 
     private String rightOutput =

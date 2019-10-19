@@ -10,15 +10,18 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExceptionInUserCode extends BaseStageTest {
 
+class ExceptionInUserCodeMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
         System.out.println(1 / 0);
     }
+}
+
+public class ExceptionInUserCode extends BaseStageTest {
 
     public ExceptionInUserCode() {
-        super(ExceptionInUserCode.class);
+        super(ExceptionInUserCodeMain.class);
     }
 
     @Rule
@@ -28,7 +31,7 @@ public class ExceptionInUserCode extends BaseStageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Exception in test #1");
-        exception.expectMessage("at outcomes.ExceptionInUserCode.main");
+        exception.expectMessage("at outcomes.ExceptionInUserCodeMain.main");
     }
 
     @Override

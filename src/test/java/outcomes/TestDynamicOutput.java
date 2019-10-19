@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestDynamicOutput extends BaseStageTest<String> {
 
+class TestDynamicOutputMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("1");
@@ -33,9 +33,12 @@ public class TestDynamicOutput extends BaseStageTest<String> {
             int x = 0/0;
         }
     }
+}
+
+public class TestDynamicOutput extends BaseStageTest<String> {
 
     public TestDynamicOutput() {
-        super(TestDynamicOutput.class);
+        super(TestDynamicOutputMain.class);
     }
 
     @Override

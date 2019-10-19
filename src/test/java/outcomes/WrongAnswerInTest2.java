@@ -13,14 +13,17 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
 
+class WrongAnswerInTest2Main {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
 
     public WrongAnswerInTest2() {
-        super(WrongAnswerInTest2.class);
+        super(WrongAnswerInTest2Main.class);
     }
 
     @Rule

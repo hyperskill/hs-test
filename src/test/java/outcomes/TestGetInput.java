@@ -8,15 +8,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestGetInput extends BaseStageTest<String> {
 
+class TestGetInputMain {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         System.out.print(s.nextLine());
     }
+}
+
+public class TestGetInput extends BaseStageTest<String> {
 
     public TestGetInput() {
-        super(TestGetInput.class);
+        super(TestGetInputMain.class);
     }
 
     @Override

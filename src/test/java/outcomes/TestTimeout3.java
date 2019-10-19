@@ -13,14 +13,17 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class TestTimeout3 extends BaseStageTest {
 
+class TestTimeout3Main {
     public static void main(String[] args) {
         while (true) { }
     }
+}
+
+public class TestTimeout3 extends BaseStageTest {
 
     public TestTimeout3() {
-        super(TestTimeout3.class);
+        super(TestTimeout3Main.class);
     }
 
     @Rule

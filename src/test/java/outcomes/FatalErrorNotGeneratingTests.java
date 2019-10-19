@@ -6,14 +6,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-public class FatalErrorNotGeneratingTests extends BaseStageTest {
 
+class FatalErrorNotGeneratingTestsMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
+}
+
+public class FatalErrorNotGeneratingTests extends BaseStageTest {
 
     public FatalErrorNotGeneratingTests() {
-        super(FatalErrorNotGeneratingTests.class);
+        super(FatalErrorNotGeneratingTestsMain.class);
     }
 
     @Rule

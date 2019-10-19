@@ -11,14 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class NoSuchElementWithoutScanner extends BaseStageTest {
 
+class NoSuchElementWithoutScannerMain {
     public static void main(String[] args) {
         throw new NoSuchElementException();
     }
+}
+
+public class NoSuchElementWithoutScanner extends BaseStageTest {
 
     public NoSuchElementWithoutScanner() {
-        super(NoSuchElementWithoutScanner.class);
+        super(NoSuchElementWithoutScannerMain.class);
     }
 
     @Rule

@@ -13,14 +13,17 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class TestRuntimeExit extends BaseStageTest {
 
+class TestRuntimeExitMain {
     public static void main(String[] args) {
         Runtime.getRuntime().exit(0);
     }
+}
+
+public class TestRuntimeExit extends BaseStageTest {
 
     public TestRuntimeExit() {
-        super(TestRuntimeExit.class);
+        super(TestRuntimeExitMain.class);
     }
 
     @Rule

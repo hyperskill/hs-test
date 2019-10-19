@@ -8,16 +8,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestCaseSameObjects extends BaseStageTest<String> {
 
+class TestCaseSameObjectsMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello");
         System.out.println(scanner.nextLine());
     }
+}
+
+public class TestCaseSameObjects extends BaseStageTest<String> {
 
     public TestCaseSameObjects() {
-        super(TestCaseSameObjects.class);
+        super(TestCaseSameObjectsMain.class);
     }
 
     @Override

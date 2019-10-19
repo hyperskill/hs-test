@@ -11,15 +11,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class FatalErrorRuntimeExitInAddInput extends BaseStageTest {
 
+class FatalErrorRuntimeExitInAddInputMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(scanner.nextLine());
     }
+}
+
+public class FatalErrorRuntimeExitInAddInput extends BaseStageTest {
 
     public FatalErrorRuntimeExitInAddInput() {
-        super(FatalErrorRuntimeExitInAddInput.class);
+        super(FatalErrorRuntimeExitInAddInputMain.class);
     }
 
     @Rule

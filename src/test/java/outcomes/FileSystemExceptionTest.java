@@ -16,18 +16,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class FileSystemExceptionTest extends BaseStageTest {
 
-    private static Scanner scanner;
+class FileSystemExceptionTestMain {
+    static Scanner scanner;
 
     public static void main(String[] args) throws Exception {
         File file = new File("in.txt");
         scanner = new Scanner(file);
         System.out.println(scanner.nextInt());
     }
+}
+
+public class FileSystemExceptionTest extends BaseStageTest {
 
     public FileSystemExceptionTest() {
-        super(FileSystemExceptionTest.class);
+        super(FileSystemExceptionTestMain.class);
     }
 
     @Rule
@@ -56,8 +59,9 @@ public class FileSystemExceptionTest extends BaseStageTest {
 
     @After
     public void deleteFile() throws Exception {
-        scanner.close();
-        Files.deleteIfExists(Paths.get(FileUtils.CURRENT_DIR + "in.txt"));
+        // Can't close scanner because this Scanner is in different ClassLoader scope
+        //FileSystemExceptionTestMain.scanner.close();
+        //Files.deleteIfExists(Paths.get(FileUtils.CURRENT_DIR + "in.txt"));
     }
 
 }
