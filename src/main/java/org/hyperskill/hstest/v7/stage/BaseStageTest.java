@@ -8,7 +8,6 @@ import org.hyperskill.hstest.v7.exception.TestPassedException;
 import org.hyperskill.hstest.v7.exception.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.WrongAnswerException;
 import org.hyperskill.hstest.v7.outcomes.Outcome;
-import org.hyperskill.hstest.v7.statics.StaticFieldsManager;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testcase.TestRun;
@@ -18,6 +17,8 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +53,7 @@ public abstract class BaseStageTest<AttachType> {
 
     private final List<TestCase<AttachType>> testCases = new ArrayList<>();
 
-    protected boolean needResetStaticFields = true;
+    protected boolean needReloadClass = true;
 
     private static TestRun currTestRun;
 
@@ -126,18 +127,6 @@ public abstract class BaseStageTest<AttachType> {
             SystemHandler.setUpSystem();
             initTests();
 
-            if (needResetStaticFields) {
-                String savingPackage;
-
-                if (userClass.getPackage() != null) {
-                    savingPackage = userClass.getPackage().getName();
-                } else {
-                    savingPackage = StaticFieldsManager.getTopPackage(userClass);
-                }
-
-                StaticFieldsManager.saveStaticFields(savingPackage);
-            }
-
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
                 SystemOutHandler.getRealOut().println(
@@ -157,10 +146,6 @@ public abstract class BaseStageTest<AttachType> {
 
                 if (!result.isCorrect()) {
                     throw new WrongAnswerException(result.getFeedback());
-                }
-
-                if (needResetStaticFields) {
-                    StaticFieldsManager.resetStaticFields();
                 }
             }
             SystemHandler.tearDownSystem();
@@ -207,9 +192,20 @@ public abstract class BaseStageTest<AttachType> {
         }
     }
 
-    private void invokeMain(List<String> args) {
+    private void invokeMain(List<String> args) throws Exception {
         try {
-            mainMethod.invoke(testedObject, new Object[] {
+            Method methodToInvoke = mainMethod;
+
+            if (needReloadClass) {
+                Class<?> myClass = testedClass;
+                URL[] urls = { myClass.getProtectionDomain().getCodeSource().getLocation() };
+                ClassLoader delegateParent = myClass.getClassLoader().getParent();
+                URLClassLoader cl = new URLClassLoader(urls, delegateParent);
+                Class<?> reloaded = cl.loadClass(myClass.getName());
+                methodToInvoke = getMainMethod(reloaded);
+            }
+
+            methodToInvoke.invoke(testedObject, new Object[] {
                 args.toArray(new String[0])
             });
         } catch (InvocationTargetException ex) {

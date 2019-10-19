@@ -17,12 +17,6 @@ public abstract class Outcome {
     String errorText = "";
     String stackTrace = "";
 
-    private static final String avoidStaticsMsg =
-        "We detected that you are using static variables, " +
-        "but they are not fully supported in testing. " +
-        "It might happen that if you try to avoid using " +
-        "them you will pass this stage.";
-
     protected abstract String getType();
 
     protected String getTypeSuffix() {
@@ -44,10 +38,6 @@ public abstract class Outcome {
 
         if (!errorText.isEmpty()) {
             result += "\n\n" + errorText.trim();
-        }
-
-        if (FailureHandler.detectStaticCloneFails()) {
-            result += "\n\n" + avoidStaticsMsg;
         }
 
         if (!stackTrace.isEmpty()) {

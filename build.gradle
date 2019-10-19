@@ -24,8 +24,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.9'
 
     compile 'com.google.code.gson:gson:2.8.5'
-    compile 'com.cedarsoftware:json-io:4.10.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 }
 
 // compileKotlin {

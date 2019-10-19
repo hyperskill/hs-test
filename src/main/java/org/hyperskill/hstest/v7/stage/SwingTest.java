@@ -24,7 +24,7 @@ public abstract class SwingTest<AttachType> extends BaseStageTest<AttachType> {
     public SwingTest(JFrame frame) {
         super(SwingTest.class, frame);
         this.frame = frame;
-        needResetStaticFields = false;
+        needReloadClass = false;
     }
 
     @BeforeClass

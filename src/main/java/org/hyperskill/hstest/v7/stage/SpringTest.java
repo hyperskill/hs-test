@@ -25,7 +25,7 @@ public abstract class SpringTest<T> extends BaseStageTest<T> {
     public SpringTest(Class clazz, int port) {
         super(SpringTest.class);
         springClass = clazz;
-        needResetStaticFields = false;
+        needReloadClass = false;
         this.port = port;
     }
 
