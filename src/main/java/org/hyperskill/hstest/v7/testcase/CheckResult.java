@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.testcase;
 
+
 public class CheckResult {
 
     public static final CheckResult FALSE = new CheckResult(false);

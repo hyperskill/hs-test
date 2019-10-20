@@ -3,6 +3,7 @@ package org.hyperskill.hstest.v7.dynamic.output;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
+
 public class SystemOutHandler {
 
     private static final PrintStream realOut = System.out;

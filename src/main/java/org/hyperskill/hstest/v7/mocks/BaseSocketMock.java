@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.mocks;
 
+
 abstract public class BaseSocketMock implements Runnable {
 
     public final int port;

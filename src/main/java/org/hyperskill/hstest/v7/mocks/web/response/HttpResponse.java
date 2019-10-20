@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+
 public class HttpResponse {
 
     private final int statusCode;

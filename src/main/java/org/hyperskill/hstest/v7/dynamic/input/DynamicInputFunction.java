@@ -2,6 +2,7 @@ package org.hyperskill.hstest.v7.dynamic.input;
 
 import java.util.function.Function;
 
+
 public class DynamicInputFunction {
 
     private int triggerCount;

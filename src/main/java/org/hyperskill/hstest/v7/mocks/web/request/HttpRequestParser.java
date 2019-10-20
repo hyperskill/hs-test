@@ -4,6 +4,7 @@ import org.hyperskill.hstest.v7.common.Utils;
 
 import java.io.DataInputStream;
 
+
 public class HttpRequestParser {
 
     private DataInputStream input;

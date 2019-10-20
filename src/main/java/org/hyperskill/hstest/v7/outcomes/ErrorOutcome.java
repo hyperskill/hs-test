@@ -5,6 +5,7 @@ import org.hyperskill.hstest.v7.exception.TimeLimitException;
 
 import java.nio.file.FileSystemException;
 
+
 public class ErrorOutcome extends Outcome {
 
     public ErrorOutcome(int testNum, Throwable cause) {

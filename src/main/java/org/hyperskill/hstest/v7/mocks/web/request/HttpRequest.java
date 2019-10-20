@@ -6,6 +6,7 @@ import org.hyperskill.hstest.v7.mocks.web.response.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class HttpRequest {
 
     String method = "";

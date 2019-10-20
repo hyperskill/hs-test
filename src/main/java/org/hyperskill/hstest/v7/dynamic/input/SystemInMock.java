@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
 
+
 public class SystemInMock extends InputStream {
     private boolean inputStarted = false;
     private StringReader currentReader;

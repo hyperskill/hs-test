@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.testcase;
 
+
 public class PredefinedIOTestCase extends TestCase<String> {
 
     private String feedback = "";

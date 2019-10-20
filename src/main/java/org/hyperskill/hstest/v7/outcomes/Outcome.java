@@ -11,6 +11,7 @@ import java.nio.file.FileSystemException;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.isUserFailed;
 
+
 public abstract class Outcome {
 
     int testNumber = 0;

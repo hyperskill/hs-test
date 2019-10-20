@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.mocks.web;
 
+
 public class WebPage {
 
     public static final String code200 = "200 OK";

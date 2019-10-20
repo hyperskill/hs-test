@@ -1,6 +1,5 @@
 package statics;
 
-
 import org.hyperskill.hstest.v7.stage.BaseStageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -8,6 +7,7 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 class TestCircularReferencesMain {
     public static class Node {

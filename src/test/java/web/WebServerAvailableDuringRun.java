@@ -46,7 +46,6 @@ class UrlDownloader {
     }
 }
 
-
 class WebServerAvailableDuringRunMain {
     public static void main(String[] args) {
         System.out.println(UrlDownloader.getUrlPage("http://127.0.0.1:45678/123"));

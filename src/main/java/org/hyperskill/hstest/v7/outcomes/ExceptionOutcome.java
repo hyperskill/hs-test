@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import static org.hyperskill.hstest.v7.exception.StackTraceUtils.filterStackTrace;
 import static org.hyperskill.hstest.v7.exception.StackTraceUtils.getStackTrace;
 
+
 public class ExceptionOutcome extends Outcome {
 
     public ExceptionOutcome(int testNum, Throwable cause, String feedback) {

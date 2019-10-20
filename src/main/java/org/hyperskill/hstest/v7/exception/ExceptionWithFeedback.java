@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.exception;
 
+
 public class ExceptionWithFeedback extends Exception {
 
     private Throwable realException;

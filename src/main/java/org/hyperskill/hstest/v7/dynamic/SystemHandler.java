@@ -6,6 +6,7 @@ import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 
 import static java.lang.System.getSecurityManager;
 
+
 public class SystemHandler {
     private static SecurityManager oldSecurityManager;
 

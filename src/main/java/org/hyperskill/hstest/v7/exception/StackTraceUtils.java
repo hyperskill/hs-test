@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class StackTraceUtils {
 
     public static String getStackTrace(final Throwable throwable) {

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class SystemInHandler {
 
     private static InputStream realIn = System.in;

@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.testcase;
 
+
 public class TestRun {
 
     private int testNum;

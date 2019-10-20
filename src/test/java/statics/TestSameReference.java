@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 class TestSameReferenceMain {
     static List list1 = new ArrayList();
     static List list2 = list1;

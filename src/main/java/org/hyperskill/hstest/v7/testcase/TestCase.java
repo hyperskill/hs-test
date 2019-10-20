@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+
 public class TestCase<AttachType> {
 
     private List<String> args = new ArrayList<>();

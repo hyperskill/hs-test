@@ -7,6 +7,7 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
+
 class TestInheritanceMain {
     public static class Parent {
         String name;

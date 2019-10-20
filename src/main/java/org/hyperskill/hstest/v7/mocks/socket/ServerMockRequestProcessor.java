@@ -1,9 +1,9 @@
 package org.hyperskill.hstest.v7.mocks.socket;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 
 public interface ServerMockRequestProcessor {
 

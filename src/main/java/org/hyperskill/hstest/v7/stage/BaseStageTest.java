@@ -41,6 +41,7 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException
 import static org.hyperskill.hstest.v7.exception.FailureHandler.isUserFailed;
 import static org.junit.Assert.fail;
 
+
 public abstract class BaseStageTest<AttachType> {
 
     private final Class<?> testedClass;

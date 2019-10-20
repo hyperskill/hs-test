@@ -4,6 +4,7 @@ import org.hyperskill.hstest.v7.exception.FailureHandler;
 
 import static org.hyperskill.hstest.v7.exception.StackTraceUtils.getStackTrace;
 
+
 public class FatalErrorOutcome extends Outcome {
 
     public FatalErrorOutcome(int testNum, Throwable cause) {

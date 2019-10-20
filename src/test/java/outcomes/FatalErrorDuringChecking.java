@@ -10,12 +10,12 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
+
 class FatalErrorDuringCheckingMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
-
 
 public class FatalErrorDuringChecking extends BaseStageTest {
 
