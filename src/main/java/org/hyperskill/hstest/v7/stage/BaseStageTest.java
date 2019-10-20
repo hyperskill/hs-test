@@ -43,10 +43,7 @@ import static org.junit.Assert.fail;
 
 public abstract class BaseStageTest<AttachType> {
 
-    // testedClass may not be user class
-    // for example, in Swing testing it's SwingTest class, not JFrame
     private final Class<?> testedClass;
-    private Class userClass;
 
     private final Object testedObject;
     private Method mainMethod;
@@ -79,12 +76,6 @@ public abstract class BaseStageTest<AttachType> {
     private void initTests() throws Exception {
 
         mainMethod = getMainMethod(testedClass);
-
-        if (testedObject != null) {
-            userClass = testedObject.getClass();
-        } else {
-            userClass = mainMethod.getDeclaringClass();
-        }
 
         String myName = BaseStageTest.class.getName();
 
