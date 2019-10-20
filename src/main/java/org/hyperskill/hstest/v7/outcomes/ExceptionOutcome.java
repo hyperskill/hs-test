@@ -25,10 +25,7 @@ public class ExceptionOutcome extends Outcome {
             && stackTrace.contains("java.util.Scanner")) {
 
             errorText = "\n\nProbably your program run out of input " +
-                "(Scanner tried to read more than expected). " +
-                "If you are sure it's not, this type of exception " +
-                "also happens if you created more than one Scanner object " +
-                "(it is preferred to use a single Scanner in program).";
+                "(Scanner tried to read more than expected).";
 
         }
     }
