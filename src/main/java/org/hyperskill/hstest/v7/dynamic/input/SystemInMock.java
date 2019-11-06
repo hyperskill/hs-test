@@ -19,10 +19,11 @@ import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
 
 
 public class SystemInMock extends InputStream {
-    private boolean inputStarted = false;
     private StringReader currentReader;
     private List<String> inputLines = new LinkedList<>();
     private List<DynamicInputFunction> inputTextFuncs = new LinkedList<>();
+
+    private int END_OF_LINE = 10; // represents \n
 
     void provideText(String text) {
         List<DynamicInputFunction> texts = new LinkedList<>();
@@ -31,10 +32,38 @@ public class SystemInMock extends InputStream {
     }
 
     void setTexts(List<DynamicInputFunction> texts) {
-        inputStarted = false;
         currentReader = new StringReader("");
         inputLines.clear();
         inputTextFuncs = texts;
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (len == 0) {
+            return 0;
+        }
+
+        int c = read();
+        if (c == -1) {
+            return -1;
+        }
+        b[off] = (byte)c;
+
+        int i = 1;
+        try {
+            for (; i < len ; i++) {
+                if (c == END_OF_LINE) {
+                    break;
+                }
+                c = read();
+                if (c == -1) {
+                    break;
+                }
+                b[off + i] = (byte)c;
+            }
+        } catch (IOException ignored) {
+        }
+        return i;
     }
 
     @Override
@@ -46,17 +75,16 @@ public class SystemInMock extends InputStream {
             return -1;
         }
 
-        if (!inputStarted) {
-            inputStarted = true;
+        int character = currentReader.read();
+        if (character == -1) {
             ejectNextLine();
-            return read();
-        } else {
-            int character = currentReader.read();
+            character = currentReader.read();
             if (character == -1) {
-                inputStarted = false;
+                return -1;
             }
-            return character;
         }
+
+        return character;
     }
 
     private void ejectNextLine() {
