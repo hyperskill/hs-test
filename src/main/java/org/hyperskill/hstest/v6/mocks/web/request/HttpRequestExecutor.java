@@ -45,6 +45,9 @@ public class HttpRequestExecutor {
             while (true) {
                 byte[] rawPortion = new byte[readPortion];
                 int readBytes = input.read(rawPortion);
+                if (readBytes == -1) {
+                    break;
+                }
                 contentLength += readBytes;
                 if (readBytes != readPortion) {
                     byte[] lastRawPortion = new byte[readBytes];
