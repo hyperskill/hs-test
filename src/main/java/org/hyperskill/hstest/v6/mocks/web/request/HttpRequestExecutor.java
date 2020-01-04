@@ -35,6 +35,10 @@ public class HttpRequestExecutor {
                 headers.put(currHeader.getName(), currHeader.getValue());
             }
 
+            if (httpResponse.getEntity() == null) {
+                return new HttpResponse(statusCode, headers, new byte[0]);
+            }
+
             DataInputStream input = new DataInputStream(
                 httpResponse.getEntity().getContent());
 
