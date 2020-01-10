@@ -29,6 +29,14 @@ public class TestOutputHandler {
     }
 
     @Test
+    public void testNormalOutputHandlerWithNewLines() {
+        System.out.println("123");
+        assertEquals("123\n", SystemOutHandler.getOutput());
+        System.out.println("456");
+        assertEquals("123\n456\n", SystemOutHandler.getOutput());
+    }
+
+    @Test
     public void testResetOutputHandler() {
         System.out.print("123");
         SystemOutHandler.resetOutput();

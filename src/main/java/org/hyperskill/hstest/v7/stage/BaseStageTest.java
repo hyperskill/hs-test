@@ -158,7 +158,7 @@ public abstract class BaseStageTest<AttachType> {
         runMain(test.getArgs(), test.getTimeLimit());
         checkErrors(test);
 
-        return normalizeLineEndings(SystemOutHandler.getOutput());
+        return SystemOutHandler.getOutput();
     }
 
     private void runMain(List<String> args, int timeLimit) {
