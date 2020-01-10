@@ -5,6 +5,7 @@ import org.hyperskill.hstest.v6.exception.ExceptionWithFeedback;
 import org.hyperskill.hstest.v6.exception.FailureHandler;
 import org.hyperskill.hstest.v6.exception.TimeLimitException;
 import org.hyperskill.hstest.v6.exception.WrongAnswerException;
+import org.hyperskill.hstest.v6.stage.BaseStageTest;
 
 import java.nio.file.FileSystemException;
 
@@ -59,8 +60,8 @@ public abstract class Outcome {
         if (fullLog.trim().length() != 0) {
             result += "\n\n" +
                 "Please find below the output of your program during this failed test.\n";
-            if (fullLog.matches('.*\n>.*')) {
-                result += "The '>' symbol corresponds to input lines.\n";
+            if (BaseStageTest.getCurrTestRun().isInputUsed()) {
+                result += "Note that the '>' character indicates the beginning of the input line.\n";
             }
             result += "\n---\n\n";
             result += fullLog;

@@ -1,7 +1,12 @@
 package org.hyperskill.hstest.v6.dynamic.output;
 
+import org.hyperskill.hstest.v6.stage.BaseStageTest;
+import org.hyperskill.hstest.v6.testcase.TestRun;
+
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+
+import static org.hyperskill.hstest.v6.common.Utils.normalizeLineEndings;
 
 public class SystemOutHandler {
 
@@ -29,20 +34,24 @@ public class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return mockOut.clonedStream.toString();
+        return normalizeLineEndings(mockOut.clonedStream.toString());
     }
 
     public static String getDynamicOutput() {
-        String output = mockOut.dynamicStream.toString();
+        String output = normalizeLineEndings(mockOut.dynamicStream.toString());
         mockOut.dynamicStream.reset();
         return output;
     }
 
     public static String getOutputWithInputInjected() {
-        return mockOut.withInputInjectedStream.toString();
+        return normalizeLineEndings(mockOut.withInputInjectedStream.toString());
     }
 
     public static void injectInput(String input) {
+        TestRun testRun = BaseStageTest.getCurrTestRun();
+        if (testRun != null) {
+            testRun.setInputUsed();
+        }
         mockOut.injectInput(input);
     }
 }

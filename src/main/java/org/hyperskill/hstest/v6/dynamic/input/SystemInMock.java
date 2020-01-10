@@ -110,7 +110,6 @@ public class SystemInMock extends InputStream {
         }
 
         String currOutput = SystemOutHandler.getDynamicOutput();
-        currOutput = normalizeLineEndings(currOutput);
         Function<String, Object> nextFunc = inputFunction.getInputFunction();
 
         String newInput;

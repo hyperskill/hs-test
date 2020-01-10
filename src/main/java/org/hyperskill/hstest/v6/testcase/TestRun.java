@@ -4,6 +4,7 @@ public class TestRun {
 
     private int testNum;
     private TestCase testCase;
+    private boolean inputUsed = false;
 
     private Throwable errorInTest;
 
@@ -20,11 +21,19 @@ public class TestRun {
         return testCase;
     }
 
+    public boolean isInputUsed() {
+        return inputUsed;
+    }
+
     public Throwable getErrorInTest() {
         return errorInTest;
     }
 
     public void setErrorInTest(Throwable errorInTest) {
         this.errorInTest = errorInTest;
+    }
+
+    public void setInputUsed() {
+        inputUsed = true;
     }
 }
