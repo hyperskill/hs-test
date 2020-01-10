@@ -22,6 +22,6 @@ public class FatalErrorOutcome extends Outcome {
 
     @Override
     protected String getTypeSuffix() {
-        return ", please send the report to Hyperskill team.";
+        return ", please send the report to support@hyperskill.org";
     }
 }

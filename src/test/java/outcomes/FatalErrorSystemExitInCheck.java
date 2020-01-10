@@ -26,7 +26,7 @@ public class FatalErrorSystemExitInCheck extends BaseStageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to Hyperskill team.");
+        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
         exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
