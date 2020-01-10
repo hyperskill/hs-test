@@ -27,7 +27,7 @@ public class NoMainMethodFound extends BaseStageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, please send the report to Hyperskill team.");
+        exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
         exception.expectMessage("No main method found");
     }
 

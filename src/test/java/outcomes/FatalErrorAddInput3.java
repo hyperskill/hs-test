@@ -32,7 +32,7 @@ public class FatalErrorAddInput3 extends BaseStageTest<String> {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #4, please send the report to Hyperskill team.");
+        exception.expectMessage("Fatal error in test #4, please send the report to support@hyperskill.org");
         exception.expectMessage("java.lang.Exception: " +
             "Dynamic input should return String or CheckResult objects only. Found: class java.lang.Integer");
     }
