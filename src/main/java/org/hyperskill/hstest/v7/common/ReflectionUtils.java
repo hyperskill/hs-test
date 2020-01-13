@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.v7.common;
 
+import org.hyperskill.hstest.v7.exception.FatalErrorException;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -15,13 +17,13 @@ public class ReflectionUtils {
             mainMethod = clazz.getDeclaredMethod("main", String[].class);
             mainMethod.setAccessible(true);
         } catch (NoSuchMethodException ex) {
-            throw new Exception("No main method found");
+            throw new FatalErrorException("No main method found");
         }
 
         boolean isMethodStatic = Modifier.isStatic(mainMethod.getModifiers());
 
         if (!isMethodStatic) {
-            throw new Exception("Main method is not static");
+            throw new FatalErrorException("Main method is not static");
         }
 
         return mainMethod;

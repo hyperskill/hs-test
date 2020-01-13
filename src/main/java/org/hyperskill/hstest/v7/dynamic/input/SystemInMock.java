@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.FatalErrorException;
 import org.hyperskill.hstest.v7.exception.TestPassedException;
 import org.hyperskill.hstest.v7.exception.WrongAnswerException;
 import org.hyperskill.hstest.v7.stage.BaseStageTest;
@@ -127,7 +128,7 @@ public class SystemInMock extends InputStream {
                     throw new WrongAnswerException(errorText);
                 }
             } else {
-                throw new Exception("Dynamic input should return " +
+                throw new FatalErrorException("Dynamic input should return " +
                     "String or CheckResult objects only. Found: " + obj.getClass());
             }
         } catch (Throwable throwable) {

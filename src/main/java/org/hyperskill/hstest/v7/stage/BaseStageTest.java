@@ -5,6 +5,7 @@ import org.hyperskill.hstest.v7.dynamic.SystemHandler;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.ExceptionWithFeedback;
+import org.hyperskill.hstest.v7.exception.FatalErrorException;
 import org.hyperskill.hstest.v7.exception.TestPassedException;
 import org.hyperskill.hstest.v7.exception.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.WrongAnswerException;
@@ -94,16 +95,19 @@ public abstract class BaseStageTest<AttachType> {
         if (overrodeGenerate) {
             testCases.addAll(generate());
             if (testCases.size() == 0) {
-                throw new Exception("No tests provided by \"generate\" method");
+                throw new FatalErrorException(
+                    "No tests provided by \"generate\" method");
             }
         } else {
-            throw new Exception("Can't create tests: override \"generate\" method");
+            throw new FatalErrorException(
+                "Can't create tests: override \"generate\" method");
         }
 
         for (TestCase<AttachType> testCase : testCases) {
             if (testCase.getCheckFunc() == null) {
                 if (!overrodeCheck) {
-                    throw new Exception("Can't check result: override \"check\" method");
+                    throw new FatalErrorException(
+                        "Can't check result: override \"check\" method");
                 }
                 testCase.setCheckFunc(this::check);
             }
