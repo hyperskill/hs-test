@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.stage;
 
+import org.hyperskill.hstest.v7.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.v7.dynamic.SystemHandler;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
@@ -189,11 +190,9 @@ public abstract class BaseStageTest<AttachType> {
             Method methodToInvoke = mainMethod;
 
             if (needReloadClass) {
-                URL[] urls = { testedClass.getProtectionDomain().getCodeSource().getLocation() };
-                ClassLoader delegateParent = testedClass.getClassLoader().getParent();
-                URLClassLoader cl = new URLClassLoader(urls, delegateParent);
+                ClassLoader dcl = new DynamicClassLoader(testedClass);
                 try {
-                    Class<?> reloaded = cl.loadClass(testedClass.getName());
+                    Class<?> reloaded = dcl.loadClass(testedClass.getName());
                     methodToInvoke = getMainMethod(reloaded);
                 } catch (Exception ex) {
                     currTestRun.setErrorInTest(ex);
