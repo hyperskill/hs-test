@@ -43,7 +43,7 @@ public class AndroidTest extends BaseStageTest {
 
     private static String fatalError(String reason) {
         String msg = "Fatal error during testing" +
-            ", please send the report to Hyperskill team.";
+            ", please send the report to support@hyperskill.org";
         return msg + "\n\n" +
             reason + ".\n\n" +
             "stdout:\n\n" + stdout + "\n\n" +
