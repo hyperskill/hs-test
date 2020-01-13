@@ -18,8 +18,6 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +33,6 @@ import static org.hyperskill.hstest.v7.common.FileUtils.deleteFiles;
 import static org.hyperskill.hstest.v7.common.ProcessUtils.startThreads;
 import static org.hyperskill.hstest.v7.common.ProcessUtils.stopThreads;
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
-import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
@@ -60,11 +57,11 @@ public abstract class BaseStageTest<AttachType> {
         return currTestRun;
     }
 
-    public BaseStageTest(Class testedClass) {
+    public BaseStageTest(Class<?> testedClass) {
         this(testedClass, null);
     }
 
-    public BaseStageTest(Class testedClass, Object testedObject) {
+    public BaseStageTest(Class<?> testedClass, Object testedObject) {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
@@ -166,7 +163,7 @@ public abstract class BaseStageTest<AttachType> {
         ExecutorService executorService = newSingleThreadExecutor();
 
         try {
-            Future future = executorService.submit(() -> {
+            Future<?> future = executorService.submit(() -> {
                 invokeMain(args);
                 return null;
             });

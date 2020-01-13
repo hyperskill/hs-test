@@ -1,7 +1,5 @@
 package org.hyperskill.hstest.v7.dynamic;
 
-import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
