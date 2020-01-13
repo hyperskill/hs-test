@@ -17,9 +17,9 @@ public class DynamicClassLoader extends ClassLoader {
     public DynamicClassLoader(Class<?> clazz) {
         URL location = clazz.getProtectionDomain().getCodeSource().getLocation();
         try {
-            this.searchLocation= new File(location.toURI()).getPath();
+            searchLocation= new File(location.toURI()).getPath();
         } catch (URISyntaxException ignored) {
-            this.searchLocation = null;
+            searchLocation = null;
         }
     }
 
