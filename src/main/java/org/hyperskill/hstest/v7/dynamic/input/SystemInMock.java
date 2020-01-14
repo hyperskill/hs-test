@@ -24,8 +24,6 @@ public class SystemInMock extends InputStream {
     private List<String> inputLines = new LinkedList<>();
     private List<DynamicInputFunction> inputTextFuncs = new LinkedList<>();
 
-    private int END_OF_LINE = 10; // represents \n
-
     void provideText(String text) {
         List<DynamicInputFunction> texts = new LinkedList<>();
         texts.add(new DynamicInputFunction(1, out -> text));
@@ -53,7 +51,7 @@ public class SystemInMock extends InputStream {
         int i = 1;
         try {
             for (; i < len ; i++) {
-                if (c == END_OF_LINE) {
+                if (c == '\n') {
                     break;
                 }
                 c = read();
@@ -80,9 +78,6 @@ public class SystemInMock extends InputStream {
         if (character == -1) {
             ejectNextLine();
             character = currentReader.read();
-            if (character == -1) {
-                return -1;
-            }
         }
 
         return character;
