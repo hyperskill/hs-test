@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -20,7 +20,7 @@ class FatalErrorAddInput3Main {
     }
 }
 
-public class FatalErrorAddInput3 extends BaseStageTest<String> {
+public class FatalErrorAddInput3 extends StageTest<String> {
 
     public FatalErrorAddInput3() {
         super(FatalErrorAddInput3Main.class);

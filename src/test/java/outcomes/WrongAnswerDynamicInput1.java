@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -23,7 +23,7 @@ class WrongAnswerDynamicInput1Main {
     }
 }
 
-public class WrongAnswerDynamicInput1 extends BaseStageTest {
+public class WrongAnswerDynamicInput1 extends StageTest {
 
     public WrongAnswerDynamicInput1() {
         super(WrongAnswerDynamicInput1Main.class);

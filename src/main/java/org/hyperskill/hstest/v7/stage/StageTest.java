@@ -41,7 +41,7 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.isUserFailed;
 import static org.junit.Assert.fail;
 
 
-public abstract class BaseStageTest<AttachType> {
+public abstract class StageTest<AttachType> {
 
     private final Class<?> testedClass;
 
@@ -58,11 +58,11 @@ public abstract class BaseStageTest<AttachType> {
         return currTestRun;
     }
 
-    public BaseStageTest(Class<?> testedClass) {
+    public StageTest(Class<?> testedClass) {
         this(testedClass, null);
     }
 
-    public BaseStageTest(Class<?> testedClass, Object testedObject) {
+    public StageTest(Class<?> testedClass, Object testedObject) {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
     }
@@ -77,7 +77,7 @@ public abstract class BaseStageTest<AttachType> {
 
         mainMethod = getMainMethod(testedClass);
 
-        String myName = BaseStageTest.class.getName();
+        String myName = StageTest.class.getName();
 
         String generateOwner = getClass()
             .getMethod("generate")

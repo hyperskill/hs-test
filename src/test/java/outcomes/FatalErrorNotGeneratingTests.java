@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,7 +13,7 @@ class FatalErrorNotGeneratingTestsMain {
     }
 }
 
-public class FatalErrorNotGeneratingTests extends BaseStageTest {
+public class FatalErrorNotGeneratingTests extends StageTest {
 
     public FatalErrorNotGeneratingTests() {
         super(FatalErrorNotGeneratingTestsMain.class);

@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -22,7 +22,7 @@ class TestDynamicOutputWithoutInputMain {
     }
 }
 
-public class TestDynamicOutputWithoutInput extends BaseStageTest<String> {
+public class TestDynamicOutputWithoutInput extends StageTest<String> {
 
     public TestDynamicOutputWithoutInput() {
         super(TestDynamicOutputWithoutInputMain.class);

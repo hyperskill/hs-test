@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -24,7 +24,7 @@ class TestOutOfInput1Main {
     }
 }
 
-public class TestOutOfInput1 extends BaseStageTest {
+public class TestOutOfInput1 extends StageTest {
 
     public TestOutOfInput1() {
         super(TestOutOfInput1Main.class);

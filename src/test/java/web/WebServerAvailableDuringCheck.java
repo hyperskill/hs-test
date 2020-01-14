@@ -3,7 +3,7 @@ package web;
 import org.hyperskill.hstest.v7.common.Utils;
 import org.hyperskill.hstest.v7.mocks.web.WebPage;
 import org.hyperskill.hstest.v7.mocks.web.WebServerMock;
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -17,7 +17,7 @@ class WebServerAvailableDuringCheckMain {
     }
 }
 
-public class WebServerAvailableDuringCheck extends BaseStageTest {
+public class WebServerAvailableDuringCheck extends StageTest {
 
     public WebServerAvailableDuringCheck() {
         super(WebServerAvailableDuringCheckMain.class);

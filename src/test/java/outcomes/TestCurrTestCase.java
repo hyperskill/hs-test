@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -16,7 +16,7 @@ class TestCurrTestCaseMain {
     }
 }
 
-public class TestCurrTestCase extends BaseStageTest<Integer> {
+public class TestCurrTestCase extends StageTest<Integer> {
 
     public TestCurrTestCase() {
         super(TestCurrTestCaseMain.class);
@@ -37,7 +37,7 @@ public class TestCurrTestCase extends BaseStageTest<Integer> {
 
     @Override
     public CheckResult check(String reply, Integer attach) {
-        TestCase testCase = BaseStageTest.getCurrTestRun().getTestCase();
+        TestCase testCase = StageTest.getCurrTestRun().getTestCase();
         if (reply.equals("1") && attach == 1 && testCase == test1
             || reply.equals("2") && attach == 2 && testCase == test2) {
             return CheckResult.TRUE;

@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -17,7 +17,7 @@ class FatalErrorEmptyTestCasesMain {
     }
 }
 
-public class FatalErrorEmptyTestCases extends BaseStageTest {
+public class FatalErrorEmptyTestCases extends StageTest {
 
     public FatalErrorEmptyTestCases() {
         super(FatalErrorEmptyTestCasesMain.class);

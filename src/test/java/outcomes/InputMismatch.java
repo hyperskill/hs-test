@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -21,7 +21,7 @@ class InputMismatchMain {
     }
 }
 
-public class InputMismatch extends BaseStageTest {
+public class InputMismatch extends StageTest {
 
     public InputMismatch() {
         super(InputMismatchMain.class);

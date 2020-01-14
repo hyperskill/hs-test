@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.PredefinedIOTestCase;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -18,7 +18,7 @@ class TestPredefinedIOMain {
     }
 }
 
-public class TestPredefinedIO extends BaseStageTest {
+public class TestPredefinedIO extends StageTest {
 
     public TestPredefinedIO() {
         super(TestPredefinedIOMain.class);

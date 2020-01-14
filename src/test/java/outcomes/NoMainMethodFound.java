@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -15,7 +15,7 @@ class NoMainMethodFoundMain {
 
 }
 
-public class NoMainMethodFound extends BaseStageTest {
+public class NoMainMethodFound extends StageTest {
 
     public NoMainMethodFound() {
         super(NoMainMethodFoundMain.class);

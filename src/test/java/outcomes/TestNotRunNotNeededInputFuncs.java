@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -21,7 +21,7 @@ class TestNotRunNotNeededInputFuncsMain {
     }
 }
 
-public class TestNotRunNotNeededInputFuncs extends BaseStageTest<String> {
+public class TestNotRunNotNeededInputFuncs extends StageTest<String> {
 
     public TestNotRunNotNeededInputFuncs() {
         super(TestNotRunNotNeededInputFuncsMain.class);

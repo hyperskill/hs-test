@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -77,7 +77,7 @@ class TestCircularReferencesMain {
     }
 }
 
-public class TestCircularReferences extends BaseStageTest {
+public class TestCircularReferences extends StageTest {
 
     public TestCircularReferences() {
         super(TestCircularReferencesMain.class);

@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +16,7 @@ class FatalErrorNoCheckMethodMain {
     }
 }
 
-public class FatalErrorNoCheckMethod extends BaseStageTest {
+public class FatalErrorNoCheckMethod extends StageTest {
 
     public FatalErrorNoCheckMethod() {
         super(FatalErrorNoCheckMethodMain.class);

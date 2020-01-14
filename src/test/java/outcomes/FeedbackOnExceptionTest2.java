@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -19,7 +19,7 @@ class FeedbackOnExceptionTest2Main {
     }
 }
 
-public class FeedbackOnExceptionTest2 extends BaseStageTest {
+public class FeedbackOnExceptionTest2 extends StageTest {
 
     public FeedbackOnExceptionTest2() {
         super(FeedbackOnExceptionTest2Main.class);

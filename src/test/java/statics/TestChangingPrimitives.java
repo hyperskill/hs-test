@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -35,7 +35,7 @@ class TestChangingPrimitivesMain {
     }
 }
 
-public class TestChangingPrimitives extends BaseStageTest {
+public class TestChangingPrimitives extends StageTest {
 
     public TestChangingPrimitives() {
         super(TestChangingPrimitivesMain.class);

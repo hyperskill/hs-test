@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -17,7 +17,7 @@ class TestCustomCheckerMain {
     }
 }
 
-public class TestCustomChecker extends BaseStageTest<String> {
+public class TestCustomChecker extends StageTest<String> {
 
     public TestCustomChecker() {
         super(TestCustomCheckerMain.class);

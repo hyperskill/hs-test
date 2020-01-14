@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.v7.dynamic.output;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.TestRun;
 
 import java.io.PrintStream;
@@ -49,7 +49,7 @@ public class SystemOutHandler {
     }
 
     public static void injectInput(String input) {
-        TestRun testRun = BaseStageTest.getCurrTestRun();
+        TestRun testRun = StageTest.getCurrTestRun();
         if (testRun != null) {
             testRun.setInputUsed();
         }

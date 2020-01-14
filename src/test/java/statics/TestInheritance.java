@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -34,7 +34,7 @@ class TestInheritanceMain {
     }
 }
 
-public class TestInheritance extends BaseStageTest {
+public class TestInheritance extends StageTest {
 
     public TestInheritance() {
         super(TestInheritanceMain.class);

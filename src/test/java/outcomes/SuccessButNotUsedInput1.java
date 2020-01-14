@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -22,7 +22,7 @@ class SuccessButNotUsedInput1Main {
     }
 }
 
-public class SuccessButNotUsedInput1 extends BaseStageTest<String> {
+public class SuccessButNotUsedInput1 extends StageTest<String> {
 
     public SuccessButNotUsedInput1() {
         super(SuccessButNotUsedInput1Main.class);

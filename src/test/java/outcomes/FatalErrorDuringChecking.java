@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -17,7 +17,7 @@ class FatalErrorDuringCheckingMain {
     }
 }
 
-public class FatalErrorDuringChecking extends BaseStageTest {
+public class FatalErrorDuringChecking extends StageTest {
 
     public FatalErrorDuringChecking() {
         super(FatalErrorDuringCheckingMain.class);

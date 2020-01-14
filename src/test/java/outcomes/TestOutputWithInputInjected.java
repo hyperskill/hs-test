@@ -1,7 +1,7 @@
 package outcomes;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -22,7 +22,7 @@ class TestOutputWithInputInjectedMain {
     }
 }
 
-public class TestOutputWithInputInjected extends BaseStageTest<String> {
+public class TestOutputWithInputInjected extends StageTest<String> {
 
     public TestOutputWithInputInjected() {
         super(TestOutputWithInputInjectedMain.class);

@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -33,7 +33,7 @@ class TestSameReferenceMain {
     }
 }
 
-public class TestSameReference extends BaseStageTest {
+public class TestSameReference extends StageTest {
 
     public TestSameReference() {
         super(TestSameReferenceMain.class);

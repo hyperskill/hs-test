@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -76,7 +76,7 @@ class TestUnmodifiableObjectsMain {
     }
 }
 
-public class TestUnmodifiableObjects extends BaseStageTest {
+public class TestUnmodifiableObjects extends StageTest {
 
     public TestUnmodifiableObjects() {
         super(TestUnmodifiableObjectsMain.class);

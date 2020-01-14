@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -18,7 +18,7 @@ class ExceptionInUserCodeMain {
     }
 }
 
-public class ExceptionInUserCode extends BaseStageTest {
+public class ExceptionInUserCode extends StageTest {
 
     public ExceptionInUserCode() {
         super(ExceptionInUserCodeMain.class);

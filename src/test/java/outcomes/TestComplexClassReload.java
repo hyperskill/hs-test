@@ -1,7 +1,7 @@
 package outcomes;
 
 import com.google.gson.Gson;
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -14,7 +14,7 @@ class TestComplexClassReloadMain {
     }
 }
 
-public class TestComplexClassReload extends BaseStageTest<String> {
+public class TestComplexClassReload extends StageTest<String> {
 
     public TestComplexClassReload() {
         super(TestComplexClassReloadMain.class);

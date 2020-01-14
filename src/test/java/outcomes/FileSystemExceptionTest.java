@@ -1,7 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.common.FileUtils;
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.After;
@@ -10,8 +9,6 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +24,7 @@ class FileSystemExceptionTestMain {
     }
 }
 
-public class FileSystemExceptionTest extends BaseStageTest {
+public class FileSystemExceptionTest extends StageTest {
 
     public FileSystemExceptionTest() {
         super(FileSystemExceptionTestMain.class);

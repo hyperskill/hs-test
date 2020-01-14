@@ -1,6 +1,6 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -23,7 +23,7 @@ class TestEnumMain {
     }
 }
 
-public class TestEnum extends BaseStageTest {
+public class TestEnum extends StageTest {
 
     public TestEnum() {
         super(TestEnumMain.class);

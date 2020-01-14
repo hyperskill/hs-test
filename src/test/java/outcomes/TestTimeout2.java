@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -24,7 +24,7 @@ class TestTimeout2Main {
     }
 }
 
-public class TestTimeout2 extends BaseStageTest {
+public class TestTimeout2 extends StageTest {
 
     public TestTimeout2() {
         super(TestTimeout2Main.class);

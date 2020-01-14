@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
@@ -20,7 +20,7 @@ class WrongAnswerInTest2Main {
     }
 }
 
-public class WrongAnswerInTest2 extends BaseStageTest<Boolean> {
+public class WrongAnswerInTest2 extends StageTest<Boolean> {
 
     public WrongAnswerInTest2() {
         super(WrongAnswerInTest2Main.class);

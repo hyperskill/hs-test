@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -19,7 +19,7 @@ class TestKotlinInputMultipleLinesMain {
     }
 }
 
-public class TestKotlinInputMultipleLines extends BaseStageTest<String> {
+public class TestKotlinInputMultipleLines extends StageTest<String> {
 
     public TestKotlinInputMultipleLines() {
         super(TestKotlinInputMultipleLinesMain.class);

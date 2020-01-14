@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -19,7 +19,7 @@ class TestScannerHasNextMain {
     }
 }
 
-public class TestScannerHasNext extends BaseStageTest<String> {
+public class TestScannerHasNext extends StageTest<String> {
 
     public TestScannerHasNext() {
         super(TestScannerHasNextMain.class);

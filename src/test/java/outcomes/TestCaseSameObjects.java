@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -17,7 +17,7 @@ class TestCaseSameObjectsMain {
     }
 }
 
-public class TestCaseSameObjects extends BaseStageTest<String> {
+public class TestCaseSameObjects extends StageTest<String> {
 
     public TestCaseSameObjects() {
         super(TestCaseSameObjectsMain.class);

@@ -4,7 +4,7 @@ import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.FatalErrorException;
 import org.hyperskill.hstest.v7.exception.TestPassedException;
 import org.hyperskill.hstest.v7.exception.WrongAnswerException;
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestRun;
 
@@ -69,7 +69,7 @@ public class SystemInMock extends InputStream {
     public int read() throws IOException {
 
         // provide no more input if there was an exception
-        TestRun testRun = BaseStageTest.getCurrTestRun();
+        TestRun testRun = StageTest.getCurrTestRun();
         if (testRun != null && testRun.getErrorInTest() != null) {
             return -1;
         }
@@ -127,7 +127,7 @@ public class SystemInMock extends InputStream {
                     "String or CheckResult objects only. Found: " + obj.getClass());
             }
         } catch (Throwable throwable) {
-            BaseStageTest.getCurrTestRun().setErrorInTest(throwable);
+            StageTest.getCurrTestRun().setErrorInTest(throwable);
             return;
         }
 

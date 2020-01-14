@@ -1,6 +1,6 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.BaseStageTest;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
@@ -18,7 +18,7 @@ class TestMultipleDynamicInputsMain {
     }
 }
 
-public class TestMultipleDynamicInputs extends BaseStageTest<String> {
+public class TestMultipleDynamicInputs extends StageTest<String> {
 
     public TestMultipleDynamicInputs() {
         super(TestMultipleDynamicInputsMain.class);
