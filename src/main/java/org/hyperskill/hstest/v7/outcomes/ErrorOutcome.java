@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.v7.outcomes;
 
 import org.hyperskill.hstest.v7.common.FileUtils;
-import org.hyperskill.hstest.v7.exception.TimeLimitException;
+import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
 
 import java.nio.file.FileSystemException;
 

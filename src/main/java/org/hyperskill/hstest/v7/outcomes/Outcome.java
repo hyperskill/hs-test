@@ -1,9 +1,9 @@
 package org.hyperskill.hstest.v7.outcomes;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.exception.ExceptionWithFeedback;
-import org.hyperskill.hstest.v7.exception.TimeLimitException;
-import org.hyperskill.hstest.v7.exception.WrongAnswerException;
+import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
+import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswerException;
 import org.hyperskill.hstest.v7.stage.StageTest;
 
 import java.nio.file.FileSystemException;

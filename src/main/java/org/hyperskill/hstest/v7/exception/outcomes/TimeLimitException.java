@@ -1,4 +1,4 @@
-package org.hyperskill.hstest.v7.exception;
+package org.hyperskill.hstest.v7.exception.outcomes;
 
 
 public class TimeLimitException extends Exception {

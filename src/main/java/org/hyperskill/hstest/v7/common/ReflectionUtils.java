@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.v7.common;
 
-import org.hyperskill.hstest.v7.exception.FatalErrorException;
+import org.hyperskill.hstest.v7.exception.outcomes.FatalErrorException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
