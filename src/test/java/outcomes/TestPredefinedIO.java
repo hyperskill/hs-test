@@ -1,7 +1,7 @@
 package outcomes;
 
 import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.v7.testcase.SimpleTestCase;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
 import java.util.Arrays;
@@ -27,8 +27,8 @@ public class TestPredefinedIO extends StageTest {
     @Override
     public List<TestCase> generate() {
         return Arrays.asList(
-            new PredefinedIOTestCase("123", "123\n123"),
-            new PredefinedIOTestCase("567", "567\n567")
+            new SimpleTestCase("123", "123\n123"),
+            new SimpleTestCase("567", "567\n567")
         );
     }
 }

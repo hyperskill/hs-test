@@ -1,17 +1,17 @@
 package org.hyperskill.hstest.v7.testcase;
 
 
-public class PredefinedIOTestCase extends TestCase<String> {
+public class SimpleTestCase extends TestCase<String> {
 
     private String feedback = "";
 
-    public PredefinedIOTestCase(String input, String output) {
+    public SimpleTestCase(String input, String output) {
         setInput(input);
         setAttach(output);
         setCheckFunc(this::customCheck);
     }
 
-    public PredefinedIOTestCase setFeedback(String feedback) {
+    public SimpleTestCase setFeedback(String feedback) {
         this.feedback = feedback;
         return this;
     }

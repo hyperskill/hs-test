@@ -1,7 +1,7 @@
 package outcomes;
 
 import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.PredefinedIOTestCase;
+import org.hyperskill.hstest.v7.testcase.SimpleTestCase;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,10 +42,10 @@ public class TestPredefinedIOFail extends StageTest {
     @Override
     public List<TestCase> generate() {
         return Arrays.asList(
-            new PredefinedIOTestCase("123", "123\n123")
+            new SimpleTestCase("123", "123\n123")
                 .setFeedback("You should output a number twice"),
 
-            new PredefinedIOTestCase("567", "567\n567")
+            new SimpleTestCase("567", "567\n567")
                 .setFeedback("You should output this number twice")
         );
     }
