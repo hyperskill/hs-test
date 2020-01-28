@@ -217,30 +217,31 @@ public abstract class StageTest<AttachType> {
     }
 
     private void checkErrors(TestCase<AttachType> test) throws Throwable {
-        if (currTestRun.getErrorInTest() != null) {
+        if (currTestRun.getErrorInTest() == null) {
+            return;
+        }
 
-            Throwable errorInTest = currTestRun.getErrorInTest();
+        Throwable errorInTest = currTestRun.getErrorInTest();
 
-            if (errorInTest instanceof TestPassedException) {
-                return;
-            }
+        if (errorInTest instanceof TestPassedException) {
+            return;
+        }
 
-            if (isUserFailed(errorInTest)) {
-                Throwable userException = getUserException(errorInTest);
-                Map<Class<? extends Throwable>, String> feedbackOnExceptions =
-                    test.getFeedbackOnExceptions();
+        if (isUserFailed(errorInTest)) {
+            Throwable userException = getUserException(errorInTest);
+            Map<Class<? extends Throwable>, String> feedbackOnExceptions =
+                test.getFeedbackOnExceptions();
 
-                for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
-                    String feedback = feedbackOnExceptions.get(exClass);
-                    if (userException != null &&
-                        exClass.isAssignableFrom(userException.getClass())) {
-                        throw new ExceptionWithFeedback(feedback, userException);
-                    }
+            for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
+                String feedback = feedbackOnExceptions.get(exClass);
+                if (userException != null &&
+                    exClass.isAssignableFrom(userException.getClass())) {
+                    throw new ExceptionWithFeedback(feedback, userException);
                 }
             }
-
-            throw errorInTest;
         }
+
+        throw errorInTest;
     }
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {

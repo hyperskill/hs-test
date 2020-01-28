@@ -45,7 +45,7 @@ public abstract class Outcome {
             result += "\n\n" + stackTrace;
         }
 
-        String fullLog = SystemOutHandler.getOutputWithInputInjected();
+        String fullLog = SystemOutHandler.getDynamicOutput();
 
         if (fullLog.trim().length() != 0) {
             result += "\n\n" +

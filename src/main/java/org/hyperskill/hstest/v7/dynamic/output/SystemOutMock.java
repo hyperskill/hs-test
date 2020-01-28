@@ -7,50 +7,55 @@ import java.io.OutputStream;
 
 public class SystemOutMock extends OutputStream {
 
-    // original stream used to actually see
+    // original stream is used to actually see
     // the test in the console and nothing else
-    private final OutputStream originalStream;
+    private final OutputStream original;
 
-    // cloned stream used to collect all output
+    // cloned stream is used to collect all output
     // from the test and redirect to check function
-    final ByteArrayOutputStream clonedStream = new ByteArrayOutputStream();
+    final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
 
-    // dynamic stream used to collect output between
+    // partial stream is used to collect output between
     // dynamic input calls in SystemInMock
-    final ByteArrayOutputStream dynamicStream = new ByteArrayOutputStream();
+    final ByteArrayOutputStream partial = new ByteArrayOutputStream();
 
-    // this stream contains not only output
+    // dynamic stream contains not only output
     // but also injected input from the test
-    final ByteArrayOutputStream
-        withInputInjectedStream = new ByteArrayOutputStream();
+    final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
 
     SystemOutMock(OutputStream originalStream) {
-        this.originalStream = originalStream;
+        this.original = originalStream;
     }
 
     @Override
     public void write(int b) throws IOException {
-        originalStream.write(b);
-        clonedStream.write(b);
-        dynamicStream.write(b);
-        withInputInjectedStream.write(b);
+        original.write(b);
+        cloned.write(b);
+        partial.write(b);
+        dynamic.write(b);
     }
 
     @Override
     public void flush() throws IOException {
-        originalStream.flush();
+        original.flush();
     }
 
     @Override
     public void close() throws IOException {
-        originalStream.close();
+        original.close();
     }
 
     public void injectInput(String input) {
         byte[] inputBytes = input.getBytes();
         try {
-            originalStream.write(inputBytes);
-            withInputInjectedStream.write(inputBytes);
+            original.write(inputBytes);
+            dynamic.write(inputBytes);
         } catch (IOException ignored) { }
+    }
+
+    public void reset() {
+        cloned.reset();
+        partial.reset();
+        dynamic.reset();
     }
 }

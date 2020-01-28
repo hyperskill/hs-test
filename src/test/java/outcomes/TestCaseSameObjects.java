@@ -14,6 +14,8 @@ class TestCaseSameObjectsMain {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello");
         System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
     }
 }
 
@@ -26,8 +28,8 @@ public class TestCaseSameObjects extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         TestCase<String> test = new TestCase<String>()
-            .addInput(out -> out)
-            .setAttach("Hello\nHello\n");
+            .addInput(3, out -> out)
+            .setAttach("Hello\nHello\nHello\nHello\n");
 
         return Arrays.asList(
             test, test, test, test, test

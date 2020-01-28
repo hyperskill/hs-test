@@ -14,17 +14,20 @@ public class SystemInHandler {
         System.setIn(mockIn);
     }
 
+    public static void revertSystemIn() {
+        System.setIn(realIn);
+    }
+
     public static void setInput(String input) {
         mockIn.provideText(input);
     }
 
     public static void setInputFuncs(List<DynamicInputFunction> inputFuncs) {
-        List<DynamicInputFunction> newFuncs = new LinkedList<>(inputFuncs);
+        List<DynamicInputFunction> newFuncs = new LinkedList<>();
+        for (DynamicInputFunction func : inputFuncs) {
+            newFuncs.add(new DynamicInputFunction(
+                func.getTriggerCount(), func.getInputFunction()));
+        }
         mockIn.setTexts(newFuncs);
     }
-
-    public static void revertSystemIn() {
-        System.setIn(realIn);
-    }
-
 }

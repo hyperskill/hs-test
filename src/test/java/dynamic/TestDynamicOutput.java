@@ -30,26 +30,26 @@ public class TestDynamicOutput {
     @Test
     public void testNormalOutputHandler() {
         System.out.print("123");
-        assertEquals("123", SystemOutHandler.getDynamicOutput());
+        assertEquals("123", SystemOutHandler.getPartialOutput());
         System.out.print("456");
-        assertEquals("456", SystemOutHandler.getDynamicOutput());
+        assertEquals("456", SystemOutHandler.getPartialOutput());
     }
 
     @Test
     public void testNormalOutputHandlerWithNewLines() {
         System.out.println("123");
-        assertEquals("123\n", SystemOutHandler.getDynamicOutput());
+        assertEquals("123\n", SystemOutHandler.getPartialOutput());
         System.out.println("456");
-        assertEquals("456\n", SystemOutHandler.getDynamicOutput());
+        assertEquals("456\n", SystemOutHandler.getPartialOutput());
     }
 
     @Test
     public void testResetOutputHandler() {
         System.out.print("123");
         SystemOutHandler.resetOutput();
-        assertEquals("", SystemOutHandler.getDynamicOutput());
+        assertEquals("", SystemOutHandler.getPartialOutput());
         System.out.print("456");
-        assertEquals("456", SystemOutHandler.getDynamicOutput());
+        assertEquals("456", SystemOutHandler.getPartialOutput());
     }
 
     @Test
@@ -57,23 +57,23 @@ public class TestDynamicOutput {
         SystemInHandler.setInput("line1\nline2\nline3");
         System.out.println("123");
         assertEquals("123\n",
-            SystemOutHandler.getOutputWithInputInjected());
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextLine();
-        assertEquals("123\n>line1\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("123\n> line1\n",
+            SystemOutHandler.getDynamicOutput());
 
         System.out.print("print:");
-        assertEquals("123\n>line1\nprint:",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("123\n> line1\nprint:",
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextLine();
-        assertEquals("123\n>line1\nprint:>line2\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("123\n> line1\nprint:> line2\n",
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextLine();
-        assertEquals("123\n>line1\nprint:>line2\n>line3\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("123\n> line1\nprint:> line2\n> line3\n",
+            SystemOutHandler.getDynamicOutput());
     }
 
     @Test
@@ -81,27 +81,27 @@ public class TestDynamicOutput {
         SystemInHandler.setInput("123 456\n678\n248");
         System.out.print("Print x and y: ");
         assertEquals("Print x and y: ",
-            SystemOutHandler.getOutputWithInputInjected());
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextInt();
-        assertEquals("Print x and y: >123 456\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("Print x and y: > 123 456\n",
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextInt();
-        assertEquals("Print x and y: >123 456\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("Print x and y: > 123 456\n",
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextInt();
-        assertEquals("Print x and y: >123 456\n>678\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("Print x and y: > 123 456\n> 678\n",
+            SystemOutHandler.getDynamicOutput());
 
         System.out.println("Another num:");
-        assertEquals("Print x and y: >123 456\n>678\nAnother num:\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("Print x and y: > 123 456\n> 678\nAnother num:\n",
+            SystemOutHandler.getDynamicOutput());
 
         scanner.nextInt();
-        assertEquals("Print x and y: >123 456\n>678\nAnother num:\n>248\n",
-            SystemOutHandler.getOutputWithInputInjected());
+        assertEquals("Print x and y: > 123 456\n> 678\nAnother num:\n> 248\n",
+            SystemOutHandler.getDynamicOutput());
     }
 
 }

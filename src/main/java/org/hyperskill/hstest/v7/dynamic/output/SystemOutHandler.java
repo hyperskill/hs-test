@@ -29,23 +29,21 @@ public class SystemOutHandler {
     }
 
     public static void resetOutput() {
-        mockOut.clonedStream.reset();
-        mockOut.dynamicStream.reset();
-        mockOut.withInputInjectedStream.reset();
+        mockOut.reset();
     }
 
     public static String getOutput() {
-        return normalizeLineEndings(mockOut.clonedStream.toString());
+        return normalizeLineEndings(mockOut.cloned.toString());
     }
 
-    public static String getDynamicOutput() {
-        String output = normalizeLineEndings(mockOut.dynamicStream.toString());
-        mockOut.dynamicStream.reset();
+    public static String getPartialOutput() {
+        String output = normalizeLineEndings(mockOut.partial.toString());
+        mockOut.partial.reset();
         return output;
     }
 
-    public static String getOutputWithInputInjected() {
-        return normalizeLineEndings(mockOut.withInputInjectedStream.toString());
+    public static String getDynamicOutput() {
+        return normalizeLineEndings(mockOut.dynamic.toString());
     }
 
     public static void injectInput(String input) {

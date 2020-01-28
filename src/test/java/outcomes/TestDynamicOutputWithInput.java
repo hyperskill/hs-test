@@ -45,10 +45,10 @@ public class TestDynamicOutputWithInput extends StageTest<String> {
             "Please find below the output of your program during this failed test.\n" +
             "Note that the '>' character indicates the beginning of the input line.\n" +
             "\n---\n\n" +
-            "Print x and y: >123 456\n" +
-            ">678\n" +
+            "Print x and y: > 123 456\n" +
+            "> 678\n" +
             "Another num:\n" +
-            ">248"
+            "> 248"
         );
         exception.expectMessage(not(containsString("Fatal error")));
     }

@@ -92,7 +92,7 @@ public class SystemInMock extends InputStream {
         }
         String nextLine = inputLines.remove(0) + "\n";
         currentReader = new StringReader(nextLine);
-        SystemOutHandler.injectInput(">" + nextLine);
+        SystemOutHandler.injectInput("> " + nextLine);
     }
 
     private void ejectNextInput() {
@@ -106,7 +106,7 @@ public class SystemInMock extends InputStream {
             inputFunction.trigger();
         }
 
-        String currOutput = SystemOutHandler.getDynamicOutput();
+        String currOutput = SystemOutHandler.getPartialOutput();
         Function<String, Object> nextFunc = inputFunction.getInputFunction();
 
         String newInput;
