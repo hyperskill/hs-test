@@ -142,13 +142,13 @@ public abstract class StageTest<AttachType> {
                     throw new WrongAnswerException(result.getFeedback());
                 }
             }
-            SystemHandler.tearDownSystem();
         } catch (Throwable t) {
             Outcome outcome = Outcome.getOutcome(t, currTest);
             String failText = outcome.toString();
+            fail(failText);
+        } finally {
             currTestRun = null;
             SystemHandler.tearDownSystem();
-            fail(failText);
         }
     }
 
