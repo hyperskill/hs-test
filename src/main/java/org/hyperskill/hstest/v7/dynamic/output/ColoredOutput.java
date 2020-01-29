@@ -3,6 +3,7 @@ package org.hyperskill.hstest.v7.dynamic.output;
 /**
  * Thanks to https://stackoverflow.com/a/45444716
  */
+@SuppressWarnings("unused")
 public class ColoredOutput {
 
     // reset
