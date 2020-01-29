@@ -26,12 +26,10 @@ public class ErrorOutcome extends Outcome {
 
         } else if (cause instanceof TimeLimitException) {
             int timeLimit = ((TimeLimitException) cause).getTimeLimitMs();
-            String timeUnit;
+            String timeUnit = "milliseconds";
             if (timeLimit > 1999) {
                 timeLimit /= 1000;
                 timeUnit = "seconds";
-            } else {
-                timeUnit = "milliseconds";
             }
             errorText = "In this test, the program is running for a long time, " +
                 "more than " + timeLimit + " " + timeUnit + ". Most likely, " +
