@@ -8,9 +8,6 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 
 import java.nio.file.FileSystemException;
 
-import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
-import static org.hyperskill.hstest.v7.exception.FailureHandler.isUserFailed;
-
 
 public abstract class Outcome {
 
@@ -42,7 +39,7 @@ public abstract class Outcome {
         }
 
         if (!stackTrace.isEmpty()) {
-            result += "\n\n" + stackTrace;
+            result += "\n\n" + stackTrace.trim();
         }
 
         String fullLog = SystemOutHandler.getDynamicOutput();
@@ -69,9 +66,6 @@ public abstract class Outcome {
             Throwable realUserException = ex.getRealException();
             String errorText = ex.getErrorText();
             return new ExceptionOutcome(currTest, realUserException, errorText);
-
-        } else if (isUserFailed(t)) {
-            return new ExceptionOutcome(currTest, getUserException(t), "");
 
         } else if (t instanceof FileSystemException
             || t instanceof TimeLimitException) {

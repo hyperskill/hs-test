@@ -10,6 +10,8 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
+import static matcher.FeedbackEquals.feedbackEquals;
+
 
 class ExceptionInUserCodeMain {
     public static void main(String[] args) {
@@ -30,8 +32,18 @@ public class ExceptionInUserCode extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1");
-        exception.expectMessage("at outcomes.ExceptionInUserCodeMain.main");
+        exception.expectMessage(feedbackEquals(
+            "Exception in test #1\n" +
+                "\n" +
+                "java.lang.ArithmeticException: / by zero\n" +
+                "\tat outcomes.ExceptionInUserCodeMain.main(ExceptionInUserCode.java:19)\n" +
+                "\n" +
+                "Please find below the output of your program during this failed test.\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "Hello World"
+        ));
     }
 
     @Override

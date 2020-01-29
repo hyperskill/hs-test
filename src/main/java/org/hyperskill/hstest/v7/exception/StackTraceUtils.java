@@ -27,7 +27,9 @@ public class StackTraceUtils {
             if (line.contains("org.junit.")) {
                 continue;
             }
-            if (line.contains("at java.base/jdk.internal.reflect")) {
+            if (line.contains("at java.base/jdk.internal.reflect.")
+                || line.contains("at sun.reflect.")
+                || line.contains("at org.hyperskill.hstest.")) {
                 break;
             }
             linesToShow.add(line);

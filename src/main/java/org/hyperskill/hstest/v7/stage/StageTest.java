@@ -208,7 +208,8 @@ public abstract class StageTest<AttachType> {
                 // CheckExitCalled is thrown in case of System.exit()
                 // consider System.exit() like normal exit
                 if (!(ex.getCause() instanceof CheckExitCalled)) {
-                    currTestRun.setErrorInTest(ex);
+                    currTestRun.setErrorInTest(
+                        new ExceptionWithFeedback("", getUserException(ex)));
                 }
             }
         } catch (IllegalAccessException ex) {
@@ -227,8 +228,10 @@ public abstract class StageTest<AttachType> {
             return;
         }
 
-        if (isUserFailed(errorInTest)) {
-            Throwable userException = getUserException(errorInTest);
+        if (errorInTest instanceof ExceptionWithFeedback) {
+            Throwable userException =
+                ((ExceptionWithFeedback) errorInTest).getRealException();
+
             Map<Class<? extends Throwable>, String> feedbackOnExceptions =
                 test.getFeedbackOnExceptions();
 
