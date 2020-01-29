@@ -32,9 +32,9 @@ public class TestInputHandlerKotlinStyle {
 
     @Test
     public void testLinesWithoutNewLineAtEnd() throws IOException {
-        SystemInHandler.setInput("qwerty\nasdfgh");
+        SystemInHandler.setInput("qwerty\nsecond");
         assertEquals("qwerty", readLine());
-        assertEquals("asdfgh", readLine());
+        assertEquals("second", readLine());
     }
 
     @Test
