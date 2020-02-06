@@ -1,5 +1,6 @@
 package dynamic;
 
+import org.hyperskill.hstest.v7.dynamic.SystemHandler;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.junit.After;
 import org.junit.Before;
@@ -14,13 +15,13 @@ import static org.junit.Assert.assertEquals;
 public class TestInputHandlerKotlinStyle {
 
     @Before
-    public void setUp() {
-        SystemInHandler.replaceSystemIn();
+    public void setUp() throws Exception {
+        SystemHandler.setUpSystem();
     }
 
     @After
     public void tearDown() {
-        SystemInHandler.revertSystemIn();
+        SystemHandler.tearDownSystem();
     }
 
     @Test

@@ -1,5 +1,6 @@
 package dynamic;
 
+import org.hyperskill.hstest.v7.dynamic.SystemHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.junit.After;
 import org.junit.Before;
@@ -12,12 +13,12 @@ public class TestOutputHandler {
 
     @Before
     public void setUp() throws Exception {
-        SystemOutHandler.replaceSystemOut();
+        SystemHandler.setUpSystem();
     }
 
     @After
     public void tearDown() {
-        SystemOutHandler.revertSystemOut();
+        SystemHandler.tearDownSystem();
     }
 
     @Test

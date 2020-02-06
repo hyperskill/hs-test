@@ -32,18 +32,18 @@ public class ExceptionInUserCode extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage(feedbackEquals(
+        exception.expectMessage(
             "Exception in test #1\n" +
                 "\n" +
-                "java.lang.ArithmeticException: / by zero\n" +
-                "\tat outcomes.ExceptionInUserCodeMain.main(ExceptionInUserCode.java:19)\n" +
-                "\n" +
-                "Please find below the output of your program during this failed test.\n" +
+                "java.lang.ArithmeticException: / by zero"
+        );
+        exception.expectMessage(
+            "Please find below the output of your program during this failed test.\n" +
                 "\n" +
                 "---\n" +
                 "\n" +
                 "Hello World"
-        ));
+        );
     }
 
     @Override
