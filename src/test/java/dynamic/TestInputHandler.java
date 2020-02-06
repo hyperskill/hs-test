@@ -1,6 +1,8 @@
 package dynamic;
 
+import org.hyperskill.hstest.v7.dynamic.SystemHandler;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
+import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +17,14 @@ public class TestInputHandler {
     public static Scanner scanner;
 
     @Before
-    public void setUp() {
-        SystemInHandler.replaceSystemIn();
+    public void setUp() throws Exception {
+        SystemHandler.setUpSystem();
         scanner = new Scanner(System.in);
     }
 
     @After
     public void tearDown() {
-        SystemInHandler.revertSystemIn();
+        SystemHandler.tearDownSystem();
     }
 
     @Test
