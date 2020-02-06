@@ -6,3 +6,4 @@ RUN chmod 777 /home/gradle/hs-test
 
 USER gradle
 WORKDIR /home/gradle/hs-test
+RUN gradle resolveDependencies
