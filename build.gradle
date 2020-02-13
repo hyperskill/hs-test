@@ -38,3 +38,20 @@ dependencies {
 wrapper {
     gradleVersion = '5.3.1'
 }
+
+task resolveDependencies {
+    doLast {
+        project.rootProject.allprojects.each { subProject ->
+            subProject.buildscript.configurations.each { configuration ->
+                if (configuration.isCanBeResolved()) {
+                    configuration.resolve()
+                }
+            }
+            subProject.configurations.each { configuration ->
+                if (configuration.isCanBeResolved()) {
+                    configuration.resolve()
+                }
+            }
+        }
+    }
+}
