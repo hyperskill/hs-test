@@ -3,7 +3,9 @@ package org.hyperskill.hstest.v7.exception;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class FailureHandler {
+public final class FailureHandler {
+
+    private FailureHandler() { }
 
     public static boolean isUserFailed(Throwable t) {
         // If user failed then t == InvocationTargetException
@@ -24,10 +26,9 @@ public class FailureHandler {
         String java = System.getProperty("java.version");
         String vendor = System.getProperty("java.vendor");
 
-        return
-            "OS " + os + "\n" +
-            "Java " + java + "\n" +
-            "Vendor " + vendor + "\n" +
-            "Testing library version 7";
+        return "OS " + os + "\n"
+            + "Java " + java + "\n"
+            + "Vendor " + vendor + "\n"
+            + "Testing library version 7";
     }
 }
