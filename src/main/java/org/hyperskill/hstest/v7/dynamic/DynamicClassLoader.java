@@ -17,7 +17,7 @@ public class DynamicClassLoader extends ClassLoader {
     public DynamicClassLoader(Class<?> clazz) {
         URL location = clazz.getProtectionDomain().getCodeSource().getLocation();
         try {
-            searchLocation= new File(location.toURI()).getPath();
+            searchLocation = new File(location.toURI()).getPath();
         } catch (URISyntaxException ignored) {
             searchLocation = null;
         }
@@ -25,7 +25,7 @@ public class DynamicClassLoader extends ClassLoader {
 
     protected synchronized Class<?> loadClass(String name, boolean resolve)
         throws ClassNotFoundException {
-        Class<?> result= findClass(name);
+        Class<?> result = findClass(name);
         if (resolve) {
             resolveClass(result);
         }
@@ -33,7 +33,7 @@ public class DynamicClassLoader extends ClassLoader {
     }
 
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Class<?> result= savedClasses.get(name);
+        Class<?> result = savedClasses.get(name);
 
         if (result != null) {
             return result;
