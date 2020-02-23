@@ -10,7 +10,8 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-import static matcher.FeedbackEquals.feedbackEquals;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 
 
 class ExceptionInUserCodeMain {
@@ -44,6 +45,12 @@ public class ExceptionInUserCode extends StageTest {
                 "\n" +
                 "Hello World"
         );
+
+        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
+        exception.expectMessage(not(containsString("org.junit.")));
+        exception.expectMessage(not(containsString("at sun.reflect.")));
+        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
     }
 
     @Override
