@@ -13,15 +13,15 @@ public class SystemOutMock extends OutputStream {
 
     // cloned stream is used to collect all output
     // from the test and redirect to check function
-    final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
 
     // partial stream is used to collect output between
     // dynamic input calls in SystemInMock
-    final ByteArrayOutputStream partial = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream partial = new ByteArrayOutputStream();
 
     // dynamic stream contains not only output
     // but also injected input from the test
-    final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
 
     SystemOutMock(OutputStream originalStream) {
         this.original = originalStream;
@@ -57,5 +57,17 @@ public class SystemOutMock extends OutputStream {
         cloned.reset();
         partial.reset();
         dynamic.reset();
+    }
+
+    public ByteArrayOutputStream getClonedOut() {
+        return cloned;
+    }
+
+    public ByteArrayOutputStream getPartialOut() {
+        return partial;
+    }
+
+    public ByteArrayOutputStream getDynamicOut() {
+        return dynamic;
     }
 }

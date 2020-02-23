@@ -35,17 +35,17 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return normalizeLineEndings(MOCK_OUT.cloned.toString());
+        return normalizeLineEndings(MOCK_OUT.getClonedOut().toString());
     }
 
     public static String getPartialOutput() {
-        String output = normalizeLineEndings(MOCK_OUT.partial.toString());
-        MOCK_OUT.partial.reset();
+        String output = normalizeLineEndings(MOCK_OUT.getPartialOut().toString());
+        MOCK_OUT.getPartialOut().reset();
         return output;
     }
 
     public static String getDynamicOutput() {
-        return normalizeLineEndings(MOCK_OUT.dynamic.toString());
+        return normalizeLineEndings(MOCK_OUT.getDynamicOut().toString());
     }
 
     public static void injectInput(String input) {
