@@ -20,7 +20,7 @@ public final class Utils {
     }
 
     public static String getUrlPage(String url) throws IOException {
-        if (!url.matches("https?://")) {
+        if (!url.matches("^https?://.*")) {
             url = "http://" + url;
         }
         InputStream inputStream = new URL(url).openStream();
