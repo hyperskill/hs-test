@@ -2,7 +2,11 @@ package org.hyperskill.hstest.v7.mocks.web.request;
 
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -14,8 +18,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_TYPE;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.DELETE;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.GET;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.POST;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.PUT;
 
-public class HttpRequestExecutor {
+
+public final class HttpRequestExecutor {
+
+    private HttpRequestExecutor() { }
+
+    private static final int READ_CHUNK = 1024;
 
     private static class BufferPortion {
         final byte[] buffer;
@@ -45,16 +59,15 @@ public class HttpRequestExecutor {
 
             ArrayList<BufferPortion> buffer = new ArrayList<>();
 
-            int readPortion = 1024;
             int contentLength = 0;
             while (true) {
-                byte[] rawPortion = new byte[readPortion];
+                byte[] rawPortion = new byte[READ_CHUNK];
                 int readBytes = input.read(rawPortion);
                 if (readBytes == -1) {
                     break;
                 }
                 contentLength += readBytes;
-                if (readBytes != readPortion) {
+                if (readBytes != READ_CHUNK) {
                     byte[] lastRawPortion = new byte[readBytes];
                     System.arraycopy(rawPortion, 0, lastRawPortion, 0, readBytes);
                     buffer.add(new BufferPortion(lastRawPortion));
@@ -68,7 +81,7 @@ public class HttpRequestExecutor {
                 BufferPortion portion = buffer.get(i);
                 System.arraycopy(
                     portion.buffer, 0,
-                    rawContent, i * readPortion,
+                    rawContent, i * READ_CHUNK,
                     portion.buffer.length);
             }
 
@@ -107,14 +120,14 @@ public class HttpRequestExecutor {
     private static HttpRequestBase constructPost(HttpRequest request) {
         HttpPost post = new HttpPost(request.uri);
         post.setEntity(new StringEntity(request.content,
-            ContentType.getByMimeType(request.headers.get("Content-Type"))));
+            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE))));
         return post;
     }
 
     private static HttpRequestBase constructPut(HttpRequest request) {
         HttpPut put = new HttpPut(request.uri);
         put.setEntity(new StringEntity(request.content,
-            ContentType.getByMimeType(request.headers.get("Content-Type"))));
+            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE))));
         return put;
     }
 
@@ -127,10 +140,16 @@ public class HttpRequestExecutor {
         HttpRequestBase requestBase;
 
         switch (request.method) {
-            case "POST": requestBase = constructPost(request); break;
-            case "PUT": requestBase = constructPut(request); break;
-            case "DELETE": requestBase = constructDelete(request); break;
-            case "GET":
+            case POST:
+                requestBase = constructPost(request);
+                break;
+            case PUT:
+                requestBase = constructPut(request);
+                break;
+            case DELETE:
+                requestBase = constructDelete(request);
+                break;
+            case GET:
             default:
                 requestBase = constructGet(request);
         }

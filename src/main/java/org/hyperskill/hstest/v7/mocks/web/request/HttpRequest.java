@@ -6,6 +6,8 @@ import org.hyperskill.hstest.v7.mocks.web.response.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_TYPE;
+
 
 public class HttpRequest {
 
@@ -75,7 +77,7 @@ public class HttpRequest {
     }
 
     public HttpRequest setContentType(ContentType type) {
-        return addHeader("Content-Type", type.getMimeType());
+        return addHeader(CONTENT_TYPE, type.getMimeType());
     }
 
     public HttpResponse send() {

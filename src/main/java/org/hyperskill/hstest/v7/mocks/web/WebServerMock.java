@@ -4,12 +4,18 @@ import org.hyperskill.hstest.v7.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.v7.mocks.web.request.HttpRequestParser;
 import org.hyperskill.hstest.v7.testcase.Process;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class WebServerMock implements Process {
+
+    private static final String DELIM = "/";
 
     public static void main(String[] args) { // for testing
         WebServerMock ws = new WebServerMock(12345);
@@ -33,8 +39,8 @@ public class WebServerMock implements Process {
     }
 
     public WebServerMock setPage(String url, WebPage page) {
-        if (!url.startsWith("/")) {
-            url = "/" + url;
+        if (!url.startsWith(DELIM)) {
+            url = DELIM + url;
         }
         pages.put(url, page.contentWithHeader());
         return this;
@@ -48,12 +54,12 @@ public class WebServerMock implements Process {
     private void sendResponse(String path, DataOutputStream output) throws Exception {
         String response;
         if (path == null) {
-            response = WebPage.notFound;
+            response = WebPage.NOT_FOUND;
         } else {
-            if (!path.startsWith("/")) {
-                path = "/" + path;
+            if (!path.startsWith(DELIM)) {
+                path = DELIM + path;
             }
-            response = pages.getOrDefault(path, WebPage.notFound);
+            response = pages.getOrDefault(path, WebPage.NOT_FOUND);
         }
         for (char c : response.toCharArray()) {
             output.write(c);
@@ -73,8 +79,7 @@ public class WebServerMock implements Process {
     public void start() {
         try {
             serverSocket = new ServerSocket(port);
-        }
-        catch (IOException ignored) { }
+        } catch (IOException ignored) { }
     }
 
     @Override

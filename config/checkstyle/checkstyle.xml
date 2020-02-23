@@ -191,6 +191,7 @@
 
         <module name="VisibilityModifier">
             <property name="allowPublicFinalFields" value="true"/>
+            <property name="packageAllowed" value="true"/>
         </module>
 
         <!-- Miscellaneous other checks.                   -->

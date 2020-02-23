@@ -4,8 +4,10 @@ import org.hyperskill.hstest.v7.common.Utils;
 
 import java.io.DataInputStream;
 
+import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_LENGTH;
 
-public class HttpRequestParser {
+
+public final class HttpRequestParser {
 
     private DataInputStream input;
     private HttpRequest request;
@@ -17,17 +19,18 @@ public class HttpRequestParser {
 
     private String getStartLine() throws Exception {
         StringBuilder buffer = new StringBuilder();
-        while (buffer.length() < 4 ||
-            !(buffer.charAt(buffer.length() - 2) == '\r' &&
-                buffer.charAt(buffer.length() - 1) == '\n')) {
+        while (buffer.length() < 4
+                || !(buffer.charAt(buffer.length() - 2) == '\r'
+                && buffer.charAt(buffer.length() - 1) == '\n')) {
             buffer.appendCodePoint(input.read());
         }
         return Utils.normalizeLineEndings(buffer.toString()).trim();
     }
 
     private void parseGetParams() {
-        if (request.uri.contains("?")) {
-            int index = request.uri.indexOf("?");
+        String getParamsIndicator = "?";
+        if (request.uri.contains(getParamsIndicator)) {
+            int index = request.uri.indexOf(getParamsIndicator);
             String strGetParams = request.uri.substring(index + 1);
             String[] params = strGetParams.split("&");
 
@@ -44,11 +47,11 @@ public class HttpRequestParser {
 
     private String getRawHeaders() throws Exception {
         StringBuilder buffer = new StringBuilder();
-        while (buffer.length() < 4 ||
-            !(buffer.charAt(buffer.length() - 4) == '\r' &&
-                buffer.charAt(buffer.length() - 3) == '\n' &&
-                buffer.charAt(buffer.length() - 2) == '\r' &&
-                buffer.charAt(buffer.length() - 1) == '\n')) {
+        while (buffer.length() < 4
+                || !(buffer.charAt(buffer.length() - 4) == '\r'
+                    && buffer.charAt(buffer.length() - 3) == '\n'
+                    && buffer.charAt(buffer.length() - 2) == '\r'
+                    && buffer.charAt(buffer.length() - 1) == '\n')) {
             buffer.appendCodePoint(input.read());
         }
         return Utils.normalizeLineEndings(buffer.toString()).trim();
@@ -64,7 +67,7 @@ public class HttpRequestParser {
             String value = parts[1].trim();
             request.headers.put(key, value);
 
-            if (key.equals("Content-Length")) {
+            if (key.equals(CONTENT_LENGTH)) {
                 request.contentLength = Integer.parseInt(value);
             }
         }
