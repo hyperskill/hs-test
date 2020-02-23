@@ -7,7 +7,10 @@ import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 import static java.lang.System.getSecurityManager;
 
 
-public class SystemHandler {
+public final class SystemHandler {
+
+    private SystemHandler() { }
+
     private static SecurityManager oldSecurityManager;
 
     public static void setUpSystem() throws Exception {

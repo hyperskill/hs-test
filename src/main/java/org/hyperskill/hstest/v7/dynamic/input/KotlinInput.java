@@ -9,8 +9,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 
-public class KotlinInput {
-    private static final CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+public final class KotlinInput {
+
+    private KotlinInput() { }
+
     private static final int BUFFER_SIZE = 32;
     private static final int LINE_SEPARATOR_MAX_LENGTH = 2;
 
@@ -36,14 +38,16 @@ public class KotlinInput {
     // copy of kotlin's readLine() written in Java
     public static String readLine() throws IOException {
         final InputStream inputStream = System.in;
-        final CharsetDecoder decoder = KotlinInput.decoder;
+        final CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
 
         final ByteBuffer byteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         final CharBuffer charBuffer = CharBuffer.allocate(LINE_SEPARATOR_MAX_LENGTH * 2);
         final StringBuilder stringBuilder = new StringBuilder();
 
         int read = inputStream.read();
-        if (read == -1) return null;
+        if (read == -1) {
+            return null;
+        }
         do {
             byteBuffer.put((byte) read);
             if (tryDecode(decoder, byteBuffer, charBuffer, false)) {

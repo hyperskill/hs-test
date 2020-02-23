@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class SystemInHandler {
+public final class SystemInHandler {
+
+    private SystemInHandler() { }
 
     private static InputStream realIn = System.in;
     private static SystemInMock mockIn = new SystemInMock();

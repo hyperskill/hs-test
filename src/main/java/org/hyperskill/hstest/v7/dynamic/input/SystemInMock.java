@@ -46,11 +46,11 @@ public class SystemInMock extends InputStream {
         if (c == -1) {
             return -1;
         }
-        b[off] = (byte)c;
+        b[off] = (byte) c;
 
         int i = 1;
         try {
-            for (; i < len ; i++) {
+            for (; i < len; i++) {
                 if (c == '\n') {
                     break;
                 }
@@ -58,7 +58,7 @@ public class SystemInMock extends InputStream {
                 if (c == -1) {
                     break;
                 }
-                b[off + i] = (byte)c;
+                b[off + i] = (byte) c;
             }
         } catch (IOException ignored) {
         }
@@ -123,8 +123,8 @@ public class SystemInMock extends InputStream {
                     throw new WrongAnswerException(errorText);
                 }
             } else {
-                throw new FatalErrorException("Dynamic input should return " +
-                    "String or CheckResult objects only. Found: " + obj.getClass());
+                throw new FatalErrorException("Dynamic input should return "
+                    + "String or CheckResult objects only. Found: " + obj.getClass());
             }
         } catch (Throwable throwable) {
             StageTest.getCurrTestRun().setErrorInTest(throwable);

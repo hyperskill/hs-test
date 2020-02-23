@@ -76,7 +76,7 @@ public class DynamicClassLoader extends ClassLoader {
     }
 
     private static byte[] loadFileAsBytes(File file) throws IOException {
-        byte[] result = new byte[(int)file.length()];
+        byte[] result = new byte[(int) file.length()];
         try (FileInputStream f = new FileInputStream(file)) {
             f.read(result, 0, result.length);
         }

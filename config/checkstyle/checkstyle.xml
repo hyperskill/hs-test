@@ -159,7 +159,7 @@
         <module name="DefaultComesLast"/>
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+<!--         <module name="HiddenField"/> -->
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="FallThrough"/>
