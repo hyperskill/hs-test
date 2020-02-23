@@ -13,9 +13,9 @@ import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 
 
-public class ProcessUtils {
+public final class ProcessUtils {
 
-    private ProcessUtils() {}
+    private ProcessUtils() { }
 
     public static ExecutorService startThreads(List<Process> processes) {
         int poolSize = processes.size();
@@ -27,7 +27,8 @@ public class ProcessUtils {
             process.start();
             executor.submit(process);
             while (!process.isStarted()) {
-                sleep(10);
+                int smallSleepTime = 10;
+                sleep(smallSleepTime);
             }
         }
         return executor;
@@ -42,10 +43,12 @@ public class ProcessUtils {
                 process.stop();
             }
             executor.shutdown();
-            boolean terminated = executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+            int sleepAwaitTime = 100;
+            int sleepAwaitTimeLong = sleepAwaitTime * 10;
+            boolean terminated = executor.awaitTermination(sleepAwaitTime, TimeUnit.MILLISECONDS);
             if (!terminated) {
                 executor.shutdownNow();
-                terminated = executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+                terminated = executor.awaitTermination(sleepAwaitTimeLong, TimeUnit.MILLISECONDS);
                 if (!terminated) {
                     SystemOutHandler.getRealOut().println(
                         RED_BOLD + "SOME PROCESSES ARE NOT TERMINATED" + RESET

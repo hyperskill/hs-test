@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class FileUtils {
+public final class FileUtils {
 
-    private FileUtils() {}
+    private FileUtils() { }
 
     public static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;
     private static final String TEMP_FILE_PREFIX = "hyperskill-temp-file-";

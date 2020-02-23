@@ -6,9 +6,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 
-public class ReflectionUtils {
+public final class ReflectionUtils {
 
-    private ReflectionUtils() {}
+    private ReflectionUtils() { }
 
     public static Method getMainMethod(Class<?> clazz) throws Exception {
 

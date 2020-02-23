@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -54,7 +55,7 @@ public class WebServerMockTest {
     }
 
     @Test
-    public void testCorrectContent1() {
+    public void testCorrectContent1() throws IOException {
         assertEquals("342\n678", Utils.getUrlPage("127.0.0.1:12345/page1"));
         assertEquals("0987\n5432", Utils.getUrlPage("127.0.0.1:12345/page2"));
         assertEquals("type1", Utils.getUrlPage("127.0.0.1:12345/type1"));
@@ -62,14 +63,14 @@ public class WebServerMockTest {
     }
 
     @Test
-    public void testCorrectContent2() {
+    public void testCorrectContent2() throws IOException {
         assertEquals("123\n456", Utils.getUrlPage("127.0.0.1:12345/"));
         assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3"));
         assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4"));
     }
 
     @Test
-    public void testWithGetParams() {
+    public void testWithGetParams() throws IOException {
         assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3?type=123"));
         assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4?abc=def&1=2"));
     }

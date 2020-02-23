@@ -7,6 +7,7 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +35,10 @@ public class WebServerAvailableDuringCheck extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object clue) {
-        return new CheckResult("234".equals(Utils.getUrlPage("http://127.0.0.1:45678/123")));
+        try {
+            return new CheckResult("234".equals(Utils.getUrlPage("http://127.0.0.1:45678/123")));
+        } catch (IOException ex) {
+            return new CheckResult(false);
+        }
     }
-
 }
