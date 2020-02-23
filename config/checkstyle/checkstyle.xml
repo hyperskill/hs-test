@@ -167,7 +167,12 @@
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="ModifiedControlVariable"/>
-        <module name="MultipleStringLiterals"/>
+
+        <module name="MultipleStringLiterals">
+            <property name="ignoreStringsRegexp"
+                      value='^(("")|("\\n"))$'/>
+        </module>
+
         <module name="MultipleVariableDeclarations"/>
         <module name="NoFinalizer"/>
         <module name="OneStatementPerLine"/>

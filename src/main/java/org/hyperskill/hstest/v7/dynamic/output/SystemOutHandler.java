@@ -9,41 +9,43 @@ import java.nio.charset.Charset;
 import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
 
 
-public class SystemOutHandler {
+public final class SystemOutHandler {
 
-    private static final PrintStream realOut = System.out;
-    private static final SystemOutMock mockOut = new SystemOutMock(realOut);
+    private SystemOutHandler() { }
+
+    private static final PrintStream REAL_OUT = System.out;
+    private static final SystemOutMock MOCK_OUT = new SystemOutMock(REAL_OUT);
 
     public static PrintStream getRealOut() {
-        return realOut;
+        return REAL_OUT;
     }
 
     public static void replaceSystemOut() throws Exception {
         System.setOut(new PrintStream(
-            mockOut, true, Charset.defaultCharset().name()));
+            MOCK_OUT, true, Charset.defaultCharset().name()));
     }
 
     public static void revertSystemOut() {
         resetOutput();
-        System.setOut(realOut);
+        System.setOut(REAL_OUT);
     }
 
     public static void resetOutput() {
-        mockOut.reset();
+        MOCK_OUT.reset();
     }
 
     public static String getOutput() {
-        return normalizeLineEndings(mockOut.cloned.toString());
+        return normalizeLineEndings(MOCK_OUT.cloned.toString());
     }
 
     public static String getPartialOutput() {
-        String output = normalizeLineEndings(mockOut.partial.toString());
-        mockOut.partial.reset();
+        String output = normalizeLineEndings(MOCK_OUT.partial.toString());
+        MOCK_OUT.partial.reset();
         return output;
     }
 
     public static String getDynamicOutput() {
-        return normalizeLineEndings(mockOut.dynamic.toString());
+        return normalizeLineEndings(MOCK_OUT.dynamic.toString());
     }
 
     public static void injectInput(String input) {
@@ -51,6 +53,6 @@ public class SystemOutHandler {
         if (testRun != null) {
             testRun.setInputUsed();
         }
-        mockOut.injectInput(input);
+        MOCK_OUT.injectInput(input);
     }
 }
