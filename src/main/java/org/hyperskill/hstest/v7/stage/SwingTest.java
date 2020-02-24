@@ -59,9 +59,9 @@ public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
         return compList;
     }
 
-    public static boolean checkExistence(final Supplier<JComponentFixture> func) {
+    public static boolean checkExistence(final Supplier<JComponentFixture<?>> func) {
         try {
-            JComponentFixture component = func.get();
+            JComponentFixture<?> component = func.get();
             return component != null;
         } catch (ComponentLookupException ex) {
             return false;

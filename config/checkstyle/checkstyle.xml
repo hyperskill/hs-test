@@ -115,7 +115,10 @@
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_import.html -->
-        <module name="AvoidStarImport"/>
+        <module name="AvoidStarImport">
+            <property name="excludes" value="java.awt,javax.swing"/>
+        </module>
+
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -170,7 +173,7 @@
 
         <module name="MultipleStringLiterals">
             <property name="ignoreStringsRegexp"
-                      value='^(("")|("\\n"))$'/>
+                      value='^(("")|("(\\n)+"))$'/>
         </module>
 
         <module name="MultipleVariableDeclarations"/>
@@ -192,6 +195,7 @@
         <module name="VisibilityModifier">
             <property name="allowPublicFinalFields" value="true"/>
             <property name="packageAllowed" value="true"/>
+            <property name="protectedAllowed" value="true"/>
         </module>
 
         <!-- Miscellaneous other checks.                   -->

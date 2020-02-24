@@ -20,9 +20,9 @@ public class ErrorOutcome extends Outcome {
                 file = file.substring(FileUtils.CURRENT_DIR.length());
             }
 
-            errorText = exceptionName + "\n\nThe file " + file +
-                " can't be deleted after the end of the test. " +
-                "Probably you didn't close File or Scanner.";
+            errorText = exceptionName + "\n\nThe file " + file
+                + " can't be deleted after the end of the test. "
+                + "Probably you didn't close File or Scanner.";
 
         } else if (cause instanceof TimeLimitException) {
             int timeLimit = ((TimeLimitException) cause).getTimeLimitMs();
@@ -31,9 +31,9 @@ public class ErrorOutcome extends Outcome {
                 timeLimit /= 1000;
                 timeUnit = "seconds";
             }
-            errorText = "In this test, the program is running for a long time, " +
-                "more than " + timeLimit + " " + timeUnit + ". Most likely, " +
-                "the program has gone into an infinite loop.";
+            errorText = "In this test, the program is running for a long time, "
+                + "more than " + timeLimit + " " + timeUnit + ". Most likely, "
+                + "the program has gone into an infinite loop.";
         }
     }
 

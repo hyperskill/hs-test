@@ -7,6 +7,10 @@ import org.junit.After;
 import java.lang.reflect.Method;
 
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.DELETE;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.GET;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.POST;
+import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.PUT;
 
 
 public abstract class SpringTest<T> extends StageTest<T> {
@@ -18,12 +22,12 @@ public abstract class SpringTest<T> extends StageTest<T> {
     public static void main(String[] args) throws Exception {
         if (!springRunning) {
             Method mainMethod = getMainMethod(springClass);
-            mainMethod.invoke(null, new Object[] { args });
+            mainMethod.invoke(null, new Object[] {args});
             springRunning = true;
         }
     }
 
-    public SpringTest(Class clazz, int port) {
+    public SpringTest(Class<?> clazz, int port) {
         super(SpringTest.class);
         springClass = clazz;
         needReloadClass = false;
@@ -36,33 +40,34 @@ public abstract class SpringTest<T> extends StageTest<T> {
     }
 
     private String constructUrl(String address) {
-        if (!address.startsWith("/")) {
-            address = "/" + address;
+        String delim = "/";
+        if (!address.startsWith(delim)) {
+            address = delim + address;
         }
         return "http://localhost:" + port + address;
     }
 
     public HttpRequest get(String address) {
-        return new HttpRequest("GET")
+        return new HttpRequest(GET)
             .setUri(constructUrl(address));
     }
 
     public HttpRequest post(String address, String content) {
-        return new HttpRequest("POST")
+        return new HttpRequest(POST)
             .setUri(constructUrl(address))
             .setContent(content)
             .setContentType(ContentType.APPLICATION_JSON);
     }
 
     public HttpRequest put(String address, String content) {
-        return new HttpRequest("PUT")
+        return new HttpRequest(PUT)
             .setUri(constructUrl(address))
             .setContent(content)
             .setContentType(ContentType.APPLICATION_JSON);
     }
 
     public HttpRequest delete(String address) {
-        return new HttpRequest("DELETE")
+        return new HttpRequest(DELETE)
             .setUri(constructUrl(address));
     }
 }

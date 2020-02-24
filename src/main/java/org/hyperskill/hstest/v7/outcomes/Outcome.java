@@ -45,8 +45,8 @@ public abstract class Outcome {
         String fullLog = SystemOutHandler.getDynamicOutput();
 
         if (fullLog.trim().length() != 0) {
-            result += "\n\n" +
-                "Please find below the output of your program during this failed test.\n";
+            result += "\n\n";
+            result += "Please find below the output of your program during this failed test.\n";
             if (StageTest.getCurrTestRun().isInputUsed()) {
                 result += "Note that the '>' character indicates the beginning of the input line.\n";
             }

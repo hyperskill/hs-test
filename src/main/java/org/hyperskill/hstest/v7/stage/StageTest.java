@@ -37,7 +37,6 @@ import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
-import static org.hyperskill.hstest.v7.exception.FailureHandler.isUserFailed;
 import static org.junit.Assert.fail;
 
 
@@ -237,8 +236,7 @@ public abstract class StageTest<AttachType> {
 
             for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
                 String feedback = feedbackOnExceptions.get(exClass);
-                if (userException != null &&
-                    exClass.isAssignableFrom(userException.getClass())) {
+                if (userException != null && exClass.isAssignableFrom(userException.getClass())) {
                     throw new ExceptionWithFeedback(feedback, userException);
                 }
             }
