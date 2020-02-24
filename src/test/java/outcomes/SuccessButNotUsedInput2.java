@@ -30,7 +30,7 @@ public class SuccessButNotUsedInput2 extends StageTest<String> {
             new TestCase<String>()
                 .addInput(out -> {
                     if (out.equals("HELLO\n")) {
-                        return CheckResult.TRUE;
+                        return CheckResult.correct();
                     }
                     return "";
                 })
@@ -40,6 +40,6 @@ public class SuccessButNotUsedInput2 extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

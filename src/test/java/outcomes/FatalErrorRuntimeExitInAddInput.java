@@ -53,6 +53,6 @@ public class FatalErrorRuntimeExitInAddInput extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals("123"));
+        return new CheckResult(reply.equals("123"), "");
     }
 }

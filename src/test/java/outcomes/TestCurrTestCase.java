@@ -40,7 +40,7 @@ public class TestCurrTestCase extends StageTest<Integer> {
         TestCase testCase = StageTest.getCurrTestRun().getTestCase();
         if (reply.equals("1") && attach == 1 && testCase == test1
             || reply.equals("2") && attach == 2 && testCase == test2) {
-            return CheckResult.TRUE;
+            return CheckResult.correct();
 
         }
         throw new NullPointerException();

@@ -41,6 +41,6 @@ public class TestOutputWithInputInjected extends StageTest<String> {
         if (!dynamicOutput.equals("Print x and y: > 123 456\n> 678\nAnother num:\n> 248\n")) {
             throw new RuntimeException();
         }
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

@@ -43,6 +43,6 @@ public class NoSuchElementWithoutScanner extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.FALSE;
+        return CheckResult.wrong("");
     }
 }

@@ -2,17 +2,24 @@ package org.hyperskill.hstest.v7.testcase;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInputFunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 
 public class TestCase<AttachType> {
 
+    private static final int DEFAULT_TIME_LIMIT = 15000;
+
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
-    private int timeLimit = 15000;
+    private int timeLimit = DEFAULT_TIME_LIMIT;
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
     private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
@@ -47,23 +54,23 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> addInput(int triggerCount, String input) {
-        addInput(triggerCount, out -> input);
-        return this;
-    }
-
-    public TestCase<AttachType> addInfInput(String input) {
-        addInput(-1, input);
-        return this;
-    }
-
     public TestCase<AttachType> addInput(Function<String, Object> inputFunc) {
         addInput(1, inputFunc);
         return this;
     }
 
+    public TestCase<AttachType> addInput(int triggerCount, String input) {
+        addInput(triggerCount, out -> input);
+        return this;
+    }
+
     public TestCase<AttachType> addInput(int triggerCount, Function<String, Object> inputFunc) {
         inputFuncs.add(new DynamicInputFunction(triggerCount, inputFunc));
+        return this;
+    }
+
+    public TestCase<AttachType> addInfInput(String input) {
+        addInput(-1, input);
         return this;
     }
 

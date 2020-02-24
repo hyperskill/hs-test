@@ -50,6 +50,6 @@ public class TestEnum extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals(rightOutput));
+        return new CheckResult(reply.equals(rightOutput), "");
     }
 }

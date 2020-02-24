@@ -52,6 +52,6 @@ public class TestCustomCheckerFail extends StageTest<String> {
     }
 
     private CheckResult customCheck(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

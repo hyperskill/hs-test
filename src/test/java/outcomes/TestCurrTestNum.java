@@ -41,7 +41,7 @@ public class TestCurrTestNum extends StageTest<Integer> {
         int testNum = StageTest.getCurrTestRun().getTestNum();
         if (reply.equals("1") && attach == 1
             || reply.equals("2") && attach == 2) {
-            return CheckResult.TRUE;
+            return CheckResult.correct();
         }
         throw new NullPointerException();
     }

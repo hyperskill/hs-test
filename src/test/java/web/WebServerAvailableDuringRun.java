@@ -69,7 +69,7 @@ public class WebServerAvailableDuringRun extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String clue) {
-        return new CheckResult(reply.trim().equals(clue.trim()));
+        return new CheckResult(reply.trim().equals(clue.trim()), "");
     }
 
 }

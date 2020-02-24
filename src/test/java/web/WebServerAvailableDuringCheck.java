@@ -36,9 +36,9 @@ public class WebServerAvailableDuringCheck extends StageTest {
     @Override
     public CheckResult check(String reply, Object clue) {
         try {
-            return new CheckResult("234".equals(Utils.getUrlPage("http://127.0.0.1:45678/123")));
+            return new CheckResult("234".equals(Utils.getUrlPage("http://127.0.0.1:45678/123")), "");
         } catch (IOException ex) {
-            return new CheckResult(false);
+            return new CheckResult(false, "");
         }
     }
 }

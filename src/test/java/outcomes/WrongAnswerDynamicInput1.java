@@ -44,12 +44,12 @@ public class WrongAnswerDynamicInput1 extends StageTest {
     public List<TestCase> generate() {
         return Arrays.asList(
             new TestCase()
-                .addInput(out -> CheckResult.FALSE("WA TEST 1"))
+                .addInput(out -> CheckResult.wrong("WA TEST 1"))
         );
     }
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.FALSE;
+        return CheckResult.wrong("");
     }
 }

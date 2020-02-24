@@ -46,6 +46,6 @@ public class WrongAnswerInTest2 extends StageTest<Boolean> {
 
     @Override
     public CheckResult check(String reply, Boolean attach) {
-        return new CheckResult(attach);
+        return new CheckResult(attach, "");
     }
 }

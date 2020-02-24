@@ -47,24 +47,24 @@ public class WrongAnswerDynamicInput3 extends StageTest<String> {
             new TestCase<String>()
                 .addInfInput(out -> {
                     if (out.equals(""))  {
-                        return CheckResult.TRUE("1");
+                        return CheckResult.correct();
                     }
-                    return CheckResult.TRUE("2");
+                    return CheckResult.correct();
                 })
                 .setAttach("1\n2\n2\n"),
 
             new TestCase<String>()
                 .addInput(out -> {
                     if (out.equals(""))  {
-                        return CheckResult.TRUE("3");
+                        return CheckResult.correct();
                     }
-                    return CheckResult.FALSE("WA TEST 2");
+                    return CheckResult.wrong("WA TEST 2");
                 })
                 .addInput(2, out-> {
                     if (out.equals("3\n"))  {
-                        return CheckResult.TRUE("3");
+                        return CheckResult.correct();
                     }
-                    return CheckResult.FALSE("WA TEST 2");
+                    return CheckResult.wrong("WA TEST 2");
                 })
                 .setAttach("3\n3\n3\n"),
 
@@ -73,13 +73,13 @@ public class WrongAnswerDynamicInput3 extends StageTest<String> {
                     if (out.equals(""))  {
                         return "3";
                     }
-                    return CheckResult.FALSE("WA TEST 3");
+                    return CheckResult.wrong("WA TEST 3");
                 })
                 .addInfInput(out-> {
                     if (out.equals("3\n"))  {
                         return "4";
                     }
-                    return CheckResult.FALSE("WA TEST 3");
+                    return CheckResult.wrong("WA TEST 3");
                 })
                 .setAttach("3\n3\n4\n")
         );
@@ -87,6 +87,6 @@ public class WrongAnswerDynamicInput3 extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

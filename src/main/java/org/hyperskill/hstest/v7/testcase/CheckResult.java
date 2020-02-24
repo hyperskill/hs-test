@@ -3,20 +3,18 @@ package org.hyperskill.hstest.v7.testcase;
 
 public class CheckResult {
 
-    public static final CheckResult FALSE = new CheckResult(false);
-    public static final CheckResult TRUE = new CheckResult(true);
-
-    public static CheckResult FALSE(String feedback) {
-        return new CheckResult(false, feedback);
+    public static CheckResult correct() {
+        return new CheckResult(true, "");
     }
 
-    public static CheckResult TRUE(String feedback) {
-        return new CheckResult(true, feedback);
+    public static CheckResult wrong(String feedback) {
+        return new CheckResult(false, feedback);
     }
 
     private final boolean isCorrect;
     private final String feedback;
 
+    @Deprecated
     public CheckResult(boolean isCorrect) {
         this(isCorrect, "");
     }

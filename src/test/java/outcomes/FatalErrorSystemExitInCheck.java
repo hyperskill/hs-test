@@ -43,6 +43,6 @@ public class FatalErrorSystemExitInCheck extends StageTest {
     @Override
     public CheckResult check(String reply, Object attach) {
         System.exit(0);
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

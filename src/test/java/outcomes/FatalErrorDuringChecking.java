@@ -42,6 +42,6 @@ public class FatalErrorDuringChecking extends StageTest {
     @Override
     public CheckResult check(String reply, Object attach) {
         System.out.println(1 / 0);
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

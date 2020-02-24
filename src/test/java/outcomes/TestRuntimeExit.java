@@ -45,6 +45,6 @@ public class TestRuntimeExit extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.FALSE;
+        return CheckResult.wrong("");
     }
 }

@@ -68,6 +68,6 @@ public class TestKotlinDynamicInput extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

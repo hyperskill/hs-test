@@ -298,6 +298,6 @@ public class TestChangingObjects extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals(rightOutput));
+        return new CheckResult(reply.equals(rightOutput), "");
     }
 }

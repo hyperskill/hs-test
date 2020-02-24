@@ -55,6 +55,6 @@ public class FeedbackOnExceptionTest5 extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

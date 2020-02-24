@@ -29,6 +29,6 @@ public class TestPrivateMain extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals("Hello World"));
+        return new CheckResult(reply.equals("Hello World"), "");
     }
 }

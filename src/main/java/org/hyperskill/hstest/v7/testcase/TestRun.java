@@ -4,12 +4,12 @@ package org.hyperskill.hstest.v7.testcase;
 public class TestRun {
 
     private int testNum;
-    private TestCase testCase;
+    private TestCase<?> testCase;
     private boolean inputUsed = false;
 
     private Throwable errorInTest;
 
-    public TestRun(int testNum, TestCase testCase) {
+    public TestRun(int testNum, TestCase<?> testCase) {
         this.testNum = testNum;
         this.testCase = testCase;
     }
@@ -18,7 +18,7 @@ public class TestRun {
         return testNum;
     }
 
-    public TestCase getTestCase() {
+    public TestCase<?> getTestCase() {
         return testCase;
     }
 

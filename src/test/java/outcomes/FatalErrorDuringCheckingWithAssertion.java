@@ -42,6 +42,6 @@ public class FatalErrorDuringCheckingWithAssertion extends StageTest {
     @Override
     public CheckResult check(String reply, Object attach) {
         assert false;
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

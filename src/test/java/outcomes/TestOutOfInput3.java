@@ -55,7 +55,7 @@ public class TestOutOfInput3 extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 
 }

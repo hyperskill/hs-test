@@ -34,6 +34,6 @@ public class Success extends StageTest<String> {
         if (attach == null) {
             System.out.println(0 / 0);
         }
-        return CheckResult.TRUE;
+        return CheckResult.correct();
     }
 }

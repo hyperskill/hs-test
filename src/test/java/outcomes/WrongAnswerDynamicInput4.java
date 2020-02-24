@@ -48,28 +48,28 @@ public class WrongAnswerDynamicInput4 extends StageTest<String> {
                 .addInput("1")
                 .addInput(2, out -> {
                     if (out.equals(""))  {
-                        return CheckResult.TRUE("1");
+                        return CheckResult.correct();
                     }
-                    return CheckResult.TRUE("2");
+                    return CheckResult.correct();
                 })
                 .setAttach("1\n2\n2\n"),
 
             new TestCase<String>()
                 .addInput(2, "3")
                 .addInput("3")
-                .addInput(out-> CheckResult.FALSE("WA TEST 2"))
+                .addInput(out-> CheckResult.wrong("WA TEST 2"))
                 .setAttach("3\n3\n3\n"),
 
             new TestCase<String>()
                 .addInfInput("4")
-                .addInput(out -> CheckResult.FALSE("WA TEST 3"))
+                .addInput(out -> CheckResult.wrong("WA TEST 3"))
                 .setAttach("4\n4\n4\n"),
 
             new TestCase<String>()
                 .addInput(2, "5")
                 .addInput(out -> {
                     if (out.equals("5\n")) {
-                        return CheckResult.FALSE("WA TEST 4");
+                        return CheckResult.wrong("WA TEST 4");
                     }
                     return 5;
                 })
@@ -79,6 +79,6 @@ public class WrongAnswerDynamicInput4 extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

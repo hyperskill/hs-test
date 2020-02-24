@@ -48,7 +48,7 @@ public class FatalErrorAddInput3 extends StageTest<String> {
 
             new TestCase<String>()
                 .addInput(out -> {
-                    return CheckResult.TRUE("34");
+                    return CheckResult.correct();
                 })
                 .setAttach("1\n34\n"),
 
@@ -68,6 +68,6 @@ public class FatalErrorAddInput3 extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return new CheckResult(reply.equals(attach));
+        return new CheckResult(reply.equals(attach), "");
     }
 }

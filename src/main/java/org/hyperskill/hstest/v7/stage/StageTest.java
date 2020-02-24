@@ -37,6 +37,8 @@ import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
+import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
+import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 import static org.junit.Assert.fail;
 
 
@@ -248,7 +250,7 @@ public abstract class StageTest<AttachType> {
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {
         if (currTestRun.getErrorInTest() != null
             && currTestRun.getErrorInTest() instanceof TestPassedException) {
-            return CheckResult.TRUE;
+            return correct();
         }
         return test.getCheckFunc().apply(output, test.getAttach());
     }
@@ -258,6 +260,6 @@ public abstract class StageTest<AttachType> {
     }
 
     public CheckResult check(String reply, AttachType attach) {
-        return CheckResult.FALSE;
+        return wrong("");
     }
 }

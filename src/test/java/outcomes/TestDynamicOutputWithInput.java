@@ -62,6 +62,6 @@ public class TestDynamicOutputWithInput extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        return CheckResult.FALSE;
+        return CheckResult.wrong("");
     }
 }
