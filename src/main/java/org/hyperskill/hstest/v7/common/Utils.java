@@ -32,12 +32,13 @@ public final class Utils {
             stringBuilder.append(nextLine);
             stringBuilder.append(newLine);
         }
-        return normalizeLineEndings(stringBuilder.toString()).trim();
+        return cleanText(stringBuilder.toString()).trim();
     }
 
-    public static String normalizeLineEndings(String str) {
+    public static String cleanText(String str) {
         return str
             .replaceAll("\r\n", "\n")
-            .replaceAll("\r", "\n");
+            .replaceAll("\r", "\n")
+            .replaceAll("\u00a0", "\u0020");
     }
 }

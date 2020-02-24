@@ -6,7 +6,7 @@ import org.hyperskill.hstest.v7.testcase.TestRun;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
-import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
+import static org.hyperskill.hstest.v7.common.Utils.cleanText;
 
 
 public final class SystemOutHandler {
@@ -35,17 +35,17 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return normalizeLineEndings(MOCK_OUT.getClonedOut().toString());
+        return cleanText(MOCK_OUT.getClonedOut().toString());
     }
 
     public static String getPartialOutput() {
-        String output = normalizeLineEndings(MOCK_OUT.getPartialOut().toString());
+        String output = cleanText(MOCK_OUT.getPartialOut().toString());
         MOCK_OUT.getPartialOut().reset();
         return output;
     }
 
     public static String getDynamicOutput() {
-        return normalizeLineEndings(MOCK_OUT.getDynamicOut().toString());
+        return cleanText(MOCK_OUT.getDynamicOut().toString());
     }
 
     public static void injectInput(String input) {

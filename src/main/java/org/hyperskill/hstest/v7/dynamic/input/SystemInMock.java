@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.hyperskill.hstest.v7.common.Utils.normalizeLineEndings;
+import static org.hyperskill.hstest.v7.common.Utils.cleanText;
 
 
 public class SystemInMock extends InputStream {
@@ -135,7 +135,7 @@ public class SystemInMock extends InputStream {
             inputTextFuncs.remove(0);
         }
 
-        newInput = normalizeLineEndings(newInput);
+        newInput = cleanText(newInput);
         inputLines.addAll(Arrays.asList(newInput.split("\n")));
     }
 

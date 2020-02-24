@@ -24,7 +24,7 @@ public final class HttpRequestParser {
                 && buffer.charAt(buffer.length() - 1) == '\n')) {
             buffer.appendCodePoint(input.read());
         }
-        return Utils.normalizeLineEndings(buffer.toString()).trim();
+        return Utils.cleanText(buffer.toString()).trim();
     }
 
     private void parseGetParams() {
@@ -54,7 +54,7 @@ public final class HttpRequestParser {
                     && buffer.charAt(buffer.length() - 1) == '\n')) {
             buffer.appendCodePoint(input.read());
         }
-        return Utils.normalizeLineEndings(buffer.toString()).trim();
+        return Utils.cleanText(buffer.toString()).trim();
     }
 
     private void parseHeaders() throws Exception {
@@ -79,7 +79,7 @@ public final class HttpRequestParser {
         for (int i = 0; i < contentLength; i++) {
             buffer.appendCodePoint(input.read());
         }
-        return Utils.normalizeLineEndings(buffer.toString());
+        return Utils.cleanText(buffer.toString());
     }
 
 
