@@ -174,7 +174,11 @@ public abstract class StageTest<AttachType> {
             });
 
             try {
-                future.get(timeLimit, TimeUnit.MILLISECONDS);
+                if (timeLimit <= 0) {
+                    future.get();
+                } else {
+                    future.get(timeLimit, TimeUnit.MILLISECONDS);
+                }
             } catch (TimeoutException ex) {
                 currTestRun.setErrorInTest(
                     new TimeLimitException(timeLimit)
