@@ -29,6 +29,6 @@ public class TextNbspInOutput extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals("1 2 3"), "");
+        return new CheckResult(reply.equals("1\u00202\u00203"), "");
     }
 }

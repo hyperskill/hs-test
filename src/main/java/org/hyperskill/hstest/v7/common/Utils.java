@@ -39,6 +39,7 @@ public final class Utils {
         return str
             .replaceAll("\r\n", "\n")
             .replaceAll("\r", "\n")
+            .replaceAll("\u0412\u00a0", "\u00a0")
             .replaceAll("\u00a0", "\u0020");
     }
 }
