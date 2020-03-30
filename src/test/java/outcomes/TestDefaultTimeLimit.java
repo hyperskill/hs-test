@@ -3,7 +3,9 @@ package outcomes;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.junit.Assume;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
@@ -21,6 +23,11 @@ class TestDefaultTimeLimitMain {
 }
 
 public class TestDefaultTimeLimit extends StageTest {
+
+    @BeforeClass
+    public static void stopSlow() {
+        Assume.assumeFalse(Boolean.getBoolean("skipSlow"));
+    }
 
     public TestDefaultTimeLimit() {
         super(TestDefaultTimeLimitMain.class);
