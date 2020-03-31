@@ -2,8 +2,8 @@ package org.hyperskill.hstest.v7.dynamic.input;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalErrorException;
-import org.hyperskill.hstest.v7.exception.outcomes.TestPassedException;
-import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswerException;
+import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestRun;
@@ -117,10 +117,10 @@ public class SystemInMock extends InputStream {
             } else if (obj instanceof CheckResult) {
                 CheckResult result = (CheckResult) obj;
                 if (result.isCorrect()) {
-                    throw new TestPassedException();
+                    throw new TestPassed();
                 } else {
                     String errorText = result.getFeedback();
-                    throw new WrongAnswerException(errorText);
+                    throw new WrongAnswer(errorText);
                 }
             } else {
                 throw new FatalErrorException("Dynamic input should return "

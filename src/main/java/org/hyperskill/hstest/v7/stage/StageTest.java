@@ -6,9 +6,9 @@ import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalErrorException;
-import org.hyperskill.hstest.v7.exception.outcomes.TestPassedException;
+import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
-import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswerException;
+import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.outcomes.Outcome;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -140,7 +140,7 @@ public abstract class StageTest<AttachType> {
                 deleteFiles(test.getFiles());
 
                 if (!result.isCorrect()) {
-                    throw new WrongAnswerException(result.getFeedback());
+                    throw new WrongAnswer(result.getFeedback());
                 }
             }
         } catch (Throwable t) {
@@ -229,7 +229,7 @@ public abstract class StageTest<AttachType> {
 
         Throwable errorInTest = currTestRun.getErrorInTest();
 
-        if (errorInTest instanceof TestPassedException) {
+        if (errorInTest instanceof TestPassed) {
             return;
         }
 
@@ -253,10 +253,16 @@ public abstract class StageTest<AttachType> {
 
     private CheckResult checkSolution(TestCase<AttachType> test, String output) {
         if (currTestRun.getErrorInTest() != null
-            && currTestRun.getErrorInTest() instanceof TestPassedException) {
+            && currTestRun.getErrorInTest() instanceof TestPassed) {
             return correct();
         }
-        return test.getCheckFunc().apply(output, test.getAttach());
+        try {
+            return test.getCheckFunc().apply(output, test.getAttach());
+        } catch (WrongAnswer ex) {
+            return wrong(ex.getMessage());
+        } catch (TestPassed ex) {
+            return correct();
+        }
     }
 
     public List<TestCase<AttachType>> generate() {
