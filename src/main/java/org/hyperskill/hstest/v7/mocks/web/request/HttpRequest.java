@@ -3,9 +3,11 @@ package org.hyperskill.hstest.v7.mocks.web.request;
 import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.v7.mocks.web.response.HttpResponse;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.AUTHORIZATION;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_TYPE;
 
 
@@ -78,6 +80,13 @@ public class HttpRequest {
 
     public HttpRequest setContentType(ContentType type) {
         return addHeader(CONTENT_TYPE, type.getMimeType());
+    }
+
+    public HttpRequest basicAuth(String login, String pass) {
+        String beforeEncoding = login + ":" + pass;
+        String afterEncoding = Base64.getEncoder().encodeToString(beforeEncoding.getBytes());
+        String headerValue = "Basic " + afterEncoding;
+        return addHeader(AUTHORIZATION, headerValue);
     }
 
     public HttpResponse send() {
