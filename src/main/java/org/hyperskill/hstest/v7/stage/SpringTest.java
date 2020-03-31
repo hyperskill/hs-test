@@ -4,10 +4,16 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.v7.mocks.web.request.HttpRequest;
 import org.junit.After;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
+import static org.hyperskill.hstest.v7.common.Utils.sleep;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.POST;
@@ -20,7 +26,9 @@ public abstract class SpringTest<T> extends StageTest<T> {
     private static boolean springRunning = false;
     private static Class<?> springClass;
     private static String[] args;
-    private int port;
+
+    protected final int port;
+    protected String databasePath;
 
     public static void main(String[] args) throws Exception {
         SpringTest.args = args;
@@ -34,11 +42,17 @@ public abstract class SpringTest<T> extends StageTest<T> {
         this.port = port;
     }
 
+    public SpringTest(Class<?> clazz, int port, String database) {
+        this(clazz, port);
+        this.databasePath = database;
+        replaceDatabase();
+    }
+
     @After
-    public void stopSpring() {
-        if (springRunning) {
-            post("/actuator/shutdown", "").send();
-            springRunning = false;
+    public void tearDown() {
+        stopSpring();
+        if (databasePath != null) {
+            revertDatabase();
         }
     }
 
@@ -50,14 +64,54 @@ public abstract class SpringTest<T> extends StageTest<T> {
         }
     }
 
+    public void stopSpring() {
+        if (springRunning) {
+            post("/actuator/shutdown", "").send();
+            sleep(1500); // should wait a bit to ensure shutdown
+            springRunning = false;
+        }
+    }
+
     public void reloadSpring() {
         stopSpring();
         try {
-            Thread.sleep(2000); // safe to wait a bit
             startSpring();
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
+    }
+
+    private void replaceDatabase() {
+        String dbFilePath = System.getProperty("user.dir")
+            + File.separator + databasePath;
+
+        String dbTempFilePath = dbFilePath + "-real";
+
+        Path dbFile = Paths.get(dbFilePath);
+        Path dbTempFile = Paths.get(dbTempFilePath);
+
+        try {
+            if (dbFile.toFile().isFile() && !dbTempFile.toFile().exists()) {
+                Files.move(dbFile, dbTempFile);
+            }
+        } catch (IOException ignored) { }
+    }
+
+    private void revertDatabase() {
+        String dbFilePath = System.getProperty("user.dir")
+            + File.separator + databasePath;
+
+        String dbTempFilePath = dbFilePath + "-real";
+
+        Path dbFile = Paths.get(dbFilePath);
+        Path dbTempFile = Paths.get(dbTempFilePath);
+
+        try {
+            Files.deleteIfExists(dbFile);
+            if (dbTempFile.toFile().isFile()) {
+                Files.move(dbTempFile, dbFile);
+            }
+        } catch (IOException ignored) { }
     }
 
     public String constructUrl(String address) {
