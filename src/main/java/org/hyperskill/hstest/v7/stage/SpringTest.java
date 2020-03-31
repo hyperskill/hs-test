@@ -5,12 +5,14 @@ import org.hyperskill.hstest.v7.mocks.web.request.HttpRequest;
 import org.junit.After;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.POST;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.PUT;
+import static org.hyperskill.hstest.v7.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
 
 public abstract class SpringTest<T> extends StageTest<T> {
@@ -58,7 +60,7 @@ public abstract class SpringTest<T> extends StageTest<T> {
         }
     }
 
-    private String constructUrl(String address) {
+    public String constructUrl(String address) {
         String delim = "/";
         if (!address.startsWith(delim)) {
             address = delim + address;
@@ -78,11 +80,25 @@ public abstract class SpringTest<T> extends StageTest<T> {
             .setContentType(ContentType.APPLICATION_JSON);
     }
 
+    public HttpRequest post(String address, Map<String, String> params) {
+        return new HttpRequest(POST)
+            .setUri(constructUrl(address))
+            .setContent(packUrlParams(params))
+            .setContentType(ContentType.APPLICATION_FORM_URLENCODED);
+    }
+
     public HttpRequest put(String address, String content) {
         return new HttpRequest(PUT)
             .setUri(constructUrl(address))
             .setContent(content)
             .setContentType(ContentType.APPLICATION_JSON);
+    }
+
+    public HttpRequest put(String address, Map<String, String> params) {
+        return new HttpRequest(PUT)
+            .setUri(constructUrl(address))
+            .setContent(packUrlParams(params))
+            .setContentType(ContentType.APPLICATION_FORM_URLENCODED);
     }
 
     public HttpRequest delete(String address) {
