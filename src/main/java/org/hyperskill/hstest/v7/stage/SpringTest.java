@@ -17,14 +17,12 @@ public abstract class SpringTest<T> extends StageTest<T> {
 
     private static boolean springRunning = false;
     private static Class<?> springClass;
+    private static String[] args;
     private int port;
 
     public static void main(String[] args) throws Exception {
-        if (!springRunning) {
-            Method mainMethod = getMainMethod(springClass);
-            mainMethod.invoke(null, new Object[] {args});
-            springRunning = true;
-        }
+        SpringTest.args = args;
+        startSpring();
     }
 
     public SpringTest(Class<?> clazz, int port) {
@@ -36,7 +34,28 @@ public abstract class SpringTest<T> extends StageTest<T> {
 
     @After
     public void stopSpring() {
-        post("/actuator/shutdown", "").send();
+        if (springRunning) {
+            post("/actuator/shutdown", "").send();
+            springRunning = false;
+        }
+    }
+
+    public static void startSpring() throws Exception {
+        if (!springRunning) {
+            Method mainMethod = getMainMethod(springClass);
+            mainMethod.invoke(null, new Object[] {args});
+            springRunning = true;
+        }
+    }
+
+    public void reloadSpring() {
+        stopSpring();
+        try {
+            Thread.sleep(2000); // safe to wait a bit
+            startSpring();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
     private String constructUrl(String address) {
