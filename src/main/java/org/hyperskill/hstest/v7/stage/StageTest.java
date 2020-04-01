@@ -172,25 +172,21 @@ public abstract class StageTest<AttachType> {
             return t;
         });
 
-        try {
-            Future<?> future = executorService.submit(() -> {
-                invokeMain(args);
-                return null;
-            });
+        Future<?> future = executorService.submit(() -> {
+            invokeMain(args);
+            return null;
+        });
 
-            try {
-                if (timeLimit <= 0) {
-                    future.get();
-                } else {
-                    future.get(timeLimit, TimeUnit.MILLISECONDS);
-                }
-            } catch (TimeoutException ex) {
-                currTestRun.setErrorInTest(
-                    new TimeLimitException(timeLimit)
-                );
-            } catch (Throwable ex) {
-                currTestRun.setErrorInTest(ex);
+        try {
+            if (timeLimit <= 0) {
+                future.get();
+            } else {
+                future.get(timeLimit, TimeUnit.MILLISECONDS);
             }
+        } catch (TimeoutException ex) {
+            currTestRun.setErrorInTest(new TimeLimitException(timeLimit));
+        } catch (Throwable ex) {
+            currTestRun.setErrorInTest(ex);
         } finally {
             executorService.shutdownNow();
         }
