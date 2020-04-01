@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -165,7 +166,11 @@ public abstract class StageTest<AttachType> {
     }
 
     private void runMain(List<String> args, int timeLimit) {
-        ExecutorService executorService = newSingleThreadExecutor();
+        ExecutorService executorService = newSingleThreadExecutor(r -> {
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        });
 
         try {
             Future<?> future = executorService.submit(() -> {
