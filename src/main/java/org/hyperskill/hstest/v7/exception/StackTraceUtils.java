@@ -30,6 +30,7 @@ public final class StackTraceUtils {
                 continue;
             }
             if (line.contains("at java.base/jdk.internal.reflect.")
+                || line.contains("at java.lang.reflect.")
                 || line.contains("at sun.reflect.")
                 || line.contains("at org.hyperskill.hstest.")) {
                 break;
