@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.exception.outcomes.FatalErrorException;
+import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -123,7 +123,7 @@ public class SystemInMock extends InputStream {
                     throw new WrongAnswer(errorText);
                 }
             } else {
-                throw new FatalErrorException("Dynamic input should return "
+                throw new FatalError("Dynamic input should return "
                     + "String or CheckResult objects only. Found: " + obj.getClass());
             }
         } catch (Throwable throwable) {
