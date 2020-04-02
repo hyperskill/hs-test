@@ -22,7 +22,11 @@ public final class ProcessUtils {
         if (poolSize == 0) {
             return null;
         }
-        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize, r -> {
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        });
         for (Process process : processes) {
             process.start();
             executor.submit(process);
