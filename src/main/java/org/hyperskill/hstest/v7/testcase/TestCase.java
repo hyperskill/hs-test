@@ -2,6 +2,8 @@ package org.hyperskill.hstest.v7.testcase;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInputFunction;
+import org.hyperskill.hstest.v7.testing.runner.AsyncMainMethodRunner;
+import org.hyperskill.hstest.v7.testing.runner.TestRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +19,9 @@ public class TestCase<AttachType> {
     private static final int DEFAULT_TIME_LIMIT = 15000;
 
     private Class<?> testedClass = null;
+    private Object testedObject = null;
+    public TestRunner runner = new AsyncMainMethodRunner();
+
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
@@ -46,6 +51,15 @@ public class TestCase<AttachType> {
 
     public Class<?> getTestedClass() {
         return testedClass;
+    }
+
+    public TestCase<AttachType> setTestedObject(Object testedObject) {
+        this.testedObject = testedObject;
+        return this;
+    }
+
+    public Object getTestedObject() {
+        return testedObject;
     }
 
     public String getInput() {
