@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
 class NoSuchElementWithoutScannerMain {
     public static void main(String[] args) {
         throw new NoSuchElementException();

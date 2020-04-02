@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public final class SystemInHandler {
 
     private SystemInHandler() { }

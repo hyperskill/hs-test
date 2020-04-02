@@ -15,7 +15,6 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-
 class WrongAnswerThrownInDynamicInput1Main {
     public static void main(String[] args) {
         System.out.print("1");

@@ -16,7 +16,6 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-
 class TestTimeout1Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

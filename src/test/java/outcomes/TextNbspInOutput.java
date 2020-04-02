@@ -13,7 +13,6 @@ class TextNbspInOutputMain {
     }
 }
 
-
 public class TextNbspInOutput extends StageTest {
 
     public TextNbspInOutput() {

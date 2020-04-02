@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class WebServerMock implements Process {
 
     private static final String DELIM = "/";

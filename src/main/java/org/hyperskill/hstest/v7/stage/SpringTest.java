@@ -20,7 +20,6 @@ import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.POST;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Methods.PUT;
 import static org.hyperskill.hstest.v7.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
-
 public abstract class SpringTest<T> extends StageTest<T> {
 
     private static boolean springRunning = false;

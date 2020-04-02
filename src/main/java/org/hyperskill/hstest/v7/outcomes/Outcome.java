@@ -8,7 +8,6 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 
 import java.nio.file.FileSystemException;
 
-
 public abstract class Outcome {
 
     int testNumber = 0;

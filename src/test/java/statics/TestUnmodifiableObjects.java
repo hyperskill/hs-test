@@ -7,7 +7,6 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.lang.reflect.Field;
 import java.util.*;
 
-
 class TestUnmodifiableObjectsMain {
 
     public static Collection unmodCollection = Collections.unmodifiableCollection(new ArrayList<>());

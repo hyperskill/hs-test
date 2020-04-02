@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 class TestScannerHasNextMain {
 
     public static void main(String[] args) {

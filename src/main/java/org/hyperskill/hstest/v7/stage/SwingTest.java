@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-
 public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
 
     public static void main(String[] args) { }

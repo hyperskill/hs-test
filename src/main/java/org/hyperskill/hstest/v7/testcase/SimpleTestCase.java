@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.v7.testcase;
 
-
 public class SimpleTestCase extends TestCase<String> {
 
     private String feedback = "";

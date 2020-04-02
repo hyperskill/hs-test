@@ -11,7 +11,6 @@ import java.io.IOException;
 import static org.hyperskill.hstest.v7.dynamic.input.KotlinInput.readLine;
 import static org.junit.Assert.assertEquals;
 
-
 public class TestInputHandlerKotlinStyle {
 
     @Before

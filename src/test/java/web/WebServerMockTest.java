@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 
 import static org.junit.Assert.assertEquals;
 
-
 public class WebServerMockTest {
 
     private ExecutorService service;

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-
 class WebServerAvailableDuringCheckMain {
     public static void main(String[] args) {
 

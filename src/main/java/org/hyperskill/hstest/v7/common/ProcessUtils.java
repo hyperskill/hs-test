@@ -12,7 +12,6 @@ import static org.hyperskill.hstest.v7.common.Utils.sleep;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 
-
 public final class ProcessUtils {
 
     private ProcessUtils() { }

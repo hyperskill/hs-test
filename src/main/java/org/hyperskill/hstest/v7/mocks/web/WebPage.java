@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.v7.mocks.web;
 
-
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_LENGTH;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_TYPE;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.HOST;

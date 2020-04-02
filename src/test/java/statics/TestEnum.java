@@ -7,7 +7,6 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-
 enum StaticEnum {
     ONE, TWO, THREE
 }

@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import java.util.Arrays;
 import java.util.List;
 
-
 class TestNoTimeLimitMain {
     public static void main(String[] args) throws Exception {
         Thread.sleep(16000);

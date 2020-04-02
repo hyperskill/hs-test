@@ -15,7 +15,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-
 class TestDefaultTimeLimitMain {
     public static void main(String[] args) throws Exception {
         Thread.sleep(16000);

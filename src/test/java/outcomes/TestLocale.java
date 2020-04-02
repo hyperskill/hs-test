@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-
 class TestLocaleMain {
     public static void main(String[] args) {
         System.out.print(Locale.getDefault());

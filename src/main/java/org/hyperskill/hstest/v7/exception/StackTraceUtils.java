@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public final class StackTraceUtils {
 
     private StackTraceUtils() { }

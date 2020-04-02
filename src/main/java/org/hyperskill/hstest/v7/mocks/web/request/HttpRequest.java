@@ -10,7 +10,6 @@ import java.util.Map;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.AUTHORIZATION;
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_TYPE;
 
-
 public class HttpRequest {
 
     String method = "";

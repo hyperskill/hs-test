@@ -6,7 +6,6 @@ import org.hyperskill.hstest.v7.testing.TestedProgram;
 import java.util.Arrays;
 import java.util.List;
 
-
 class Server {
     public static void main(String[] args) {
         System.out.println("Server started!");
@@ -18,7 +17,6 @@ class Client {
         System.out.println("Client started!");
     }
 }
-
 
 public class TestDynamic extends StageTest<String> {
 

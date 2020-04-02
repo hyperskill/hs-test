@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-
 class UrlDownloader {
     public static String normalizeLineEndings(String str) {
         return str

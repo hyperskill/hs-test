@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public final class FileUtils {
 
     private FileUtils() { }

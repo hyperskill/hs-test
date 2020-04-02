@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.v7.testcase;
 
-
 public class CheckResult {
 
     public static CheckResult correct() {

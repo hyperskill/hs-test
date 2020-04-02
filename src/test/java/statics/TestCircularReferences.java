@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 class TestCircularReferencesMain {
     public static class Node {
         public Node next;

@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 
 import static org.hyperskill.hstest.v7.mocks.web.constants.Headers.CONTENT_LENGTH;
 
-
 public final class HttpRequestParser {
 
     private DataInputStream input;

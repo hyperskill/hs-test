@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import static java.lang.System.getSecurityManager;
 
-
 public final class SystemHandler {
 
     private SystemHandler() { }

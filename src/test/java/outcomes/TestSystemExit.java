@@ -13,7 +13,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-
 class TestSystemExitMain {
     public static void main(String[] args) {
         System.exit(0);

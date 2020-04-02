@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 class TestChangingObjectsMain {
     public    static final List<String> list1 = new ArrayList<>();
     protected static final List<String> list2 = new ArrayList<>();

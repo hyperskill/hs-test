@@ -13,7 +13,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-
 class TestDynamicOutputWithoutInputMain {
     public static void main(String[] args) {
         System.out.print("Print x and y: ");

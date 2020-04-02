@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 class NoSuchElementWithScannerMain {
     public static void main(String[] args) {
         new Scanner(System.in).nextInt();

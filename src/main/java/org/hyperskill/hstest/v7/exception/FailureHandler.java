@@ -2,7 +2,6 @@ package org.hyperskill.hstest.v7.exception;
 
 import java.lang.reflect.InvocationTargetException;
 
-
 public final class FailureHandler {
 
     private FailureHandler() { }

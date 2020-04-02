@@ -7,7 +7,6 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-
 class TestChangingPrimitivesMain {
 
     public    static final int int1 = 0;
