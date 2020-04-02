@@ -45,8 +45,6 @@ public abstract class StageTest<AttachType> {
 
     private final Object testedObject;
 
-    private List<TestCase<AttachType>> testCases = new ArrayList<>();
-
     protected boolean needReloadClass = true;
 
     private static TestRun currTestRun;
@@ -83,7 +81,6 @@ public abstract class StageTest<AttachType> {
             testRuns.add(new TestRun(++currTest, testCase));
         }
 
-        this.testCases = testCases;
         return testRuns;
     }
 
@@ -94,13 +91,14 @@ public abstract class StageTest<AttachType> {
             SystemHandler.setUpSystem();
             List<TestRun> testRuns = initTests();
 
-            for (TestCase<AttachType> test : testCases) {
+            for (TestRun testRun : testRuns) {
                 currTest++;
                 SystemOutHandler.getRealOut().println(
                     RED_BOLD + "\nStart test " + currTest + RESET
                 );
 
-                currTestRun = new TestRun(currTest, test);
+                currTestRun = testRun;
+                TestCase<?> test = testRun.getTestCase();
 
                 createFiles(test.getFiles());
                 ExecutorService pool = startThreads(test.getProcesses());
@@ -125,7 +123,7 @@ public abstract class StageTest<AttachType> {
         }
     }
 
-    private String runTest(TestCase<AttachType> test) throws Throwable {
+    private String runTest(TestCase<?> test) throws Throwable {
         SystemInHandler.setInputFuncs(test.getInputFuncs());
         SystemOutHandler.resetOutput();
         currTestRun.setErrorInTest(null);
@@ -184,7 +182,7 @@ public abstract class StageTest<AttachType> {
         }
     }
 
-    private void checkErrors(TestCase<AttachType> test) throws Throwable {
+    private void checkErrors(TestCase<?> test) throws Throwable {
         if (currTestRun.getErrorInTest() == null) {
             return;
         }
@@ -213,7 +211,7 @@ public abstract class StageTest<AttachType> {
         throw errorInTest;
     }
 
-    private CheckResult checkSolution(TestCase<AttachType> test, String output) {
+    private <T> CheckResult checkSolution(TestCase<T> test, String output) {
         if (currTestRun.getErrorInTest() != null
             && currTestRun.getErrorInTest() instanceof TestPassed) {
             return correct();
