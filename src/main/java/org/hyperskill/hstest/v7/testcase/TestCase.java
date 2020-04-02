@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.testcase;
 
+import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInputFunction;
 
 import java.util.ArrayList;
@@ -11,11 +12,11 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-
 public class TestCase<AttachType> {
 
     private static final int DEFAULT_TIME_LIMIT = 15000;
 
+    private Class<?> testedClass = null;
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
@@ -36,6 +37,15 @@ public class TestCase<AttachType> {
 
     public TestCase() {
         // use methods to configure TestCase
+    }
+
+    public TestCase<AttachType> setTestedClass(Class<?> testedClass) {
+        this.testedClass = testedClass;
+        return this;
+    }
+
+    public Class<?> getTestedClass() {
+        return testedClass;
     }
 
     public String getInput() {
@@ -76,6 +86,10 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> addInfInput(Function<String, Object> inputFunc) {
         addInput(-1, inputFunc);
+        return this;
+    }
+
+    public TestCase<AttachType> setDynamicInput(DynamicInput dynamicInput) {
         return this;
     }
 

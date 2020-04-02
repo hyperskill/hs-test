@@ -5,13 +5,11 @@ import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-
 public final class ReflectionUtils {
 
     private ReflectionUtils() { }
 
-    public static Method getMainMethod(Class<?> clazz) throws Exception {
-
+    public static Method getMainMethod(Class<?> clazz) {
         Method mainMethod;
         try {
             mainMethod = clazz.getDeclaredMethod("main", String[].class);

@@ -10,7 +10,6 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-
 class NoMainMethodFoundMain {
 
 }
@@ -27,7 +26,7 @@ public class NoMainMethodFound extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
+        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
         exception.expectMessage("No main method found");
     }
 

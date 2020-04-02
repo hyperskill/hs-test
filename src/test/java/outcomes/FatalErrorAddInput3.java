@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 class FatalErrorAddInput3Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -33,7 +32,7 @@ public class FatalErrorAddInput3 extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error in test #4, please send the report to support@hyperskill.org");
-        exception.expectMessage("FatalErrorException: " +
+        exception.expectMessage("FatalError: " +
             "Dynamic input should return String or CheckResult objects only. Found: class java.lang.Integer");
     }
 

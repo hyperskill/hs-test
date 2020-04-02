@@ -6,7 +6,7 @@ import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestRun;
+import org.hyperskill.hstest.v7.testing.TestRun;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import static org.hyperskill.hstest.v7.common.Utils.cleanText;
-
 
 public class SystemInMock extends InputStream {
     private StringReader currentReader;

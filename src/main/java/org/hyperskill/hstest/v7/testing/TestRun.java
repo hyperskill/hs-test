@@ -1,5 +1,6 @@
-package org.hyperskill.hstest.v7.testcase;
+package org.hyperskill.hstest.v7.testing;
 
+import org.hyperskill.hstest.v7.testcase.TestCase;
 
 public class TestRun {
 

@@ -10,7 +10,6 @@ import java.util.List;
 
 import static org.hyperskill.hstest.v7.dynamic.input.KotlinInput.readLine;
 
-
 class TestKotlinInputMain {
     public static void main(String[] args) throws IOException {
         System.out.print(readLine());
@@ -21,7 +20,6 @@ public class TestKotlinInput extends StageTest<String> {
 
     public TestKotlinInput() {
         super(TestKotlinInputMain.class);
-        needReloadClass = false;
     }
 
     @Override

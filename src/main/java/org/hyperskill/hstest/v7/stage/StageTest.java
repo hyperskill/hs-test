@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,15 +39,13 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
 import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 import static org.junit.Assert.fail;
 
-
 public abstract class StageTest<AttachType> {
 
     private final Class<?> testedClass;
 
     private final Object testedObject;
-    private Method mainMethod;
 
-    private final List<TestCase<AttachType>> testCases = new ArrayList<>();
+    private List<TestCase<AttachType>> testCases = new ArrayList<>();
 
     protected boolean needReloadClass = true;
 
@@ -67,45 +64,27 @@ public abstract class StageTest<AttachType> {
         this.testedObject = testedObject;
     }
 
-    private void initTests() throws Exception {
+    private List<TestRun> initTests() {
+        List<TestRun> testRuns = new ArrayList<>();
+        List<TestCase<AttachType>> testCases = generate();
 
-        mainMethod = getMainMethod(testedClass);
-
-        String myName = StageTest.class.getName();
-
-        String generateOwner = getClass()
-            .getMethod("generate")
-            .getDeclaringClass()
-            .getName();
-
-        String checkOwner = getClass()
-            .getMethod("check", String.class, Object.class)
-            .getDeclaringClass()
-            .getName();
-
-        boolean overrodeGenerate = !myName.equals(generateOwner);
-        boolean overrodeCheck = !myName.equals(checkOwner);
-
-        if (overrodeGenerate) {
-            testCases.addAll(generate());
-            if (testCases.size() == 0) {
-                throw new FatalError(
-                    "No tests provided by \"generate\" method");
-            }
-        } else {
-            throw new FatalError(
-                "Can't create tests: override \"generate\" method");
+        if (testCases.size() == 0) {
+            throw new FatalError("No tests provided by \"generate\" method");
         }
 
+        int currTest = 0;
         for (TestCase<AttachType> testCase : testCases) {
+            if (testedClass != null) {
+                testCase.setTestedClass(testedClass);
+            }
             if (testCase.getCheckFunc() == null) {
-                if (!overrodeCheck) {
-                    throw new FatalError(
-                        "Can't check result: override \"check\" method");
-                }
                 testCase.setCheckFunc(this::check);
             }
+            testRuns.add(new TestRun(++currTest, testCase));
         }
+
+        this.testCases = testCases;
+        return testRuns;
     }
 
     @Test
@@ -113,7 +92,7 @@ public abstract class StageTest<AttachType> {
         int currTest = 0;
         try {
             SystemHandler.setUpSystem();
-            initTests();
+            List<TestRun> testRuns = initTests();
 
             for (TestCase<AttachType> test : testCases) {
                 currTest++;
@@ -186,19 +165,9 @@ public abstract class StageTest<AttachType> {
 
     private void invokeMain(List<String> args) {
         try {
-            Method methodToInvoke = mainMethod;
-
-            if (needReloadClass) {
-                ClassLoader dcl = new DynamicClassLoader(testedClass);
-                try {
-                    Class<?> reloaded = dcl.loadClass(testedClass.getName());
-                    methodToInvoke = getMainMethod(reloaded);
-                } catch (Exception ex) {
-                    currTestRun.setErrorInTest(ex);
-                }
-            }
-
-            methodToInvoke.invoke(testedObject, new Object[] {
+            ClassLoader dcl = new DynamicClassLoader(testedClass);
+            Class<?> reloaded = dcl.loadClass(testedClass.getName());
+            getMainMethod(reloaded).invoke(testedObject, new Object[] {
                 args.toArray(new String[0])
             });
         } catch (InvocationTargetException ex) {
@@ -210,7 +179,7 @@ public abstract class StageTest<AttachType> {
                         new ExceptionWithFeedback("", getUserException(ex)));
                 }
             }
-        } catch (IllegalAccessException ex) {
+        } catch (Exception ex) {
             currTestRun.setErrorInTest(ex);
         }
     }
@@ -259,10 +228,10 @@ public abstract class StageTest<AttachType> {
     }
 
     public List<TestCase<AttachType>> generate() {
-        return new ArrayList<>();
+        throw new FatalError("No tests provided by \"generate\" method");
     }
 
     public CheckResult check(String reply, AttachType attach) {
-        return wrong("");
+        throw new FatalError("Can't check result: override \"check\" method");
     }
 }

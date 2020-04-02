@@ -1,13 +1,12 @@
 package org.hyperskill.hstest.v7.dynamic.output;
 
 import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.TestRun;
+import org.hyperskill.hstest.v7.testing.TestRun;
 
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
 import static org.hyperskill.hstest.v7.common.Utils.cleanText;
-
 
 public final class SystemOutHandler {
 
