@@ -12,8 +12,7 @@ import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.outcomes.Outcome;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
-import org.hyperskill.hstest.v7.testcase.TestRun;
-import org.junit.BeforeClass;
+import org.hyperskill.hstest.v7.testing.TestRun;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
@@ -21,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,12 +65,6 @@ public abstract class StageTest<AttachType> {
     public StageTest(Class<?> testedClass, Object testedObject) {
         this.testedClass = testedClass;
         this.testedObject = testedObject;
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        Locale.setDefault(Locale.US);
-        System.setProperty("line.separator", "\n");
     }
 
     private void initTests() throws Exception {
