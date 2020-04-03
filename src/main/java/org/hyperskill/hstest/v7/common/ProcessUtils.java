@@ -16,16 +16,20 @@ public final class ProcessUtils {
 
     private ProcessUtils() { }
 
+    public static ExecutorService newDaemonThreadPool(int poolSize) {
+        return Executors.newFixedThreadPool(poolSize, r -> {
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        });
+    }
+
     public static ExecutorService startThreads(List<Process> processes) {
         int poolSize = processes.size();
         if (poolSize == 0) {
             return null;
         }
-        ExecutorService executor = Executors.newFixedThreadPool(poolSize, r -> {
-            Thread t = Executors.defaultThreadFactory().newThread(r);
-            t.setDaemon(true);
-            return t;
-        });
+        ExecutorService executor = newDaemonThreadPool(poolSize);
         for (Process process : processes) {
             process.start();
             executor.submit(process);

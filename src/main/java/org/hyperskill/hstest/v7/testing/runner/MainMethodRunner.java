@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
+import static org.hyperskill.hstest.v7.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
@@ -51,11 +51,7 @@ public class MainMethodRunner implements TestRunner {
     private void runMain(TestCase<?> testCase) {
         int timeLimit = testCase.getTimeLimit();
 
-        ExecutorService executorService = newSingleThreadExecutor(r -> {
-            Thread t = Executors.defaultThreadFactory().newThread(r);
-            t.setDaemon(true);
-            return t;
-        });
+        ExecutorService executorService = newDaemonThreadPool(1);
 
         Future<?> future = executorService.submit(() -> {
             invokeMain(testCase);

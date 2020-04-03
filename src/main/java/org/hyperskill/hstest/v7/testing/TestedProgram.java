@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
+import static org.hyperskill.hstest.v7.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException;
 
@@ -54,27 +54,32 @@ public class TestedProgram {
         }
     }
 
-    public String start(String... args) {
+    private void start(String... args) {
         if (state != ProgramState.NOT_STARTED) {
             throw new IllegalStateException("Cannot start the program twice");
         }
 
-        ExecutorService executorService = newSingleThreadExecutor(r -> {
-            Thread t = Executors.defaultThreadFactory().newThread(r);
-            t.setDaemon(true);
-            return t;
-        });
+        ExecutorService executorService = newDaemonThreadPool(1);
 
         runningProgram = executorService.submit(() -> {
             invokeMain(args);
             return null;
         });
-
-        return "";
     }
 
-    public void run() {
+    public void execute() {
+        if (state == ProgramState.NOT_STARTED) {
+            start();
+        }
+
 
     }
 
+    public void execute(String... args) {
+        if (state != ProgramState.NOT_STARTED) {
+            throw new IllegalStateException("Cannot start the program twice");
+        }
+        start(args);
+        execute();
+    }
 }
