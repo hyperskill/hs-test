@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.v7.testing;
 
+import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -56,6 +57,7 @@ public class TestRun {
         createFiles(testCase.getFiles());
         ExecutorService pool = startThreads(testCase.getProcesses());
 
+        SystemOutHandler.resetOutput();
         CheckResult result = testCase.runner.test(testCase);
 
         stopThreads(testCase.getProcesses(), pool);

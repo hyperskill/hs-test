@@ -28,9 +28,29 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 
 public class MainMethodRunner implements TestRunner {
 
-    TestCase<?> testCase = null;
+    @Override
+    public <T> CheckResult test(TestCase<T> testCase) {
+        SystemInHandler.setInputFuncs(testCase.getInputFuncs());
 
-    private void runMain(List<String> args, int timeLimit) {
+        runMain(testCase);
+        String output = SystemOutHandler.getOutput();
+
+        if (StageTest.getCurrTestRun().getErrorInTest() == null) {
+            try {
+                return testCase.getCheckFunc().apply(output, testCase.getAttach());
+            } catch (WrongAnswer ex) {
+                return wrong(ex.getMessage());
+            } catch (TestPassed ex) {
+                return correct();
+            }
+        }
+
+        return null;
+    }
+
+    private void runMain(TestCase<?> testCase) {
+        int timeLimit = testCase.getTimeLimit();
+
         ExecutorService executorService = newSingleThreadExecutor(r -> {
             Thread t = Executors.defaultThreadFactory().newThread(r);
             t.setDaemon(true);
@@ -38,7 +58,7 @@ public class MainMethodRunner implements TestRunner {
         });
 
         Future<?> future = executorService.submit(() -> {
-            invokeMain(args);
+            invokeMain(testCase);
             return null;
         });
 
@@ -57,12 +77,12 @@ public class MainMethodRunner implements TestRunner {
         }
     }
 
-    private void invokeMain(List<String> args) {
+    private void invokeMain(TestCase<?> testCase) {
         try {
             ClassLoader dcl = new DynamicClassLoader(testCase.getTestedClass());
             Class<?> reloaded = dcl.loadClass(testCase.getTestedClass().getName());
             getMainMethod(reloaded).invoke(testCase.getTestedObject(), new Object[] {
-                args.toArray(new String[0])
+                testCase.getArgs().toArray(new String[0])
             });
         } catch (InvocationTargetException ex) {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
@@ -76,29 +96,5 @@ public class MainMethodRunner implements TestRunner {
         } catch (Exception ex) {
             StageTest.getCurrTestRun().setErrorInTest(ex);
         }
-    }
-
-    @Override
-    public <T> CheckResult test(TestCase<T> testCase) {
-        this.testCase = testCase;
-
-        SystemInHandler.setInputFuncs(testCase.getInputFuncs());
-        SystemOutHandler.resetOutput();
-
-        runMain(testCase.getArgs(), testCase.getTimeLimit());
-
-        String output = SystemOutHandler.getOutput();
-
-        if (StageTest.getCurrTestRun().getErrorInTest() == null) {
-            try {
-                return testCase.getCheckFunc().apply(output, testCase.getAttach());
-            } catch (WrongAnswer ex) {
-                return wrong(ex.getMessage());
-            } catch (TestPassed ex) {
-                return correct();
-            }
-        }
-
-        return null;
     }
 }
