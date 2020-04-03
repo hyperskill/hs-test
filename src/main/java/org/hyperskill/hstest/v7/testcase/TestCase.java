@@ -2,7 +2,7 @@ package org.hyperskill.hstest.v7.testcase;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInputFunction;
-import org.hyperskill.hstest.v7.testing.runner.AsyncMainMethodRunner;
+import org.hyperskill.hstest.v7.testing.runner.MainMethodRunner;
 import org.hyperskill.hstest.v7.testing.runner.TestRunner;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class TestCase<AttachType> {
 
     private Class<?> testedClass = null;
     private Object testedObject = null;
-    public TestRunner runner = new AsyncMainMethodRunner();
+    public TestRunner runner = new MainMethodRunner();
 
     private List<String> args = new ArrayList<>();
     private AttachType attach = null;
