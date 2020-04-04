@@ -80,10 +80,14 @@ public class TestedProgram {
         if (machine.getState() != ProgramState.WAITING) {
             throw new IllegalStateException("Cannot execute the program " +
                 "that isn't waiting to be executed " +
-                "(it isn't started or running or already finished)");
+                "(it isn't started or is running or has already finished)");
         }
         this.input = input;
         machine.setAndWait(ProgramState.RUNNING);
         return this.output;
+    }
+
+    public boolean isFinished() {
+        return machine.getState() == ProgramState.FINISHED;
     }
 }

@@ -1,8 +1,15 @@
 package org.hyperskill.hstest.v7.testing.runner;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
+import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
+
+import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
+import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 
 public class AsyncMainMethodRunner implements TestRunner {
 
@@ -14,26 +21,29 @@ public class AsyncMainMethodRunner implements TestRunner {
             testCase.setDynamicInput(converted);
         }
 
-        // SystemInHandler.setInputFuncs(testCase.getInputFuncs());
+        CheckResult result = testCase.getDynamicInput().handle();
 
-        return testCase.getDynamicInput().handle();
-
-        /*
-        runMain(testCase.getArgs(), testCase.getTimeLimit());
-
-        String output = SystemOutHandler.getOutput();
-
-        if (StageTest.getCurrTestRun().getErrorInTest() == null) {
+        if (result == null) {
+            Throwable error = StageTest.getCurrTestRun().getErrorInTest();
             try {
-                return testCase.getCheckFunc().apply(output, testCase.getAttach());
-            } catch (WrongAnswer ex) {
-                return wrong(ex.getMessage());
-            } catch (TestPassed ex) {
+                if (error == null) {
+                    return testCase.getCheckFunc().apply(
+                        SystemOutHandler.getOutput(), testCase.getAttach());
+                }
+            } catch (Throwable ex) {
+                error = ex;
+                StageTest.getCurrTestRun().setErrorInTest(error);
+            }
+
+            if (error instanceof TestPassed) {
                 return correct();
+            } else if (error instanceof WrongAnswer) {
+                return wrong(error.getMessage());
+            } else {
+                return null;
             }
         }
 
-        return null;
-        */
+        return result;
     }
 }

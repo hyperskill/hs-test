@@ -82,7 +82,7 @@ public interface DynamicInput {
 
             InputFunctionHandler handler = new InputFunctionHandler(inputFuncs);
 
-            while (true) {
+            while (!program.isFinished()) {
                 String input = handler.ejectNextInput(output);
                 if (input == null) {
                     break;
@@ -90,7 +90,7 @@ public interface DynamicInput {
                 program.execute(input);
             }
 
-            return CheckResult.correct();
+            return null;
         };
     }
 }
