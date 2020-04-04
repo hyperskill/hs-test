@@ -120,7 +120,7 @@ public interface DynamicInput {
                     program.execute(null);
                     break;
                 }
-                program.execute(input);
+                output = program.execute(input);
             }
             program.stop();
             return null;
