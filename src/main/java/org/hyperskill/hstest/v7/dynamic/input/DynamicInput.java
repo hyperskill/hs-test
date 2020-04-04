@@ -117,11 +117,12 @@ public interface DynamicInput {
             while (!program.isFinished()) {
                 String input = handler.ejectNextInput(output);
                 if (input == null) {
+                    program.execute(null);
                     break;
                 }
                 program.execute(input);
             }
-
+            program.stop();
             return null;
         };
     }

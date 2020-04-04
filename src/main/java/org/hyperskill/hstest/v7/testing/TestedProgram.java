@@ -18,7 +18,7 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException
 public class TestedProgram {
 
     private enum ProgramState {
-        NOT_STARTED, WAITING, RUNNING, FINISHED
+        NOT_STARTED, WAITING, RUNNING, ABANDONED, FINISHED
     }
 
     private final StateMachine<ProgramState> machine =
@@ -56,6 +56,7 @@ public class TestedProgram {
         } catch (IllegalAccessException ex) {
             StageTest.getCurrTestRun().setErrorInTest(ex);
         }
+        machine.setState(ProgramState.FINISHED);
     }
 
     public String start(String... args) {
@@ -65,12 +66,14 @@ public class TestedProgram {
         machine.setState(ProgramState.WAITING);
         SystemInHandler.setDynamicInputFunc(output -> {
             this.output = output;
-            machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
+            if (machine.getState() == ProgramState.ABANDONED) {
+                return null;
+            }
+            machine.setAndWait(ProgramState.WAITING);
             return this.input;
         });
         runningProgram = newDaemonThreadPool(1).submit(() -> {
             invokeMain(args);
-            machine.setState(ProgramState.FINISHED);
             return null;
         });
         return execute("");
@@ -83,8 +86,16 @@ public class TestedProgram {
                 "(it isn't started or is running or has already finished)");
         }
         this.input = input;
+        if (input == null) {
+            machine.setState(ProgramState.ABANDONED); // send "EOF" message and not wait for output
+            return null;
+        }
         machine.setAndWait(ProgramState.RUNNING);
         return this.output;
+    }
+
+    public void stop() {
+        machine.waitState(ProgramState.FINISHED);
     }
 
     public boolean isFinished() {

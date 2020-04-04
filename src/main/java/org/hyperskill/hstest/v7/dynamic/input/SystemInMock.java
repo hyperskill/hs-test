@@ -99,6 +99,9 @@ public class SystemInMock extends InputStream {
     private void ejectNextInput() {
         String currOutput = SystemOutHandler.getPartialOutput();
         String newInput = dynamicInputFunction.apply(currOutput);
+        if (newInput == null) {
+            return;
+        }
         newInput = cleanText(newInput);
         inputLines.addAll(Arrays.asList(newInput.split("\n")));
     }
