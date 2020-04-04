@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.v7.testing;
 
 import org.hyperskill.hstest.v7.dynamic.DynamicClassLoader;
+import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -8,8 +9,6 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static org.hyperskill.hstest.v7.common.ProcessUtils.newDaemonThreadPool;
@@ -19,10 +18,14 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException
 public class TestedProgram {
 
     private enum ProgramState {
-        NOT_STARTED, RUNNING, FINISHED
+        NOT_STARTED, WAITING, RUNNING, FINISHED
     }
 
-    private ProgramState state = ProgramState.NOT_STARTED;
+    private final StateMachine<ProgramState> machine =
+        new StateMachine<>(ProgramState.NOT_STARTED);
+
+    private volatile String output;
+    private volatile String input;
 
     private Method methodToInvoke;
     private Future<?> runningProgram;
@@ -39,6 +42,7 @@ public class TestedProgram {
 
     private void invokeMain(String[] args) {
         try {
+            machine.waitState(ProgramState.RUNNING);
             methodToInvoke.invoke(null, new Object[] { args });
         } catch (InvocationTargetException ex) {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
@@ -54,32 +58,32 @@ public class TestedProgram {
         }
     }
 
-    private void start(String... args) {
-        if (state != ProgramState.NOT_STARTED) {
+    public String start(String... args) {
+        if (machine.getState() != ProgramState.NOT_STARTED) {
             throw new IllegalStateException("Cannot start the program twice");
         }
-
-        ExecutorService executorService = newDaemonThreadPool(1);
-
-        runningProgram = executorService.submit(() -> {
+        machine.setState(ProgramState.WAITING);
+        SystemInHandler.setDynamicInputFunc(output -> {
+            this.output = output;
+            machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
+            return this.input;
+        });
+        runningProgram = newDaemonThreadPool(1).submit(() -> {
             invokeMain(args);
+            machine.setState(ProgramState.FINISHED);
             return null;
         });
+        return execute("");
     }
 
-    public void execute() {
-        if (state == ProgramState.NOT_STARTED) {
-            start();
+    public String execute(String input) {
+        if (machine.getState() != ProgramState.WAITING) {
+            throw new IllegalStateException("Cannot execute the program " +
+                "that isn't waiting to be executed " +
+                "(it isn't started or running or already finished)");
         }
-
-
-    }
-
-    public void execute(String... args) {
-        if (state != ProgramState.NOT_STARTED) {
-            throw new IllegalStateException("Cannot start the program twice");
-        }
-        start(args);
-        execute();
+        this.input = input;
+        machine.setAndWait(ProgramState.RUNNING);
+        return this.output;
     }
 }

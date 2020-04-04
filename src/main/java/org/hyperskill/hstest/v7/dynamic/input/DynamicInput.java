@@ -79,25 +79,18 @@ public interface DynamicInput {
         return () -> {
             TestedProgram program = new TestedProgram(testedClass);
             String output = program.start(args.toArray(new String[0]));
-            String input;
 
             InputFunctionHandler handler = new InputFunctionHandler(inputFuncs);
 
             while (true) {
-                input = handler.ejectNextInput(output);
+                String input = handler.ejectNextInput(output);
                 if (input == null) {
                     break;
                 }
+                program.execute(input);
             }
-
-            for (DynamicInputFunction func : inputFuncs) {
-
-            }
-
 
             return CheckResult.correct();
         };
     }
-
-
 }

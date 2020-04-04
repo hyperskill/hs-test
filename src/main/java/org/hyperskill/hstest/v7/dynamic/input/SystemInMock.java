@@ -1,11 +1,7 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
-import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testing.TestRun;
 
 import java.io.IOException;
@@ -21,7 +17,8 @@ import static org.hyperskill.hstest.v7.common.Utils.cleanText;
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
     private List<String> inputLines = new LinkedList<>();
-    private List<DynamicInputFunction> inputTextFuncs = new LinkedList<>();
+
+    private Function<String, String> dynamicInputFunction = null;
 
     void provideText(String text) {
         List<DynamicInputFunction> texts = new LinkedList<>();
@@ -30,9 +27,14 @@ public class SystemInMock extends InputStream {
     }
 
     void setTexts(List<DynamicInputFunction> texts) {
+        // inputTextFuncs = texts;
+        // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
+    }
+
+    void setDynamicInputFunction(Function<String, String> func) {
+        dynamicInputFunction = func;
         currentReader = new StringReader("");
         inputLines.clear();
-        inputTextFuncs = texts;
     }
 
     @Override
@@ -95,47 +97,9 @@ public class SystemInMock extends InputStream {
     }
 
     private void ejectNextInput() {
-        if (inputTextFuncs.isEmpty()) {
-            return;
-        }
-
-        DynamicInputFunction inputFunction = inputTextFuncs.get(0);
-        int triggerCount = inputFunction.getTriggerCount();
-        if (triggerCount > 0) {
-            inputFunction.trigger();
-        }
-
         String currOutput = SystemOutHandler.getPartialOutput();
-        Function<String, Object> nextFunc = inputFunction.getInputFunction();
-
-        String newInput;
-        try {
-            Object obj = nextFunc.apply(currOutput);
-            if (obj instanceof String) {
-                newInput = (String) obj;
-            } else if (obj instanceof CheckResult) {
-                CheckResult result = (CheckResult) obj;
-                if (result.isCorrect()) {
-                    throw new TestPassed();
-                } else {
-                    String errorText = result.getFeedback();
-                    throw new WrongAnswer(errorText);
-                }
-            } else {
-                throw new FatalError("Dynamic input should return "
-                    + "String or CheckResult objects only. Found: " + obj.getClass());
-            }
-        } catch (Throwable throwable) {
-            StageTest.getCurrTestRun().setErrorInTest(throwable);
-            return;
-        }
-
-        if (inputFunction.getTriggerCount() == 0) {
-            inputTextFuncs.remove(0);
-        }
-
+        String newInput = dynamicInputFunction.apply(currOutput);
         newInput = cleanText(newInput);
         inputLines.addAll(Arrays.asList(newInput.split("\n")));
     }
-
 }
