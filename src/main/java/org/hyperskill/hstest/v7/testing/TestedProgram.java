@@ -9,7 +9,6 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.Future;
 
 import static org.hyperskill.hstest.v7.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
