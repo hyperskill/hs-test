@@ -96,7 +96,11 @@ public class TestedProgram {
     }
 
     public void stop() {
-        machine.waitState(ProgramState.FINISHED);
+        synchronized (machine) {
+            if (machine.getState() != ProgramState.FINISHED) {
+                machine.setAndWait(ProgramState.ABANDONED, ProgramState.FINISHED);
+            }
+        }
     }
 
     public boolean isFinished() {
