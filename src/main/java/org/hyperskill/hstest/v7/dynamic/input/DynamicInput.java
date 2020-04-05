@@ -80,7 +80,7 @@ public interface DynamicInput {
                 String newInput;
                 try {
                     Object obj = nextFunc.apply(currOutput);
-                    if (obj instanceof String) {
+                    if (obj instanceof String || obj == null) {
                         newInput = (String) obj;
                     } else if (obj instanceof CheckResult) {
                         CheckResult result = (CheckResult) obj;
@@ -103,7 +103,10 @@ public interface DynamicInput {
                     inputFuncs.remove(0);
                 }
 
-                newInput = cleanText(newInput);
+                if (newInput != null) {
+                    newInput = cleanText(newInput);
+                }
+
                 return newInput;
             }
         }
