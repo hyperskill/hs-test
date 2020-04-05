@@ -35,6 +35,7 @@ public class TestedProgram {
             Class<?> reloaded = dcl.loadClass(testedClass.getName());
             methodToInvoke = getMainMethod(reloaded);
             group = new ThreadGroup(reloaded.getSimpleName());
+            group.setDaemon(true);
         } catch (Exception ex) {
             throw new FatalError("Error initializing tested program", ex);
         }
