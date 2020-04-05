@@ -1,6 +1,8 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
+import org.hyperskill.hstest.v7.dynamic.output.ColoredOutput;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testing.TestRun;
 
@@ -8,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.hyperskill.hstest.v7.common.Utils.cleanText;
@@ -18,7 +22,8 @@ public class SystemInMock extends InputStream {
     private StringReader currentReader;
     private List<String> inputLines = new LinkedList<>();
 
-    private Function<String, String> dynamicInputFunction = null;
+    private Map<ThreadGroup, Function<String, String>>
+        dynamicInputFunctions = new HashMap<>();
 
     void provideText(String text) {
         List<DynamicInputFunction> texts = new LinkedList<>();
@@ -31,8 +36,11 @@ public class SystemInMock extends InputStream {
         // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
     }
 
-    void setDynamicInputFunction(Function<String, String> func) {
-        dynamicInputFunction = func;
+    void setDynamicInputFunction(ThreadGroup group, Function<String, String> func) {
+        if (dynamicInputFunctions.containsKey(group)) {
+            throw new FatalError("Cannot change dynamic input function");
+        }
+        dynamicInputFunctions.put(group, func);
         currentReader = new StringReader("");
         inputLines.clear();
     }
@@ -98,7 +106,16 @@ public class SystemInMock extends InputStream {
 
     private void ejectNextInput() {
         String currOutput = SystemOutHandler.getPartialOutput();
-        String newInput = dynamicInputFunction.apply(currOutput);
+        SystemOutHandler.getRealOut().println(
+            ColoredOutput.BLUE + this + "\n" +
+                dynamicInputFunctions.get(Thread.currentThread().getThreadGroup()) + "\n" +
+                Thread.currentThread().getThreadGroup() + ColoredOutput.RESET
+        );
+
+        String newInput = dynamicInputFunctions
+            .get(Thread.currentThread().getThreadGroup())
+            .apply(currOutput);
+
         if (newInput == null) {
             return;
         }

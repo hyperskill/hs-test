@@ -28,15 +28,16 @@ public class TestedProgram {
     private volatile String input;
 
     private Method methodToInvoke;
-    private Future<?> runningProgram;
+    private final ThreadGroup group;
 
     public TestedProgram(Class<?> testedClass) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
         try {
             Class<?> reloaded = dcl.loadClass(testedClass.getName());
             methodToInvoke = getMainMethod(reloaded);
+            group = new ThreadGroup(reloaded.getSimpleName());
         } catch (Exception ex) {
-            throw new FatalError("Cannot get main method of the tested class", ex);
+            throw new FatalError("Error initializing tested program", ex);
         }
     }
 
@@ -64,7 +65,7 @@ public class TestedProgram {
             throw new IllegalStateException("Cannot start the program twice");
         }
         machine.setState(ProgramState.WAITING);
-        SystemInHandler.setDynamicInputFunc(output -> {
+        SystemInHandler.setDynamicInputFunc(group, output -> {
             this.output = output;
             if (machine.getState() == ProgramState.ABANDONED) {
                 return null;
@@ -72,7 +73,7 @@ public class TestedProgram {
             machine.setAndWait(ProgramState.WAITING);
             return this.input;
         });
-        runningProgram = newDaemonThreadPool(1).submit(() -> {
+        newDaemonThreadPool(1, group).submit(() -> {
             invokeMain(args);
             return null;
         });

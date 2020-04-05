@@ -17,8 +17,15 @@ public final class ProcessUtils {
     private ProcessUtils() { }
 
     public static ExecutorService newDaemonThreadPool(int poolSize) {
+        return newDaemonThreadPool(poolSize, Thread.currentThread().getThreadGroup());
+    }
+
+    public static ExecutorService newDaemonThreadPool(int poolSize, ThreadGroup group) {
         return Executors.newFixedThreadPool(poolSize, r -> {
-            Thread t = Executors.defaultThreadFactory().newThread(r);
+            Thread t = new Thread(group, r, group.getName(), 0);
+            if (t.getPriority() != Thread.NORM_PRIORITY) {
+                t.setPriority(Thread.NORM_PRIORITY);
+            }
             t.setDaemon(true);
             return t;
         });

@@ -20,8 +20,8 @@ public final class SystemInHandler {
         System.setIn(realIn);
     }
 
-    public static void setDynamicInputFunc(Function<String, String> func) {
-        mockIn.setDynamicInputFunction(func);
+    public static void setDynamicInputFunc(ThreadGroup group, Function<String, String> func) {
+        mockIn.setDynamicInputFunction(group, func);
     }
 
     public static void setInput(String input) {
