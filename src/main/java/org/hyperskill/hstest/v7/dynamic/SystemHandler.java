@@ -24,7 +24,9 @@ public final class SystemHandler {
 
         oldSecurityManager = getSecurityManager();
         System.setSecurityManager(
-            new NoExitSecurityManager(oldSecurityManager)
+            new TestingSecurityManager(
+                oldSecurityManager,
+                Thread.currentThread().getThreadGroup())
         );
 
         oldLocale = Locale.getDefault();

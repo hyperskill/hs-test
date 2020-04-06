@@ -8,11 +8,19 @@ import java.util.List;
 import java.util.Scanner;
 
 class Server {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Server started!");
-        System.out.println("S1: " + scanner.nextLine());
-        System.out.println("S2: " + scanner.nextLine());
+    public static void main(String[] args) throws Exception {
+
+        ThreadGroup tg = Thread.currentThread().getThreadGroup().getParent();
+
+        Thread t = new Thread(tg, () -> {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Server started!");
+            System.out.println("S1: " + scanner.nextLine());
+            System.out.println("S2: " + scanner.nextLine());
+        });
+
+        t.start();
+        t.join();
     }
 }
 
