@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.v7.outcomes;
 
 import org.hyperskill.hstest.v7.common.FileUtils;
+import org.hyperskill.hstest.v7.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.v7.exception.testing.TimeLimitException;
 
 import java.nio.file.FileSystemException;
@@ -10,30 +11,40 @@ public class ErrorOutcome extends Outcome {
     public ErrorOutcome(int testNum, Throwable cause) {
         testNumber = testNum;
         if (cause instanceof FileSystemException) {
-            // without "class "
-            String exceptionName = cause.getClass().toString().substring(6);
-
-            String file = ((FileSystemException) cause).getFile();
-
-            if (file.startsWith(FileUtils.CURRENT_DIR)) {
-                file = file.substring(FileUtils.CURRENT_DIR.length());
-            }
-
-            errorText = exceptionName + "\n\nThe file " + file
-                + " can't be deleted after the end of the test. "
-                + "Probably you didn't close File or Scanner.";
+            initFileSystemException((FileSystemException) cause);
 
         } else if (cause instanceof TimeLimitException) {
-            int timeLimit = ((TimeLimitException) cause).getTimeLimitMs();
-            String timeUnit = "milliseconds";
-            if (timeLimit > 1999) {
-                timeLimit /= 1000;
-                timeUnit = "seconds";
-            }
-            errorText = "In this test, the program is running for a long time, "
-                + "more than " + timeLimit + " " + timeUnit + ". Most likely, "
-                + "the program has gone into an infinite loop.";
+            initTimeLimitException((TimeLimitException) cause);
+
+        } else if (cause instanceof ErrorWithFeedback) {
+            errorText = ((ErrorWithFeedback) cause).getErrorText();
         }
+    }
+
+    private void initFileSystemException(FileSystemException ex) {
+        // without "class "
+        String exceptionName = ex.getClass().toString().substring(6);
+        String file = ex.getFile();
+
+        if (file.startsWith(FileUtils.CURRENT_DIR)) {
+            file = file.substring(FileUtils.CURRENT_DIR.length());
+        }
+
+        errorText = exceptionName + "\n\nThe file " + file
+            + " can't be deleted after the end of the test. "
+            + "Probably you didn't close File or Scanner.";
+    }
+
+    private void initTimeLimitException(TimeLimitException ex) {
+        int timeLimit = ex.getTimeLimitMs();
+        String timeUnit = "milliseconds";
+        if (timeLimit > 1999) {
+            timeLimit /= 1000;
+            timeUnit = "seconds";
+        }
+        errorText = "In this test, the program is running for a long time, "
+            + "more than " + timeLimit + " " + timeUnit + ". Most likely, "
+            + "the program has gone into an infinite loop.";
     }
 
     @Override

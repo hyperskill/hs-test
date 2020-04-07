@@ -3,6 +3,7 @@ package org.hyperskill.hstest.v7.testing;
 import org.hyperskill.hstest.v7.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
@@ -89,8 +90,13 @@ public class TestedProgram {
 
     public String execute(String input) {
         if (machine.getState() == ProgramState.FINISHED) {
+            StageTest.getCurrTestRun().setErrorInTest(
+                new ErrorWithFeedback("The main method of the class "
+                    + methodToInvoke.getDeclaringClass().getSimpleName()
+                    + " has unexpectedly terminated"));
             throw new TestedProgramFinishedEarly();
         }
+
         if (machine.getState() != ProgramState.WAITING) {
             throw new IllegalStateException("Cannot execute the program " +
                 "that isn't waiting to be executed " +

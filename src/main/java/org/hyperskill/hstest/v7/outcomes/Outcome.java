@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.v7.outcomes;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
@@ -67,7 +68,8 @@ public abstract class Outcome {
             String errorText = ex.getErrorText();
             return new ExceptionOutcome(currTest, realUserException, errorText);
 
-        } else if (t instanceof FileSystemException
+        } else if (t instanceof ErrorWithFeedback
+            || t instanceof FileSystemException
             || t instanceof TimeLimitException) {
 
             return new ErrorOutcome(currTest, t);
