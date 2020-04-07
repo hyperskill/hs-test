@@ -2,6 +2,7 @@ package org.hyperskill.hstest.v7.testing.runner;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
@@ -25,7 +26,13 @@ public class AsyncMainMethodRunner implements TestRunner {
 
         ExecutorService executorService = newDaemonThreadPool(1);
         Future<CheckResult> future = executorService
-            .submit(() -> testCase.getDynamicInput().handle());
+            .submit(() -> {
+                try {
+                    return testCase.getDynamicInput().handle();
+                } catch (TestedProgramThrewException ignored) {
+                    return null;
+                }
+            });
 
         try {
             if (timeLimit <= 0) {

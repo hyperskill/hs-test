@@ -2,6 +2,7 @@ package org.hyperskill.hstest.v7.testing;
 
 import org.hyperskill.hstest.v7.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
+import org.hyperskill.hstest.v7.exception.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -17,7 +18,7 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException
 public class TestedProgram {
 
     private enum ProgramState {
-        NOT_STARTED, WAITING, RUNNING, ABANDONED, FINISHED
+        NOT_STARTED, WAITING, RUNNING, ABANDONED, EXCEPTION_THROWN, FINISHED
     }
 
     private final StateMachine<ProgramState> machine =
@@ -45,6 +46,7 @@ public class TestedProgram {
         try {
             machine.waitState(ProgramState.RUNNING);
             methodToInvoke.invoke(null, new Object[] { args });
+            machine.setState(ProgramState.FINISHED);
         } catch (InvocationTargetException ex) {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
                 // CheckExitCalled is thrown in case of System.exit()
@@ -54,10 +56,11 @@ public class TestedProgram {
                         new ExceptionWithFeedback("", getUserException(ex)));
                 }
             }
+            machine.setState(ProgramState.EXCEPTION_THROWN);
         } catch (IllegalAccessException ex) {
             StageTest.getCurrTestRun().setErrorInTest(ex);
+            machine.setState(ProgramState.FINISHED);
         }
-        machine.setState(ProgramState.FINISHED);
     }
 
     public String start(String... args) {
@@ -73,10 +76,7 @@ public class TestedProgram {
             machine.setAndWait(ProgramState.WAITING);
             return this.input;
         });
-        newDaemonThreadPool(1, group).submit(() -> {
-            invokeMain(args);
-            return null;
-        });
+        newDaemonThreadPool(1, group).submit(() -> invokeMain(args));
         return execute("");
     }
 
@@ -92,18 +92,22 @@ public class TestedProgram {
             return null;
         }
         machine.setAndWait(ProgramState.RUNNING);
+        if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
+            throw new TestedProgramThrewException();
+        }
         return this.output;
     }
 
     public void stop() {
         synchronized (machine) {
-            if (machine.getState() != ProgramState.FINISHED) {
-                machine.setAndWait(ProgramState.ABANDONED, ProgramState.FINISHED);
+            while (!isFinished()) {
+                machine.setAndWait(ProgramState.ABANDONED);
             }
         }
     }
 
     public boolean isFinished() {
-        return machine.getState() == ProgramState.FINISHED;
+        return machine.getState() == ProgramState.FINISHED
+            || machine.getState() == ProgramState.EXCEPTION_THROWN;
     }
 }

@@ -20,12 +20,14 @@ public final class StackTraceUtils {
      * It prepares a given stacktrace to display it for learners.
      *
      * If user calls System.exit(0) the stacktrace starts with org.junit that should be skipped.
+     * If user tries to execute prohibited code the stack trace will contain TestingSecurityManager
      * We're showing all user's stack trace up to our reflect methods.
      */
     public static String filterStackTrace(final String stackTrace) {
         List<String> linesToShow = new ArrayList<>();
         for (String line : stackTrace.split("\n")) {
-            if (line.contains("org.junit.")) {
+            if (line.contains("org.junit.")
+                || line.contains("TestingSecurityManager")) {
                 continue;
             }
             if (line.contains("at java.base/jdk.internal.reflect.")
