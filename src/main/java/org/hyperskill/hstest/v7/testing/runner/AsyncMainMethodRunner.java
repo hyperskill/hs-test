@@ -11,6 +11,7 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +44,8 @@ public class AsyncMainMethodRunner implements TestRunner {
             }
         } catch (TimeoutException ex) {
             StageTest.getCurrTestRun().setErrorInTest(new TimeLimitException(timeLimit));
+        } catch (ExecutionException ex) {
+            StageTest.getCurrTestRun().setErrorInTest(ex.getCause());
         } catch (Throwable ex) {
             StageTest.getCurrTestRun().setErrorInTest(ex);
         } finally {
