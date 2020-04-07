@@ -36,25 +36,6 @@ public class TestDynamicThreadGroupManipulation2 extends StageTest<String> {
         super(TestDynamicThreadGroupManipulation2Server.class);
     }
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Exception in test #1\n" +
-                "\n" +
-                "java.security.AccessControlException: Cannot access or create ThreadGroup objects"
-        );
-
-        exception.expectMessage(not(containsString("Fatal error")));
-        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
-        exception.expectMessage(not(containsString("org.junit.")));
-        exception.expectMessage(not(containsString("at sun.reflect.")));
-        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
-    }
-
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
