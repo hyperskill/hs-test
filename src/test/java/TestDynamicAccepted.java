@@ -63,9 +63,4 @@ public class TestDynamicAccepted extends StageTest<String> {
             })
         );
     }
-
-    @Override
-    public CheckResult check(String reply, String attach) {
-        return CheckResult.correct();
-    }
 }

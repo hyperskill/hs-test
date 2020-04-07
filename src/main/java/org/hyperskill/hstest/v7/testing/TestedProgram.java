@@ -33,15 +33,11 @@ public class TestedProgram {
     private final ThreadGroup group;
 
     public TestedProgram(Class<?> testedClass) {
-        this(testedClass, testedClass.getSimpleName());
-    }
-
-    public TestedProgram(Class<?> testedClass, String printName) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
         try {
             Class<?> reloaded = dcl.loadClass(testedClass.getName());
             methodToInvoke = getMainMethod(reloaded);
-            group = new ThreadGroup(printName);
+            group = new ThreadGroup(reloaded.getSimpleName());
             group.setDaemon(true);
         } catch (Exception ex) {
             throw new FatalError("Error initializing tested program", ex);

@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.v7.dynamic.output;
 
+import org.hyperskill.hstest.v7.dynamic.TestingSecurityManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,12 +31,12 @@ public class SystemOutMock extends OutputStream {
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public synchronized void write(int b) throws IOException {
         original.write(b);
         cloned.write(b);
         dynamic.write(b);
 
-        ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
+        ThreadGroup currGroup = TestingSecurityManager.getTestingGroup();
         if (!partial.containsKey(currGroup)) {
             partial.put(currGroup, new ByteArrayOutputStream());
         }

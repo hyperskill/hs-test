@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
-import org.hyperskill.hstest.v7.dynamic.output.ColoredOutput;
+import org.hyperskill.hstest.v7.dynamic.TestingSecurityManager;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -106,10 +106,10 @@ public class SystemInMock extends InputStream {
 
     private void ejectNextInput() {
         String currOutput = SystemOutHandler.getPartialOutput(
-            Thread.currentThread().getThreadGroup());
+            TestingSecurityManager.getTestingGroup());
 
         String newInput = dynamicInputFunctions
-            .get(Thread.currentThread().getThreadGroup())
+            .get(TestingSecurityManager.getTestingGroup())
             .apply(currOutput);
 
         if (newInput == null) {

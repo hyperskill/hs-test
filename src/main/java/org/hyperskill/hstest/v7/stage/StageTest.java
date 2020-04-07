@@ -8,6 +8,7 @@ import org.hyperskill.hstest.v7.outcomes.Outcome;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestRun;
+import org.hyperskill.hstest.v7.testing.TestingConfig;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public abstract class StageTest<AttachType> {
 
     private final Class<?> testedClass;
     private final Object testedObject;
+
+    protected TestingConfig config = new TestingConfig();
 
     protected boolean needReloadClass = true;
 
