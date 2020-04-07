@@ -2,7 +2,7 @@ package org.hyperskill.hstest.v7.outcomes;
 
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
-import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
+import org.hyperskill.hstest.v7.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 
@@ -58,7 +58,8 @@ public abstract class Outcome {
 
     public static Outcome getOutcome(Throwable t, int currTest) {
         if (t instanceof WrongAnswer) {
-            return new WrongAnswerOutcome(currTest, t.getMessage().trim());
+            return new WrongAnswerOutcome(currTest,
+                ((WrongAnswer) t).getFeedbackText().trim());
 
         } else if (t instanceof ExceptionWithFeedback) {
             ExceptionWithFeedback ex = (ExceptionWithFeedback) t;

@@ -5,7 +5,7 @@ import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
+import org.hyperskill.hstest.v7.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
@@ -78,7 +78,7 @@ public class AsyncMainMethodRunner implements TestRunner {
             if (error instanceof TestPassed) {
                 return correct();
             } else if (error instanceof WrongAnswer) {
-                return wrong(error.getMessage());
+                return wrong(((WrongAnswer) error).getFeedbackText());
             } else {
                 return null;
             }

@@ -5,7 +5,7 @@ import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
+import org.hyperskill.hstest.v7.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
@@ -13,9 +13,7 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -39,7 +37,7 @@ public class MainMethodRunner implements TestRunner {
             try {
                 return testCase.getCheckFunc().apply(output, testCase.getAttach());
             } catch (WrongAnswer ex) {
-                return wrong(ex.getMessage());
+                return wrong(ex.getFeedbackText());
             } catch (TestPassed ex) {
                 return correct();
             }
