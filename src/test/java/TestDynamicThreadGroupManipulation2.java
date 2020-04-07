@@ -1,0 +1,74 @@
+import org.hyperskill.hstest.v7.stage.StageTest;
+import org.hyperskill.hstest.v7.testcase.CheckResult;
+import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.v7.testing.TestedProgram;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+
+class TestDynamicThreadGroupManipulation2Server {
+    public static void main(String[] args) throws Exception {
+
+        ThreadGroup tg = new ThreadGroup("123");
+
+        Thread t = new Thread(tg, () -> {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Server started!");
+            System.out.println("S1: " + scanner.nextLine());
+            System.out.println("S2: " + scanner.nextLine());
+        });
+
+        t.start();
+        t.join();
+    }
+}
+
+public class TestDynamicThreadGroupManipulation2 extends StageTest<String> {
+
+    public TestDynamicThreadGroupManipulation2() {
+        super(TestDynamicThreadGroupManipulation2Server.class);
+    }
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+    @Before
+    public void before() {
+        exception.expect(AssertionError.class);
+        exception.expectMessage(
+            "Exception in test #1\n" +
+                "\n" +
+                "java.security.AccessControlException: Cannot access or create ThreadGroup objects"
+        );
+
+        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
+        exception.expectMessage(not(containsString("org.junit.")));
+        exception.expectMessage(not(containsString("at sun.reflect.")));
+        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
+    }
+
+    @Override
+    public List<TestCase<String>> generate() {
+        return Arrays.asList(
+            new TestCase<String>().setDynamicInput(() -> {
+                TestedProgram server = new TestedProgram(
+                    TestDynamicThreadGroupManipulation2Server.class);
+                server.start();
+                return CheckResult.correct();
+            })
+        );
+    }
+
+    @Override
+    public CheckResult check(String reply, String attach) {
+        return CheckResult.correct();
+    }
+}
