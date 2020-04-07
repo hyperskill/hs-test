@@ -16,8 +16,8 @@ public class TestingSecurityManager extends NoExitSecurityManager {
     @Override
     public void checkAccess(ThreadGroup g) {
         ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
-        if (currGroup != rootGroup && g == rootGroup) {
-            throw new AccessControlException("Cannot access root ThreadGroup");
+        if (currGroup != rootGroup) {
+            throw new AccessControlException("Cannot access or create ThreadGroup objects");
         }
     }
 }

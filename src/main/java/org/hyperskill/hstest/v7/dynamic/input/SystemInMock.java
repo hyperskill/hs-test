@@ -105,12 +105,8 @@ public class SystemInMock extends InputStream {
     }
 
     private void ejectNextInput() {
-        String currOutput = SystemOutHandler.getPartialOutput();
-        SystemOutHandler.getRealOut().println(
-            ColoredOutput.BLUE + this + "\n" +
-                dynamicInputFunctions.get(Thread.currentThread().getThreadGroup()) + "\n" +
-                Thread.currentThread().getThreadGroup() + ColoredOutput.RESET
-        );
+        String currOutput = SystemOutHandler.getPartialOutput(
+            Thread.currentThread().getThreadGroup());
 
         String newInput = dynamicInputFunctions
             .get(Thread.currentThread().getThreadGroup())

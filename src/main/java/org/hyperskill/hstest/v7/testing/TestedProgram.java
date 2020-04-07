@@ -2,7 +2,9 @@ package org.hyperskill.hstest.v7.testing;
 
 import org.hyperskill.hstest.v7.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
-import org.hyperskill.hstest.v7.exception.TestedProgramThrewException;
+import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
+import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.stage.StageTest;
@@ -31,11 +33,15 @@ public class TestedProgram {
     private final ThreadGroup group;
 
     public TestedProgram(Class<?> testedClass) {
+        this(testedClass, testedClass.getSimpleName());
+    }
+
+    public TestedProgram(Class<?> testedClass, String printName) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
         try {
             Class<?> reloaded = dcl.loadClass(testedClass.getName());
             methodToInvoke = getMainMethod(reloaded);
-            group = new ThreadGroup(reloaded.getSimpleName());
+            group = new ThreadGroup(printName);
             group.setDaemon(true);
         } catch (Exception ex) {
             throw new FatalError("Error initializing tested program", ex);
@@ -51,10 +57,13 @@ public class TestedProgram {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
                 // CheckExitCalled is thrown in case of System.exit()
                 // consider System.exit() like normal exit
-                if (!(ex.getCause() instanceof CheckExitCalled)) {
-                    StageTest.getCurrTestRun().setErrorInTest(
-                        new ExceptionWithFeedback("", getUserException(ex)));
+                if (ex.getCause() instanceof CheckExitCalled) {
+                    machine.setState(ProgramState.FINISHED);
+                    return;
                 }
+
+                StageTest.getCurrTestRun().setErrorInTest(
+                    new ExceptionWithFeedback("", getUserException(ex)));
             }
             machine.setState(ProgramState.EXCEPTION_THROWN);
         } catch (IllegalAccessException ex) {
@@ -74,18 +83,24 @@ public class TestedProgram {
                 return null;
             }
             machine.setAndWait(ProgramState.WAITING);
-            return this.input;
+            String input = this.input;
+            this.input = null;
+            return input;
         });
         newDaemonThreadPool(1, group).submit(() -> invokeMain(args));
         return execute("");
     }
 
     public String execute(String input) {
+        if (machine.getState() == ProgramState.FINISHED) {
+            throw new TestedProgramFinishedEarly();
+        }
         if (machine.getState() != ProgramState.WAITING) {
             throw new IllegalStateException("Cannot execute the program " +
                 "that isn't waiting to be executed " +
                 "(it isn't started or is running or has already finished)");
         }
+
         this.input = input;
         if (input == null) {
             machine.setState(ProgramState.ABANDONED); // send "EOF" message and not wait for output
@@ -95,7 +110,15 @@ public class TestedProgram {
         if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
             throw new TestedProgramThrewException();
         }
-        return this.output;
+
+        String output;
+        if (machine.getState() != ProgramState.FINISHED) {
+            output = this.output;
+        } else {
+            output = SystemOutHandler.getPartialOutput(group);
+        }
+        this.output = null;
+        return output;
     }
 
     public void stop() {

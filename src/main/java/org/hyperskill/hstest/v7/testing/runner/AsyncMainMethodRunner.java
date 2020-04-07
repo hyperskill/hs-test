@@ -2,7 +2,8 @@ package org.hyperskill.hstest.v7.testing.runner;
 
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.exception.TestedProgramThrewException;
+import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
+import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.TimeLimitException;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
@@ -29,7 +30,7 @@ public class AsyncMainMethodRunner implements TestRunner {
             .submit(() -> {
                 try {
                     return testCase.getDynamicInput().handle();
-                } catch (TestedProgramThrewException ignored) {
+                } catch (TestedProgramThrewException | TestedProgramFinishedEarly ignored) {
                     return null;
                 }
             });

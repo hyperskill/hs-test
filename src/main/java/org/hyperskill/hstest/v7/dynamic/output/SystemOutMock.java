@@ -3,6 +3,8 @@ package org.hyperskill.hstest.v7.dynamic.output;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SystemOutMock extends OutputStream {
 
@@ -14,13 +16,13 @@ public class SystemOutMock extends OutputStream {
     // from the test and redirect to check function
     private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
 
-    // partial stream is used to collect output between
-    // dynamic input calls in SystemInMock
-    private final ByteArrayOutputStream partial = new ByteArrayOutputStream();
-
     // dynamic stream contains not only output
     // but also injected input from the test
     private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
+
+    // partial stream is used to collect output between
+    // dynamic input calls in SystemInMock
+    private final Map<ThreadGroup, ByteArrayOutputStream> partial = new HashMap<>();
 
     SystemOutMock(OutputStream originalStream) {
         this.original = originalStream;
@@ -30,8 +32,13 @@ public class SystemOutMock extends OutputStream {
     public void write(int b) throws IOException {
         original.write(b);
         cloned.write(b);
-        partial.write(b);
         dynamic.write(b);
+
+        ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
+        if (!partial.containsKey(currGroup)) {
+            partial.put(currGroup, new ByteArrayOutputStream());
+        }
+        partial.get(currGroup).write(b);
     }
 
     @Override
@@ -54,19 +61,22 @@ public class SystemOutMock extends OutputStream {
 
     public void reset() {
         cloned.reset();
-        partial.reset();
         dynamic.reset();
+        partial.clear();
     }
 
     public ByteArrayOutputStream getClonedOut() {
         return cloned;
     }
 
-    public ByteArrayOutputStream getPartialOut() {
-        return partial;
-    }
-
     public ByteArrayOutputStream getDynamicOut() {
         return dynamic;
+    }
+
+    public ByteArrayOutputStream getPartialOut(ThreadGroup group) {
+        if (!partial.containsKey(group)) {
+            return new ByteArrayOutputStream();
+        }
+        return partial.get(group);
     }
 }

@@ -41,16 +41,16 @@ public class TestRun {
         return inputUsed;
     }
 
+    public void setInputUsed() {
+        inputUsed = true;
+    }
+
     public Throwable getErrorInTest() {
         return errorInTest;
     }
 
     public void setErrorInTest(Throwable errorInTest) {
         this.errorInTest = errorInTest;
-    }
-
-    public void setInputUsed() {
-        inputUsed = true;
     }
 
     public CheckResult test() throws Throwable {

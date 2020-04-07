@@ -37,14 +37,14 @@ public final class SystemOutHandler {
         return cleanText(MOCK_OUT.getClonedOut().toString());
     }
 
-    public static String getPartialOutput() {
-        String output = cleanText(MOCK_OUT.getPartialOut().toString());
-        MOCK_OUT.getPartialOut().reset();
-        return output;
-    }
-
     public static String getDynamicOutput() {
         return cleanText(MOCK_OUT.getDynamicOut().toString());
+    }
+
+    public static String getPartialOutput(ThreadGroup group) {
+        String output = cleanText(MOCK_OUT.getPartialOut(group).toString());
+        MOCK_OUT.getPartialOut(group).reset();
+        return output;
     }
 
     public static void injectInput(String input) {
