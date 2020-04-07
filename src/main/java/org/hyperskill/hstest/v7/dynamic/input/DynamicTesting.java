@@ -26,7 +26,7 @@ import static org.hyperskill.hstest.v7.common.Utils.cleanText;
  * 2) Some programs aren't testable with static input because the input may
  *    be dependent on the previous output (for example, Tic-Tac-Toe game).
  */
-public interface DynamicInput {
+public interface DynamicTesting {
     /**
      * Method that provides dynamic input. Designed to be used with
      * TestedProgram class to be able to partially execute tested program.
@@ -48,8 +48,8 @@ public interface DynamicInput {
      * @param inputFuncs old way of constructing dynamic input
      * @return DynamicInput's single method that provides dynamic input.
      */
-    static DynamicInput toDynamicInput(Class<?> testedClass, List<String> args,
-                                       List<DynamicInputFunction> inputFuncs) {
+    static DynamicTesting toDynamicInput(Class<?> testedClass, List<String> args,
+                                         List<DynamicInputFunction> inputFuncs) {
 
         class InputFunctionHandler {
             List<DynamicInputFunction> inputFuncs;

@@ -71,7 +71,7 @@ public class TestDynamicException extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
-            new TestCase<String>().setDynamicInput(() -> {
+            new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(TestDynamicExceptionServer.class);
                 TestedProgram client = new TestedProgram(TestDynamicExceptionClient.class);
 

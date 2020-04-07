@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.v7.testing.runner;
 
-import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
+import org.hyperskill.hstest.v7.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
@@ -30,7 +30,7 @@ public class AsyncMainMethodRunner implements TestRunner {
         Future<CheckResult> future = executorService
             .submit(() -> {
                 try {
-                    return testCase.getDynamicInput().handle();
+                    return testCase.getDynamicTesting().handle();
                 } catch (TestedProgramThrewException | TestedProgramFinishedEarly ignored) {
                     return null;
                 }
@@ -57,10 +57,10 @@ public class AsyncMainMethodRunner implements TestRunner {
 
     @Override
     public <T> CheckResult test(TestCase<T> testCase) {
-        if (testCase.getDynamicInput() == null) {
-            DynamicInput converted = DynamicInput.toDynamicInput(
+        if (testCase.getDynamicTesting() == null) {
+            DynamicTesting converted = DynamicTesting.toDynamicInput(
                 testCase.getTestedClass(), testCase.getArgs(), testCase.getInputFuncs());
-            testCase.setDynamicInput(converted);
+            testCase.setDynamicTesting(converted);
         }
 
         CheckResult result = runMain(testCase);

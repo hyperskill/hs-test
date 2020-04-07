@@ -65,7 +65,7 @@ public class TestDynamicEarlyExit extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
-            new TestCase<String>().setDynamicInput(() -> {
+            new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(TestDynamicEarlyExitServer.class);
                 TestedProgram client = new TestedProgram(TestDynamicEarlyExitClient.class);
 

@@ -38,7 +38,7 @@ public class FatalErrorAddInput1Dynamic extends StageTest {
     @Override
     public List<TestCase> generate() {
         return Arrays.asList(
-            new TestCase().setDynamicInput(() -> {
+            new TestCase().setDynamicTesting(() -> {
                 TestedProgram main = new TestedProgram(FatalErrorAddInput1DynamicMain.class);
                 main.start();
                 int x = 0 / 0;

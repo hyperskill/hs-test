@@ -1,9 +1,8 @@
 package org.hyperskill.hstest.v7.testcase;
 
-import org.hyperskill.hstest.v7.dynamic.input.DynamicInput;
+import org.hyperskill.hstest.v7.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.v7.dynamic.input.DynamicInputFunction;
 import org.hyperskill.hstest.v7.testing.runner.AsyncMainMethodRunner;
-import org.hyperskill.hstest.v7.testing.runner.MainMethodRunner;
 import org.hyperskill.hstest.v7.testing.runner.TestRunner;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class TestCase<AttachType> {
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
     private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
     private String staticInput = null;
-    private DynamicInput dynamicInput = null;
+    private DynamicTesting dynamicTesting = null;
 
     // files needed to be set up before test
     private Map<String, String> files = new LinkedHashMap<>();
@@ -105,13 +104,13 @@ public class TestCase<AttachType> {
         return this;
     }
 
-    public TestCase<AttachType> setDynamicInput(DynamicInput dynamicInput) {
-        this.dynamicInput = dynamicInput;
+    public TestCase<AttachType> setDynamicTesting(DynamicTesting dynamicTesting) {
+        this.dynamicTesting = dynamicTesting;
         return this;
     }
 
-    public DynamicInput getDynamicInput() {
-        return dynamicInput;
+    public DynamicTesting getDynamicTesting() {
+        return dynamicTesting;
     }
 
     public TestCase<AttachType> setAttach(AttachType attach) {

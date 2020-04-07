@@ -33,7 +33,7 @@ public class TestDynamicThreadGroupManipulation2 extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
-            new TestCase<String>().setDynamicInput(() -> {
+            new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
                     TestDynamicThreadGroupManipulation2Server.class);
                 server.start();
