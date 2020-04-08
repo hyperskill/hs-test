@@ -1,7 +1,6 @@
 package outcomes;
 
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;

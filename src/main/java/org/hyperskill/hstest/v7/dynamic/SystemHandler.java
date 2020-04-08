@@ -2,7 +2,6 @@ package org.hyperskill.hstest.v7.dynamic;
 
 import org.hyperskill.hstest.v7.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
 
 import java.util.Locale;
 

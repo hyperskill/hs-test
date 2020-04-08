@@ -7,7 +7,6 @@ import org.hyperskill.hstest.v7.testcase.TestCase;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.hyperskill.hstest.v7.dynamic.input.KotlinInput.readLine;
 

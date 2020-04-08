@@ -1,11 +1,8 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
-import org.hyperskill.hstest.v7.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
-import org.hyperskill.hstest.v7.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
-import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestedProgram;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
