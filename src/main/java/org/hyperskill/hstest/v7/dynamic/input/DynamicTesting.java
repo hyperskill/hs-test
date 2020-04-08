@@ -36,23 +36,23 @@ public interface DynamicTesting {
      * You can also partially execute multiple programs at the same time.
      * @return CheckResult object at the result of the testing. Return null
      *         if output needs additional testing using StageTest.check method.
-     *         Converting old dynamic input to the new one requires returning null
+     *         Converting old dynamic testing to the new one requires returning null
      *         so written tests remain backwards-compatible but it's preferred
-     *         to check user's output in DynamicInput.handle method and return
+     *         to check user's output in DynamicTesting.handle method and return
      *         a CheckResult object.
      */
     CheckResult handle();
 
     /**
-     * Converter from old way of constructing dynamic input (multiple methods)
+     * Converter from old way of constructing dynamic testing (multiple methods)
      * to new way (using single method)
      * @param testedClass class that is tested
      * @param args arguments for the testedClass's main method
-     * @param inputFuncs old way of constructing dynamic input
-     * @return DynamicInput's single method that provides dynamic input.
+     * @param inputFuncs old way of constructing dynamic testing
+     * @return DynamicTesting's single method that provides dynamic input.
      */
-    static DynamicTesting toDynamicInput(Class<?> testedClass, List<String> args,
-                                                List<DynamicInputFunction> inputFuncs) {
+    static DynamicTesting toDynamicTesting(Class<?> testedClass, List<String> args,
+                                           List<DynamicInputFunction> inputFuncs) {
 
         class InputFunctionHandler {
             List<DynamicInputFunction> inputFuncs;

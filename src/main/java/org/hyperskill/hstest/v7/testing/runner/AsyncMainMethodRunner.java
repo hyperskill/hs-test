@@ -62,11 +62,6 @@ public class AsyncMainMethodRunner implements TestRunner {
     @Override
     public <T> CheckResult test(TestRun testRun) {
         TestCase<T> testCase = (TestCase<T>) testRun.getTestCase();
-        if (testCase.getDynamicTesting() == null) {
-            DynamicTesting converted = DynamicTesting.toDynamicInput(
-                testCase.getTestedClass(), testCase.getArgs(), testCase.getInputFuncs());
-            testCase.setDynamicTesting(converted);
-        }
 
         CheckResult result = runMain(testRun);
 

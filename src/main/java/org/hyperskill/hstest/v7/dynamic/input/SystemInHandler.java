@@ -24,10 +24,12 @@ public final class SystemInHandler {
         mockIn.setDynamicInputFunction(group, func);
     }
 
+    @Deprecated
     public static void setInput(String input) {
         mockIn.provideText(input);
     }
 
+    @Deprecated
     public static void setInputFuncs(List<DynamicInputFunction> inputFuncs) {
         List<DynamicInputFunction> newFuncs = new LinkedList<>();
         for (DynamicInputFunction func : inputFuncs) {

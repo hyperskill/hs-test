@@ -25,12 +25,14 @@ public class SystemInMock extends InputStream {
     private Map<ThreadGroup, Function<String, String>>
         dynamicInputFunctions = new HashMap<>();
 
+    @Deprecated
     void provideText(String text) {
         List<DynamicInputFunction> texts = new LinkedList<>();
         texts.add(new DynamicInputFunction(1, out -> text));
         setTexts(texts);
     }
 
+    @Deprecated
     void setTexts(List<DynamicInputFunction> texts) {
         // inputTextFuncs = texts;
         // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
@@ -76,19 +78,11 @@ public class SystemInMock extends InputStream {
 
     @Override
     public int read() throws IOException {
-
-        // provide no more input if there was an exception
-        TestRun testRun = StageTest.getCurrTestRun();
-        if (testRun != null && testRun.getErrorInTest() != null) {
-            return -1;
-        }
-
         int character = currentReader.read();
         if (character == -1) {
             ejectNextLine();
             character = currentReader.read();
         }
-
         return character;
     }
 

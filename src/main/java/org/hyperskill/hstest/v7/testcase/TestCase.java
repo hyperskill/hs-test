@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static org.hyperskill.hstest.v7.dynamic.input.DynamicTesting.toDynamicTesting;
+
 public class TestCase<AttachType> {
 
     private static final int DEFAULT_TIME_LIMIT = 15000;
@@ -45,18 +47,16 @@ public class TestCase<AttachType> {
         // use methods to configure TestCase
     }
 
-    public TestCase<AttachType> setTestedClass(Class<?> testedClass) {
+    public void setTestedClass(Class<?> testedClass) {
         this.testedClass = testedClass;
-        return this;
     }
 
     public Class<?> getTestedClass() {
         return testedClass;
     }
 
-    public TestCase<AttachType> setTestedObject(Object testedObject) {
+    public void setTestedObject(Object testedObject) {
         this.testedObject = testedObject;
-        return this;
     }
 
     public Object getTestedObject() {
@@ -74,31 +74,37 @@ public class TestCase<AttachType> {
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInput(String input) {
         addInput(1, input);
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInput(Function<String, Object> inputFunc) {
         addInput(1, inputFunc);
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInput(int triggerCount, String input) {
         addInput(triggerCount, out -> input);
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInput(int triggerCount, Function<String, Object> inputFunc) {
         inputFuncs.add(new DynamicInputFunction(triggerCount, inputFunc));
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInfInput(String input) {
         addInput(-1, input);
         return this;
     }
 
+    @Deprecated
     public TestCase<AttachType> addInfInput(Function<String, Object> inputFunc) {
         addInput(-1, inputFunc);
         return this;
@@ -110,6 +116,9 @@ public class TestCase<AttachType> {
     }
 
     public DynamicTesting getDynamicTesting() {
+        if (dynamicTesting == null) {
+            dynamicTesting = toDynamicTesting(testedClass, args, inputFuncs);
+        }
         return dynamicTesting;
     }
 
@@ -148,6 +157,7 @@ public class TestCase<AttachType> {
         return this;
     }
 
+    @Deprecated
     public List<DynamicInputFunction> getInputFuncs() {
         return inputFuncs;
     }
