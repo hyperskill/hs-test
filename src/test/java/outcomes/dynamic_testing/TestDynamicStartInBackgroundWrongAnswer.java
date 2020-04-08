@@ -1,3 +1,5 @@
+package outcomes.dynamic_testing;
+
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -13,16 +15,21 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicFatalErrorNoCheckMethodServer {
+class TestDynamicStartInBackgroundWrongAnswerServer {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
-        System.out.println("S1: " + scanner.nextLine());
-        System.out.println("S2: " + scanner.nextLine());
+        try {
+            while (true) {
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException ex) {
+            System.out.println(ex.toString());
+            System.out.println("Server interrupted!");
+        }
     }
 }
 
-class TestDynamicFatalErrorNoCheckMethodClient {
+class TestDynamicStartInBackgroundWrongAnswerClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -31,10 +38,10 @@ class TestDynamicFatalErrorNoCheckMethodClient {
     }
 }
 
-public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
+public class TestDynamicStartInBackgroundWrongAnswer extends StageTest<String> {
 
-    public TestDynamicFatalErrorNoCheckMethod() {
-        super(TestDynamicFatalErrorNoCheckMethodServer.class);
+    public TestDynamicStartInBackgroundWrongAnswer() {
+        super(TestDynamicStartInBackgroundWrongAnswerServer.class);
     }
 
     @Rule
@@ -44,12 +51,18 @@ public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Fatal error in test #1, please send the report to support@hyperskill.org"
+            "Wrong answer in test #1"
         );
-
         exception.expectMessage(
-            "FatalError: Can't check result: override \"check\" method"
-        );
+            "java.lang.InterruptedException: sleep interrupted\n" +
+            "Server interrupted!");
+        exception.expectMessage(
+            "Client started!\n" +
+            "> 123\n" +
+            "C1: 123\n" +
+            "> 345\n" +
+            "C2: 345");
+        exception.expectMessage(not(containsString("Fatal error")));
     }
 
     @Override
@@ -57,33 +70,29 @@ public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicFatalErrorNoCheckMethodServer.class);
+                    TestDynamicStartInBackgroundWrongAnswerServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicFatalErrorNoCheckMethodClient.class);
+                    TestDynamicStartInBackgroundWrongAnswerClient.class);
 
-                String out1 = server.start();
-                String out2 = client.start();
-                if (!out1.equals("Server started!\n")
-                    || !out2.equals("Client started!\n")) {
+                server.startInBackground();
+                String out = client.start();
+
+                if (!out.equals("Client started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                String out3 = server.execute(out2);
-                String out4 = client.execute(out1);
-                if (!out3.equals("S1: Client started!\n")
-                    || !out4.equals("C1: Server started!\n")) {
+                out = client.execute("123");
+                if (!out.equals("C1: 123\n")) {
                     return CheckResult.wrong("");
                 }
 
-                String out5 = server.execute(out4);
-                String out6 = client.execute(out3);
-                if (!out5.equals("S2: C1: Server started!\n")
-                    || !out6.equals("C2: S1: Client started!\n")) {
+                out = client.execute("345");
+                if (!out.equals("C2: 345\n")) {
                     return CheckResult.wrong("");
                 }
 
-                return null;
+                return CheckResult.wrong("");
             })
         );
     }

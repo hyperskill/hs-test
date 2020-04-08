@@ -1,3 +1,5 @@
+package outcomes.dynamic_testing;
+
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -10,10 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-
-class TestDynamicWrongAnswerInCheckMethodServer {
+class TestDynamicFatalErrorDoubleStartProgramServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
@@ -22,7 +21,7 @@ class TestDynamicWrongAnswerInCheckMethodServer {
     }
 }
 
-class TestDynamicWrongAnswerInCheckMethodClient {
+class TestDynamicFatalErrorDoubleStartProgramClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -31,10 +30,10 @@ class TestDynamicWrongAnswerInCheckMethodClient {
     }
 }
 
-public class TestDynamicWrongAnswerInCheckMethod extends StageTest<String> {
+public class TestDynamicFatalErrorDoubleStartProgram extends StageTest<String> {
 
-    public TestDynamicWrongAnswerInCheckMethod() {
-        super(TestDynamicWrongAnswerInCheckMethodServer.class);
+    public TestDynamicFatalErrorDoubleStartProgram() {
+        super(TestDynamicFatalErrorDoubleStartProgramServer.class);
     }
 
     @Rule
@@ -44,11 +43,12 @@ public class TestDynamicWrongAnswerInCheckMethod extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Wrong answer in test #1\n" +
-                "\n" +
-                "WA1"
+            "Fatal error in test #1, please send the report to support@hyperskill.org"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+
+        exception.expectMessage(
+            "IllegalStateException: Cannot start the program twice"
+        );
     }
 
     @Override
@@ -56,13 +56,16 @@ public class TestDynamicWrongAnswerInCheckMethod extends StageTest<String> {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicWrongAnswerInCheckMethodServer.class);
+                    TestDynamicFatalErrorDoubleStartProgramServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicWrongAnswerInCheckMethodClient.class);
+                    TestDynamicFatalErrorDoubleStartProgramClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();
+
+                server.start();
+
                 if (!out1.equals("Server started!\n")
                     || !out2.equals("Client started!\n")) {
                     return CheckResult.wrong("");
@@ -82,13 +85,8 @@ public class TestDynamicWrongAnswerInCheckMethod extends StageTest<String> {
                     return CheckResult.wrong("");
                 }
 
-                return null;
+                return CheckResult.correct();
             })
         );
-    }
-
-    @Override
-    public CheckResult check(String reply, String attach) {
-        return CheckResult.wrong("WA1");
     }
 }

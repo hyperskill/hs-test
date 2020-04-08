@@ -1,3 +1,5 @@
+package outcomes.dynamic_testing;
+
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -13,26 +15,28 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicEarlyExitServer {
+class TestDynamicWrongAnswerInCheckMethodServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
         System.out.println("S1: " + scanner.nextLine());
+        System.out.println("S2: " + scanner.nextLine());
     }
 }
 
-class TestDynamicEarlyExitClient {
+class TestDynamicWrongAnswerInCheckMethodClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
         System.out.println("C1: " + scanner.nextLine());
+        System.out.println("C2: " + scanner.nextLine());
     }
 }
 
-public class TestDynamicEarlyExit extends StageTest<String> {
+public class TestDynamicWrongAnswerInCheckMethod extends StageTest<String> {
 
-    public TestDynamicEarlyExit() {
-        super(TestDynamicEarlyExitServer.class);
+    public TestDynamicWrongAnswerInCheckMethod() {
+        super(TestDynamicWrongAnswerInCheckMethodServer.class);
     }
 
     @Rule
@@ -42,23 +46,10 @@ public class TestDynamicEarlyExit extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Error in test #1\n" +
+            "Wrong answer in test #1\n" +
                 "\n" +
-                "The main method of the class TestDynamicEarlyExitServer has unexpectedly terminated\n" +
-                "\n" +
-                "Please find below the output of your program during this failed test.\n" +
-                "Note that the '>' character indicates the beginning of the input line.\n" +
-                "\n" +
-                "---\n" +
-                "\n" +
-                "Server started!\n" +
-                "Client started!\n" +
-                "> Client started!\n" +
-                "S1: Client started!\n" +
-                "> Server started!\n" +
-                "C1: Server started!"
+                "WA1"
         );
-
         exception.expectMessage(not(containsString("Fatal error")));
     }
 
@@ -66,8 +57,11 @@ public class TestDynamicEarlyExit extends StageTest<String> {
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
-                TestedProgram server = new TestedProgram(TestDynamicEarlyExitServer.class);
-                TestedProgram client = new TestedProgram(TestDynamicEarlyExitClient.class);
+                TestedProgram server = new TestedProgram(
+                    TestDynamicWrongAnswerInCheckMethodServer.class);
+
+                TestedProgram client = new TestedProgram(
+                    TestDynamicWrongAnswerInCheckMethodClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();
@@ -90,8 +84,13 @@ public class TestDynamicEarlyExit extends StageTest<String> {
                     return CheckResult.wrong("");
                 }
 
-                return CheckResult.correct();
+                return null;
             })
         );
+    }
+
+    @Override
+    public CheckResult check(String reply, String attach) {
+        return CheckResult.wrong("WA1");
     }
 }
