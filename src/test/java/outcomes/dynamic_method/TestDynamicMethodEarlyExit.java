@@ -1,5 +1,6 @@
-package outcomes.dynamic_testing;
+package outcomes.dynamic_method;
 
+import org.hyperskill.hstest.v7.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicTestingEarlyExitServer {
+class TestDynamicMethodEarlyExitServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
@@ -23,7 +24,7 @@ class TestDynamicTestingEarlyExitServer {
     }
 }
 
-class TestDynamicTestingEarlyExitClient {
+class TestDynamicMethodEarlyExitClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -31,7 +32,7 @@ class TestDynamicTestingEarlyExitClient {
     }
 }
 
-public class TestDynamicTestingEarlyExit extends StageTest<String> {
+public class TestDynamicMethodEarlyExit extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -41,7 +42,7 @@ public class TestDynamicTestingEarlyExit extends StageTest<String> {
         exception.expectMessage(
             "Error in test #1\n" +
                 "\n" +
-                "The main method of the class TestDynamicTestingEarlyExitServer " +
+                "The main method of the class TestDynamicMethodEarlyExitServer " +
                 "has unexpectedly terminated\n" +
                 "\n" +
                 "Please find below the output of your program during this failed test.\n" +
@@ -60,39 +61,35 @@ public class TestDynamicTestingEarlyExit extends StageTest<String> {
         exception.expectMessage(not(containsString("Fatal error")));
     }
 
-    @Override
-    public List<TestCase<String>> generate() {
-        return Arrays.asList(
-            new TestCase<String>().setDynamicTesting(() -> {
-                TestedProgram server = new TestedProgram(
-                    TestDynamicTestingEarlyExitServer.class);
+    @DynamicTestingMethod
+    CheckResult test() {
+        TestedProgram server = new TestedProgram(
+            TestDynamicMethodEarlyExitServer.class);
 
-                TestedProgram client = new TestedProgram(
-                    TestDynamicTestingEarlyExitClient.class);
+        TestedProgram client = new TestedProgram(
+            TestDynamicMethodEarlyExitClient.class);
 
-                String out1 = server.start();
-                String out2 = client.start();
-                if (!out1.equals("Server started!\n")
-                    || !out2.equals("Client started!\n")) {
-                    return CheckResult.wrong("");
-                }
+        String out1 = server.start();
+        String out2 = client.start();
+        if (!out1.equals("Server started!\n")
+            || !out2.equals("Client started!\n")) {
+            return CheckResult.wrong("");
+        }
 
-                String out3 = server.execute(out2);
-                String out4 = client.execute(out1);
-                if (!out3.equals("S1: Client started!\n")
-                    || !out4.equals("C1: Server started!\n")) {
-                    return CheckResult.wrong("");
-                }
+        String out3 = server.execute(out2);
+        String out4 = client.execute(out1);
+        if (!out3.equals("S1: Client started!\n")
+            || !out4.equals("C1: Server started!\n")) {
+            return CheckResult.wrong("");
+        }
 
-                String out5 = server.execute(out4);
-                String out6 = client.execute(out3);
-                if (!out5.equals("S2: C1: Server started!\n")
-                    || !out6.equals("C2: S1: Client started!\n")) {
-                    return CheckResult.wrong("");
-                }
+        String out5 = server.execute(out4);
+        String out6 = client.execute(out3);
+        if (!out5.equals("S2: C1: Server started!\n")
+            || !out6.equals("C2: S1: Client started!\n")) {
+            return CheckResult.wrong("");
+        }
 
-                return CheckResult.correct();
-            })
-        );
+        return CheckResult.correct();
     }
 }
