@@ -23,7 +23,7 @@ import static org.hyperskill.hstest.v7.exception.FailureHandler.getUserException
 public class TestedProgram {
 
     private enum ProgramState {
-        NOT_STARTED, WAITING, RUNNING, ABANDONED, EXCEPTION_THROWN, FINISHED
+        NOT_STARTED, WAITING, RUNNING, EXCEPTION_THROWN, FINISHED
     }
 
     private final StateMachine<ProgramState> machine =
@@ -31,6 +31,8 @@ public class TestedProgram {
 
     private volatile String output;
     private volatile String input;
+
+    private boolean inBackground;
 
     private Method methodToInvoke;
     private final ThreadGroup group;
@@ -73,16 +75,25 @@ public class TestedProgram {
         }
     }
 
+    public void startInBackground(String... args) {
+        start(true, args);
+    }
+
     public String start(String... args) {
+        return start(false, args);
+    }
+
+    public String start(boolean inBackground, String... args) {
         if (machine.getState() != ProgramState.NOT_STARTED) {
             throw new IllegalStateException("Cannot start the program twice");
         }
+        this.inBackground = inBackground;
         machine.setState(ProgramState.WAITING);
         SystemInHandler.setDynamicInputFunc(group, output -> {
-            this.output = output;
-            if (machine.getState() == ProgramState.ABANDONED) {
-                return null;
+            if (this.inBackground) {
+                return null; // no waiting and no input, only EOF
             }
+            this.output = output;
             machine.setAndWait(ProgramState.WAITING);
             String input = this.input;
             this.input = null;
@@ -95,6 +106,12 @@ public class TestedProgram {
     }
 
     public String execute(String input) {
+        if (input == null || inBackground) {
+            inBackground = true;
+            machine.setState(ProgramState.RUNNING); // send "EOF" message and not wait for output
+            return null;
+        }
+
         if (machine.getState() == ProgramState.FINISHED) {
             StageTest.getCurrTestRun().setErrorInTest(
                 new ErrorWithFeedback("The main method of the class "
@@ -110,21 +127,16 @@ public class TestedProgram {
         }
 
         this.input = input;
-        if (input == null) {
-            machine.setState(ProgramState.ABANDONED); // send "EOF" message and not wait for output
-            return null;
-        }
         machine.setAndWait(ProgramState.RUNNING);
         if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
             throw new TestedProgramThrewException();
         }
 
-        String output;
-        if (machine.getState() != ProgramState.FINISHED) {
-            output = this.output;
-        } else {
+        String output = this.output;
+        if (machine.getState() == ProgramState.FINISHED) {
             output = SystemOutHandler.getPartialOutput(group);
         }
+
         this.output = null;
         return output;
     }
@@ -133,9 +145,10 @@ public class TestedProgram {
         executor.shutdownNow();
         task.cancel(true);
         synchronized (machine) {
+            inBackground = true;
             while (!isFinished()) {
                 this.input = null;
-                machine.setAndWait(ProgramState.ABANDONED);
+                machine.setAndWait(ProgramState.RUNNING);
             }
         }
     }
