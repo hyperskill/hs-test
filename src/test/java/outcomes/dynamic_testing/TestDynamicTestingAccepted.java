@@ -9,21 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class TestDynamicStartInBackgroundCorrectServer {
+class TestDynamicTestingAcceptedServer {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
-        try {
-            while (true) {
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException ex) {
-            System.out.println(ex.toString());
-            System.out.println("Server interrupted!");
-        }
+        System.out.println("S1: " + scanner.nextLine());
+        System.out.println("S2: " + scanner.nextLine());
     }
 }
 
-class TestDynamicStartInBackgroundCorrectClient {
+class TestDynamicTestingAcceptedClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -32,36 +27,35 @@ class TestDynamicStartInBackgroundCorrectClient {
     }
 }
 
-public class TestDynamicStartInBackgroundCorrect extends StageTest<String> {
-
-    public TestDynamicStartInBackgroundCorrect() {
-        super(TestDynamicStartInBackgroundCorrectServer.class);
-    }
-
+public class TestDynamicTestingAccepted extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicStartInBackgroundCorrectServer.class);
+                    TestDynamicTestingAcceptedServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicStartInBackgroundCorrectClient.class);
+                    TestDynamicTestingAcceptedClient.class);
 
-                server.startInBackground();
-                String out = client.start();
-
-                if (!out.equals("Client started!\n")) {
+                String out1 = server.start();
+                String out2 = client.start();
+                if (!out1.equals("Server started!\n")
+                    || !out2.equals("Client started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                out = client.execute("123");
-                if (!out.equals("C1: 123\n")) {
+                String out3 = server.execute(out2);
+                String out4 = client.execute(out1);
+                if (!out3.equals("S1: Client started!\n")
+                    || !out4.equals("C1: Server started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                out = client.execute("345");
-                if (!out.equals("C2: 345\n")) {
+                String out5 = server.execute(out4);
+                String out6 = client.execute(out3);
+                if (!out5.equals("S2: C1: Server started!\n")
+                    || !out6.equals("C2: S1: Client started!\n")) {
                     return CheckResult.wrong("");
                 }
 

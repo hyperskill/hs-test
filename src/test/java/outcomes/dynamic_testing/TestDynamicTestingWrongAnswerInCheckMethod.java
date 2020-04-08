@@ -15,21 +15,16 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicStartInBackgroundWrongAnswerServer {
+class TestDynamicTestingWrongAnswerInCheckMethodServer {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
-        try {
-            while (true) {
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException ex) {
-            System.out.println(ex.toString());
-            System.out.println("Server interrupted!");
-        }
+        System.out.println("S1: " + scanner.nextLine());
+        System.out.println("S2: " + scanner.nextLine());
     }
 }
 
-class TestDynamicStartInBackgroundWrongAnswerClient {
+class TestDynamicTestingWrongAnswerInCheckMethodClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -38,12 +33,7 @@ class TestDynamicStartInBackgroundWrongAnswerClient {
     }
 }
 
-public class TestDynamicStartInBackgroundWrongAnswer extends StageTest<String> {
-
-    public TestDynamicStartInBackgroundWrongAnswer() {
-        super(TestDynamicStartInBackgroundWrongAnswerServer.class);
-    }
-
+public class TestDynamicTestingWrongAnswerInCheckMethod extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -51,17 +41,10 @@ public class TestDynamicStartInBackgroundWrongAnswer extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Wrong answer in test #1"
+            "Wrong answer in test #1\n" +
+                "\n" +
+                "WA1"
         );
-        exception.expectMessage(
-            "java.lang.InterruptedException: sleep interrupted\n" +
-            "Server interrupted!");
-        exception.expectMessage(
-            "Client started!\n" +
-            "> 123\n" +
-            "C1: 123\n" +
-            "> 345\n" +
-            "C2: 345");
         exception.expectMessage(not(containsString("Fatal error")));
     }
 
@@ -70,30 +53,39 @@ public class TestDynamicStartInBackgroundWrongAnswer extends StageTest<String> {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicStartInBackgroundWrongAnswerServer.class);
+                    TestDynamicTestingWrongAnswerInCheckMethodServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicStartInBackgroundWrongAnswerClient.class);
+                    TestDynamicTestingWrongAnswerInCheckMethodClient.class);
 
-                server.startInBackground();
-                String out = client.start();
-
-                if (!out.equals("Client started!\n")) {
+                String out1 = server.start();
+                String out2 = client.start();
+                if (!out1.equals("Server started!\n")
+                    || !out2.equals("Client started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                out = client.execute("123");
-                if (!out.equals("C1: 123\n")) {
+                String out3 = server.execute(out2);
+                String out4 = client.execute(out1);
+                if (!out3.equals("S1: Client started!\n")
+                    || !out4.equals("C1: Server started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                out = client.execute("345");
-                if (!out.equals("C2: 345\n")) {
+                String out5 = server.execute(out4);
+                String out6 = client.execute(out3);
+                if (!out5.equals("S2: C1: Server started!\n")
+                    || !out6.equals("C2: S1: Client started!\n")) {
                     return CheckResult.wrong("");
                 }
 
-                return CheckResult.wrong("");
+                return null;
             })
         );
+    }
+
+    @Override
+    public CheckResult check(String reply, String attach) {
+        return CheckResult.wrong("WA1");
     }
 }

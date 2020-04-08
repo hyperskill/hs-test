@@ -21,11 +21,6 @@ class TestSystemExitDynamicTestingMain {
 }
 
 public class TestSystemExitDynamicTesting extends StageTest {
-
-    public TestSystemExitDynamicTesting() {
-        super(TestSystemExitDynamicTestingMain.class);
-    }
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 

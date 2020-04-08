@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class TestDynamicThreadGroupManipulation2Server {
+class TestDynamicTestingThreadGroupManipulation2Server {
     public static void main(String[] args) throws Exception {
 
         ThreadGroup tg = new ThreadGroup("123");
@@ -26,18 +26,13 @@ class TestDynamicThreadGroupManipulation2Server {
     }
 }
 
-public class TestDynamicThreadGroupManipulation2 extends StageTest<String> {
-
-    public TestDynamicThreadGroupManipulation2() {
-        super(TestDynamicThreadGroupManipulation2Server.class);
-    }
-
+public class TestDynamicTestingThreadGroupManipulation2 extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicThreadGroupManipulation2Server.class);
+                    TestDynamicTestingThreadGroupManipulation2Server.class);
                 server.start();
                 return CheckResult.correct();
             })

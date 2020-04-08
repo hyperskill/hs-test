@@ -9,10 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class TestDynamicAcceptedWithThreadGroupServer {
+class TestDynamicTestingAcceptedWithThreadsServer {
     public static void main(String[] args) throws Exception {
-        ThreadGroup group = new ThreadGroup("S");
-        Thread t = new Thread(group, () -> {
+        Thread t = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Server started!");
             System.out.println("Server1: " + scanner.nextLine());
@@ -23,10 +22,9 @@ class TestDynamicAcceptedWithThreadGroupServer {
     }
 }
 
-class TestDynamicAcceptedWithThreadGroupClient {
+class TestDynamicTestingAcceptedWithThreadsClient {
     public static void main(String[] args) throws Exception {
-        ThreadGroup group = new ThreadGroup("C");
-        Thread t = new Thread(group, () -> {
+        Thread t = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Client started!");
             System.out.println("Client1: " + scanner.nextLine());
@@ -37,22 +35,17 @@ class TestDynamicAcceptedWithThreadGroupClient {
     }
 }
 
-public class TestDynamicAcceptedWithThreadGroup extends StageTest<String> {
-
-    public TestDynamicAcceptedWithThreadGroup() {
-        super(TestDynamicAcceptedWithThreadGroupServer.class);
-    }
-
+public class TestDynamicTestingAcceptedWithThreads extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
 
                 TestedProgram server = new TestedProgram(
-                    TestDynamicAcceptedWithThreadGroupServer.class);
+                    TestDynamicTestingAcceptedWithThreadsServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicAcceptedWithThreadGroupClient.class);
+                    TestDynamicTestingAcceptedWithThreadsClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();

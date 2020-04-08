@@ -32,6 +32,10 @@ public abstract class StageTest<AttachType> {
         return currTestRun;
     }
 
+    public StageTest() {
+        this(null, null);
+    }
+
     public StageTest(Class<?> testedClass) {
         this(testedClass, null);
     }

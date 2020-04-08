@@ -12,19 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class FatalErrorAddInput1DynamicMain {
+class FatalErrorAddInput1DynamicTestingMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(scanner.nextLine());
     }
 }
 
-public class FatalErrorAddInput1Dynamic extends StageTest {
-
-    public FatalErrorAddInput1Dynamic() {
-        super(FatalErrorAddInput1DynamicMain.class);
-    }
-
+public class FatalErrorAddInput1DynamicTesting extends StageTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -39,7 +34,8 @@ public class FatalErrorAddInput1Dynamic extends StageTest {
     public List<TestCase> generate() {
         return Arrays.asList(
             new TestCase().setDynamicTesting(() -> {
-                TestedProgram main = new TestedProgram(FatalErrorAddInput1DynamicMain.class);
+                TestedProgram main = new TestedProgram(
+                    FatalErrorAddInput1DynamicTestingMain.class);
                 main.start();
                 int x = 0 / 0;
                 main.execute("Hello");

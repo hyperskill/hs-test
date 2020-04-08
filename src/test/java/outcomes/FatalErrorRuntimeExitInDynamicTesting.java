@@ -20,11 +20,6 @@ class FatalErrorRuntimeExitInDynamicTestingMain {
 }
 
 public class FatalErrorRuntimeExitInDynamicTesting extends StageTest {
-
-    public FatalErrorRuntimeExitInDynamicTesting() {
-        super(FatalErrorRuntimeExitInDynamicTestingMain.class);
-    }
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -55,10 +50,5 @@ public class FatalErrorRuntimeExitInDynamicTesting extends StageTest {
                 return CheckResult.correct();
             })
         );
-    }
-
-    @Override
-    public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals("123"), "");
     }
 }

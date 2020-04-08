@@ -18,11 +18,6 @@ class TestCommandLineArgumentsPassingDynamicTestingMain {
 }
 
 public class TestCommandLineArgumentsPassingDynamicTesting extends StageTest<String> {
-
-    public TestCommandLineArgumentsPassingDynamicTesting() {
-        super(TestCommandLineArgumentsPassingDynamicTestingMain.class);
-    }
-
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(

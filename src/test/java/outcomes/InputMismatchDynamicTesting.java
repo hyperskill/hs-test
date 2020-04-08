@@ -22,11 +22,6 @@ class InputMismatchDynamicTestingMain {
 }
 
 public class InputMismatchDynamicTesting extends StageTest {
-
-    public InputMismatchDynamicTesting() {
-        super(InputMismatchDynamicTestingMain.class);
-    }
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 

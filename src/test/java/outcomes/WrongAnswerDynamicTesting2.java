@@ -24,11 +24,6 @@ class WrongAnswerDynamicTesting2Main {
 }
 
 public class WrongAnswerDynamicTesting2 extends StageTest<String> {
-
-    public WrongAnswerDynamicTesting2() {
-        super(WrongAnswerDynamicTesting2Main.class);
-    }
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 

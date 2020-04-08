@@ -20,11 +20,6 @@ class TestKotlinDynamicTestingMain {
 }
 
 public class TestKotlinDynamicTesting extends StageTest<String> {
-
-    public TestKotlinDynamicTesting() {
-        super(TestKotlinDynamicTestingMain.class);
-    }
-
     @Override
     public List<TestCase<String>> generate() {
 

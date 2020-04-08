@@ -25,11 +25,6 @@ class TestPassedThrownInDynamicTesting1Main {
 }
 
 public class TestPassedThrownInDynamicTesting1 extends StageTest<Boolean> {
-
-    public TestPassedThrownInDynamicTesting1() {
-        super(TestPassedThrownInDynamicTesting1Main.class);
-    }
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 

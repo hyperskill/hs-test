@@ -15,7 +15,7 @@ import java.util.Scanner;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicThreadGroupManipulation1Server {
+class TestDynamicTestingThreadGroupManipulation1Server {
     public static void main(String[] args) throws Exception {
 
         ThreadGroup tg = Thread.currentThread().getThreadGroup().getParent();
@@ -32,12 +32,7 @@ class TestDynamicThreadGroupManipulation1Server {
     }
 }
 
-public class TestDynamicThreadGroupManipulation1 extends StageTest<String> {
-
-    public TestDynamicThreadGroupManipulation1() {
-        super(TestDynamicThreadGroupManipulation1Server.class);
-    }
-
+public class TestDynamicTestingThreadGroupManipulation1 extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -62,7 +57,7 @@ public class TestDynamicThreadGroupManipulation1 extends StageTest<String> {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicThreadGroupManipulation1Server.class);
+                    TestDynamicTestingThreadGroupManipulation1Server.class);
                 server.start();
                 return CheckResult.correct();
             })

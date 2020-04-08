@@ -4,12 +4,18 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestedProgram;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class TestDynamicProgramNotFinishedAfterTestButShutDownServer {
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+
+class TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappenedServer {
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -24,23 +30,30 @@ class TestDynamicProgramNotFinishedAfterTestButShutDownServer {
     }
 }
 
-class TestDynamicProgramNotFinishedAfterTestButShutDownClient {
+class TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappenedClient {
     public static void main(String[] args) {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Client started!");
-            System.out.println("C1: " + scanner.nextLine());
-            System.out.println("C2: " + scanner.nextLine());
-        } catch (Throwable th) {
-            System.out.println("Client stopped!");
-        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Client started!");
+        System.out.println("C1: " + scanner.nextLine());
+        System.out.println("C2: " + scanner.nextLine());
     }
 }
 
-public class TestDynamicProgramNotFinishedAfterTestButShutDown extends StageTest<String> {
+public class TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappened extends StageTest<String> {
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
-    public TestDynamicProgramNotFinishedAfterTestButShutDown() {
-        super(TestDynamicProgramNotFinishedAfterTestButShutDownServer.class);
+    @Before
+    public void before() {
+        exception.expect(AssertionError.class);
+        exception.expectMessage(
+            "Exception in test #1\n" +
+                "\n" +
+                "Probably your program run out of input (Scanner tried to read more than expected).\n" +
+                "\n" +
+                "java.util.NoSuchElementException: No line found"
+        );
+        exception.expectMessage(not(containsString("Fatal error")));
     }
 
     @Override
@@ -49,10 +62,10 @@ public class TestDynamicProgramNotFinishedAfterTestButShutDown extends StageTest
             new TestCase<String>().setDynamicTesting(() -> {
 
                 TestedProgram server = new TestedProgram(
-                    TestDynamicProgramNotFinishedAfterTestButShutDownServer.class);
+                    TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappenedServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicProgramNotFinishedAfterTestButShutDownClient.class);
+                    TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappenedClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();

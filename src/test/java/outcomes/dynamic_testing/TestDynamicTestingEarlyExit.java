@@ -12,32 +12,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicFatalErrorNoCheckMethodServer {
+class TestDynamicTestingEarlyExitServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
         System.out.println("S1: " + scanner.nextLine());
-        System.out.println("S2: " + scanner.nextLine());
     }
 }
 
-class TestDynamicFatalErrorNoCheckMethodClient {
+class TestDynamicTestingEarlyExitClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
         System.out.println("C1: " + scanner.nextLine());
-        System.out.println("C2: " + scanner.nextLine());
     }
 }
 
-public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
-
-    public TestDynamicFatalErrorNoCheckMethod() {
-        super(TestDynamicFatalErrorNoCheckMethodServer.class);
-    }
-
+public class TestDynamicTestingEarlyExit extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -45,12 +39,24 @@ public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Fatal error in test #1, please send the report to support@hyperskill.org"
+            "Error in test #1\n" +
+                "\n" +
+                "The main method of the class TestDynamicEarlyExitServer has unexpectedly terminated\n" +
+                "\n" +
+                "Please find below the output of your program during this failed test.\n" +
+                "Note that the '>' character indicates the beginning of the input line.\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "Server started!\n" +
+                "Client started!\n" +
+                "> Client started!\n" +
+                "S1: Client started!\n" +
+                "> Server started!\n" +
+                "C1: Server started!"
         );
 
-        exception.expectMessage(
-            "FatalError: Can't check result: override \"check\" method"
-        );
+        exception.expectMessage(not(containsString("Fatal error")));
     }
 
     @Override
@@ -58,10 +64,10 @@ public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicFatalErrorNoCheckMethodServer.class);
+                    TestDynamicTestingEarlyExitServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicFatalErrorNoCheckMethodClient.class);
+                    TestDynamicTestingEarlyExitClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();
@@ -84,7 +90,7 @@ public class TestDynamicFatalErrorNoCheckMethod extends StageTest<String> {
                     return CheckResult.wrong("");
                 }
 
-                return null;
+                return CheckResult.correct();
             })
         );
     }
