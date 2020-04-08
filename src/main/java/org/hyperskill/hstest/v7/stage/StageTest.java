@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.v7.stage;
 
 import org.hyperskill.hstest.v7.dynamic.SystemHandler;
+import org.hyperskill.hstest.v7.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
@@ -8,12 +9,12 @@ import org.hyperskill.hstest.v7.outcomes.Outcome;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestRun;
-import org.hyperskill.hstest.v7.testing.TestingConfig;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hyperskill.hstest.v7.dynamic.input.DynamicTesting.searchDynamicTestingMethods;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.v7.dynamic.output.ColoredOutput.RESET;
 import static org.junit.Assert.fail;
@@ -22,8 +23,6 @@ public abstract class StageTest<AttachType> {
 
     private final Class<?> testedClass;
     private final Object testedObject;
-
-    protected TestingConfig config = new TestingConfig();
 
     protected boolean needReloadClass = true;
 
@@ -45,6 +44,10 @@ public abstract class StageTest<AttachType> {
     private List<TestRun> initTests() {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = generate();
+
+        for (DynamicTesting method : searchDynamicTestingMethods(this)) {
+            testCases.add(new TestCase<AttachType>().setDynamicTesting(method));
+        }
 
         if (testCases.size() == 0) {
             throw new FatalError("No tests provided by \"generate\" method");
@@ -94,7 +97,7 @@ public abstract class StageTest<AttachType> {
     }
 
     public List<TestCase<AttachType>> generate() {
-        throw new FatalError("No tests provided by \"generate\" method");
+        return new ArrayList<>();
     }
 
     public CheckResult check(String reply, AttachType attach) {

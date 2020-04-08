@@ -1,12 +1,17 @@
 package org.hyperskill.hstest.v7.dynamic.input;
 
 import org.hyperskill.hstest.v7.exception.outcomes.FatalError;
+import org.hyperskill.hstest.v7.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestedProgram;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -28,7 +33,7 @@ import static org.hyperskill.hstest.v7.common.Utils.cleanText;
  */
 public interface DynamicTesting {
     /**
-     * Method that provides dynamic input. Designed to be used with
+     * Method that provides dynamic testing. Designed to be used with
      * TestedProgram class to be able to partially execute tested program.
      * You can also partially execute multiple programs at the same time.
      * @return CheckResult object at the result of the testing. Return null
@@ -49,7 +54,7 @@ public interface DynamicTesting {
      * @return DynamicInput's single method that provides dynamic input.
      */
     static DynamicTesting toDynamicInput(Class<?> testedClass, List<String> args,
-                                         List<DynamicInputFunction> inputFuncs) {
+                                                List<DynamicInputFunction> inputFuncs) {
 
         class InputFunctionHandler {
             List<DynamicInputFunction> inputFuncs;
@@ -128,5 +133,50 @@ public interface DynamicTesting {
             program.stop();
             return null;
         };
+    }
+
+    /**
+     * Searches for methods with annotation DynamicTestingMethod in the obj object
+     * and converts this methods into DynamicTesting objects.
+     *
+     * Requirements for the method: must return CheckResult object
+     * and doesn't take any parameters.
+     *
+     * @param obj object that contain methods declared with DynamicTestingMethod annotation.
+     * @return list of DynamicMethod objects that represent every method marked
+     *         with DynamicTestingMethod annotation.
+     */
+    static List<DynamicTesting> searchDynamicTestingMethods(Object obj) {
+        List<DynamicTesting> dynamicTestingMethods = new ArrayList<>();
+
+        for (Method method : obj.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(DynamicTestingMethod.class)) {
+
+                if (method.getReturnType() != CheckResult.class) {
+                    throw new FatalError("Method " + method.getName()
+                        + "should return CheckResult object. Found: " + method.getReturnType());
+                }
+
+                if (method.getParameterCount() != 0) {
+                    throw new FatalError("Method " + method.getName()
+                        + "should take 0 arguments. Found: " + method.getParameterCount());
+                }
+
+                dynamicTestingMethods.add(() -> {
+                    method.setAccessible(true);
+                    try {
+                        return (CheckResult) method.invoke(obj);
+                    } catch (InvocationTargetException ex) {
+                        if (ex.getCause() instanceof OutcomeError) {
+                            throw (OutcomeError) ex.getCause();
+                        }
+                        throw new FatalError("", ex.getCause());
+                    } catch (IllegalAccessException ex) {
+                        throw new FatalError("", ex);
+                    }
+                });
+            }
+        }
+        return dynamicTestingMethods;
     }
 }
