@@ -7,6 +7,8 @@ import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -25,6 +27,8 @@ public class TestRun {
     private boolean inputUsed = false;
 
     private Throwable errorInTest;
+
+    private List<TestedProgram> testedPrograms = new ArrayList<>();
 
     public TestRun(int testNum, TestCase<?> testCase) {
         this.testNum = testNum;
@@ -59,17 +63,29 @@ public class TestRun {
         this.errorInTest = errorInTest;
     }
 
+    public void addTestedProgram(TestedProgram testedProgram) {
+        testedPrograms.add(testedProgram);
+    }
+
+    public void stopTestedPrograms() {
+        for (TestedProgram testedProgram : testedPrograms) {
+            testedProgram.stop();
+        }
+    }
+
     public CheckResult test() throws Throwable {
         createFiles(testCase.getFiles());
         ExecutorService pool = startThreads(testCase.getProcesses());
 
         SystemOutHandler.resetOutput();
-        CheckResult result = testCase.runner.test(testCase);
+        CheckResult result = testCase.runner.test(this);
 
         stopThreads(testCase.getProcesses(), pool);
         deleteFiles(testCase.getFiles());
 
-        checkErrors();
+        if (result == null) {
+            checkErrors();
+        }
 
         Throwable errorInTest = StageTest.getCurrTestRun().getErrorInTest();
         if (errorInTest instanceof TestPassed) {

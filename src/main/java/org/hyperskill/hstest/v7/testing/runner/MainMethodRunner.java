@@ -10,6 +10,7 @@ import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.v7.testing.TestRun;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +28,9 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 public class MainMethodRunner implements TestRunner {
 
     @Override
-    public <T> CheckResult test(TestCase<T> testCase) {
+    public <T> CheckResult test(TestRun testRun) {
+        TestCase<T> testCase = (TestCase<T>) testRun.getTestCase();
+
         SystemInHandler.setInputFuncs(testCase.getInputFuncs());
 
         runMain(testCase);

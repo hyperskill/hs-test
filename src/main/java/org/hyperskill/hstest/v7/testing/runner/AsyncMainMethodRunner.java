@@ -10,6 +10,7 @@ import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.v7.testing.TestRun;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -23,14 +24,17 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.wrong;
 
 public class AsyncMainMethodRunner implements TestRunner {
 
-    private CheckResult runMain(TestCase<?> testCase) {
+    private CheckResult runMain(TestRun testRun) {
+        TestCase<?> testCase = testRun.getTestCase();
         int timeLimit = testCase.getTimeLimit();
 
         ExecutorService executorService = newDaemonThreadPool(1);
         Future<CheckResult> future = executorService
             .submit(() -> {
                 try {
-                    return testCase.getDynamicTesting().handle();
+                    CheckResult result = testCase.getDynamicTesting().handle();
+                    testRun.stopTestedPrograms();
+                    return result;
                 } catch (TestedProgramThrewException | TestedProgramFinishedEarly ignored) {
                     return null;
                 }
@@ -56,14 +60,15 @@ public class AsyncMainMethodRunner implements TestRunner {
     }
 
     @Override
-    public <T> CheckResult test(TestCase<T> testCase) {
+    public <T> CheckResult test(TestRun testRun) {
+        TestCase<T> testCase = (TestCase<T>) testRun.getTestCase();
         if (testCase.getDynamicTesting() == null) {
             DynamicTesting converted = DynamicTesting.toDynamicInput(
                 testCase.getTestedClass(), testCase.getArgs(), testCase.getInputFuncs());
             testCase.setDynamicTesting(converted);
         }
 
-        CheckResult result = runMain(testCase);
+        CheckResult result = runMain(testRun);
 
         if (result == null) {
             Throwable error = StageTest.getCurrTestRun().getErrorInTest();

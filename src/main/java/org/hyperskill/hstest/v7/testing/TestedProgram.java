@@ -13,6 +13,8 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import static org.hyperskill.hstest.v7.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.v7.common.ReflectionUtils.getMainMethod;
@@ -32,6 +34,8 @@ public class TestedProgram {
 
     private Method methodToInvoke;
     private final ThreadGroup group;
+    private ExecutorService executor;
+    private Future<?> task;
 
     public TestedProgram(Class<?> testedClass) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
@@ -84,7 +88,9 @@ public class TestedProgram {
             this.input = null;
             return input;
         });
-        newDaemonThreadPool(1, group).submit(() -> invokeMain(args));
+        StageTest.getCurrTestRun().addTestedProgram(this);
+        executor = newDaemonThreadPool(1, group);
+        task = executor.submit(() -> invokeMain(args));
         return execute("");
     }
 
@@ -124,8 +130,11 @@ public class TestedProgram {
     }
 
     public void stop() {
+        executor.shutdownNow();
+        task.cancel(true);
         synchronized (machine) {
             while (!isFinished()) {
+                this.input = null;
                 machine.setAndWait(ProgramState.ABANDONED);
             }
         }
