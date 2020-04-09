@@ -9,6 +9,8 @@ import org.hyperskill.hstest.v7.outcomes.Outcome;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
 import org.hyperskill.hstest.v7.testing.TestRun;
+import org.hyperskill.hstest.v7.testing.runner.AsyncMainMethodRunner;
+import org.hyperskill.hstest.v7.testing.runner.TestRunner;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public abstract class StageTest<AttachType> {
     private final Object testedObject;
 
     protected boolean needReloadClass = true;
+    protected Class<? extends TestRunner> runner = AsyncMainMethodRunner.class;
 
     private static TestRun currTestRun;
 
@@ -45,7 +48,7 @@ public abstract class StageTest<AttachType> {
         this.testedObject = testedObject;
     }
 
-    private List<TestRun> initTests() {
+    private List<TestRun> initTests() throws Exception {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = generate();
 
@@ -64,7 +67,7 @@ public abstract class StageTest<AttachType> {
             if (testCase.getCheckFunc() == null) {
                 testCase.setCheckFunc(this::check);
             }
-            testRuns.add(new TestRun(++currTest, testCase));
+            testRuns.add(new TestRun(++currTest, testCase, runner.newInstance()));
         }
 
         return testRuns;

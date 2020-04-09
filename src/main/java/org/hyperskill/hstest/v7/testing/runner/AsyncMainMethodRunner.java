@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.v7.testing.runner;
 
-import org.hyperskill.hstest.v7.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.v7.exception.testing.TestedProgramThrewException;
@@ -47,11 +46,11 @@ public class AsyncMainMethodRunner implements TestRunner {
                 return future.get(timeLimit, TimeUnit.MILLISECONDS);
             }
         } catch (TimeoutException ex) {
-            StageTest.getCurrTestRun().setErrorInTest(new TimeLimitException(timeLimit));
+            testRun.setErrorInTest(new TimeLimitException(timeLimit));
         } catch (ExecutionException ex) {
-            StageTest.getCurrTestRun().setErrorInTest(ex.getCause());
+            testRun.setErrorInTest(ex.getCause());
         } catch (Throwable ex) {
-            StageTest.getCurrTestRun().setErrorInTest(ex);
+            testRun.setErrorInTest(ex);
         } finally {
             executorService.shutdownNow();
         }
@@ -66,7 +65,7 @@ public class AsyncMainMethodRunner implements TestRunner {
         CheckResult result = runMain(testRun);
 
         if (result == null) {
-            Throwable error = StageTest.getCurrTestRun().getErrorInTest();
+            Throwable error = testRun.getErrorInTest();
 
             if (error == null) {
                 try {
@@ -74,7 +73,7 @@ public class AsyncMainMethodRunner implements TestRunner {
                         SystemOutHandler.getOutput(), testCase.getAttach());
                 } catch (Throwable ex) {
                     error = ex;
-                    StageTest.getCurrTestRun().setErrorInTest(error);
+                    testRun.setErrorInTest(error);
                 }
             }
 

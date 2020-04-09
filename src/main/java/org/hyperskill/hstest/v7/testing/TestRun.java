@@ -3,9 +3,9 @@ package org.hyperskill.hstest.v7.testing;
 import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.v7.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.v7.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.v7.stage.StageTest;
 import org.hyperskill.hstest.v7.testcase.CheckResult;
 import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.v7.testing.runner.TestRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +20,20 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
 
 public class TestRun {
 
-    private int testNum;
-    private TestCase<?> testCase;
+    private final TestRunner testRunner;
+
+    private final int testNum;
+    private final TestCase<?> testCase;
     private boolean inputUsed = false;
 
-    private Throwable errorInTest;
+    private Throwable errorInTest = null;
 
     private List<TestedProgram> testedPrograms = new ArrayList<>();
 
-    public TestRun(int testNum, TestCase<?> testCase) {
+    public TestRun(int testNum, TestCase<?> testCase, TestRunner testRunner) {
         this.testNum = testNum;
         this.testCase = testCase;
+        this.testRunner = testRunner;
     }
 
     public int getTestNum() {
@@ -54,7 +57,9 @@ public class TestRun {
     }
 
     public void setErrorInTest(Throwable errorInTest) {
-        this.errorInTest = errorInTest;
+        if (this.errorInTest == null) {
+            this.errorInTest = errorInTest;
+        }
     }
 
     public void addTestedProgram(TestedProgram testedProgram) {
@@ -72,7 +77,7 @@ public class TestRun {
         ExecutorService pool = startThreads(testCase.getProcesses());
 
         SystemOutHandler.resetOutput();
-        CheckResult result = testCase.runner.test(this);
+        CheckResult result = testRunner.test(this);
 
         stopThreads(testCase.getProcesses(), pool);
         deleteFiles(testCase.getFiles());
@@ -81,7 +86,6 @@ public class TestRun {
             checkErrors();
         }
 
-        Throwable errorInTest = StageTest.getCurrTestRun().getErrorInTest();
         if (errorInTest instanceof TestPassed) {
             return correct();
         }
@@ -89,11 +93,9 @@ public class TestRun {
     }
 
     private void checkErrors() throws Throwable {
-        if (StageTest.getCurrTestRun().getErrorInTest() == null) {
+        if (errorInTest == null) {
             return;
         }
-
-        Throwable errorInTest = StageTest.getCurrTestRun().getErrorInTest();
 
         if (errorInTest instanceof TestPassed) {
             return;
