@@ -20,8 +20,6 @@ import static org.hyperskill.hstest.v7.testcase.CheckResult.correct;
 
 public class TestRun {
 
-    private TestingConfig config = null;
-
     private int testNum;
     private TestCase<?> testCase;
     private boolean inputUsed = false;
@@ -33,10 +31,6 @@ public class TestRun {
     public TestRun(int testNum, TestCase<?> testCase) {
         this.testNum = testNum;
         this.testCase = testCase;
-    }
-
-    public TestingConfig getConfig() {
-        return config;
     }
 
     public int getTestNum() {
