@@ -1,9 +1,9 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 
 import java.util.Arrays;
 import java.util.List;

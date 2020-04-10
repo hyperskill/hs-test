@@ -1,8 +1,8 @@
 package statics;
 
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

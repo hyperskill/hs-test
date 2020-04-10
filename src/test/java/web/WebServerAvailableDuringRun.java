@@ -1,10 +1,10 @@
 package web;
 
-import org.hyperskill.hstest.v7.mocks.web.WebPage;
-import org.hyperskill.hstest.v7.mocks.web.WebServerMock;
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.mocks.web.WebPage;
+import org.hyperskill.hstest.mocks.web.WebServerMock;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

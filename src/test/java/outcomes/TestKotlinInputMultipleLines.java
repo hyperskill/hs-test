@@ -1,14 +1,14 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hyperskill.hstest.v7.dynamic.input.KotlinInput.readLine;
+import static org.hyperskill.hstest.dynamic.input.KotlinInput.readLine;
 
 class TestKotlinInputMultipleLinesMain {
     public static void main(String[] args) throws IOException {

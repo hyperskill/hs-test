@@ -1,13 +1,13 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testing.TestedProgram;
+import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.io.IOException;
 
-import static org.hyperskill.hstest.v7.dynamic.input.KotlinInput.readLine;
+import static org.hyperskill.hstest.dynamic.input.KotlinInput.readLine;
 
 class TestKotlinDynamicMethodMain {
     public static void main(String[] args) throws IOException {

@@ -1,9 +1,9 @@
 package outcomes;
 
-import org.hyperskill.hstest.v7.exception.outcomes.WrongAnswer;
-import org.hyperskill.hstest.v7.stage.StageTest;
-import org.hyperskill.hstest.v7.testcase.CheckResult;
-import org.hyperskill.hstest.v7.testcase.TestCase;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;

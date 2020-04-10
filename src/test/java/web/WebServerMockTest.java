@@ -1,10 +1,10 @@
 package web;
 
-import org.hyperskill.hstest.v7.common.ProcessUtils;
-import org.hyperskill.hstest.v7.common.Utils;
-import org.hyperskill.hstest.v7.mocks.web.WebPage;
-import org.hyperskill.hstest.v7.mocks.web.WebServerMock;
-import org.hyperskill.hstest.v7.testcase.Process;
+import org.hyperskill.hstest.common.ProcessUtils;
+import org.hyperskill.hstest.common.Utils;
+import org.hyperskill.hstest.mocks.web.WebPage;
+import org.hyperskill.hstest.mocks.web.WebServerMock;
+import org.hyperskill.hstest.testcase.Process;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
