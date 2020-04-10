@@ -11,9 +11,19 @@ import java.nio.file.FileSystemException;
 
 public abstract class Outcome {
 
-    int testNumber = 0;
-    String errorText = "";
-    String stackTrace = "";
+    int testNumber;
+    String errorText;
+    String stackTrace;
+
+    public Outcome() {
+        this(0, "", "");
+    }
+
+    public Outcome(int testNumber, String errorText, String stackTrace) {
+        this.testNumber = testNumber;
+        this.errorText = errorText;
+        this.stackTrace = stackTrace;
+    }
 
     protected abstract String getType();
 

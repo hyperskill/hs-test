@@ -7,8 +7,7 @@ import static org.hyperskill.hstest.v7.exception.StackTraceUtils.getStackTrace;
 public class FatalErrorOutcome extends Outcome {
 
     public FatalErrorOutcome(int testNum, Throwable cause) {
-        testNumber = testNum;
-        errorText = FailureHandler.getReport();
+        super(testNum, FailureHandler.getReport(), "");
         stackTrace = getStackTrace(cause);
         if (cause.getCause() != null) {
             stackTrace += "\n" + getStackTrace(cause.getCause());
