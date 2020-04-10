@@ -13,6 +13,8 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -39,12 +41,15 @@ public class TestedProgram {
     private ExecutorService executor;
     private Future<?> task;
 
+    private List<String> runArgs;
+    private Class<?> runClass;
+
     public TestedProgram(Class<?> testedClass) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
         try {
-            Class<?> reloaded = dcl.loadClass(testedClass.getName());
-            methodToInvoke = getMainMethod(reloaded);
-            group = new ThreadGroup(reloaded.getSimpleName());
+            runClass = dcl.loadClass(testedClass.getName());
+            methodToInvoke = getMainMethod(runClass);
+            group = new ThreadGroup(runClass.getSimpleName());
             group.setDaemon(true);
         } catch (Exception ex) {
             throw new FatalError("Error initializing tested program", ex);
@@ -87,7 +92,10 @@ public class TestedProgram {
         if (machine.getState() != ProgramState.NOT_STARTED) {
             throw new IllegalStateException("Cannot start the program twice");
         }
+
         this.inBackground = inBackground;
+        this.runArgs = Arrays.asList(args);
+
         machine.setState(ProgramState.WAITING);
         SystemInHandler.setDynamicInputFunc(group, output -> {
             if (this.inBackground) {
@@ -99,6 +107,7 @@ public class TestedProgram {
             this.input = null;
             return input;
         });
+
         StageTest.getCurrTestRun().addTestedProgram(this);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
@@ -156,5 +165,13 @@ public class TestedProgram {
     public boolean isFinished() {
         return machine.getState() == ProgramState.FINISHED
             || machine.getState() == ProgramState.EXCEPTION_THROWN;
+    }
+
+    public List<String> getRunArgs() {
+        return runArgs;
+    }
+
+    public Class<?> getRunClass() {
+        return runClass;
     }
 }

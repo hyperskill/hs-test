@@ -66,6 +66,10 @@ public class TestRun {
         testedPrograms.add(testedProgram);
     }
 
+    public List<TestedProgram> getTestedPrograms() {
+        return testedPrograms;
+    }
+
     public void stopTestedPrograms() {
         for (TestedProgram testedProgram : testedPrograms) {
             testedProgram.stop();
