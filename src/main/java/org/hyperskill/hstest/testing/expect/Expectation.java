@@ -15,41 +15,42 @@ public class Expectation<T> {
     final String text;
 
     Function<Integer, Boolean> checkAmount;
-    Supplier<List<T>> foundElemsFunc;
+    Supplier<List<T>> findAllElemsFunc;
     Supplier<String> whatsWrongFunc;
-    String hint;
+    Function<Integer, String> hintFunc = i -> null;
 
     private Expectation(String output) {
-        text = output;
+        text = output.trim();
     }
 
-    public static ExpectAmountBuilder<?> expect(String text) {
-        return new ExpectAmountBuilder<>(new Expectation<>(text));
+    public static ExpectationBuilder<?> expect(String text) {
+        return new ExpectationBuilder<>(new Expectation<>(text));
     }
 
-    <X> Expectation<X> copy(Supplier<List<X>> foundElemsFunc) {
+    <X> Expectation<X> copy(Supplier<List<X>> findAllElemsFunc) {
         Expectation<X> result = new Expectation<>(text);
         result.checkAmount = checkAmount;
-        result.foundElemsFunc = foundElemsFunc;
+        result.findAllElemsFunc = findAllElemsFunc;
         result.whatsWrongFunc = whatsWrongFunc;
-        result.hint = hint;
+        result.hintFunc = hintFunc;
         return result;
     }
 
     List<T> check() {
-        List<T> found = foundElemsFunc.get();
+        List<T> found = findAllElemsFunc.get();
         if (!checkAmount.apply(found.size())) {
-            throw new PresentationError(constructFeedback());
+            throw new PresentationError(constructFeedback(found.size()));
         }
         return found;
     }
 
-    private String constructFeedback() {
+    private String constructFeedback(int foundSize) {
         String feedback;
         if (text.length() == 0) {
             feedback = "Since the last input no output was printed, but should.";
         } else {
             String whatsWrong = whatsWrongFunc.get();
+            String hint = hintFunc.apply(foundSize);
             if (hint == null) {
                 hint = "";
             }
@@ -59,24 +60,5 @@ public class Expectation<T> {
             feedback = "The following output " + whatsWrong + hint + ":\n\n" + text;
         }
         return feedback;
-    }
-
-
-
-
-
-    /**
-     * Checks that condition is true.
-     * If it's not then it throws PresentationError with feedback.
-     * This method should be called from all other methods.
-     */
-    public static void expect(boolean condition, String feedback) throws PresentationError {
-        expect(condition, () -> feedback);
-    }
-
-    public static void expect(boolean condition, Supplier<String> feedbackFunc) throws PresentationError {
-        if (!condition) {
-            throw new PresentationError(feedbackFunc.get());
-        }
     }
 }
