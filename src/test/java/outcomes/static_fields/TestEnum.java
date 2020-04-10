@@ -32,9 +32,9 @@ public class TestEnum extends StageTest {
         "ONE\n" +
         "TWO\n" +
         "THREE\n" +
-        "class statics.StaticEnum\n" +
-        "class statics.StaticEnum\n" +
-        "class statics.StaticEnum\n";
+        "class outcomes.static_fields.StaticEnum\n" +
+        "class outcomes.static_fields.StaticEnum\n" +
+        "class outcomes.static_fields.StaticEnum\n";
 
     @Override
     public List<TestCase<String>> generate() {

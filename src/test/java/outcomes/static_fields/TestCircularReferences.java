@@ -84,7 +84,7 @@ public class TestCircularReferences extends StageTest {
 
     private String rightOutput =
         "true\n" +
-        "class statics.TestCircularReferencesMain$Node2\n" +
+        "class outcomes.static_fields.TestCircularReferencesMain$Node2\n" +
         "class java.lang.String\n" +
         "qwerty\n" +
         "class java.lang.Integer\n" +
@@ -95,7 +95,7 @@ public class TestCircularReferences extends StageTest {
         "class java.lang.Integer\n" +
         "123\n" +
         "true\n" +
-        "class statics.TestCircularReferencesMain$Node2\n" +
+        "class outcomes.static_fields.TestCircularReferencesMain$Node2\n" +
         "class java.lang.String\n" +
         "657\n" +
         "class java.lang.Integer\n" +

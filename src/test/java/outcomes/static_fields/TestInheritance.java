@@ -40,7 +40,7 @@ public class TestInheritance extends StageTest {
     }
 
     private String rightOutput =
-        "class statics.TestInheritanceMain$Child\n" +
+        "class outcomes.static_fields.TestInheritanceMain$Child\n" +
         "Child\n" +
         "234\n";
 
