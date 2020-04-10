@@ -4,6 +4,7 @@ public class PresentationError extends OutcomeError {
     private final String feedbackText;
 
     public PresentationError(String feedbackText) {
+        super(feedbackText);
         this.feedbackText = feedbackText;
     }
 

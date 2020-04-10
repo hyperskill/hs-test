@@ -38,8 +38,12 @@ public class Expectation<T> {
 
     List<T> check() {
         List<T> found = findAllElemsFunc.get();
-        if (!checkAmount.apply(found.size())) {
-            throw new PresentationError(constructFeedback(found.size()));
+        if (found == null || !checkAmount.apply(found.size())) {
+            int size = -1;
+            if (found != null) {
+                size = found.size();
+            }
+            throw new PresentationError(constructFeedback(size));
         }
         return found;
     }

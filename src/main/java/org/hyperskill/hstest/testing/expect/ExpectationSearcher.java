@@ -38,8 +38,9 @@ public class ExpectationSearcher<T> {
     }
 
     public List<String> wordsOnlyFrom(String... words) {
-        return custom(() -> findWords(patternForSpecificWords(words)),
-            "contains wrong number of specific words");
+        Expectation<String> exp = expect.copy(() -> findWords(patternForSpecificWords(words)));
+        exp.whatsWrongFunc = feedbackWithScanner(exp, "specific words");
+        return exp.check();
     }
 
     public List<Integer> integers() {
@@ -48,26 +49,14 @@ public class ExpectationSearcher<T> {
 
     public List<Integer> integersOnly() {
         Expectation<Integer> exp = expect.copy(this::findIntegersOnly);
-        exp.whatsWrongFunc = () -> {
-            if (scanner.hasNext()) {
-                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
-                return "contains not only integers";
-            }
-            return "contains wrong number of integers";
-        };
+        exp.whatsWrongFunc = feedbackWithScanner(exp, "integers");
         return exp.check();
     }
 
     public List<Integer> integersOnly(String delim) {
-        scanner.useDelimiter(delim);
+        scanner.useDelimiter("\\s*" + delim + "\\s*");
         Expectation<Integer> exp = expect.copy(this::findIntegersOnly);
-        exp.whatsWrongFunc = () -> {
-            if (scanner.hasNext()) {
-                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
-                return "contains not only integers";
-            }
-            return "contains wrong number of integers separated by \"" + delim + "\"";
-        };
+        exp.whatsWrongFunc = feedbackWithScanner(exp, "integers", delim);
         return exp.check();
     }
 
@@ -77,26 +66,14 @@ public class ExpectationSearcher<T> {
 
     public List<Double> doublesOnly() {
         Expectation<Double> exp = expect.copy(this::findDoublesOnly);
-        exp.whatsWrongFunc = () -> {
-            if (scanner.hasNext()) {
-                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
-                return "contains not only doubles";
-            }
-            return "contains wrong number of doubles";
-        };
+        exp.whatsWrongFunc = feedbackWithScanner(exp, "doubles");
         return exp.check();
     }
 
     public List<Double> doublesOnly(String delim) {
-        scanner.useDelimiter(delim);
+        scanner.useDelimiter("\\s*" + delim + "\\s*");
         Expectation<Double> exp = expect.copy(this::findDoublesOnly);
-        exp.whatsWrongFunc = () -> {
-            if (scanner.hasNext()) {
-                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
-                return "contains not only doubles";
-            }
-            return "contains wrong number of doubles separated by \"" + delim + "\"";
-        };
+        exp.whatsWrongFunc = feedbackWithScanner(exp, "doubles", delim);
         return exp.check();
     }
 
@@ -119,7 +96,7 @@ public class ExpectationSearcher<T> {
     }
 
     // ---------------------------------
-    // below are just searching functions
+    // searching methods
 
     List<String> findLines() {
         List<String> lines = new ArrayList<>();
@@ -139,8 +116,11 @@ public class ExpectationSearcher<T> {
 
     List<String> findWords(String pattern) {
         List<String> words = new ArrayList<>();
-        while (scanner.hasNext()) {
+        while (scanner.hasNext(pattern)) {
             words.add(scanner.next(pattern));
+        }
+        if (scanner.hasNext()) {
+            return null;
         }
         return words;
     }
@@ -150,6 +130,9 @@ public class ExpectationSearcher<T> {
         while (scanner.hasNextInt()) {
             ints.add(scanner.nextInt());
         }
+        if (scanner.hasNext()) {
+            return null;
+        }
         return ints;
     }
 
@@ -157,6 +140,9 @@ public class ExpectationSearcher<T> {
         List<Double> doubles = new ArrayList<>();
         while (scanner.hasNextDouble()) {
             doubles.add(scanner.nextDouble());
+        }
+        if (scanner.hasNext()) {
+            return null;
         }
         return doubles;
     }
@@ -188,6 +174,9 @@ public class ExpectationSearcher<T> {
         return matches;
     }
 
+    // ---------------------------------
+    // helper methods
+
     String patternForSpecificWords(String... words) {
         StringBuilder patternBuilder = new StringBuilder();
         for (String word : words) {
@@ -196,5 +185,23 @@ public class ExpectationSearcher<T> {
         // remove last "|"
         patternBuilder.setLength(Math.max(patternBuilder.length() - 1, 0));
         return patternBuilder.toString();
+    }
+
+    <X> Supplier<String> feedbackWithScanner(Expectation<X> expect, String type) {
+        return feedbackWithScanner(expect, type, null);
+    }
+
+    <X> Supplier<String> feedbackWithScanner(Expectation<X> expect, String type, String delim) {
+        return () -> {
+            if (scanner.hasNext()) {
+                expect.hintFunc = i -> "but also \"" + scanner.next() + "\"";
+                return "contains not only " + type;
+            }
+            String separated = "";
+            if (delim != null) {
+                separated = " separated by \"" + delim + "\"";
+            }
+            return "contains wrong number of " + type + separated;
+        };
     }
 }
