@@ -3,6 +3,7 @@ package org.hyperskill.hstest.outcomes;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.stage.StageTest;
@@ -54,7 +55,7 @@ public abstract class Outcome {
 
         String fullLog = SystemOutHandler.getDynamicOutput();
 
-        if (fullLog.trim().length() != 0) {
+        if (fullLog.trim().length() != 0 && !result.contains(fullLog.trim())) {
             result += "\n\n";
             result += "Please find below the output of your program during this failed test.\n";
             if (StageTest.getCurrTestRun().isInputUsed()) {
@@ -71,6 +72,10 @@ public abstract class Outcome {
         if (t instanceof WrongAnswer) {
             return new WrongAnswerOutcome(currTest,
                 ((WrongAnswer) t).getFeedbackText().trim());
+
+        } else if (t instanceof PresentationError) {
+            return new PresentationErrorOutcome(currTest,
+                ((PresentationError) t).getFeedbackText());
 
         } else if (t instanceof ExceptionWithFeedback) {
             ExceptionWithFeedback ex = (ExceptionWithFeedback) t;
