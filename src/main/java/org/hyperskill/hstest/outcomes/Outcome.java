@@ -3,8 +3,8 @@ package org.hyperskill.hstest.outcomes;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
-import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.stage.StageTest;
 
 import java.nio.file.FileSystemException;

@@ -6,14 +6,14 @@ import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.FailureHandler;
+import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
-import org.hyperskill.hstest.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.exception.testing.TimeLimitException;
-import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,8 +21,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 
 public class MainMethodRunner implements TestRunner {
 

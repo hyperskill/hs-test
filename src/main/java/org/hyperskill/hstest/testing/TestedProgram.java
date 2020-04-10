@@ -4,10 +4,10 @@ import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
-import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
-import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
+import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
 import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 

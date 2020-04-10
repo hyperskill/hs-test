@@ -1,23 +1,21 @@
 package org.hyperskill.hstest.testing.runner;
 
 import org.hyperskill.hstest.common.ProcessUtils;
+import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
+import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
+import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
-import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
-import org.hyperskill.hstest.exception.outcomes.TestPassed;
-import org.hyperskill.hstest.exception.testing.TimeLimitException;
-import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 
 public class AsyncMainMethodRunner implements TestRunner {
 

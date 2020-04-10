@@ -1,8 +1,8 @@
 package org.hyperskill.hstest.common;
 
 import org.hyperskill.hstest.dynamic.output.ColoredOutput;
-import org.hyperskill.hstest.testcase.Process;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.testcase.Process;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

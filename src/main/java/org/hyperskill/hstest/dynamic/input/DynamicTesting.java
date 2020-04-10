@@ -3,9 +3,9 @@ package org.hyperskill.hstest.dynamic.input;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
-import org.hyperskill.hstest.testing.TestedProgram;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,10 +1,10 @@
 package org.hyperskill.hstest.testing;
 
-import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 
 import java.util.ArrayList;
