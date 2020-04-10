@@ -58,6 +58,19 @@ public class ExpectationSearcher<T> {
         return exp.check();
     }
 
+    public List<Integer> integersOnly(String delim) {
+        scanner.useDelimiter(delim);
+        Expectation<Integer> exp = expect.copy(this::findIntegersOnly);
+        exp.whatsWrongFunc = () -> {
+            if (scanner.hasNext()) {
+                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
+                return "contains not only integers";
+            }
+            return "contains wrong number of integers separated by \"" + delim + "\"";
+        };
+        return exp.check();
+    }
+
     public List<Double> doubles() {
         return custom(this::findDoubles, "contains wrong number of doubles");
     }
@@ -70,6 +83,19 @@ public class ExpectationSearcher<T> {
                 return "contains not only doubles";
             }
             return "contains wrong number of doubles";
+        };
+        return exp.check();
+    }
+
+    public List<Double> doublesOnly(String delim) {
+        scanner.useDelimiter(delim);
+        Expectation<Double> exp = expect.copy(this::findDoublesOnly);
+        exp.whatsWrongFunc = () -> {
+            if (scanner.hasNext()) {
+                exp.hintFunc = i -> "but also \"" + scanner.next() + "\"";
+                return "contains not only doubles";
+            }
+            return "contains wrong number of doubles separated by \"" + delim + "\"";
         };
         return exp.check();
     }

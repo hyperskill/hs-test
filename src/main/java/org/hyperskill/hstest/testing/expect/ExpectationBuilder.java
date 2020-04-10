@@ -13,7 +13,7 @@ public class ExpectationBuilder<T> {
         return toContain(amount -> amount > 0);
     }
 
-    public ExpectationSearcher<T> toContainOnly(int count) {
+    public ExpectationSearcher<T> toContain(int count) {
         return toContain(amount -> amount == count, "equal to " + count);
     }
 
