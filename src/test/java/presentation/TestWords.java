@@ -27,8 +27,8 @@ public class TestWords {
             expect("123 234 345").toContain(4).words();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
-                "The following output contains wrong number of words (expected to be equal to 4, found 3):\n" +
-                    "\n" +
+                "The following output contains wrong " +
+                    "number of words (expected to be equal to 4, found 3):\n" +
                     "123 234 345");
             return;
         }
@@ -54,7 +54,6 @@ public class TestWords {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong number " +
                     "of words separated by \",\" (expected to be equal to 1, found 4):\n" +
-                    "\n" +
                     "qweqw,  123 , dsjfdhasd234 ,345fgfgnfg");
             return;
         }
@@ -81,7 +80,6 @@ public class TestWords {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of specific words (expected to be equal to 6, found 3):\n" +
-                    "\n" +
                     "yes 4324 23 123 324 2no 564yes 345");
             return;
         }
@@ -107,7 +105,6 @@ public class TestWords {
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only specific words (but also \"43\"):\n" +
-                    "\n" +
                     "yes 43 no 24 yes");
             return;
         }

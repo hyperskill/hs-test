@@ -61,7 +61,7 @@ public class Expectation<T> {
             if (hint.length() != 0) {
                 hint = " (" + hint + ")";
             }
-            feedback = "The following output " + whatsWrong + hint + ":\n\n" + text;
+            feedback = "The following output " + whatsWrong + hint + ":\n" + text;
         }
         return feedback;
     }

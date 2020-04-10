@@ -36,7 +36,6 @@ public class TestDoubles {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of doubles (expected to be equal to 4, found 2):\n" +
-                    "\n" +
                     "123.65 234.99");
             return;
         }
@@ -70,8 +69,7 @@ public class TestDoubles {
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only doubles (but also \"qweqw\"):\n" +
-                    "\n" +
-                    "qweqw 123 dsjfdhasd234 345fgfgnfg");
+                    "qweqw 123.76 dsjfdhasd234.09 345.98fgfgnfg");
             return;
         }
         fail();
@@ -84,7 +82,6 @@ public class TestDoubles {
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only doubles (but also \"qweqw\"):\n" +
-                    "\n" +
                     "1.0 2e3 -3 qweqw 123 dsjfdhasd234 345fgfgnfg");
             return;
         }
@@ -109,7 +106,6 @@ public class TestDoubles {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of doubles separated by \"=\" (expected to be equal to 1, found 3):\n" +
-                    "\n" +
                     "123.456  =234e3= 345e-1");
             return;
         }

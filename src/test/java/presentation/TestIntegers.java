@@ -27,8 +27,8 @@ public class TestIntegers {
             expect("123 234 ").toContain(4).integers();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
-                "The following output contains wrong number of integers (expected to be equal to 4, found 2):\n" +
-                    "\n" +
+                "The following output contains wrong " +
+                    "number of integers (expected to be equal to 4, found 2):\n" +
                     "123 234");
             return;
         }
@@ -62,7 +62,6 @@ public class TestIntegers {
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only integers (but also \"qweqw\"):\n" +
-                    "\n" +
                     "qweqw 123 dsjfdhasd234 345fgfgnfg");
             return;
         }
@@ -76,7 +75,6 @@ public class TestIntegers {
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only integers (but also \"qweqw\"):\n" +
-                    "\n" +
                     "1 2 3 qweqw 123 dsjfdhasd234 345fgfgnfg");
             return;
         }
@@ -101,7 +99,6 @@ public class TestIntegers {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers separated by \":\" (expected to be equal to 4, found 3):\n" +
-                "\n" +
                 "123  :234: 345");
             return;
         }

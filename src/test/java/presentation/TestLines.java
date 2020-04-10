@@ -38,7 +38,6 @@ public class TestLines {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of lines (expected to be equal to 4, found 1):\n" +
-                    "\n" +
                     "123 234 345");
             return;
         }

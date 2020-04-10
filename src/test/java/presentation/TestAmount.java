@@ -34,7 +34,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains " +
                     "wrong number of integers (expected to be equal to 5, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -54,7 +53,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains " +
                     "wrong number of integers (expected to be equal to 7, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -74,7 +72,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be more than 6, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -89,7 +86,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be more than 7, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -104,7 +100,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be less than 5, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -119,7 +114,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be less than 6, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -149,7 +143,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be at least 7, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -164,7 +157,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be 5 at most, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -189,7 +181,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be between 3 and 5, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
@@ -224,7 +215,6 @@ public class TestAmount {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains wrong " +
                     "number of integers (expected to be between 7 and 9, found 6):\n" +
-                    "\n" +
                     "123 987 765 654 987 675");
             return;
         }
