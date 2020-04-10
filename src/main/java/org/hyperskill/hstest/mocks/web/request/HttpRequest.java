@@ -8,6 +8,9 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.mocks.web.constants.Headers.AUTHORIZATION;
+import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_TYPE;
+
 public class HttpRequest {
 
     String method = "";
@@ -76,14 +79,14 @@ public class HttpRequest {
     }
 
     public HttpRequest setContentType(ContentType type) {
-        return addHeader(Headers.CONTENT_TYPE, type.getMimeType());
+        return addHeader(CONTENT_TYPE, type.getMimeType());
     }
 
     public HttpRequest basicAuth(String login, String pass) {
         String beforeEncoding = login + ":" + pass;
         String afterEncoding = Base64.getEncoder().encodeToString(beforeEncoding.getBytes());
         String headerValue = "Basic " + afterEncoding;
-        return addHeader(Headers.AUTHORIZATION, headerValue);
+        return addHeader(AUTHORIZATION, headerValue);
     }
 
     public HttpResponse send() {
