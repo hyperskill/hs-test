@@ -1,19 +1,21 @@
-package outcomes.dynamic_method;
+package outcomes.thread_group;
 
-import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-class TestDynamicMethodThreadGroupManipulation1Server {
+class TestDynamicTestingThreadGroupManipulation1Server {
     public static void main(String[] args) throws Exception {
 
         ThreadGroup tg = Thread.currentThread().getThreadGroup().getParent();
@@ -30,7 +32,7 @@ class TestDynamicMethodThreadGroupManipulation1Server {
     }
 }
 
-public class TestDynamicMethodThreadGroupManipulation1 extends StageTest<String> {
+public class TestDynamicTestingThreadGroupManipulation1 extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -50,11 +52,15 @@ public class TestDynamicMethodThreadGroupManipulation1 extends StageTest<String>
         exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
     }
 
-    @DynamicTestingMethod
-    CheckResult test() {
-        TestedProgram server = new TestedProgram(
-            TestDynamicMethodThreadGroupManipulation1Server.class);
-        server.start();
-        return CheckResult.correct();
+    @Override
+    public List<TestCase<String>> generate() {
+        return Arrays.asList(
+            new TestCase<String>().setDynamicTesting(() -> {
+                TestedProgram server = new TestedProgram(
+                    TestDynamicTestingThreadGroupManipulation1Server.class);
+                server.start();
+                return CheckResult.correct();
+            })
+        );
     }
 }

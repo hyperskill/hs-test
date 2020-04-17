@@ -1,4 +1,4 @@
-package outcomes.dynamic_method;
+package outcomes.thread_group;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.stage.StageTest;
