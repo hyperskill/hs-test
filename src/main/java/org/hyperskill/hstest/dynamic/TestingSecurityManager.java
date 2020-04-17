@@ -14,21 +14,33 @@ public class TestingSecurityManager extends NoExitSecurityManager {
     }
 
     public static ThreadGroup getTestingGroup() {
+        ThreadGroup prevGroup = null;
         ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
         while (currGroup != rootGroup) {
             try {
+                prevGroup = currGroup;
                 currGroup = currGroup.getParent();
             } catch (AccessControlException ex) {
                 return currGroup;
             }
         }
-        return null;
+        return prevGroup;
+    }
+
+    private static boolean isPrivilegedAccess() {
+        for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+            if (stackTraceElement.getClassName().equals("java.security.AccessController")
+                    && stackTraceElement.getMethodName().equals("doPrivileged")) {
+               return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void checkAccess(ThreadGroup g) {
         ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
-        if (currGroup != rootGroup && g == rootGroup) {
+        if (currGroup != rootGroup && g == rootGroup && !isPrivilegedAccess()) {
             throw new AccessControlException("Cannot access or create ThreadGroup objects");
         }
     }
