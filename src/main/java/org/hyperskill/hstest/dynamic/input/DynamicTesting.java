@@ -23,8 +23,8 @@ import static org.hyperskill.hstest.common.Utils.cleanText;
  * while dynamic input is calculated in the middle of testing process.
  *
  * Dynamic testing has some benefits over tests with static input:
- * 1) You are able to test small parts of the output compared to checking
- *    whole output. Parsing it to determine if the program written correctly
+ * 1) You are able to test small parts of the output compared to checking whole
+ *    output. Parsing whole output to determine if the program written correctly
  *    may be more error-prone rather than parsing small pieces of the output.
  * 2) Some programs aren't testable with static input because the input may
  *    be dependent on the previous output (for example, Tic-Tac-Toe game).
