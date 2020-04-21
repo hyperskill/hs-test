@@ -17,11 +17,11 @@ public class TestingSecurityManager extends NoExitSecurityManager {
         ThreadGroup prevGroup = null;
         ThreadGroup currGroup = Thread.currentThread().getThreadGroup();
         while (currGroup != rootGroup) {
+            prevGroup = currGroup;
             try {
-                prevGroup = currGroup;
                 currGroup = currGroup.getParent();
             } catch (AccessControlException ex) {
-                return currGroup;
+                break;
             }
         }
         return prevGroup;
