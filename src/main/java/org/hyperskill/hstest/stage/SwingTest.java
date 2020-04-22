@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.stage;
 
+import org.assertj.swing.core.ComponentLookupScope;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
@@ -35,6 +36,7 @@ public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
     @Before
     public void setUpUI() {
         window = new FrameFixture(GuiActionRunner.execute(() -> frame));
+        window.robot().settings().componentLookupScope(ComponentLookupScope.ALL);
         Rectangle savedFrameBounds = frame.getBounds();
         window.show();
         frame.setBounds(savedFrameBounds);
