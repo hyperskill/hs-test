@@ -1,4 +1,4 @@
-package outcomes.thread_group;
+package outcomes.threads;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
