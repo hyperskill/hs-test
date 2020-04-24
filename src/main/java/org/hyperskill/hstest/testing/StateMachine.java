@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.testing;
 
+import java.util.function.Supplier;
+
 public class StateMachine<T> {
     private volatile T state;
 
@@ -16,13 +18,7 @@ public class StateMachine<T> {
     }
 
     public synchronized void waitAndSet(T waitingState, T newState) {
-        while (state != waitingState) {
-            try {
-                wait();
-            } catch (InterruptedException ignored) { }
-        }
-        state = newState;
-        notifyAll();
+        waitSetWait(() -> state != waitingState, newState, () -> false);
     }
 
     public synchronized void setState(T newState) {
@@ -30,19 +26,25 @@ public class StateMachine<T> {
     }
 
     public synchronized void setAndWait(T newState, T waitingState) {
-        state = newState;
-        notifyAll();
-        while (state != waitingState) {
+        waitSetWait(() -> false, newState, () -> state != waitingState);
+    }
+
+    public synchronized void setAndWait(T newState) {
+        waitSetWait(() -> false, newState, () -> state == newState);
+    }
+
+    public synchronized void waitSetWait(Supplier<Boolean> checkWaitBefore, T newState,
+                                          Supplier<Boolean> checkWaitAfter) {
+        while (checkWaitBefore.get()) {
             try {
                 wait();
             } catch (InterruptedException ignored) { }
         }
-    }
 
-    public synchronized void setAndWait(T newState) {
         state = newState;
         notifyAll();
-        while (state == newState) {
+
+        while (checkWaitAfter.get()) {
             try {
                 wait();
             } catch (InterruptedException ignored) { }
