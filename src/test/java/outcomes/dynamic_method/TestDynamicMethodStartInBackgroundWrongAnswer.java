@@ -28,7 +28,8 @@ class TestDynamicMethodStartInBackgroundWrongAnswerServer {
 }
 
 class TestDynamicMethodStartInBackgroundWrongAnswerClient {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Thread.sleep(10);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
         System.out.println("C1: " + scanner.nextLine());
