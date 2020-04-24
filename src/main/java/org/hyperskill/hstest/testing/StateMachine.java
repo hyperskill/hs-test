@@ -1,12 +1,24 @@
 package org.hyperskill.hstest.testing;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class StateMachine<T> {
     private volatile T state;
+    private final Map<T, Set<T>> transitions = new HashMap<>();
 
     public StateMachine(T initialValue) {
         state = initialValue;
+    }
+
+    public void addTransition(T from, T to) {
+        if (!transitions.containsKey(from)) {
+            transitions.put(from, new HashSet<>());
+        }
+        transitions.get(from).add(to);
     }
 
     public T getState() {
@@ -34,13 +46,17 @@ public class StateMachine<T> {
     }
 
     public synchronized void waitSetWait(Supplier<Boolean> checkWaitBefore, T newState,
-                                          Supplier<Boolean> checkWaitAfter) {
+                                         Supplier<Boolean> checkWaitAfter) {
         while (checkWaitBefore.get()) {
             try {
                 wait();
             } catch (InterruptedException ignored) { }
         }
 
+        if (state != newState && !transitions.get(state).contains(newState)) {
+            throw new IllegalStateException(
+                "Cannot transit from " + state + " to " + newState);
+        }
         state = newState;
         notifyAll();
 

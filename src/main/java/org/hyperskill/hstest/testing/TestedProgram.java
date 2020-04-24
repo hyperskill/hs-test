@@ -31,18 +31,28 @@ public class TestedProgram {
     private final StateMachine<ProgramState> machine =
         new StateMachine<>(ProgramState.NOT_STARTED);
 
+    {
+        machine.addTransition(ProgramState.NOT_STARTED, ProgramState.WAITING);
+
+        machine.addTransition(ProgramState.WAITING, ProgramState.RUNNING);
+        machine.addTransition(ProgramState.RUNNING, ProgramState.WAITING);
+
+        machine.addTransition(ProgramState.RUNNING, ProgramState.EXCEPTION_THROWN);
+        machine.addTransition(ProgramState.RUNNING, ProgramState.FINISHED);
+    }
+
     private volatile String output;
     private volatile String input;
 
     private boolean inBackground;
 
-    private Method methodToInvoke;
+    private final Method methodToInvoke;
     private final ThreadGroup group;
     private ExecutorService executor;
     private Future<?> task;
 
     private List<String> runArgs;
-    private Class<?> runClass;
+    private final Class<?> runClass;
 
     public TestedProgram(Class<?> testedClass) {
         ClassLoader dcl = new DynamicClassLoader(testedClass);
@@ -54,6 +64,33 @@ public class TestedProgram {
         } catch (Exception ex) {
             throw new FatalError("Error initializing tested program", ex);
         }
+    }
+
+    private String waitOutput(String input) {
+        this.input = input;
+        machine.setAndWait(ProgramState.RUNNING);
+        if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
+            throw new TestedProgramThrewException();
+        }
+
+        String output = this.output;
+        if (machine.getState() == ProgramState.FINISHED) {
+            output = SystemOutHandler.getPartialOutput(group);
+        }
+
+        this.output = null;
+        return output;
+    }
+
+    private String waitInput(String output) {
+        if (this.inBackground) {
+            return null; // no waiting and no input, only EOF
+        }
+        this.output = output;
+        machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
+        String input = this.input;
+        this.input = null;
+        return input;
     }
 
     private void invokeMain(String[] args) {
@@ -88,7 +125,7 @@ public class TestedProgram {
         return start(false, args);
     }
 
-    public String start(boolean inBackground, String... args) {
+    private String start(boolean inBackground, String... args) {
         if (machine.getState() != ProgramState.NOT_STARTED) {
             throw new IllegalStateException("Cannot start the program twice");
         }
@@ -97,16 +134,7 @@ public class TestedProgram {
         this.runArgs = Arrays.asList(args);
 
         machine.setState(ProgramState.WAITING);
-        SystemInHandler.setDynamicInputFunc(group, output -> {
-            if (this.inBackground) {
-                return null; // no waiting and no input, only EOF
-            }
-            this.output = output;
-            machine.setAndWait(ProgramState.WAITING);
-            String input = this.input;
-            this.input = null;
-            return input;
-        });
+        SystemInHandler.setDynamicInputFunc(group, this::waitInput);
 
         StageTest.getCurrTestRun().addTestedProgram(this);
         executor = newDaemonThreadPool(1, group);
@@ -135,19 +163,7 @@ public class TestedProgram {
                 "(it isn't started or is running or has already finished)");
         }
 
-        this.input = input;
-        machine.setAndWait(ProgramState.RUNNING);
-        if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
-            throw new TestedProgramThrewException();
-        }
-
-        String output = this.output;
-        if (machine.getState() == ProgramState.FINISHED) {
-            output = SystemOutHandler.getPartialOutput(group);
-        }
-
-        this.output = null;
-        return output;
+        return waitOutput(input);
     }
 
     public void stop() {
