@@ -10,7 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hyperskill.hstest.v6.common.Utils.sleep;
+import static org.hyperskill.hstest.common.Utils.sleep;
 
 class TestThreadInterrupt1Main {
     public static void main(String[] args) {
