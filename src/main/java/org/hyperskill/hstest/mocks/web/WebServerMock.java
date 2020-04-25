@@ -23,8 +23,8 @@ public class WebServerMock implements Process {
     }
 
     private ServerSocket serverSocket;
-    private Map<String, String> pages = new HashMap<>();
-    private int port;
+    private final Map<String, String> pages = new HashMap<>();
+    private final int port;
 
     private boolean isStarted = false;
     private boolean isStopped = false;

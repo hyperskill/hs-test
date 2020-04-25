@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.exception.outcomes;
 
 public class ErrorWithFeedback extends OutcomeError {
-    private String errorText;
+    private final String errorText;
 
     public ErrorWithFeedback(String errorText) {
         this.errorText = errorText;

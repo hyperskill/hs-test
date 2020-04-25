@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.exception.testing;
 
 public class TimeLimitException extends Exception {
-    private int timeLimitMs;
+    private final int timeLimitMs;
 
     public TimeLimitException(int timeLimitMs) {
         super();

@@ -9,8 +9,8 @@ public final class SystemInHandler {
 
     private SystemInHandler() { }
 
-    private static InputStream realIn = System.in;
-    private static SystemInMock mockIn = new SystemInMock();
+    private static final InputStream realIn = System.in;
+    private static final SystemInMock mockIn = new SystemInMock();
 
     public static void replaceSystemIn() {
         System.setIn(mockIn);

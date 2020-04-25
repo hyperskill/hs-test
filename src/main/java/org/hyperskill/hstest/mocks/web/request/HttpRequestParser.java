@@ -8,8 +8,8 @@ import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_LENGTH;
 
 public final class HttpRequestParser {
 
-    private DataInputStream input;
-    private HttpRequest request;
+    private final DataInputStream input;
+    private final HttpRequest request;
 
     private HttpRequestParser(DataInputStream input) {
         this.input = input;

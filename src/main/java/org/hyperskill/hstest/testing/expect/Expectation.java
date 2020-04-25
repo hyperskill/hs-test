@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.testing.expect;
 
+import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.function.Supplier;
  * If it's not, then PresentationError is thrown.
  */
 public class Expectation<T> {
+    private interface ThrowExpectationError {
+        void throwError(String text) throws OutcomeError;
+    }
 
     final String text;
 
@@ -18,6 +22,10 @@ public class Expectation<T> {
     Supplier<List<T>> findAllElemsFunc;
     Supplier<String> whatsWrongFunc;
     Function<Integer, String> hintFunc = i -> null;
+
+    ThrowExpectationError error = err -> {
+        throw new PresentationError(err);
+    };
 
     private Expectation(String output) {
         text = output.trim();
@@ -43,7 +51,7 @@ public class Expectation<T> {
             if (found != null) {
                 size = found.size();
             }
-            throw new PresentationError(constructFeedback(size));
+            error.throwError(constructFeedback(size));
         }
         return found;
     }

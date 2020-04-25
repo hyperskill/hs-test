@@ -28,7 +28,7 @@ public class TestRun {
 
     private Throwable errorInTest = null;
 
-    private List<TestedProgram> testedPrograms = new ArrayList<>();
+    private final List<TestedProgram> testedPrograms = new ArrayList<>();
 
     public TestRun(int testNum, TestCase<?> testCase, TestRunner testRunner) {
         this.testNum = testNum;

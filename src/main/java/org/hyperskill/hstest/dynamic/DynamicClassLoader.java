@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class DynamicClassLoader extends ClassLoader {
 
-    private Map<String, Class<?>> savedClasses = new HashMap<>();
+    private final Map<String, Class<?>> savedClasses = new HashMap<>();
     private String searchLocation;
 
     public DynamicClassLoader(Class<?> clazz) {

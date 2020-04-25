@@ -5,7 +5,7 @@ import java.util.function.Function;
 public class DynamicInputFunction {
 
     private int triggerCount;
-    private Function<String, Object> inputFunction;
+    private final Function<String, Object> inputFunction;
 
     public DynamicInputFunction(int triggerCount, Function<String, Object> inputFunction) {
         this.triggerCount = triggerCount;

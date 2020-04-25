@@ -19,24 +19,24 @@ public class TestCase<AttachType> {
     private Class<?> testedClass = null;
     private Object testedObject = null;
 
-    private List<String> args = new ArrayList<>();
+    private final List<String> args = new ArrayList<>();
     private AttachType attach = null;
 
     private int timeLimit = DEFAULT_TIME_LIMIT;
 
     private BiFunction<String, AttachType, CheckResult> checkFunction = null;
-    private List<DynamicInputFunction> inputFuncs = new LinkedList<>();
+    private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
     private String staticInput = null;
     private DynamicTesting dynamicTesting = null;
 
     // files needed to be set up before test
-    private Map<String, String> files = new LinkedHashMap<>();
+    private final Map<String, String> files = new LinkedHashMap<>();
 
-    private Map<Class<? extends Throwable>, String>
+    private final Map<Class<? extends Throwable>, String>
         feedbackOnExceptions = new LinkedHashMap<>();
 
     // runnables that should be run before test
-    private List<Process> processes = new ArrayList<>();
+    private final List<Process> processes = new ArrayList<>();
 
     public TestCase() {
         // use methods to configure TestCase

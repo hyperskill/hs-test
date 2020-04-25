@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 public class ExpectationSearcher<T> {
     final Expectation<T> expect;
 
-    private Scanner scanner;
-    private Pattern doublePattern = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?");
-    private Pattern intPattern = Pattern.compile("[-+]?[0-9]+");
+    private final Scanner scanner;
+    private final Pattern doublePattern = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?");
+    private final Pattern intPattern = Pattern.compile("[-+]?[0-9]+");
 
     ExpectationSearcher(Expectation<T> expect) {
         this.expect = expect;

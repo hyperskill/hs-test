@@ -56,7 +56,7 @@ public interface DynamicTesting {
                                            List<DynamicInputFunction> inputFuncs) {
 
         class InputFunctionHandler {
-            List<DynamicInputFunction> inputFuncs;
+            final List<DynamicInputFunction> inputFuncs;
 
             InputFunctionHandler(List<DynamicInputFunction> inputFuncs) {
                 List<DynamicInputFunction> newFuncs = new LinkedList<>();
