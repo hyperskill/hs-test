@@ -167,6 +167,7 @@ public class TestedProgram {
     }
 
     public void stop() {
+        group.interrupt();
         executor.shutdownNow();
         task.cancel(true);
         synchronized (machine) {
