@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.StageTest;
@@ -165,8 +166,8 @@ public interface DynamicTesting {
                     try {
                         return (CheckResult) method.invoke(obj);
                     } catch (InvocationTargetException ex) {
-                        if (ex.getCause() instanceof Error) {
-                            throw (Error) ex.getCause();
+                        if (ex.getCause() instanceof OutcomeError) {
+                            throw (OutcomeError) ex.getCause();
                         }
                         throw new FatalError("", ex.getCause());
                     } catch (IllegalAccessException ex) {
