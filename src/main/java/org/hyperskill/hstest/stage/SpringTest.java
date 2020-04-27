@@ -2,7 +2,6 @@ package org.hyperskill.hstest.stage;
 
 import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.ReflectionUtils;
-import org.hyperskill.hstest.common.Utils;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
@@ -16,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static org.hyperskill.hstest.common.Utils.sleep;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
@@ -67,18 +67,8 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public void stopSpring() {
         if (springRunning) {
-            if (!isSpringRunning()) {
-                throw new FatalError("Spring application " +
-                    "is supposed to be running, but it is not");
-            }
             post("/actuator/shutdown", "").send();
-            int i = 10;
-            while (isSpringRunning()) {
-                if (--i == 0) {
-                    throw new FatalError("Cannot stop Spring application");
-                }
-                Utils.sleep(1000);
-            }
+            sleep(5000);
             springRunning = false;
         }
     }
@@ -91,10 +81,6 @@ public abstract class SpringTest extends StageTest<Object> {
             throw new FatalError(ex.getMessage(), ex);
         }
     }
-
-    private boolean isSpringRunning() {
-        return post("/health", "").send().getStatusCode() == 200;
-    };
 
     private void replaceDatabase() {
         String dbFilePath = System.getProperty("user.dir")
