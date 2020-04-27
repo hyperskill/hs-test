@@ -22,7 +22,12 @@ class TestDynamicTestingThreadGroupManipulation2Server {
         });
 
         t.start();
-        t.join();
+        // TODO without while+try it fails
+        while (t.isAlive()) {
+            try {
+                t.join();
+            } catch (InterruptedException ignored) { }
+        }
     }
 }
 
