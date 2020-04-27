@@ -149,11 +149,8 @@ public interface DynamicTesting {
      */
     static List<DynamicTesting> searchDynamicTestingMethods(Object obj) {
         return Arrays.stream(obj.getClass().getDeclaredMethods())
+            .filter(method -> method.isAnnotationPresent(DynamicTestingMethod.class))
             .filter(method -> {
-                if (!method.isAnnotationPresent(DynamicTestingMethod.class)) {
-                    return false;
-                }
-
                 if (method.getReturnType() != CheckResult.class) {
                     throw new FatalError("Method \"" + method.getName()
                         + "\" should return CheckResult object. Found: " + method.getReturnType());
@@ -161,7 +158,6 @@ public interface DynamicTesting {
                     throw new FatalError("Method \"" + method.getName()
                         + "\" should take 0 arguments. Found: " + method.getParameterCount());
                 }
-
                 return true;
             })
             .sorted(comparingInt(ReflectionUtils::getLineNumber))
@@ -178,5 +174,40 @@ public interface DynamicTesting {
                     throw new FatalError("", ex);
                 }
             }).collect(toList());
+    }
+
+    /**
+     * Searches for variables with annotation DynamicTestingMethod in the obj object
+     * and converts this variables into DynamicTesting objects.
+     *
+     * Requirements for the variable: must be a List that contain DynamicTesting objects.
+     *
+     * @param obj object that contain variables declared with DynamicTestingMethod annotation.
+     * @return list of DynamicMethod objects that includes every DynamicTesting object found
+     *         in variables marked with DynamicTestingMethod annotation.
+     */
+    static List<DynamicTesting> searchDynamicTestingVariables(Object obj) {
+        return Arrays.stream(obj.getClass().getDeclaredFields())
+            .filter(field -> field.isAnnotationPresent(DynamicTestingMethod.class))
+            .flatMap(field -> {
+                field.setAccessible(true);
+                try {
+                    Object var = field.get(obj);
+                    List<DynamicTesting> tests;
+                    if (var instanceof List) {
+                        tests = ((List<DynamicTesting>) var);
+                    } else if (var instanceof DynamicTesting[]) {
+                        tests = Arrays.asList((DynamicTesting[]) var);
+                    } else {
+                        throw new FatalError("Cannot cast " +
+                            "the field \"" + field.getName() + "\" to a List or array");
+                    }
+                    return tests.stream();
+                } catch (Exception ex) {
+                    throw new FatalError("Cannot get " +
+                        "dynamic methods from the field \"" + field.getName() + "\"", ex);
+                }
+            })
+            .collect(toList());
     }
 }

@@ -17,6 +17,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTestingMethods;
+import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTestingVariables;
 import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
@@ -50,7 +52,11 @@ public abstract class StageTest<AttachType> {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = generate();
 
-        for (DynamicTesting method : DynamicTesting.searchDynamicTestingMethods(this)) {
+        List<DynamicTesting> methods = new ArrayList<>();
+        methods.addAll(searchDynamicTestingVariables(this));
+        methods.addAll(searchDynamicTestingMethods(this));
+
+        for (DynamicTesting method : methods) {
             testCases.add(new TestCase<AttachType>().setDynamicTesting(method));
         }
 
