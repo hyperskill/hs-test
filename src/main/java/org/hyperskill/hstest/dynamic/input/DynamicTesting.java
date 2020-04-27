@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dynamic.input;
 
+import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
@@ -9,12 +10,13 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
 /**
@@ -146,36 +148,35 @@ public interface DynamicTesting {
      *         with DynamicTestingMethod annotation.
      */
     static List<DynamicTesting> searchDynamicTestingMethods(Object obj) {
-        List<DynamicTesting> dynamicTestingMethods = new ArrayList<>();
-
-        for (Method method : obj.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(DynamicTestingMethod.class)) {
+        return Arrays.stream(obj.getClass().getDeclaredMethods())
+            .filter(method -> {
+                if (!method.isAnnotationPresent(DynamicTestingMethod.class)) {
+                    return false;
+                }
 
                 if (method.getReturnType() != CheckResult.class) {
-                    throw new FatalError("Method " + method.getName()
-                        + "should return CheckResult object. Found: " + method.getReturnType());
+                    throw new FatalError("Method \"" + method.getName()
+                        + "\" should return CheckResult object. Found: " + method.getReturnType());
+                } else if (method.getParameterCount() != 0) {
+                    throw new FatalError("Method \"" + method.getName()
+                        + "\" should take 0 arguments. Found: " + method.getParameterCount());
                 }
 
-                if (method.getParameterCount() != 0) {
-                    throw new FatalError("Method " + method.getName()
-                        + "should take 0 arguments. Found: " + method.getParameterCount());
-                }
-
-                dynamicTestingMethods.add(() -> {
-                    method.setAccessible(true);
-                    try {
-                        return (CheckResult) method.invoke(obj);
-                    } catch (InvocationTargetException ex) {
-                        if (ex.getCause() instanceof OutcomeError) {
-                            throw (OutcomeError) ex.getCause();
-                        }
-                        throw new FatalError("", ex.getCause());
-                    } catch (IllegalAccessException ex) {
-                        throw new FatalError("", ex);
+                return true;
+            })
+            .sorted(comparingInt(ReflectionUtils::getLineNumber))
+            .map(method -> (DynamicTesting) () -> {
+                method.setAccessible(true);
+                try {
+                    return (CheckResult) method.invoke(obj);
+                } catch (InvocationTargetException ex) {
+                    if (ex.getCause() instanceof OutcomeError) {
+                        throw (OutcomeError) ex.getCause();
                     }
-                });
-            }
-        }
-        return dynamicTestingMethods;
+                    throw new FatalError("", ex.getCause());
+                } catch (IllegalAccessException ex) {
+                    throw new FatalError("", ex);
+                }
+            }).collect(toList());
     }
 }
