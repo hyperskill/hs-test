@@ -25,7 +25,7 @@ public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
     public SwingTest(JFrame frame) {
         super(SwingTest.class, frame);
         this.frame = frame;
-        needReloadClass = false;
+        //needReloadClass = false;
     }
 
     @BeforeClass

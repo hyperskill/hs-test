@@ -4,6 +4,7 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.common.Utils;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
+import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
 import org.junit.After;
 
 import java.io.File;
@@ -36,8 +37,8 @@ public abstract class SpringTest<T> extends StageTest<T> {
 
     public SpringTest(Class<?> clazz, int port) {
         super(SpringTest.class);
+        runner = SpringApplicationRunner.class;
         springClass = clazz;
-        needReloadClass = false;
         this.port = port;
     }
 

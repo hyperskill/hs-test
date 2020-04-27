@@ -26,7 +26,6 @@ public abstract class StageTest<AttachType> {
     private final Class<?> testedClass;
     private final Object testedObject;
 
-    protected boolean needReloadClass = true;
     protected Class<? extends TestRunner> runner = AsyncMainMethodRunner.class;
 
     private static TestRun currTestRun;
