@@ -28,6 +28,6 @@ public final class FailureHandler {
         return "OS " + os + "\n"
             + "Java " + java + "\n"
             + "Vendor " + vendor + "\n"
-            + "Testing library version 7";
+            + "Testing library version 8";
     }
 }
