@@ -98,6 +98,7 @@ public class TestRightSequenceOfTests extends StageTest {
     CheckResult test14() {
         return new CheckResult(++x == 14, "");
     }
+
     @DynamicTestingMethod
     CheckResult test15() {
         return CheckResult.wrong("x == " + x);
