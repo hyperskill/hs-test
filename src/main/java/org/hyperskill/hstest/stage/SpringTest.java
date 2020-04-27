@@ -11,6 +11,8 @@ import org.junit.After;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,8 +69,19 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public void stopSpring() {
         if (springRunning) {
+            if (isPortAvailable(port)) {
+                throw new FatalError("Port is available, " +
+                    "but Spring application is supposed to be running");
+            }
             post("/actuator/shutdown", "").send();
-            Utils.sleep(1500); // should wait a bit to ensure shutdown
+            int i = 10;
+            while (!isPortAvailable(port)) {
+                if (--i == 0) {
+                    throw new FatalError("Cannot stop Spring application, " +
+                        "port is unavailable");
+                }
+                Utils.sleep(1000);
+            }
             springRunning = false;
         }
     }
@@ -80,6 +93,33 @@ public abstract class SpringTest extends StageTest<Object> {
         } catch (Exception ex) {
             throw new FatalError(ex.getMessage(), ex);
         }
+    }
+
+    private static boolean isPortAvailable(int port) {
+        ServerSocket ss = null;
+        DatagramSocket ds = null;
+        try {
+            ss = new ServerSocket(port);
+            ss.setReuseAddress(true);
+            ds = new DatagramSocket(port);
+            ds.setReuseAddress(true);
+            return true;
+        } catch (IOException ignored) {
+        } finally {
+            if (ds != null) {
+                ds.close();
+            }
+
+            if (ss != null) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    /* should not be thrown */
+                }
+            }
+        }
+
+        return false;
     }
 
     private void replaceDatabase() {
