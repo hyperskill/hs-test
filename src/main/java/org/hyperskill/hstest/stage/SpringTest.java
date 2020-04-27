@@ -92,7 +92,7 @@ public abstract class SpringTest extends StageTest<Object> {
         Path dbTempFile = Paths.get(dbTempFilePath);
 
         try {
-            if (dbFile.toFile().exists() && dbTempFile.toFile().exists()) {
+            if (dbTempFile.toFile().exists()) {
                 Files.deleteIfExists(dbFile);
             } else if (dbFile.toFile().exists() && !dbTempFile.toFile().exists()) {
                 Files.move(dbFile, dbTempFile);
