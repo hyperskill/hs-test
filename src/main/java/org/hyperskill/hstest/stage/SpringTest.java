@@ -11,8 +11,6 @@ import org.junit.After;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,16 +67,15 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public void stopSpring() {
         if (springRunning) {
-            if (isPortAvailable(port)) {
-                throw new FatalError("Port is available, " +
-                    "but Spring application is supposed to be running");
+            if (!isSpringRunning()) {
+                throw new FatalError("Spring application " +
+                    "is supposed to be running, but it is not");
             }
             post("/actuator/shutdown", "").send();
             int i = 10;
-            while (!isPortAvailable(port)) {
+            while (isSpringRunning()) {
                 if (--i == 0) {
-                    throw new FatalError("Cannot stop Spring application, " +
-                        "port is unavailable");
+                    throw new FatalError("Cannot stop Spring application");
                 }
                 Utils.sleep(1000);
             }
@@ -95,32 +92,9 @@ public abstract class SpringTest extends StageTest<Object> {
         }
     }
 
-    private static boolean isPortAvailable(int port) {
-        ServerSocket ss = null;
-        DatagramSocket ds = null;
-        try {
-            ss = new ServerSocket(port);
-            ss.setReuseAddress(true);
-            ds = new DatagramSocket(port);
-            ds.setReuseAddress(true);
-            return true;
-        } catch (IOException ignored) {
-        } finally {
-            if (ds != null) {
-                ds.close();
-            }
-
-            if (ss != null) {
-                try {
-                    ss.close();
-                } catch (IOException e) {
-                    /* should not be thrown */
-                }
-            }
-        }
-
-        return false;
-    }
+    private boolean isSpringRunning() {
+        return post("/health", "").send().getStatusCode() == 200;
+    };
 
     private void replaceDatabase() {
         String dbFilePath = System.getProperty("user.dir")
