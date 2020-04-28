@@ -2,6 +2,7 @@ package org.hyperskill.hstest.stage;
 
 import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.ReflectionUtils;
+import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
@@ -68,7 +69,13 @@ public abstract class SpringTest extends StageTest<Object> {
     public void stopSpring() {
         if (springRunning) {
             post("/actuator/shutdown", "").send();
-            sleep(5000);
+            int i = 100;
+            while (--i != 0) {
+                if (SystemOutHandler.getOutput().contains("Shutdown completed.\n")) {
+                    break;
+                }
+                sleep(100);
+            }
             springRunning = false;
         }
     }
