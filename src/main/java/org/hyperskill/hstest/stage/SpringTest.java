@@ -4,6 +4,7 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
 import org.junit.After;
@@ -70,15 +71,26 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public void stopSpring() {
         if (springRunning) {
-            post("/actuator/shutdown", "").send();
+            int status = post("/actuator/shutdown", "").send().getStatusCode();
+
+            if (status != 200) {
+                throw new WrongAnswer("Cannot stop Spring application.\n" +
+                    "Please make POST \"/actuator/shutdown\" endpoint accessible without authentication.\n" +
+                    "The endpoint should return status code 200, returned " + status + ".");
+            }
+
+            springRunning = false;
+            if (isTearDown) {
+                return;
+            }
+
             int i = 100;
-            while (--i != 0 && !isTearDown) {
+            while (--i != 0) {
                 if (SystemOutHandler.getOutput().contains("Shutdown completed.\n")) {
                     break;
                 }
                 sleep(100);
             }
-            springRunning = false;
         }
     }
 
