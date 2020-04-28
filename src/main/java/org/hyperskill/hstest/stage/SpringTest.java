@@ -25,6 +25,7 @@ import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUr
 
 public abstract class SpringTest extends StageTest<Object> {
 
+    private static boolean isTearDown = false;
     private static boolean springRunning = false;
     private static Class<?> springClass;
     private static String[] args;
@@ -52,6 +53,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
     @After
     public void tearDown() {
+        isTearDown = true;
         stopSpring();
         if (databasePath != null) {
             revertDatabase();
@@ -70,7 +72,7 @@ public abstract class SpringTest extends StageTest<Object> {
         if (springRunning) {
             post("/actuator/shutdown", "").send();
             int i = 100;
-            while (--i != 0) {
+            while (--i != 0 && !isTearDown) {
                 if (SystemOutHandler.getOutput().contains("Shutdown completed.\n")) {
                     break;
                 }
