@@ -195,17 +195,17 @@ public interface DynamicTesting {
                     Object var = field.get(obj);
                     List<DynamicTesting> tests;
                     if (var instanceof List) {
-                        tests = ((List<DynamicTesting>) var);
+                        tests = (List<DynamicTesting>) var;
                     } else if (var instanceof DynamicTesting[]) {
                         tests = Arrays.asList((DynamicTesting[]) var);
                     } else {
-                        throw new FatalError("Cannot cast " +
-                            "the field \"" + field.getName() + "\" to a List or array");
+                        throw new FatalError("Cannot cast "
+                            + "the field \"" + field.getName() + "\" to a List or array");
                     }
                     return tests.stream();
                 } catch (Exception ex) {
-                    throw new FatalError("Cannot get " +
-                        "dynamic methods from the field \"" + field.getName() + "\"", ex);
+                    throw new FatalError("Cannot get "
+                        + "dynamic methods from the field \"" + field.getName() + "\"", ex);
                 }
             })
             .collect(toList());

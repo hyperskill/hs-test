@@ -35,10 +35,12 @@ public final class Utils {
     }
 
     public static String cleanText(String str) {
+        String nbsp = "\u00a0";
+        String space = "\u0020";
         return str
             .replaceAll("\r\n", "\n")
             .replaceAll("\r", "\n")
-            .replaceAll("\u0412\u00a0", "\u00a0")
-            .replaceAll("\u00a0", "\u0020");
+            .replaceAll("\u0412" + nbsp, nbsp)
+            .replaceAll(nbsp, space);
     }
 }

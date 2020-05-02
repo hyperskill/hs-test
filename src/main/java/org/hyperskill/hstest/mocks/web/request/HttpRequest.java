@@ -1,7 +1,6 @@
 package org.hyperskill.hstest.mocks.web.request;
 
 import org.apache.http.entity.ContentType;
-import org.hyperskill.hstest.mocks.web.constants.Headers;
 import org.hyperskill.hstest.mocks.web.response.HttpResponse;
 
 import java.util.Base64;
