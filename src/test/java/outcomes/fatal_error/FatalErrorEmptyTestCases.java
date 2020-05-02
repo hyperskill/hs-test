@@ -29,7 +29,7 @@ public class FatalErrorEmptyTestCases extends StageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
-        exception.expectMessage("No tests provided by \"generate\" method");
+        exception.expectMessage("No tests found");
     }
 
     @Override

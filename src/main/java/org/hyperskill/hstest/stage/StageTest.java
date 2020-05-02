@@ -60,7 +60,7 @@ public abstract class StageTest<AttachType> {
         }
 
         if (testCases.size() == 0) {
-            throw new FatalError("No tests provided by \"generate\" method");
+            throw new FatalError("No tests found");
         }
 
         int currTest = 0;
