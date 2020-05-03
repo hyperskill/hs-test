@@ -6,12 +6,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TestOutputHandler {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         SystemHandler.setUpSystem();
     }
 
@@ -49,8 +49,6 @@ public class TestOutputHandler {
     public void testRevertOutputHandler() {
         System.out.print("123");
         SystemOutHandler.revertSystemOut();
-        assertEquals("", SystemOutHandler.getOutput());
-        System.out.print("456");
         assertEquals("", SystemOutHandler.getOutput());
     }
 

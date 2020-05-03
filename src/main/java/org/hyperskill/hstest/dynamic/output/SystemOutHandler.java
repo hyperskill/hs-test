@@ -5,31 +5,39 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
-import java.nio.charset.Charset;
 
 public final class SystemOutHandler {
 
     private SystemOutHandler() { }
 
     private static final PrintStream REAL_OUT = System.out;
+    private static final PrintStream REAL_ERR = System.err;
+
     private static final SystemOutMock MOCK_OUT = new SystemOutMock(REAL_OUT);
+    private static final SystemOutMock MOCK_ERR = new SystemOutMock(REAL_ERR);
 
     public static PrintStream getRealOut() {
-        return REAL_OUT;
+        return MOCK_OUT.getOriginal();
     }
 
-    public static void replaceSystemOut() throws Exception {
-        System.setOut(new PrintStream(
-            MOCK_OUT, true, Charset.defaultCharset().name()));
+    public static PrintStream getRealErr() {
+        return MOCK_ERR.getOriginal();
+    }
+
+    public static void replaceSystemOut() {
+        System.setOut(new PrintStream(MOCK_OUT, true));
+        System.setErr(new PrintStream(MOCK_ERR, true));
     }
 
     public static void revertSystemOut() {
         resetOutput();
         System.setOut(REAL_OUT);
+        System.setErr(REAL_ERR);
     }
 
     public static void resetOutput() {
         MOCK_OUT.reset();
+        MOCK_ERR.reset();
     }
 
     public static String getOutput() {

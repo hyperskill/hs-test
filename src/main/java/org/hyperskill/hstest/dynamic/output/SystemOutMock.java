@@ -3,8 +3,8 @@ package org.hyperskill.hstest.dynamic.output;
 import org.hyperskill.hstest.dynamic.TestingSecurityManager;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class SystemOutMock extends OutputStream {
 
     // original stream is used to actually see
     // the test in the console and nothing else
-    private final OutputStream original;
+    private final PrintStream original;
 
     // cloned stream is used to collect all output
     // from the test and redirect to check function
@@ -26,45 +26,54 @@ public class SystemOutMock extends OutputStream {
     // dynamic input calls in SystemInMock
     private final Map<ThreadGroup, ByteArrayOutputStream> partial = new HashMap<>();
 
-    SystemOutMock(OutputStream originalStream) {
-        this.original = originalStream;
+    SystemOutMock(PrintStream originalStream) {
+        boolean printStdout = !Boolean.getBoolean("ignoreStdout");
+        this.original = new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) {
+                if (printStdout) {
+                    originalStream.write(b);
+                }
+            }
+        }, true);
     }
 
     @Override
-    public synchronized void write(int b) throws IOException {
+    public synchronized void write(int b) {
         original.write(b);
         cloned.write(b);
         dynamic.write(b);
 
         ThreadGroup currGroup = TestingSecurityManager.getTestingGroup();
-        if (!partial.containsKey(currGroup)) {
-            partial.put(currGroup, new ByteArrayOutputStream());
-        }
+        partial.putIfAbsent(currGroup, new ByteArrayOutputStream());
         partial.get(currGroup).write(b);
     }
 
     @Override
-    public void flush() throws IOException {
+    public void flush() {
         original.flush();
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         original.close();
     }
 
     public void injectInput(String input) {
-        byte[] inputBytes = input.getBytes();
-        try {
-            original.write(inputBytes);
-            dynamic.write(inputBytes);
-        } catch (IOException ignored) { }
+        for (byte b : input.getBytes()) {
+            original.write(b);
+            dynamic.write(b);
+        }
     }
 
     public void reset() {
         cloned.reset();
         dynamic.reset();
         partial.clear();
+    }
+
+    public PrintStream getOriginal() {
+        return original;
     }
 
     public ByteArrayOutputStream getClonedOut() {
@@ -76,9 +85,6 @@ public class SystemOutMock extends OutputStream {
     }
 
     public ByteArrayOutputStream getPartialOut(ThreadGroup group) {
-        if (!partial.containsKey(group)) {
-            return new ByteArrayOutputStream();
-        }
-        return partial.get(group);
+        return partial.getOrDefault(group, new ByteArrayOutputStream());
     }
 }

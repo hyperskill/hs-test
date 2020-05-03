@@ -17,7 +17,7 @@ public final class SystemHandler {
 
     private final static String separatorProperty = "line.separator";
 
-    public static void setUpSystem() throws Exception {
+    public static void setUpSystem() {
         SystemOutHandler.replaceSystemOut();
         SystemInHandler.replaceSystemIn();
 
