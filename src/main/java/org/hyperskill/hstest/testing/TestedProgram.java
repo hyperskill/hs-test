@@ -166,6 +166,10 @@ public class TestedProgram {
         return waitOutput(input);
     }
 
+    public String getOutput() {
+        return SystemOutHandler.getPartialOutput(group);
+    }
+
     public void stop() {
         executor.shutdownNow();
         task.cancel(true);
