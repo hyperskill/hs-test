@@ -59,7 +59,7 @@ public class SystemOutMock extends OutputStream {
         original.close();
     }
 
-    public void injectInput(String input) {
+    public synchronized void injectInput(String input) {
         for (byte b : input.getBytes()) {
             original.write(b);
             dynamic.write(b);
@@ -84,7 +84,7 @@ public class SystemOutMock extends OutputStream {
         return dynamic;
     }
 
-    public ByteArrayOutputStream getPartialOut(ThreadGroup group) {
+    public synchronized ByteArrayOutputStream getPartialOut(ThreadGroup group) {
         return partial.getOrDefault(group, new ByteArrayOutputStream());
     }
 }
