@@ -75,7 +75,7 @@ public class TestedProgram {
 
         String output = this.output;
         if (machine.getState() == ProgramState.FINISHED) {
-            output = SystemOutHandler.getPartialOutput(group);
+            output = getOutput();
         }
 
         this.output = null;
