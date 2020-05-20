@@ -17,7 +17,7 @@ public class SpringApplicationRunner implements TestRunner {
             try {
                 SpringTest.main(testCase.getArgs().toArray(new String[0]));
             } catch (Exception ex) {
-                throw new FatalError("Cannot start String application");
+                throw new FatalError("Cannot start Spring application");
             }
         }
 
