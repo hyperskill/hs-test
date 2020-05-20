@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DynamicClassLoader extends ClassLoader {
+    private static final Map<String, byte[]> FILE_CACHE = new HashMap<>();
 
     private final Map<String, Class<?>> savedClasses = new HashMap<>();
     private String searchLocation;
@@ -38,14 +39,19 @@ public class DynamicClassLoader extends ClassLoader {
             return result;
         }
 
-        File f = findFile(name);
-
-        if (f == null) {
-            return findSystemClass(name);
-        }
-
         try {
-            byte[] classBytes = loadFileAsBytes(f);
+            byte[] classBytes = FILE_CACHE.getOrDefault(name, null);
+
+            if (classBytes == null) {
+                File f = findFile(name);
+                if (f == null) {
+                    return findSystemClass(name);
+                }
+
+                classBytes = loadFileAsBytes(f);
+                FILE_CACHE.put(name, classBytes);
+            }
+
             result = defineClass(name, classBytes, 0, classBytes.length);
         } catch (IOException e) {
             throw new ClassNotFoundException(
