@@ -41,10 +41,10 @@ public class TestedProgram {
         machine.addTransition(ProgramState.RUNNING, ProgramState.FINISHED);
     }
 
-    private volatile String output;
     private volatile String input;
 
     private boolean inBackground;
+    private boolean returnOutputAfterExecution = true;
 
     private final Method methodToInvoke;
     private final ThreadGroup group;
@@ -72,21 +72,13 @@ public class TestedProgram {
         if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
             throw new TestedProgramThrewException();
         }
-
-        String output = this.output;
-        if (machine.getState() == ProgramState.FINISHED) {
-            output = getOutput();
-        }
-
-        this.output = null;
-        return output;
+        return returnOutputAfterExecution ? getOutput() : "";
     }
 
-    private String waitInput(String output) {
+    private String waitInput() {
         if (this.inBackground) {
             return null; // no waiting and no input, only EOF
         }
-        this.output = output;
         machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
         String input = this.input;
         this.input = null;
@@ -127,7 +119,7 @@ public class TestedProgram {
 
     private String start(boolean inBackground, String... args) {
         if (machine.getState() != ProgramState.NOT_STARTED) {
-            throw new IllegalStateException("Cannot start the program twice");
+            throw new FatalError("Cannot start the program twice");
         }
 
         this.inBackground = inBackground;
@@ -194,5 +186,9 @@ public class TestedProgram {
 
     public Class<?> getRunClass() {
         return runClass;
+    }
+
+    public void setReturnOutputAfterExecution(boolean value) {
+        this.returnOutputAfterExecution = value;
     }
 }

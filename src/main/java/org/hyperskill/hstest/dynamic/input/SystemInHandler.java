@@ -3,7 +3,7 @@ package org.hyperskill.hstest.dynamic.input;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class SystemInHandler {
 
@@ -20,7 +20,7 @@ public final class SystemInHandler {
         System.setIn(realIn);
     }
 
-    public static void setDynamicInputFunc(ThreadGroup group, Function<String, String> func) {
+    public static void setDynamicInputFunc(ThreadGroup group, Supplier<String> func) {
         mockIn.setDynamicInputFunction(group, func);
     }
 

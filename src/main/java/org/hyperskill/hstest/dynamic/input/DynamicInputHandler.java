@@ -7,19 +7,16 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
 public class DynamicInputHandler {
-    private final ThreadGroup group;
-
     private StringReader currentReader = new StringReader("");
     private final List<String> inputLines = new ArrayList<>();
-    private final Function<String, String> dynamicInputFunction;
+    private final Supplier<String> dynamicInputFunction;
 
-    DynamicInputHandler(ThreadGroup group, Function<String, String> func) {
-        this.group = group;
+    DynamicInputHandler(Supplier<String> func) {
         dynamicInputFunction = func;
     }
 
@@ -45,8 +42,7 @@ public class DynamicInputHandler {
     }
 
     private void ejectNextInput() {
-        String currOutput = SystemOutHandler.getPartialOutput(group);
-        String newInput = dynamicInputFunction.apply(currOutput);
+        String newInput = dynamicInputFunction.get();
 
         if (newInput == null) {
             return;

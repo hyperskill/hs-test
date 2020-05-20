@@ -40,7 +40,7 @@ public class TestDynamicMethodFatalErrorDoubleStartProgram extends StageTest<Str
         );
 
         exception.expectMessage(
-            "IllegalStateException: Cannot start the program twice"
+            "FatalError: Cannot start the program twice"
         );
     }
 

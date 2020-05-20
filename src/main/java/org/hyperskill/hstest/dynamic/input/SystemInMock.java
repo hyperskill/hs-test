@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SystemInMock extends InputStream {
     private final Map<ThreadGroup, DynamicInputHandler> handlers = new HashMap<>();
@@ -27,11 +27,11 @@ public class SystemInMock extends InputStream {
         // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
     }
 
-    void setDynamicInputFunction(ThreadGroup group, Function<String, String> func) {
+    void setDynamicInputFunction(ThreadGroup group, Supplier<String> func) {
         if (handlers.containsKey(group)) {
             throw new FatalError("Cannot change dynamic input function");
         }
-        handlers.put(group, new DynamicInputHandler(group, func));
+        handlers.put(group, new DynamicInputHandler(func));
     }
 
     @Override
