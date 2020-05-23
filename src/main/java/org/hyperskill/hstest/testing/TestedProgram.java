@@ -13,6 +13,7 @@ import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -123,7 +124,7 @@ public class TestedProgram {
         }
 
         this.inBackground = inBackground;
-        this.runArgs = Arrays.asList(args);
+        this.runArgs = new ArrayList<>(Arrays.asList(args));
 
         machine.setState(ProgramState.WAITING);
         SystemInHandler.setDynamicInputFunc(group, this::waitInput);
