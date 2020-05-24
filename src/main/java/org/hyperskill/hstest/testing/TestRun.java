@@ -23,6 +23,7 @@ public class TestRun {
     private final TestRunner testRunner;
 
     private final int testNum;
+    private final int testCount;
     private final TestCase<?> testCase;
     private boolean inputUsed = false;
 
@@ -30,14 +31,19 @@ public class TestRun {
 
     private final List<TestedProgram> testedPrograms = new ArrayList<>();
 
-    public TestRun(int testNum, TestCase<?> testCase, TestRunner testRunner) {
+    public TestRun(int testNum, int testCount, TestCase<?> testCase, TestRunner testRunner) {
         this.testNum = testNum;
+        this.testCount = testCount;
         this.testCase = testCase;
         this.testRunner = testRunner;
     }
 
     public int getTestNum() {
         return testNum;
+    }
+
+    public int getTestCount() {
+        return testCount;
     }
 
     public TestCase<?> getTestCase() {

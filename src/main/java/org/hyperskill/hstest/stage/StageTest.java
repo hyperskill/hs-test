@@ -64,13 +64,14 @@ public abstract class StageTest<AttachType> {
         }
 
         int currTest = 0;
+        int testCount = testCases.size();
         for (TestCase<AttachType> testCase : testCases) {
             testCase.setTestedClass(testedClass);
             testCase.setTestedObject(testedObject);
             if (testCase.getCheckFunc() == null) {
                 testCase.setCheckFunc(this::check);
             }
-            testRuns.add(new TestRun(++currTest, testCase, runner.newInstance()));
+            testRuns.add(new TestRun(++currTest, testCount, testCase, runner.newInstance()));
         }
 
         return testRuns;

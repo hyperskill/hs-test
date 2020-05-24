@@ -17,7 +17,9 @@ public class DynamicInputFunction {
     }
 
     public void trigger() {
-        triggerCount--;
+        if (triggerCount > 0) {
+            triggerCount--;
+        }
     }
 
     public Function<String, Object> getInputFunction() {
