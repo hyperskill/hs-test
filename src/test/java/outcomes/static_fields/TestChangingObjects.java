@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@SuppressWarnings("unused")
 class TestChangingObjectsMain {
     public    static final List<String> list1 = new ArrayList<>();
     protected static final List<String> list2 = new ArrayList<>();
@@ -141,6 +142,8 @@ class TestChangingObjectsMain {
               static       List<String> null8 = null;
 
     static void print() throws Exception {
+        StringBuilder builder = new StringBuilder();
+
         List<List> lists = new ArrayList<>();
 
         for (Field f : TestChangingObjectsMain.class.getDeclaredFields()) {
@@ -148,26 +151,29 @@ class TestChangingObjectsMain {
         }
 
         for (List list : lists) {
-            System.out.print(list == null);
+            builder.append(list == null);
             if (list == null) {
                 continue;
             }
 
-            System.out.print(list.getClass());
-            System.out.print(list.size());
+            builder.append(list.getClass());
+            builder.append(list.size());
             for (Object obj : list) {
-                System.out.print(obj.getClass());
-                System.out.print(obj);
+                builder.append(obj.getClass());
+                builder.append(obj);
             }
 
             try {
                 list.add("123");
             } catch (Exception ex) {
-                System.out.print(ex.getMessage());
+                builder.append(ex.getMessage());
             }
 
-            System.out.println(list.size());
+            builder.append(list.size());
+            builder.append("\n");
         }
+
+        System.out.print(builder.toString().hashCode());
     }
 
     public static void main(String[] args) throws Exception {
@@ -297,6 +303,6 @@ public class TestChangingObjects extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals(rightOutput), "");
+        return new CheckResult(reply.equals(rightOutput.hashCode() + ""), "");
     }
 }
