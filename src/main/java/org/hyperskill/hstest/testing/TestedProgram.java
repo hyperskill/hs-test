@@ -74,7 +74,9 @@ public class TestedProgram {
 
     private volatile String input;
 
-    private boolean inBackground;
+    private boolean inBackground = false;
+    private boolean noMoreInput = false;
+
     private boolean returnOutputAfterExecution = true;
 
     private final Method methodToInvoke;
@@ -84,6 +86,14 @@ public class TestedProgram {
 
     private List<String> runArgs;
     private final Class<?> runClass;
+
+    public List<String> getRunArgs() {
+        return runArgs;
+    }
+
+    public Class<?> getRunClass() {
+        return runClass;
+    }
 
     /**
      * Creates TestedProgram instance, but doesn't run the class
@@ -102,7 +112,23 @@ public class TestedProgram {
     }
 
     private String waitOutput(String input) {
+        if (!isWaitingInput()) {
+            throw new FatalError(
+                "Tested program is not waiting for the input " +
+                "(state == \"" + machine.getState() + "\")");
+        }
+
+        if (noMoreInput) {
+            throw new FatalError(
+                "Can't input to the tested program - input was prohibited.");
+        }
+
         this.input = input;
+        if (inBackground) {
+            machine.setState(ProgramState.RUNNING);
+            return "";
+        }
+
         machine.setAndWait(ProgramState.RUNNING);
         if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
             throw new TestedProgramThrewException();
@@ -111,13 +137,13 @@ public class TestedProgram {
     }
 
     private String waitInput() {
-        if (this.inBackground) {
-            return null; // no waiting and no input, only EOF
+        if (noMoreInput) {
+            return null;
         }
         machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
-        String input = this.input;
-        this.input = null;
-        return input;
+        String inputLocal = input;
+        input = null;
+        return inputLocal;
     }
 
     private void invokeMain(String[] args) {
@@ -149,7 +175,8 @@ public class TestedProgram {
      * @param args arguments you want tested program to start with
      */
     public void startInBackground(String... args) {
-        start(true, args);
+        inBackground = true;
+        start(args);
     }
 
     /**
@@ -160,15 +187,10 @@ public class TestedProgram {
      *         Returns an empty string if returnOutputAfterExecution is set to false.
      */
     public String start(String... args) {
-        return start(false, args);
-    }
-
-    private String start(boolean inBackground, String... args) {
         if (machine.getState() != ProgramState.NOT_STARTED) {
             throw new FatalError("Cannot start the program twice");
         }
 
-        this.inBackground = inBackground;
         this.runArgs = new ArrayList<>(Arrays.asList(args));
 
         machine.setState(ProgramState.WAITING);
@@ -181,7 +203,6 @@ public class TestedProgram {
     }
 
     /**
-     *
      * @param input input that needs to be sent to the tested program.
      * @return Output that tested program manages to print while executing the program
      *         with the given input.
@@ -190,13 +211,7 @@ public class TestedProgram {
      *         2. The execution is done in the background.
      */
     public String execute(String input) {
-        if (input == null || inBackground) {
-            inBackground = true;
-            machine.setState(ProgramState.RUNNING); // send "EOF" message and not wait for output
-            return null;
-        }
-
-        if (machine.getState() == ProgramState.FINISHED) {
+        if (isFinished()) {
             StageTest.getCurrTestRun().setErrorInTest(
                 new ErrorWithFeedback("The main method of the class "
                     + methodToInvoke.getDeclaringClass().getSimpleName()
@@ -204,10 +219,9 @@ public class TestedProgram {
             throw new TestedProgramFinishedEarly();
         }
 
-        if (machine.getState() != ProgramState.WAITING) {
-            throw new IllegalStateException("Cannot execute the program " +
-                "that isn't waiting to be executed " +
-                "(it isn't started or is running or has already finished)");
+        if (input == null) {
+            stopInput();
+            return "";
         }
 
         return waitOutput(input);
@@ -252,14 +266,6 @@ public class TestedProgram {
             || machine.getState() == ProgramState.EXCEPTION_THROWN;
     }
 
-    public List<String> getRunArgs() {
-        return runArgs;
-    }
-
-    public Class<?> getRunClass() {
-        return runClass;
-    }
-
     /**
      * If set to false, methods "execute" and "start" will no longer return output but return
      * just an empty string. In this case you can get the output only by "getOutput" method.
@@ -272,5 +278,52 @@ public class TestedProgram {
      */
     public void setReturnOutputAfterExecution(boolean value) {
         this.returnOutputAfterExecution = value;
+    }
+
+    /**
+     * After this method being called, every input request result in EOF being sent
+     * to tested program without waiting for the proper input.
+     * If tested program is waiting input, then EOF also will be sent.
+     *
+     * Note, that this cannot be undone and indicates the end of the input.
+     */
+    public void stopInput() {
+        inBackground = true;
+        noMoreInput = true;
+        if (isWaitingInput()) {
+            machine.setState(ProgramState.RUNNING);
+        }
+    }
+
+    /**
+     * @return true if tested program waits for the input. Would be useful
+     *         for the tested program that is executed in the background.
+     */
+    public boolean isWaitingInput() {
+        return machine.getState() == ProgramState.WAITING;
+    }
+
+    /**
+     * Moves tested program in background mode. Program still be waiting for the input.
+     * You can still input data into tested program using "execute" method,
+     * but this method return immediately, while tested program will continue to run.
+     * Nothing happens if tested program is already in background mode.
+     */
+    public void goBackground() {
+        inBackground = true;
+    }
+
+    /**
+     * Moves tested program from background mode into plain sequential mode.
+     * If tested program is already waiting for the input then returns immediately.
+     * Otherwise waits for the input request and then returns.
+     */
+    public void stopBackground() {
+        inBackground = false;
+        machine.waitState(ProgramState.WAITING);
+    }
+
+    public boolean isInBackground() {
+        return inBackground;
     }
 }
