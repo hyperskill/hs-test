@@ -49,7 +49,7 @@ public abstract class StageTest<AttachType> {
 
     private List<TestRun> initTests() throws Exception {
         List<TestRun> testRuns = new ArrayList<>();
-        List<TestCase<AttachType>> testCases = generate();
+        List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
 
         List<DynamicTesting> methods = new ArrayList<>();
         methods.addAll(searchDynamicTestingVariables(this));
