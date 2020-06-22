@@ -47,7 +47,7 @@ public abstract class Outcome {
         }
 
         String result =
-            getType() + whenErrorHappened + getTypeSuffix();
+                getType() + whenErrorHappened + getTypeSuffix();
 
         if (!errorText.isEmpty()) {
             result += "\n\n" + errorText.trim();
@@ -59,27 +59,30 @@ public abstract class Outcome {
 
         String fullLog = SystemOutHandler.getDynamicOutput();
         boolean worthToShowLog =
-            fullLog.trim().length() != 0 && !result.contains(fullLog.trim());
+                fullLog.trim().length() != 0 && !result.contains(fullLog.trim());
 
         String arguments = "";
         TestRun testRun = StageTest.getCurrTestRun();
         if (testRun != null) {
             List<TestedProgram> testedPrograms = StageTest.getCurrTestRun().getTestedPrograms();
             List<TestedProgram> programsWithArgs = testedPrograms
-                .stream().filter(pr -> pr.getRunArgs().size() > 0).collect(Collectors.toList());
+                    .stream().filter(pr -> pr.getRunArgs().size() > 0).collect(Collectors.toList());
 
             StringBuilder argumentsBuilder = new StringBuilder();
             for (TestedProgram pr : programsWithArgs) {
                 argumentsBuilder.append("Arguments");
                 if (testedPrograms.size() > 1) {
                     argumentsBuilder
-                        .append(" for ")
-                        .append(pr.getRunClass().getSimpleName());
+                            .append(" for ")
+                            .append(pr.getRunClass().getSimpleName());
                 }
+                List<String> prArgs = pr.getRunArgs().stream()
+                        .map(arg -> arg.contains(" ") ? "\"" + arg + "\"" : arg)
+                        .collect(Collectors.toList());
                 argumentsBuilder
-                    .append(": ")
-                    .append(String.join(" ", pr.getRunArgs()))
-                    .append("\n");
+                        .append(": ")
+                        .append(String.join(" ", prArgs))
+                        .append("\n");
             }
             arguments = argumentsBuilder.toString().trim();
         }
@@ -109,11 +112,11 @@ public abstract class Outcome {
     public static Outcome getOutcome(Throwable t, int currTest) {
         if (t instanceof WrongAnswer) {
             return new WrongAnswerOutcome(currTest,
-                ((WrongAnswer) t).getFeedbackText().trim());
+                    ((WrongAnswer) t).getFeedbackText().trim());
 
         } else if (t instanceof PresentationError) {
             return new PresentationErrorOutcome(currTest,
-                ((PresentationError) t).getFeedbackText());
+                    ((PresentationError) t).getFeedbackText());
 
         } else if (t instanceof ExceptionWithFeedback) {
             ExceptionWithFeedback ex = (ExceptionWithFeedback) t;
@@ -122,8 +125,8 @@ public abstract class Outcome {
             return new ExceptionOutcome(currTest, realUserException, errorText);
 
         } else if (t instanceof ErrorWithFeedback
-            || t instanceof FileSystemException
-            || t instanceof TimeLimitException) {
+                || t instanceof FileSystemException
+                || t instanceof TimeLimitException) {
 
             return new ErrorOutcome(currTest, t);
 
