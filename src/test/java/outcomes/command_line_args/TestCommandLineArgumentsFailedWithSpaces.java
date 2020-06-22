@@ -23,7 +23,7 @@ public class TestCommandLineArgumentsFailedWithSpaces extends StageTest<String> 
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-                "Arguments: -spaces \"some argument with spaces\" -number 234 -onlySpaces \"      \""
+            "Arguments: -spaces \"some argument with spaces\" -number 234 -onlySpaces \"      \""
         );
         exception.expectMessage(not(containsString("Fatal error")));
     }
@@ -31,11 +31,11 @@ public class TestCommandLineArgumentsFailedWithSpaces extends StageTest<String> 
     @Override
     public List<TestCase<String>> generate() {
         return Collections.singletonList(
-                new TestCase<String>().setDynamicTesting(() -> {
-                    TestedProgram pr = new TestedProgram(Main.class);
-                    String out = pr.start("-spaces", "some argument with spaces", "-number", "234", "-onlySpaces", "      ");
-                    return CheckResult.wrong("See arguments below:");
-                })
+            new TestCase<String>().setDynamicTesting(() -> {
+                TestedProgram pr = new TestedProgram(Main.class);
+                String out = pr.start("-spaces", "some argument with spaces", "-number", "234", "-onlySpaces", "      ");
+                return CheckResult.wrong("See arguments below:");
+            })
         );
     }
 }
