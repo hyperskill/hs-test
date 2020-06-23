@@ -26,13 +26,20 @@ public class AsyncMainMethodRunner implements TestRunner {
         ExecutorService executorService = ProcessUtils.newDaemonThreadPool(1);
         Future<CheckResult> future = executorService
             .submit(() -> {
+                CheckResult result;
                 try {
-                    CheckResult result = testCase.getDynamicTesting().handle();
-                    testRun.stopTestedPrograms();
-                    return result;
+                    result = testCase.getDynamicTesting().handle();
+                } catch (WrongAnswer wrongAnswer) {
+                    result = CheckResult.wrong(wrongAnswer.getFeedbackText());
+                } catch (TestPassed testPassed) {
+                    result = CheckResult.correct();
                 } catch (TestedProgramThrewException | TestedProgramFinishedEarly ignored) {
-                    return null;
+                    result = null;
                 }
+                if (result == null || result.isCorrect()) {
+                    testRun.stopTestedPrograms();
+                }
+                return result;
             });
 
         try {

@@ -88,6 +88,8 @@ public class TestDynamicTestingStartInBackgroundWrongAnswer extends StageTest<St
                     return CheckResult.wrong("");
                 }
 
+                server.stop();
+
                 return CheckResult.wrong("");
             })
         );

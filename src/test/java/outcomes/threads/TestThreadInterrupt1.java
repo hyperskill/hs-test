@@ -49,8 +49,10 @@ public class TestThreadInterrupt1 extends StageTest {
 
     @DynamicTestingMethod
     CheckResult test() {
-        new TestedProgram(TestThreadInterrupt1Main.class).startInBackground();
+        TestedProgram pr = new TestedProgram(TestThreadInterrupt1Main.class);
+        pr.startInBackground();
         sleep(10);
+        pr.stop();
         return CheckResult.wrong("");
     }
 }
