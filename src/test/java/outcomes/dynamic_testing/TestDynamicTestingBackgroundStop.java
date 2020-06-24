@@ -39,7 +39,7 @@ public class TestDynamicTestingBackgroundStop extends StageTest {
         }
 
         pr.execute("1234");
-        sleep(30);
+        sleep(50);
 
         if (!pr.isWaitingInput() || !pr.getOutput().equals("1234")) {
             return CheckResult.wrong("Should already wait for output");
