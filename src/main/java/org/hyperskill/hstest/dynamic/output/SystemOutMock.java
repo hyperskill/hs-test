@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.ignoreStdout;
+
 public class SystemOutMock extends OutputStream {
 
     // original stream is used to actually see
@@ -27,11 +29,10 @@ public class SystemOutMock extends OutputStream {
     private final Map<ThreadGroup, ByteArrayOutputStream> partial = new HashMap<>();
 
     SystemOutMock(PrintStream originalStream) {
-        boolean printStdout = !Boolean.getBoolean("ignoreStdout");
         this.original = new PrintStream(new OutputStream() {
             @Override
             public void write(int b) {
-                if (printStdout) {
+                if (!ignoreStdout) {
                     originalStream.write(b);
                 }
             }

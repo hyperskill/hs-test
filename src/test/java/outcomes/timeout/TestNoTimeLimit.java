@@ -9,6 +9,8 @@ import org.junit.BeforeClass;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.skipSlow;
+
 class TestNoTimeLimitMain {
     public static void main(String[] args) throws Exception {
         Thread.sleep(16000);
@@ -19,7 +21,7 @@ public class TestNoTimeLimit extends StageTest {
 
     @BeforeClass
     public static void stopSlow() {
-        Assume.assumeFalse(Boolean.getBoolean("skipSlow"));
+        Assume.assumeFalse(skipSlow);
     }
 
     public TestNoTimeLimit() {

@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hyperskill.hstest.testing.ExecutionOptions.skipSlow;
 
 class TestTimeout2Main {
     public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class TestTimeout2 extends StageTest {
 
     @BeforeClass
     public static void stopSlow() {
-        Assume.assumeFalse(Boolean.getBoolean("skipSlow"));
+        Assume.assumeFalse(skipSlow);
     }
 
     public TestTimeout2() {

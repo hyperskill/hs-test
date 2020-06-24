@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hyperskill.hstest.testing.ExecutionOptions.skipSlow;
 
 class TestDefaultTimeLimitMain {
     public static void main(String[] args) throws Exception {
@@ -25,7 +26,7 @@ public class TestDefaultTimeLimit extends StageTest {
 
     @BeforeClass
     public static void stopSlow() {
-        Assume.assumeFalse(Boolean.getBoolean("skipSlow"));
+        Assume.assumeFalse(skipSlow);
     }
 
     public TestDefaultTimeLimit() {
