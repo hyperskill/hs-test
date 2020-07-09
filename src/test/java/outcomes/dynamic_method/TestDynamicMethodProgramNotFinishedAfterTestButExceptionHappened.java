@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -19,9 +20,9 @@ class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappenedServer {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Server started!");
             System.out.println("S1: " + scanner.nextLine());
-            Thread.sleep(1000);
+            Thread.sleep(100);
             System.out.println("S2: " + scanner.nextLine());
-        } catch (Throwable th) {
+        } catch (NoSuchElementException | InterruptedException th) {
             System.out.println("Server stopped!");
             System.out.println(th.toString());
         }
