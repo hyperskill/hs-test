@@ -26,6 +26,8 @@ import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUr
 
 public abstract class SpringTest extends StageTest<Object> {
 
+    private static final int DEFAULT_PORT = 8889;
+
     private static boolean isTearDown = false;
     private static boolean springRunning = false;
     private static Class<?> springClass;
@@ -37,6 +39,10 @@ public abstract class SpringTest extends StageTest<Object> {
     public static void main(String[] args) throws Exception {
         SpringTest.args = args;
         startSpring();
+    }
+
+    public SpringTest(Class<?> clazz) {
+        this(clazz, DEFAULT_PORT);
     }
 
     public SpringTest(Class<?> clazz, int port) {
