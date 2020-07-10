@@ -10,6 +10,7 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,7 +172,14 @@ public interface DynamicTesting {
                     }
                     throw new FatalError("", ex.getCause());
                 } catch (IllegalAccessException ex) {
-                    throw new FatalError("", ex);
+                    String feedback = "Cannot invoke test.";
+                    if (!Modifier.isPublic(method.getModifiers())) {
+                        String className = method.getDeclaringClass().getSimpleName();
+                        String methodName = method.getName();
+                        feedback += " Try to declare method \"" +
+                            className + "." + methodName + "\" as public";
+                    }
+                    throw new FatalError(feedback, ex);
                 }
             }).collect(toList());
     }
@@ -203,6 +211,15 @@ public interface DynamicTesting {
                             + "the field \"" + field.getName() + "\" to a List or array");
                     }
                     return tests.stream();
+                } catch (IllegalAccessException ex) {
+                    String feedback = "Cannot invoke test.";
+                    if (!Modifier.isPublic(field.getModifiers())) {
+                        String className = field.getDeclaringClass().getSimpleName();
+                        String fieldName = field.getName();
+                        feedback += " Try to declare field \"" +
+                            className + "." + fieldName + "\" as public";
+                    }
+                    throw new FatalError(feedback, ex);
                 } catch (Exception ex) {
                     throw new FatalError("Cannot get "
                         + "dynamic methods from the field \"" + field.getName() + "\"", ex);
