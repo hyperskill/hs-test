@@ -22,6 +22,16 @@ public class TestIntegers {
     }
 
     @Test
+    public void checkIntegersAsText() {
+        List<Integer> ints = expect("123 234 345").asText().toContain(3).integers();
+
+        assertEquals(ints.size(), 3);
+        assertEquals((int) ints.get(0), 123);
+        assertEquals((int) ints.get(1), 234);
+        assertEquals((int) ints.get(2), 345);
+    }
+
+    @Test
     public void checkIntegersFail() {
         try {
             expect("123 234 ").toContain(4).integers();
@@ -36,8 +46,34 @@ public class TestIntegers {
     }
 
     @Test
+    public void checkIntegersFailAsText() {
+        try {
+            expect("123 234 ").asText().toContain(4).integers();
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The following output contains wrong " +
+                    "number of integers (expected to be equal to 4, found 2):\n" +
+                    "123 234");
+            return;
+        }
+        fail();
+    }
+
+    @Test
     public void checkIntegersInText() {
-        List<Integer> ints = expect("qweqw 123 dsjfdhasd234 345fgfgnfg").toContain(3).integers();
+        List<Integer> ints = expect("qweqw 123 dsjfdhasd234 345fgfgnfg")
+            .toContain(3).integers();
+
+        assertEquals(ints.size(), 3);
+        assertEquals((int) ints.get(0), 123);
+        assertEquals((int) ints.get(1), 234);
+        assertEquals((int) ints.get(2), 345);
+    }
+
+    @Test
+    public void checkIntegersInTextAsText() {
+        List<Integer> ints = expect("qweqw 123 dsjfdhasd234 345fgfgnfg")
+            .asText().toContain(3).integers();
 
         assertEquals(ints.size(), 3);
         assertEquals((int) ints.get(0), 123);
@@ -56,9 +92,34 @@ public class TestIntegers {
     }
 
     @Test
+    public void checkIntegersOnlyAsText() {
+        List<Integer> ints = expect("123 234 345").asText().toContain(3).integersOnly();
+
+        assertEquals(ints.size(), 3);
+        assertEquals((int) ints.get(0), 123);
+        assertEquals((int) ints.get(1), 234);
+        assertEquals((int) ints.get(2), 345);
+    }
+
+    @Test
     public void checkIntegersOnlyInText() {
         try {
-            expect("qweqw 123 dsjfdhasd234 345fgfgnfg").toContain(3).integersOnly();
+            expect("qweqw 123 dsjfdhasd234 345fgfgnfg")
+                .toContain(3).integersOnly();
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The following output contains not only integers (but also \"qweqw\"):\n" +
+                    "qweqw 123 dsjfdhasd234 345fgfgnfg");
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void checkIntegersOnlyInTextAsText() {
+        try {
+            expect("qweqw 123 dsjfdhasd234 345fgfgnfg")
+                .asText().toContain(3).integersOnly();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only integers (but also \"qweqw\"):\n" +
@@ -71,7 +132,22 @@ public class TestIntegers {
     @Test
     public void checkIntegersOnlyInText2() {
         try {
-            expect("1 2 3 qweqw 123 dsjfdhasd234 345fgfgnfg").toContain(3).integersOnly();
+            expect("1 2 3 qweqw 123 dsjfdhasd234 345fgfgnfg")
+                .toContain(3).integersOnly();
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The following output contains not only integers (but also \"qweqw\"):\n" +
+                    "1 2 3 qweqw 123 dsjfdhasd234 345fgfgnfg");
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void checkIntegersOnlyInText2AsText() {
+        try {
+            expect("1 2 3 qweqw 123 dsjfdhasd234 345fgfgnfg")
+                .asText().toContain(3).integersOnly();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
                 "The following output contains not only integers (but also \"qweqw\"):\n" +
@@ -83,7 +159,19 @@ public class TestIntegers {
 
     @Test
     public void checkIntegersOnlyWthDelim() {
-        List<Integer> ints = expect("123  :234: 345").toContain(3).integersOnly(":");
+        List<Integer> ints = expect("123  :234: 345")
+            .toContain(3).integersOnly(":");
+
+        assertEquals(ints.size(), 3);
+        assertEquals((int) ints.get(0), 123);
+        assertEquals((int) ints.get(1), 234);
+        assertEquals((int) ints.get(2), 345);
+    }
+
+    @Test
+    public void checkIntegersOnlyWthDelimAsText() {
+        List<Integer> ints = expect("123  :234: 345")
+            .asText().toContain(3).integersOnly(":");
 
         assertEquals(ints.size(), 3);
         assertEquals((int) ints.get(0), 123);
@@ -100,6 +188,20 @@ public class TestIntegers {
                 "The following output contains wrong " +
                     "number of integers separated by \":\" (expected to be equal to 4, found 3):\n" +
                 "123  :234: 345");
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void checkIntegersOnlyWthDelimFailAsText() {
+        try {
+            expect("123  :234: 345").asText().toContain(4).integersOnly(":");
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The following output contains wrong " +
+                    "number of integers separated by \":\" (expected to be equal to 4, found 3):\n" +
+                    "123  :234: 345");
             return;
         }
         fail();
