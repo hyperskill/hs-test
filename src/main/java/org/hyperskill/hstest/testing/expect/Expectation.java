@@ -16,14 +16,14 @@ public class Expectation<T> {
         void throwError(String text) throws OutcomeError;
     }
 
-    final String text;
+    public final String text;
 
-    Function<Integer, Boolean> checkAmount;
-    Supplier<List<T>> findAllElemsFunc;
-    Supplier<String> whatsWrongFunc;
-    Function<Integer, String> hintFunc = i -> null;
+    public Function<Integer, Boolean> checkAmount;
+    public Supplier<List<T>> findAllElemsFunc;
+    public Supplier<String> whatsWrongFunc;
+    public Function<Integer, String> hintFunc = i -> null;
 
-    ThrowExpectationError error = err -> {
+    public ThrowExpectationError error = err -> {
         throw new PresentationError(err);
     };
 
@@ -35,7 +35,7 @@ public class Expectation<T> {
         return new ExpectationBuilder<>(new Expectation<>(text));
     }
 
-    <X> Expectation<X> copy(Supplier<List<X>> findAllElemsFunc) {
+    public <X> Expectation<X> copy(Supplier<List<X>> findAllElemsFunc) {
         Expectation<X> result = new Expectation<>(text);
         result.checkAmount = checkAmount;
         result.findAllElemsFunc = findAllElemsFunc;
@@ -44,7 +44,7 @@ public class Expectation<T> {
         return result;
     }
 
-    List<T> check() {
+    public List<T> check() {
         List<T> found = findAllElemsFunc.get();
         if (found == null || !checkAmount.apply(found.size())) {
             int size = -1;

@@ -1,5 +1,8 @@
 package org.hyperskill.hstest.testing.expect;
 
+import org.hyperskill.hstest.testing.expect.text.AmountBuilder;
+import org.hyperskill.hstest.testing.expect.text.TextSearcher;
+
 import java.util.function.Function;
 
 public class ExpectationBuilder<T> {
@@ -9,46 +12,47 @@ public class ExpectationBuilder<T> {
         this.expect = expect;
     }
 
-    public ExpectationSearcher<T> toContain() {
-        return toContain(amount -> amount > 0);
+    public AmountBuilder<T> asText() {
+        return new AmountBuilder<>(expect);
     }
 
-    public ExpectationSearcher<T> toContain(int count) {
-        return toContain(amount -> amount == count, "equal to " + count);
+    public TextSearcher<T> toContain() {
+        return asText().toContain();
     }
 
-    public ExpectationSearcher<T> toContainMoreThan(int count) {
-        return toContain(amount -> amount > count, "more than " + count);
+    public TextSearcher<T> toContain(int count) {
+        return asText().toContain(count);
     }
 
-    public ExpectationSearcher<T> toContainLessThan(int count) {
-        return toContain(amount -> amount < count, "less than " + count);
+    public TextSearcher<T> toContainMoreThan(int count) {
+        return asText().toContainMoreThan(count);
     }
 
-    public ExpectationSearcher<T> toContainAtLeast(int count) {
-        return toContain(amount -> amount >= count, "at least " + count);
+    public TextSearcher<T> toContainLessThan(int count) {
+        return asText().toContainLessThan(count);
     }
 
-    public ExpectationSearcher<T> toContainAtMost(int count) {
-        return toContain(amount -> amount <= count, count + " at most");
+    public TextSearcher<T> toContainAtLeast(int count) {
+        return asText().toContainAtLeast(count);
     }
 
-    public ExpectationSearcher<T> toContainBetween(int lowerBound, int upperBound) {
-        return toContain(amount -> amount >= lowerBound && amount <= upperBound,
-            "between " + lowerBound + " and " + upperBound);
+    public TextSearcher<T> toContainAtMost(int count) {
+        return asText().toContainAtMost(count);
     }
 
-    public ExpectationSearcher<T> toContain(Function<Integer, Boolean> checkAmount) {
-        return toContain(checkAmount, i -> null);
+    public TextSearcher<T> toContainBetween(int lowerBound, int upperBound) {
+        return asText().toContainBetween(lowerBound, upperBound);
     }
 
-    public ExpectationSearcher<T> toContain(Function<Integer, Boolean> checkAmount, String hint) {
-        return toContain(checkAmount, realSize -> "expected to be " + hint + ", found " + realSize);
+    public TextSearcher<T> toContain(Function<Integer, Boolean> checkAmount) {
+        return asText().toContain(checkAmount);
     }
 
-    public ExpectationSearcher<T> toContain(Function<Integer, Boolean> checkAmount, Function<Integer, String> hint) {
-        expect.checkAmount = checkAmount;
-        expect.hintFunc = hint;
-        return new ExpectationSearcher<>(expect);
+    public TextSearcher<T> toContain(Function<Integer, Boolean> checkAmount, String hint) {
+        return asText().toContain(checkAmount, hint);
+    }
+
+    public TextSearcher<T> toContain(Function<Integer, Boolean> checkAmount, Function<Integer, String> hint) {
+        return asText().toContain(checkAmount, hint);
     }
 }

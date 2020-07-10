@@ -1,4 +1,6 @@
-package org.hyperskill.hstest.testing.expect;
+package org.hyperskill.hstest.testing.expect.text;
+
+import org.hyperskill.hstest.testing.expect.Expectation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +9,14 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExpectationSearcher<T> {
+public class TextSearcher<T> {
     final Expectation<T> expect;
 
     private final Scanner scanner;
     private final Pattern doublePattern = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?");
     private final Pattern intPattern = Pattern.compile("[-+]?[0-9]+");
 
-    ExpectationSearcher(Expectation<T> expect) {
+    public TextSearcher(Expectation<T> expect) {
         this.expect = expect;
         scanner = new Scanner(expect.text);
     }
