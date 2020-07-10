@@ -16,7 +16,7 @@ public class Expectation<T> {
         void throwError(String text) throws OutcomeError;
     }
 
-    public final String text;
+    public String text;
 
     public Function<Integer, Boolean> checkAmount;
     public Supplier<List<T>> findAllElemsFunc;

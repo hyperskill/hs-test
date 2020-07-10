@@ -68,15 +68,10 @@ public final class FileUtils {
         return getNonexistentFilePath(null);
     }
 
-    public static String readFile(String name) {
-        try {
-            Path path = Paths.get(CURRENT_DIR + name);
-            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-            //return Files.readString(path); <- Java 11
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return "";
+    public static String readFile(String name) throws IOException {
+        Path path = Paths.get(CURRENT_DIR + name);
+        return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        //return Files.readString(path); <- Java 11
     }
 
 }

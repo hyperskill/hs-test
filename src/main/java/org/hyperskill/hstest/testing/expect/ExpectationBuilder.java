@@ -1,8 +1,11 @@
 package org.hyperskill.hstest.testing.expect;
 
+import org.hyperskill.hstest.common.FileUtils;
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextAmountBuilder;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextSearcher;
 
+import java.io.IOException;
 import java.util.function.Function;
 
 public class ExpectationBuilder<T> {
@@ -14,6 +17,16 @@ public class ExpectationBuilder<T> {
 
     public ExpectationTextAmountBuilder<T> asText() {
         return new ExpectationTextAmountBuilder<>(expect);
+    }
+
+    public ExpectationBuilder<T> fromFile() {
+        try {
+            expect.text = FileUtils.readFile(expect.text);
+            return this;
+        } catch (IOException ex) {
+            throw new PresentationError("File \"" + expect.error
+                + "\" expected, but not found");
+        }
     }
 
     public ExpectationTextSearcher<T> toContain() {
