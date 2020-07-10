@@ -9,14 +9,14 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TextSearcher<T> {
+public class ExpectationTextSearcher<T> {
     final Expectation<T> expect;
 
     private final Scanner scanner;
     private final Pattern doublePattern = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?");
     private final Pattern intPattern = Pattern.compile("[-+]?[0-9]+");
 
-    public TextSearcher(Expectation<T> expect) {
+    public ExpectationTextSearcher(Expectation<T> expect) {
         this.expect = expect;
         scanner = new Scanner(expect.text);
     }
