@@ -22,4 +22,13 @@ public class ExecutionOptions {
      * an argument "-DignoreStdout=true" should be passed
      */
     public static final boolean ignoreStdout = Boolean.getBoolean("ignoreStdout");
+
+    /**
+     * In case of fatal error outcome, feedback contains OS, language version,
+     * language vendor. In case of running a test inside docker, this information
+     * is not relevant to the user and to the Hyperskill team and thus should be ignored.
+     * If the test is to be run inside docker,
+     * an argument "-DinsideDocker=true" should be passed
+     */
+    public static boolean insideDocker = Boolean.getBoolean("insideDocker");
 }

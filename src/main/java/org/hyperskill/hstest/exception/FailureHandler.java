@@ -2,6 +2,8 @@ package org.hyperskill.hstest.exception;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.insideDocker;
+
 public final class FailureHandler {
 
     private FailureHandler() { }
@@ -21,13 +23,19 @@ public final class FailureHandler {
     }
 
     public static String getReport() {
-        String os = System.getProperty("os.name");
-        String java = System.getProperty("java.version");
-        String vendor = System.getProperty("java.vendor");
+        if (!insideDocker) {
+            String os = System.getProperty("os.name");
+            String java = System.getProperty("java.version");
+            String vendor = System.getProperty("java.vendor");
 
-        return "OS " + os + "\n"
-            + "Java " + java + "\n"
-            + "Vendor " + vendor + "\n"
-            + "Testing library version 8";
+            return "Submitted via IDE\n"
+                + "\n"
+                + "OS " + os + "\n"
+                + "Java " + java + "\n"
+                + "Vendor " + vendor + "\n"
+                + "Testing library version 7.1";
+        } else {
+            return "Submitted via web";
+        }
     }
 }
