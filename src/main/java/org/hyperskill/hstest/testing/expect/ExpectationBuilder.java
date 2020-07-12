@@ -2,6 +2,7 @@ package org.hyperskill.hstest.testing.expect;
 
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.hyperskill.hstest.testing.expect.json.ExpectationJsonBuilder;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextAmountBuilder;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextSearcher;
 
@@ -67,5 +68,9 @@ public class ExpectationBuilder<T> {
 
     public ExpectationTextSearcher<T> toContain(Function<Integer, Boolean> checkAmount, Function<Integer, String> hint) {
         return asText().toContain(checkAmount, hint);
+    }
+
+    public ExpectationJsonBuilder<T> asJson() {
+        return new ExpectationJsonBuilder<>(expect);
     }
 }
