@@ -50,7 +50,7 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         }
 
         entries:
-        for (int index = 0; index < array.size(); index++) {
+        for (int index = 0; index < length; index++) {
             JsonElement value = array.get(index);
 
             if (!itemTemplate.check(value)) {
