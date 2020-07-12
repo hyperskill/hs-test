@@ -67,15 +67,23 @@ public class JsonChecker {
     }
 
     public static JsonStringBuilder isString(String value) {
-        return isString(v -> v.equals(value));
+        return isString(v -> v.equals(value), "should equal to " + value);
     }
 
     public static JsonStringBuilder isString(Pattern regex) {
-        return isString(v -> regex.matcher(v).matches());
+        return isString(regex, "is incorrect");
+    }
+
+    public static JsonStringBuilder isString(Pattern regex, String failFeedback) {
+        return isString(v -> regex.matcher(v).matches(), failFeedback);
     }
 
     public static JsonStringBuilder isString(StringChecker checker) {
-        return new JsonStringBuilder(checker);
+        return isString(checker, "is incorrect");
+    }
+
+    public static JsonStringBuilder isString(StringChecker checker, String failFeedback) {
+        return new JsonStringBuilder(checker, failFeedback);
     }
 
     public static JsonNumberBuilder isNumber() {
@@ -91,7 +99,11 @@ public class JsonChecker {
     }
 
     public static JsonNumberBuilder isNumber(NumberChecker checker) {
-        return new JsonNumberBuilder(checker);
+        return isNumber(checker, "is incorrect");
+    }
+
+    public static JsonNumberBuilder isNumber(NumberChecker checker, String failFeedback) {
+        return new JsonNumberBuilder(checker, failFeedback);
     }
 
     public static JsonIntegerBuilder isInteger() {
@@ -99,11 +111,15 @@ public class JsonChecker {
     }
 
     public static JsonIntegerBuilder isInteger(int value) {
-        return isInteger(v -> v == value);
+        return isInteger(v -> v == value, "should equal to " + value);
     }
 
     public static JsonIntegerBuilder isInteger(IntegerChecker checker) {
-        return new JsonIntegerBuilder(checker);
+        return isInteger(checker, "is incorrect");
+    }
+
+    public static JsonIntegerBuilder isInteger(IntegerChecker checker, String failFeedback) {
+        return new JsonIntegerBuilder(checker, failFeedback);
     }
 
     public static JsonDoubleBuilder isDouble() {
@@ -111,11 +127,15 @@ public class JsonChecker {
     }
 
     public static JsonDoubleBuilder isDouble(double value) {
-        return isDouble(v -> v - value < 1e-6);
+        return isDouble(v -> v - value < 1e-6, "should equal to " + value);
     }
 
     public static JsonDoubleBuilder isDouble(DoubleChecker checker) {
-        return new JsonDoubleBuilder(checker);
+        return isDouble(checker, "is incorrect");
+    }
+
+    public static JsonDoubleBuilder isDouble(DoubleChecker checker, String failFeedback) {
+        return new JsonDoubleBuilder(checker, failFeedback);
     }
 
     public static JsonBooleanBuilder isBoolean() {
@@ -123,11 +143,15 @@ public class JsonChecker {
     }
 
     public static JsonBooleanBuilder isBoolean(boolean value) {
-        return isBoolean(v -> v == value);
+        return isBoolean(v -> v == value, "should equal to " + value);
     }
 
     public static JsonBooleanBuilder isBoolean(BooleanChecker checker) {
-        return new JsonBooleanBuilder(checker);
+        return isBoolean(checker, "is incorrect");
+    }
+
+    public static JsonBooleanBuilder isBoolean(BooleanChecker checker, String failFeedback) {
+        return new JsonBooleanBuilder(checker, failFeedback);
     }
 
     public static JsonNullBuilder isNull() {

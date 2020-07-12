@@ -1,10 +1,5 @@
 package org.hyperskill.hstest.common;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,15 +32,6 @@ public final class Utils {
             stringBuilder.append(newLine);
         }
         return cleanText(stringBuilder.toString()).trim();
-    }
-
-    public static JsonElement getJson(String content) {
-        return new JsonParser().parse(content);
-    }
-
-    public static String getPrettyJson(JsonElement json) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
     }
 
     public static String cleanText(String str) {

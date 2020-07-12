@@ -2,6 +2,8 @@ package org.hyperskill.hstest.testing.expect.json.builder;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.StringChecker;
 
 import java.util.ArrayList;
@@ -23,15 +25,16 @@ public class JsonFinishedObjectBuilder extends JsonBaseBuilder {
         }
     }
 
-    List<KeyValueChecker> keyValueCheckers = new ArrayList<>();
+    final List<KeyValueChecker> keyValueCheckers = new ArrayList<>();
 
     @Override
-    public final boolean check(JsonElement elem) {
+    public final boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
         for (KeyValueChecker checker : keyValueCheckers) {
             checker.matched = false;
         }
 
         if (!elem.isJsonObject()) {
+            feedback.fail("should be of object type, found " + JsonUtils.getType(elem));
             return false;
         }
 
@@ -44,19 +47,26 @@ public class JsonFinishedObjectBuilder extends JsonBaseBuilder {
 
             for (KeyValueChecker checker : keyValueCheckers) {
                 if (checker.keyChecker.check(key)) {
-                    if (!checker.valueChecker.check(value)) {
+                    feedback.addPath(key);
+                    boolean result = checker.valueChecker.check(value, feedback);
+                    feedback.removePath();
+
+                    if (!result) {
                         return false;
                     }
+
                     checker.matched = true;
                     continue entries;
                 }
             }
 
+            feedback.fail("shouldn't have the key \"" + key + "\"");
             return false;
         }
 
         for (KeyValueChecker checker : keyValueCheckers) {
             if (checker.requireMatch && !checker.matched) {
+                feedback.fail("should have some keys that are missing");
                 return false;
             }
         }

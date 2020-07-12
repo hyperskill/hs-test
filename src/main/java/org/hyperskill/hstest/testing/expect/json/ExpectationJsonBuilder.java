@@ -9,6 +9,9 @@ import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.testing.expect.Expectation;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonBaseBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.util.regex.Pattern.compile;
 import static org.hyperskill.hstest.testing.expect.Expectation.expect;
 import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
@@ -22,13 +25,17 @@ public class ExpectationJsonBuilder<T> {
 
     Expectation<T> expect;
 
+    JsonElement originalElem;
     JsonElement elem;
+
+    List<String> path = new ArrayList<>();
     String feedback = "";
 
     public ExpectationJsonBuilder(Expectation<T> expect) {
         this.expect = expect;
         try {
             elem = Utils.getJson(expect.text);
+            originalElem = elem;
         } catch (JsonSyntaxException ex) {
             throw new PresentationError("Expected JSON, got something else.\n"
                 + ex.getMessage() + "\n\n" + "Content:\n" + expect.text);
@@ -49,10 +56,11 @@ public class ExpectationJsonBuilder<T> {
         StringBuilder currPath = new StringBuilder("/");
         for (String key : path) {
             currPath.append(key);
+            this.path.add(key);
 
             if (!elem.isJsonArray() && !elem.isJsonObject()) {
                 feedback += "\n\nJSON should contain an object or an array at path \""
-                    + currPath + "\". Full JSON:\n\n" + Utils.getPrettyJson(elem);
+                    + currPath + "\". Full JSON:\n\n" + Utils.getPrettyJson(originalElem);
                 throw new PresentationError(feedback.trim());
             }
 
@@ -62,7 +70,7 @@ public class ExpectationJsonBuilder<T> {
                 if (!key.matches("[0-9]+")) {
                     feedback += "\n\nJSON should contain an object at path \""
                         + currPath + "\", found an array with " + array.size()
-                        + " elements. Full JSON:\n\n" + Utils.getPrettyJson(elem);
+                        + " elements. Full JSON:\n\n" + Utils.getPrettyJson(originalElem);
                     throw new PresentationError(feedback.trim());
                 }
 
@@ -71,7 +79,7 @@ public class ExpectationJsonBuilder<T> {
                 if (array.size() <= index) {
                     feedback += "\n\nJSON should contain an array with at least "
                         + (index + 1) + " elements at path \"" + currPath + "\", found "
-                        + array.size() + " elements. Full JSON:\n\n" + Utils.getPrettyJson(elem);
+                        + array.size() + " elements. Full JSON:\n\n" + Utils.getPrettyJson(originalElem);
                     throw new PresentationError(feedback.trim());
                 }
 
@@ -89,7 +97,7 @@ public class ExpectationJsonBuilder<T> {
                     }
 
                     feedback += " at path \"" + currPath
-                        + "\". Full JSON:\n\n" + Utils.getPrettyJson(elem);
+                        + "\". Full JSON:\n\n" + Utils.getPrettyJson(originalElem);
 
                     throw new PresentationError(feedback.trim());
                 }
