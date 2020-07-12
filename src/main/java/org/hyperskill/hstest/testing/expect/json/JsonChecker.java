@@ -34,8 +34,8 @@ public class JsonChecker {
         return isArray().length(length);
     }
 
-    public static JsonArrayBuilder isArray(JsonBaseBuilder values) {
-        return isArray().everyItem(values);
+    public static JsonArrayBuilder isArray(JsonBaseBuilder itemsTemplate) {
+        return isArray().everyItem(itemsTemplate);
     }
 
     public static JsonArrayBuilder isArray(int length, JsonBaseBuilder itemsTemplate) {

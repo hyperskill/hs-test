@@ -38,7 +38,7 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
             checker.matched = false;
         }
 
-        if (!elem.isJsonObject()) {
+        if (!elem.isJsonArray()) {
             return false;
         }
 
