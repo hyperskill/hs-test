@@ -43,19 +43,19 @@ public class JsonChecker {
     }
 
     public static JsonFinishedArrayBuilder isArray(int... values) {
-        return isArray().items(values);
+        return isArray().length(values.length).items(values);
     }
 
     public static JsonFinishedArrayBuilder isArray(double... values) {
-        return isArray().items(values);
+        return isArray().length(values.length).items(values);
     }
 
     public static JsonFinishedArrayBuilder isArray(boolean... values) {
-        return isArray().items(values);
+        return isArray().length(values.length).items(values);
     }
 
     public static JsonFinishedArrayBuilder isArray(String... values) {
-        return isArray().items(values);
+        return isArray().length(values.length).items(values);
     }
 
     public static JsonArrayBuilder isArray() {

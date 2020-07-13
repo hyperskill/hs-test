@@ -1,14 +1,19 @@
 package org.hyperskill.hstest.testing.expect.json;
 
+import com.google.gson.JsonElement;
+import org.hyperskill.hstest.common.JsonUtils;
+
 import java.util.List;
 
 public class ExpectationJsonFeedback {
     final List<String> currPath;
+    final JsonElement originalElem;
     boolean isFailed = false;
     String feedback;
 
-    ExpectationJsonFeedback(List<String> currPath) {
+    ExpectationJsonFeedback(List<String> currPath, JsonElement originalElem) {
         this.currPath = currPath;
+        this.originalElem = originalElem;
     }
 
     public void addPath(String key) {
@@ -23,7 +28,8 @@ public class ExpectationJsonFeedback {
         if (!isFailed) {
             isFailed = true;
             String path = "/" + String.join("/", currPath.toArray(new String[0]));
-            this.feedback = "The element at path \"" + path + "\" " + feedback;
+            this.feedback = "The element at path \"" + path + "\" " + feedback
+                + "\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
         }
     }
 

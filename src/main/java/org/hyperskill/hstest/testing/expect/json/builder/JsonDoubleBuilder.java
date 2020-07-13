@@ -21,13 +21,13 @@ public class JsonDoubleBuilder extends JsonBaseBuilder {
     @Override
     public boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
         if (!elem.isJsonPrimitive()) {
-            feedback.fail("should be of number type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be double, found " + JsonUtils.getType(elem));
             return false;
         }
 
         JsonPrimitive primitive = elem.getAsJsonPrimitive();
         if (!primitive.isNumber()) {
-            feedback.fail("should be of number type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be double, found " + JsonUtils.getType(elem));
             return false;
         }
 

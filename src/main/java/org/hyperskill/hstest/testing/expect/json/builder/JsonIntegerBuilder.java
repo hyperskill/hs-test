@@ -22,20 +22,20 @@ public class JsonIntegerBuilder extends JsonBaseBuilder {
     @Override
     public boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
         if (!elem.isJsonPrimitive()) {
-            feedback.fail("should be of number type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be integer, found " + JsonUtils.getType(elem));
             return false;
         }
 
         JsonPrimitive primitive = elem.getAsJsonPrimitive();
         if (!primitive.isNumber()) {
-            feedback.fail("should be of number type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be integer, found " + JsonUtils.getType(elem));
             return false;
         }
 
         int value = primitive.getAsInt();
 
         if (!primitive.getAsNumber().toString().equals("" + value)) {
-            feedback.fail("should be of integer type, found double");
+            feedback.fail("should be integer, found double");
             return false;
         }
 

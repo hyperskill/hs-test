@@ -21,13 +21,13 @@ public class JsonBooleanBuilder extends JsonBaseBuilder {
     @Override
     public boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
         if (!elem.isJsonPrimitive()) {
-            feedback.fail("should be of boolean type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be boolean, found " + JsonUtils.getType(elem));
             return false;
         }
 
         JsonPrimitive primitive = elem.getAsJsonPrimitive();
         if (!primitive.isBoolean()) {
-            feedback.fail("should be of boolean type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be boolean, found " + JsonUtils.getType(elem));
             return false;
         }
 

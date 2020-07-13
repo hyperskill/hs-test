@@ -9,8 +9,6 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder.Inte
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
-
 public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
 
     protected static class ArrayIndexChecker {
@@ -30,8 +28,8 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         boolean check(int length);
     }
 
-    JsonBaseBuilder itemTemplate = any();
-    ArrayLengthChecker requiredLength = len -> true;
+    JsonBaseBuilder itemTemplate = null;
+    ArrayLengthChecker requiredLength = null;
     final List<ArrayIndexChecker> arrayIndexCheckers = new ArrayList<>();
 
     @Override
@@ -41,14 +39,14 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         }
 
         if (!elem.isJsonArray()) {
-            feedback.fail("should be of array type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be array, found " + JsonUtils.getType(elem));
             return false;
         }
 
         JsonArray array = elem.getAsJsonArray();
 
         int length = array.size();
-        if (!requiredLength.check(length)) {
+        if (requiredLength != null && !requiredLength.check(length)) {
             feedback.fail("has an incorrect length");
             return false;
         }
@@ -57,9 +55,14 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         for (int index = 0; index < length; index++) {
             JsonElement value = array.get(index);
 
-            if (!itemTemplate.check(value, feedback)) {
-                feedback.fail("doesn't match this array's elements format");
-                return false;
+            if (itemTemplate != null) {
+                feedback.addPath("" + index);
+                boolean result = itemTemplate.check(value, feedback);
+                feedback.removePath();
+
+                if (!result) {
+                    return false;
+                }
             }
 
             for (ArrayIndexChecker checker : arrayIndexCheckers) {
@@ -75,6 +78,10 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
                     checker.matched = true;
                     continue entries;
                 }
+            }
+
+            if (requiredLength != null || itemTemplate != null) {
+                continue;
             }
 
             feedback.fail("shouldn't have the element with index " + index);

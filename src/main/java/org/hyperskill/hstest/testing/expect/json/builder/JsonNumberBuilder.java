@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.testing.expect.json.builder;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import org.hyperskill.hstest.common.JsonUtils;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
 
@@ -19,8 +20,14 @@ public class JsonNumberBuilder extends JsonBaseBuilder {
 
     @Override
     public boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
-        if (!elem.isJsonPrimitive() || !elem.getAsJsonPrimitive().isNumber()) {
-            feedback.fail("should be of number type, found " + JsonUtils.getType(elem));
+        if (!elem.isJsonPrimitive()) {
+            feedback.fail("should be number, found " + JsonUtils.getType(elem));
+            return false;
+        }
+
+        JsonPrimitive primitive = elem.getAsJsonPrimitive();
+        if (!primitive.isNumber()) {
+            feedback.fail("should be number, found " + JsonUtils.getType(elem));
             return false;
         }
 

@@ -12,15 +12,6 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonBaseBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.regex.Pattern.compile;
-import static org.hyperskill.hstest.testing.expect.Expectation.expect;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isArray;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isInteger;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isObject;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
-
 public class ExpectationJsonBuilder<T> {
 
     Expectation<T> expect;
@@ -60,7 +51,7 @@ public class ExpectationJsonBuilder<T> {
 
             if (!elem.isJsonArray() && !elem.isJsonObject()) {
                 feedback += "\n\nJSON should contain an object or an array at path \""
-                    + currPath + "\". Full JSON:\n\n" + JsonUtils.getPrettyJson(originalElem);
+                    + currPath + "\".\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
                 throw new PresentationError(feedback.trim());
             }
 
@@ -70,7 +61,7 @@ public class ExpectationJsonBuilder<T> {
                 if (!key.matches("[0-9]+")) {
                     feedback += "\n\nJSON should contain an object at path \""
                         + currPath + "\", found an array with " + array.size()
-                        + " elements. Full JSON:\n\n" + JsonUtils.getPrettyJson(originalElem);
+                        + " elements.\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
                     throw new PresentationError(feedback.trim());
                 }
 
@@ -79,7 +70,7 @@ public class ExpectationJsonBuilder<T> {
                 if (array.size() <= index) {
                     feedback += "\n\nJSON should contain an array with at least "
                         + (index + 1) + " elements at path \"" + currPath + "\", found "
-                        + array.size() + " elements. Full JSON:\n\n" + JsonUtils.getPrettyJson(originalElem);
+                        + array.size() + " elements.\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
                     throw new PresentationError(feedback.trim());
                 }
 
@@ -97,7 +88,7 @@ public class ExpectationJsonBuilder<T> {
                     }
 
                     feedback += " at path \"" + currPath
-                        + "\". Full JSON:\n\n" + JsonUtils.getPrettyJson(originalElem);
+                        + "\".\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
 
                     throw new PresentationError(feedback.trim());
                 }
@@ -111,23 +102,8 @@ public class ExpectationJsonBuilder<T> {
     }
 
     public void check(JsonBaseBuilder schema) {
-        expect("").asJson().atPath("data", "3", "name").check(
-            isObject()
-                .value("name", isString())
-                .value("car", isObject()
-                    .value("model", "Tesla Roadster")
-                    .value("year", 2018)
-                    .value("repairs", isArray(6,
-                        isObject()
-                            .value("date", compile("\\d{4}-\\d{2}-\\d{2}"))
-                            .value("time", compile("\\d{2}-\\d{2}"))
-                            .value("cost", isNumber())
-                            .value("pic", isString(s -> s.endsWith(".png"))))))
-                .value("rocket", isObject()
-                    .value("name", "Falcon 9")
-                    .value("launches", compile("[0-9]+\\+")))
-                .value("options", any())
-        );
+        /*
+
 
         expect("").asJson().check(
             isObject()
@@ -139,8 +115,14 @@ public class ExpectationJsonBuilder<T> {
                     )
                 )
         );
+        */
 
-        schema.check(elem, null);
+        ExpectationJsonFeedback feedback = new ExpectationJsonFeedback(path, originalElem);
+        schema.check(elem, feedback);
+
+        if (feedback.isFailed) {
+            throw new PresentationError(feedback.feedback.trim());
+        }
     }
 
 

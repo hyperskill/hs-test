@@ -34,7 +34,7 @@ public class JsonFinishedObjectBuilder extends JsonBaseBuilder {
         }
 
         if (!elem.isJsonObject()) {
-            feedback.fail("should be of object type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be object, found " + JsonUtils.getType(elem));
             return false;
         }
 

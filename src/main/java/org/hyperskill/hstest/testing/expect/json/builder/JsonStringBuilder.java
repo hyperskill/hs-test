@@ -21,13 +21,13 @@ public class JsonStringBuilder extends JsonBaseBuilder {
     @Override
     public boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
         if (!elem.isJsonPrimitive()) {
-            feedback.fail("should be of string type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be string, found " + JsonUtils.getType(elem));
             return false;
         }
 
         JsonPrimitive primitive = elem.getAsJsonPrimitive();
         if (!primitive.isString()) {
-            feedback.fail("should be of string type, found " + JsonUtils.getType(elem));
+            feedback.fail("should be string, found " + JsonUtils.getType(elem));
             return false;
         }
 
