@@ -102,21 +102,6 @@ public class ExpectationJsonBuilder<T> {
     }
 
     public void check(JsonBaseBuilder schema) {
-        /*
-
-
-        expect("").asJson().check(
-            isObject()
-                .value("workers", isObject()
-                    .value(compile("[A-Z][a-z]+ [A-Z][a-z]+"), isObject()
-                        .value("name", isString())
-                        .value("age", isInteger(i -> i >= 18))
-                        .value("works", isString())
-                    )
-                )
-        );
-        */
-
         ExpectationJsonFeedback feedback = new ExpectationJsonFeedback(path, originalElem);
         schema.check(elem, feedback);
 
@@ -124,7 +109,4 @@ public class ExpectationJsonBuilder<T> {
             throw new PresentationError(feedback.feedback.trim());
         }
     }
-
-
-
 }
