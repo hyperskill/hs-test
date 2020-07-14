@@ -1,6 +1,6 @@
 package expect;
 
-import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -53,14 +53,14 @@ public class TestJson {
     public void testJsonObjectIncorrectElements() {
         try {
             expect("[]").asJson().check(isObject());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be object, found array"));
         }
 
         try {
             expect("12").asJson().check(isObject());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be object, found number"));
         }
@@ -70,14 +70,14 @@ public class TestJson {
     public void testJsonArrayIncorrectElements() {
         try {
             expect("{}").asJson().check(isArray());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be array, found object"));
         }
 
         try {
             expect("null").asJson().check(isArray());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be array, found null"));
         }
@@ -87,14 +87,14 @@ public class TestJson {
     public void testJsonNumberIncorrectElements() {
         try {
             expect("wer").asJson().check(isNumber());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be number, found string"));
         }
 
         try {
             expect("[]").asJson().check(isNumber());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be number, found array"));
         }
@@ -104,14 +104,14 @@ public class TestJson {
     public void testJsonIntegerIncorrectElements() {
         try {
             expect("null").asJson().check(isInteger());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be integer, found null"));
         }
 
         try {
             expect("{}").asJson().check(isInteger());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be integer, found object"));
         }
@@ -121,7 +121,7 @@ public class TestJson {
     public void testJsonDoubleParsedAsInteger() {
         try {
             expect("12.98").asJson().check(isInteger());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be integer, found double"));
         }
@@ -131,14 +131,14 @@ public class TestJson {
     public void testJsonDoubleIncorrectElements() {
         try {
             expect("ert").asJson().check(isDouble());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be double, found string"));
         }
 
         try {
             expect("{}").asJson().check(isDouble());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be double, found object"));
         }
@@ -148,14 +148,14 @@ public class TestJson {
     public void testJsonStringIncorrectElements() {
         try {
             expect("true").asJson().check(isString());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be string, found boolean"));
         }
 
         try {
             expect("[]").asJson().check(isString());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be string, found array"));
         }
@@ -165,14 +165,14 @@ public class TestJson {
     public void testJsonNullIncorrectElements() {
         try {
             expect("true").asJson().check(isNull());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be null, found boolean"));
         }
 
         try {
             expect("[]").asJson().check(isNull());
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should be null, found array"));
         }
@@ -350,7 +350,7 @@ public class TestJson {
             expect("[1, 2, 3, 4]").asJson().check(
                 isArray()
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" shouldn't have the element with index 0"));
         }
@@ -365,7 +365,7 @@ public class TestJson {
                     .item(1)
                     .item(2)
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/0\" should equal to 0"));
         }
@@ -380,7 +380,7 @@ public class TestJson {
                     .item(2)
                     .item(3)
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" shouldn't have the element with index 3"));
         }
@@ -392,7 +392,7 @@ public class TestJson {
             expect("[1, 2, true, 4]").asJson().check(
                 isArray(isInteger(i -> i <= 2))
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/2\" should be integer, found boolean"));
         }
@@ -404,7 +404,7 @@ public class TestJson {
             expect("[1, 2, true, 4]").asJson().check(
                 isArray(isInteger(1))
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/1\" should equal to 1"));
         }
@@ -416,7 +416,7 @@ public class TestJson {
             expect("{\"1\" : 1 , \"2\" : 2}").asJson().check(
                 isObject().value("1", 1)
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" shouldn't have the key \"2\""));
         }
@@ -431,7 +431,7 @@ public class TestJson {
                     .value("2", 2)
                     .value("3", 3)
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/\" should contain a key \"3\""));
         }
@@ -446,7 +446,7 @@ public class TestJson {
                     .value("2", isObject()
                         .value("3", isObject()))
             );
-        } catch (PresentationError ex) {
+        } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The element at path \"/2/3\" shouldn't have the key \"4\""));
         }
