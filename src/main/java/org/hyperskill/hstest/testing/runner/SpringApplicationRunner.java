@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.testing.runner;
 
+import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -7,6 +8,8 @@ import org.hyperskill.hstest.stage.SpringTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class SpringApplicationRunner implements TestRunner {
     @Override
@@ -16,6 +19,8 @@ public class SpringApplicationRunner implements TestRunner {
         if (testRun.getTestNum() == 1) {
             try {
                 SpringTest.main(testCase.getArgs().toArray(new String[0]));
+            } catch (InvocationTargetException ex) {
+                throw new ExceptionWithFeedback("Cannot start Spring application", ex.getCause());
             } catch (Throwable ex) {
                 throw new FatalError("Cannot start Spring application", ex);
             }
