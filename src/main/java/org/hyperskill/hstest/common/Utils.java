@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Utils {
 
@@ -42,5 +44,24 @@ public final class Utils {
             .replaceAll("\r", "\n")
             .replaceAll("\u0412" + nbsp, nbsp)
             .replaceAll(nbsp, space);
+    }
+
+    private static final Pattern methodSorter = Pattern.compile("^.*[^0-9]([0-9]+)$");
+
+    public static int smartCompare(String s1, String s2) {
+        Matcher m1 = methodSorter.matcher(s1);
+        Matcher m2 = methodSorter.matcher(s2);
+
+        if (m1.matches() && m2.matches()) {
+            String num1 = m1.group(1);
+            String num2 = m2.group(1);
+            String name1 = s1.substring(0, s1.length() - num1.length());
+            String name2 = s2.substring(0, s2.length() - num2.length());
+            if (name1.equals(name2)) {
+                return Integer.parseInt(num1) - Integer.parseInt(num2);
+            }
+        }
+
+        return s1.compareTo(s2);
     }
 }
