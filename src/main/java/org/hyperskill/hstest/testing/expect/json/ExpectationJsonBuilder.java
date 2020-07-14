@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import org.hyperskill.hstest.common.JsonUtils;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.testing.expect.Expectation;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonBaseBuilder;
 
@@ -106,7 +107,7 @@ public class ExpectationJsonBuilder<T> {
         schema.check(elem, feedback);
 
         if (feedback.isFailed) {
-            throw new PresentationError(feedback.feedback.trim());
+            throw new WrongAnswer(feedback.feedback.trim());
         }
     }
 }
