@@ -47,7 +47,7 @@ public class WebServerMock implements Process {
 
     private String resolveRequest(DataInputStream input) {
         HttpRequest request = HttpRequestParser.parse(input);
-        return request != null ? request.getUri() : null;
+        return request != null ? request.getEndpoint() : null;
     }
 
     private void sendResponse(String path, DataOutputStream output) throws Exception {

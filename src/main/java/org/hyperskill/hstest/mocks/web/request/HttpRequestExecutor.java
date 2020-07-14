@@ -37,7 +37,7 @@ public final class HttpRequestExecutor {
         }
     }
 
-    private static HttpResponse executeRequest(HttpRequestBase request) {
+    private static HttpResponse executeRequest(HttpRequestBase request, HttpRequest source) {
         try {
             HttpClient client = HttpClientBuilder.create().build();
             org.apache.http.HttpResponse httpResponse = client.execute(request);
@@ -50,7 +50,7 @@ public final class HttpRequestExecutor {
             }
 
             if (httpResponse.getEntity() == null) {
-                return new HttpResponse(statusCode, headers, new byte[0]);
+                return new HttpResponse(source, statusCode, headers, new byte[0]);
             }
 
             DataInputStream input = new DataInputStream(
@@ -86,7 +86,7 @@ public final class HttpRequestExecutor {
 
             request.releaseConnection();
 
-            return new HttpResponse(statusCode, headers, rawContent);
+            return new HttpResponse(source, statusCode, headers, rawContent);
         } catch (IOException e) {
             return null;
         }
@@ -110,8 +110,8 @@ public final class HttpRequestExecutor {
 
     private static HttpRequestBase constructGet(HttpRequest request) {
         String uriWithUrlParams = request.uri;
-        if (request.getParams != null && !request.getParams.isEmpty()) {
-            uriWithUrlParams += "?" + packUrlParams(request.getParams);
+        if (request.params != null && !request.params.isEmpty()) {
+            uriWithUrlParams += "?" + packUrlParams(request.params);
         }
         return new HttpGet(uriWithUrlParams);
     }
@@ -157,6 +157,6 @@ public final class HttpRequestExecutor {
             requestBase.addHeader(key, request.headers.get(key));
         }
 
-        return executeRequest(requestBase);
+        return executeRequest(requestBase, request);
     }
 }

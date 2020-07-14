@@ -9,6 +9,9 @@ import java.util.Map;
 
 import static org.hyperskill.hstest.mocks.web.constants.Headers.AUTHORIZATION;
 import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_TYPE;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
+import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
+import static org.hyperskill.hstest.mocks.web.request.HttpRequestParser.parseUri;
 
 public class HttpRequest {
 
@@ -16,7 +19,13 @@ public class HttpRequest {
     String uri = "";
     String version = "";
 
-    Map<String, String> getParams = new HashMap<>();
+    String schema = "http";
+    String host = "localhost";
+    int port = 80;
+    String endpoint = "/";
+    String anchor = "";
+
+    Map<String, String> params = new HashMap<>();
     Map<String, String> headers = new HashMap<>();
 
     String content = "";
@@ -28,18 +37,6 @@ public class HttpRequest {
         this.method = method;
     }
 
-    public int getContentLength() {
-        return contentLength;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
     public String getMethod() {
         return method;
     }
@@ -48,27 +45,95 @@ public class HttpRequest {
         return uri;
     }
 
-    public String getVersion() {
-        return version;
+    public String getLocalUri() {
+        String localUri = endpoint;
+        if (params.size() > 0) {
+            localUri += "?" + packUrlParams(params);
+        }
+        if (anchor.length() > 0) {
+            localUri += "#" + anchor;
+        }
+        return localUri;
     }
 
-    public Map<String, String> getGetParams() {
-        return getParams;
+    public String getSchema() {
+        return schema;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public String getAnchor() {
+        return anchor;
     }
 
     public HttpRequest setUri(String uri) {
         this.uri = uri;
+        parseUri(this);
         return this;
     }
 
-    public HttpRequest setGetParam(String getParam, String value) {
-        getParams.put(getParam, value);
+    public String getVersion() {
+        return version;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
+    }
+
+    @Deprecated
+    public Map<String, String> getGetParams() {
+        return getParams();
+    }
+
+    public HttpRequest addParam(String param, String value) {
+        params.put(param, value);
         return this;
+    }
+
+    public HttpRequest addParams(Map<String, String> newParams) {
+        for (String key : newParams.keySet()) {
+            addParam(key, newParams.get(key));
+        }
+        return this;
+    }
+
+    @Deprecated
+    public HttpRequest setGetParam(String getParam, String value) {
+        return addParam(getParam, value);
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     public HttpRequest addHeader(String header, String value) {
         headers.put(header, value);
         return this;
+    }
+
+    public HttpRequest addHeaders(Map<String, String> newHeaders) {
+        for (String key : newHeaders.keySet()) {
+            addHeader(key, newHeaders.get(key));
+        }
+        return this;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getContentLength() {
+        return contentLength;
     }
 
     public HttpRequest setContent(String content) {
@@ -89,6 +154,9 @@ public class HttpRequest {
     }
 
     public HttpResponse send() {
+        if (method.equals(POST) && !params.isEmpty()) {
+            content = packUrlParams(params);
+        }
         return HttpRequestExecutor.send(this);
     }
 }
