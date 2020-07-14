@@ -1,6 +1,5 @@
 package org.hyperskill.hstest.dynamic.input;
 
-import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
@@ -10,13 +9,16 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static java.util.Comparator.comparingInt;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
@@ -161,7 +163,23 @@ public interface DynamicTesting {
                 }
                 return true;
             })
-            .sorted(comparingInt(ReflectionUtils::getLineNumber))
+            .sorted(comparing(Method::getName, (method1, method2) -> {
+                Pattern methodSorter = Pattern.compile("^.*[^0-9]([0-9]+)$");
+                Matcher m1 = methodSorter.matcher(method1);
+                Matcher m2 = methodSorter.matcher(method2);
+
+                if (m1.matches() && m2.matches()) {
+                    String num1 = m1.group(1);
+                    String num2 = m2.group(1);
+                    String name1 = method1.substring(0, method1.length() - num1.length());
+                    String name2 = method2.substring(0, method2.length() - num2.length());
+                    if (name1.equals(name2)) {
+                        return Integer.parseInt(num1) - Integer.parseInt(num2);
+                    }
+                }
+
+                return method1.compareTo(method2);
+            }))
             .map(method -> (DynamicTesting) () -> {
                 method.setAccessible(true);
                 try {

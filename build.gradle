@@ -24,8 +24,6 @@ dependencies {
     compile 'com.github.stefanbirkner:system-rules:1.19.0'
     compile 'org.apache.httpcomponents:httpclient:4.5.9'
 
-    compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
-
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'com.cedarsoftware:json-io:4.10.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
