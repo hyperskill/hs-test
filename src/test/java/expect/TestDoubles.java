@@ -1,4 +1,4 @@
-package presentation;
+package expect;
 
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.junit.BeforeClass;
