@@ -86,7 +86,7 @@ public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
     }
 
     public JsonObjectBuilder value(String key, JsonBaseBuilder value) {
-        return value(k -> k.equals(key), value);
+        return value(k -> k.equals(key), value, "should contain a key \"" + key + "\"" );
     }
 
     public JsonObjectBuilder value(Pattern regex, JsonBaseBuilder value) {
@@ -94,12 +94,16 @@ public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
     }
 
     public JsonObjectBuilder value(StringChecker key, JsonBaseBuilder value) {
-        keyValueCheckers.add(new KeyValueChecker(key, value, true));
+        return value(key, value, "should contain some keys that are missing");
+    }
+
+    public JsonObjectBuilder value(StringChecker key, JsonBaseBuilder value, String failFeedback) {
+        keyValueCheckers.add(new KeyValueChecker(key, value, true, failFeedback));
         return this;
     }
 
     public JsonFinishedObjectBuilder anyOtherValues() {
-        keyValueCheckers.add(new KeyValueChecker(key -> true, any(), false));
+        keyValueCheckers.add(new KeyValueChecker(key -> true, any(), false, ""));
         return this;
     }
 

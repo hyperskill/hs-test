@@ -411,6 +411,48 @@ public class TestJson {
     }
 
     @Test
+    public void testJsonObjectExcessKey() {
+        try {
+            expect("{\"1\" : 1 , \"2\" : 2}").asJson().check(
+                isObject().value("1", 1)
+            );
+        } catch (PresentationError ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                "The element at path \"/\" shouldn't have the key \"2\""));
+        }
+    }
+
+    @Test
+    public void testJsonObjectMissingKey() {
+        try {
+            expect("{\"1\" : 1 , \"2\" : 2}").asJson().check(
+                isObject()
+                    .value("1", 1)
+                    .value("2", 2)
+                    .value("3", 3)
+            );
+        } catch (PresentationError ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                "The element at path \"/\" should contain a key \"3\""));
+        }
+    }
+
+    @Test
+    public void testJsonObjectMissingKeyInner() {
+        try {
+            expect("{\"1\" : 1 , \"2\" : {\"3\" : {\"4\" : 5}}}").asJson().check(
+                isObject()
+                    .value("1", 1)
+                    .value("2", isObject()
+                        .value("3", isObject()))
+            );
+        } catch (PresentationError ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                "The element at path \"/2/3\" shouldn't have the key \"4\""));
+        }
+    }
+
+    @Test
     public void testJsonComplexExample() {
         String text = "{\n" +
             "    \"name\": \"123\",\n" +

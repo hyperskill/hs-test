@@ -14,12 +14,15 @@ public class JsonFinishedObjectBuilder extends JsonBaseBuilder {
 
     protected static class KeyValueChecker {
         StringChecker keyChecker;
+        String failFeedback;
         JsonBaseBuilder valueChecker;
         boolean requireMatch;
         boolean matched = false;
 
-        KeyValueChecker(StringChecker keyChecker, JsonBaseBuilder valueChecker, boolean requireMatch) {
+        KeyValueChecker(StringChecker keyChecker, JsonBaseBuilder valueChecker,
+                        boolean requireMatch, String failFeedback) {
             this.keyChecker = keyChecker;
+            this.failFeedback = failFeedback;
             this.valueChecker = valueChecker;
             this.requireMatch = requireMatch;
         }
@@ -66,7 +69,7 @@ public class JsonFinishedObjectBuilder extends JsonBaseBuilder {
 
         for (KeyValueChecker checker : keyValueCheckers) {
             if (checker.requireMatch && !checker.matched) {
-                feedback.fail("should have some keys that are missing");
+                feedback.fail(checker.failFeedback);
                 return false;
             }
         }
