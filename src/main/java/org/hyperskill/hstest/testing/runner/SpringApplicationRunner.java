@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.testing.runner;
 
-import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.FatalError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.SpringTest;
@@ -17,7 +17,7 @@ public class SpringApplicationRunner implements TestRunner {
             try {
                 SpringTest.main(testCase.getArgs().toArray(new String[0]));
             } catch (Throwable ex) {
-                throw new ExceptionWithFeedback("Cannot start Spring application", ex);
+                throw new FatalError("Cannot start Spring application", ex);
             }
         }
 
