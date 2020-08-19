@@ -69,7 +69,10 @@ public final class FileUtils {
     }
 
     public static String readFile(String name) throws IOException {
-        Path path = Paths.get(CURRENT_DIR + name);
+        if (!name.startsWith(CURRENT_DIR)) {
+            name = CURRENT_DIR + name;
+        }
+        Path path = Paths.get(name);
         return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         //return Files.readString(path); <- Java 11
     }

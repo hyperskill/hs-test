@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.stage;
 
 import org.apache.http.entity.ContentType;
+import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
@@ -9,8 +10,10 @@ import org.hyperskill.hstest.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
 import org.junit.After;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,10 +21,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.PUT;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.*;
 import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
 public abstract class SpringTest extends StageTest<Object> {
@@ -42,7 +42,7 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public SpringTest(Class<?> clazz) {
-        this(clazz, DEFAULT_PORT);
+        this(clazz, detectPort());
     }
 
     public SpringTest(Class<?> clazz, int port) {
@@ -56,6 +56,45 @@ public abstract class SpringTest extends StageTest<Object> {
         this(clazz, port);
         this.databasePath = database;
         replaceDatabase();
+    }
+
+    private static int detectPort() {
+        String[] resourcesDirs = new String[] {
+            "resources", "src" + File.separator + "resources"
+        };
+
+        for (String resDir : resourcesDirs) {
+            File folder = new File(resDir);
+            if (!folder.exists() || !folder.isDirectory()) {
+                continue;
+            }
+
+            File[] files = folder.getAbsoluteFile().listFiles();
+
+            if (files == null) {
+                continue;
+            }
+
+            for (File file : files) {
+                try {
+                    String content = FileUtils.readFile(file.getAbsolutePath());
+                    BufferedReader bufReader = new BufferedReader(new StringReader(content));
+
+                    String line;
+                    String toSearch = "server.port";
+                    while((line = bufReader.readLine()) != null) {
+                        if (line.startsWith(toSearch) && line.contains("=")) {
+                            String portNumber = line.substring(line.indexOf("=") + 1).trim();
+                            return Integer.parseInt(portNumber);
+                        }
+                    }
+
+                    bufReader.close();
+                } catch (IOException | NumberFormatException ignored) { }
+            }
+        }
+
+        return DEFAULT_PORT;
     }
 
     @After
