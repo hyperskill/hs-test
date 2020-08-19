@@ -52,6 +52,10 @@ public abstract class SpringTest extends StageTest<Object> {
         this.port = port;
     }
 
+    public SpringTest(Class<?> clazz, String database) {
+        this(clazz, detectPort(), database);
+    }
+
     public SpringTest(Class<?> clazz, int port, String database) {
         this(clazz, port);
         this.databasePath = database;
