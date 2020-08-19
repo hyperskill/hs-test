@@ -17,12 +17,16 @@ public class SpringApplicationRunner implements TestRunner {
         TestCase<?> testCase = testRun.getTestCase();
 
         if (testRun.getTestNum() == 1) {
+            String errorMessage = "Cannot start Spring application";
             try {
                 SpringTest.main(testCase.getArgs().toArray(new String[0]));
             } catch (InvocationTargetException ex) {
-                throw new ExceptionWithFeedback("Cannot start Spring application", ex.getCause());
+                if (ex.getCause().getClass().getSimpleName().equals("PortInUseException")) {
+                    errorMessage += "\nMake sure that no other Spring application is running at the moment.";
+                }
+                throw new ExceptionWithFeedback(errorMessage, ex.getCause());
             } catch (Throwable ex) {
-                throw new FatalError("Cannot start Spring application", ex);
+                throw new FatalError(errorMessage, ex);
             }
         }
 
