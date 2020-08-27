@@ -44,12 +44,11 @@ public class SystemInMock extends InputStream {
         if (c == -1) {
             return -1;
         }
-        b[off] = (byte) (c & 0xFF);
-        b[off + 1] = (byte) ((c >> 8) & 0xFF);
+        b[off] = (byte) c;
 
-        int i = 2;
+        int i = 1;
         try {
-            for (; i < len * 2; i += 2) {
+            for (; i < len; i++) {
                 if (c == '\n') {
                     break;
                 }
@@ -57,8 +56,7 @@ public class SystemInMock extends InputStream {
                 if (c == -1) {
                     break;
                 }
-                b[off + i] = (byte) (c & 0xFF);
-                b[off + i + 1] = (byte) ((c >> 8) & 0xFF);
+                b[off + i] = (byte) c;
             }
         } catch (IOException ignored) {
         }

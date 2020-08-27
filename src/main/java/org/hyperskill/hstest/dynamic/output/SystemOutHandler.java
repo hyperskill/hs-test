@@ -5,6 +5,8 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public final class SystemOutHandler {
 
@@ -24,9 +26,9 @@ public final class SystemOutHandler {
         return MOCK_ERR.getOriginal();
     }
 
-    public static void replaceSystemOut() {
-        System.setOut(new PrintStream(MOCK_OUT, true));
-        System.setErr(new PrintStream(MOCK_ERR, true));
+    public static void replaceSystemOut() throws UnsupportedEncodingException {
+        System.setOut(new PrintStream(MOCK_OUT, true, "UTF-8"));
+        System.setErr(new PrintStream(MOCK_ERR, true, "UTF-8"));
     }
 
     public static void revertSystemOut() {
@@ -41,7 +43,8 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(MOCK_OUT.getClonedOut().toString());
+        String out = new String(MOCK_OUT.getClonedOut().toByteArray(), StandardCharsets.UTF_8);
+        return Utils.cleanText(out);
     }
 
     public static String getDynamicOutput() {
