@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dynamic.TestingSecurityManager;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,8 @@ public class SystemOutMock extends OutputStream {
     }
 
     public synchronized void injectInput(String input) {
-        for (byte b : input.getBytes()) {
+        byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
+        for (byte b : bytes) {
             original.write(b);
             dynamic.write(b);
         }
