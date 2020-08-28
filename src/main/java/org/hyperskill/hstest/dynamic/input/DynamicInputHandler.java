@@ -4,6 +4,7 @@ import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.function.Supplier;
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
 public class DynamicInputHandler {
-    private StringReader currentReader = new StringReader("");
+    private byte[] currentReader = null;
+    private int pos = 0;
     private final List<String> inputLines = new ArrayList<>();
     private final Supplier<String> dynamicInputFunction;
 
@@ -21,12 +23,19 @@ public class DynamicInputHandler {
     }
 
     int ejectChar() throws IOException {
-        int character = currentReader.read();
+        int character = nextByte();
         if (character == -1) {
             ejectNextLine();
-            character = currentReader.read();
+            character = nextByte();
         }
         return character;
+    }
+    
+    private int nextByte() {
+        if (currentReader == null || pos >= currentReader.length) {
+            return -1;
+        }
+        return currentReader[pos++];
     }
 
     private void ejectNextLine() {
@@ -37,7 +46,8 @@ public class DynamicInputHandler {
             }
         }
         String nextLine = inputLines.remove(0) + "\n";
-        currentReader = new StringReader(nextLine);
+        currentReader = nextLine.getBytes(StandardCharsets.UTF_8);
+        pos = 0;
         SystemOutHandler.injectInput("> " + nextLine);
     }
 

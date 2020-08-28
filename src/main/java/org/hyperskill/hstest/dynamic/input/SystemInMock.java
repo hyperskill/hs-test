@@ -45,9 +45,8 @@ public class SystemInMock extends InputStream {
             return -1;
         }
         b[off] = (byte) c;
-        b[off + 1] = (byte) (c >> 8);
 
-        int i = 2;
+        int i = 1;
         try {
             for (; i < len; i++) {
                 if (c == '\n') {
@@ -58,8 +57,6 @@ public class SystemInMock extends InputStream {
                     break;
                 }
                 b[off + i] = (byte) c;
-                ++i;
-                b[off + i] = (byte) (c >> 8);
             }
         } catch (IOException ignored) {
         }
