@@ -27,17 +27,6 @@ public class TestOutputHandler {
         System.out.print("456");
         assertEquals("123456", SystemOutHandler.getOutput());
     }
-    
-    @Test
-    public void testUnicodeOutputHandler() {
-        String a = "řĦπ";
-        String b = "ŔΦΣ";
-        System.out.print(a);
-        String s = SystemOutHandler.getOutput();
-        assertEquals(a, SystemOutHandler.getOutput());
-        System.out.print(b);
-        assertEquals(a + b, SystemOutHandler.getOutput());
-    }
 
     @Test
     public void testNormalOutputHandlerWithNewLines() {

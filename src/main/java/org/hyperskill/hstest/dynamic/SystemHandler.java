@@ -3,7 +3,6 @@ package org.hyperskill.hstest.dynamic;
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import static java.lang.System.getSecurityManager;
@@ -19,12 +18,7 @@ public final class SystemHandler {
     private final static String separatorProperty = "line.separator";
 
     public static void setUpSystem() {
-        try {
-            SystemOutHandler.replaceSystemOut();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    
+        SystemOutHandler.replaceSystemOut();
         SystemInHandler.replaceSystemIn();
 
         oldSecurityManager = getSecurityManager();
