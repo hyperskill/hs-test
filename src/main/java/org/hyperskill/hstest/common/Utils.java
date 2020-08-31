@@ -42,7 +42,6 @@ public final class Utils {
         return str
             .replaceAll("\r\n", "\n")
             .replaceAll("\r", "\n")
-            .replaceAll("\u0412" + nbsp, nbsp)
             .replaceAll(nbsp, space);
     }
 
