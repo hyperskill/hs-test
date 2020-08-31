@@ -4,17 +4,11 @@ import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.regex.Pattern;
+
 import static java.util.regex.Pattern.compile;
 import static org.hyperskill.hstest.testing.expect.Expectation.expect;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isArray;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isBoolean;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isDouble;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isInteger;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNull;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isObject;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.*;
 
 public class TestJson {
 
@@ -55,14 +49,14 @@ public class TestJson {
             expect("[]").asJson().check(isObject());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be object, found array"));
+                "The JSON array should be object, found array"));
         }
 
         try {
             expect("12").asJson().check(isObject());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be object, found number"));
+                "The JSON element should be object, found number"));
         }
     }
 
@@ -72,14 +66,14 @@ public class TestJson {
             expect("{}").asJson().check(isArray());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be array, found object"));
+                "The JSON object should be array, found object"));
         }
 
         try {
             expect("null").asJson().check(isArray());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be array, found null"));
+                "The JSON element should be array, found null"));
         }
     }
 
@@ -89,14 +83,14 @@ public class TestJson {
             expect("wer").asJson().check(isNumber());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be number, found string"));
+                "The JSON element should be number, found string"));
         }
 
         try {
             expect("[]").asJson().check(isNumber());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be number, found array"));
+                "The JSON array should be number, found array"));
         }
     }
 
@@ -106,14 +100,14 @@ public class TestJson {
             expect("null").asJson().check(isInteger());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be integer, found null"));
+                "The JSON element should be integer, found null"));
         }
 
         try {
             expect("{}").asJson().check(isInteger());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be integer, found object"));
+                "The JSON object should be integer, found object"));
         }
     }
 
@@ -123,7 +117,7 @@ public class TestJson {
             expect("12.98").asJson().check(isInteger());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be integer, found double"));
+                "The JSON element should be integer, found double"));
         }
     }
 
@@ -133,14 +127,14 @@ public class TestJson {
             expect("ert").asJson().check(isDouble());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be double, found string"));
+                "The JSON element should be double, found string"));
         }
 
         try {
             expect("{}").asJson().check(isDouble());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be double, found object"));
+                "The JSON object should be double, found object"));
         }
     }
 
@@ -150,14 +144,14 @@ public class TestJson {
             expect("true").asJson().check(isString());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be string, found boolean"));
+                "The JSON element should be string, found boolean"));
         }
 
         try {
             expect("[]").asJson().check(isString());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be string, found array"));
+                "The JSON array should be string, found array"));
         }
     }
 
@@ -167,14 +161,14 @@ public class TestJson {
             expect("true").asJson().check(isNull());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be null, found boolean"));
+                "The JSON element should be null, found boolean"));
         }
 
         try {
             expect("[]").asJson().check(isNull());
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should be null, found array"));
+                "The JSON array should be null, found array"));
         }
     }
 
@@ -352,7 +346,7 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" shouldn't have the element with index 0"));
+                "The JSON array has an incorrect length: should be equal to 0, found 4"));
         }
     }
 
@@ -367,7 +361,7 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/0\" should equal to 0"));
+                "The JSON array has an incorrect length: should be equal to 3, found 4"));
         }
     }
 
@@ -382,7 +376,7 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" shouldn't have the element with index 3"));
+                "The JSON array has an incorrect length: should be equal to 3, found 4"));
         }
     }
 
@@ -394,7 +388,170 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/2\" should be integer, found boolean"));
+                "The JSON array at index 2 should be integer, found boolean"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayIncorrectValue() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                        .item(1)
+                        .item(2)
+                        .item(4)
+                        .item(5)
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array at index 2 should equal to 4, found 3"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayLengthUsingLambda() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                        .length(len -> len <= 3)
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array has an incorrect length"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayLengthUsingLambdaWithFeedback() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                        .length(len -> len < 4, "should be less than 4")
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array has an incorrect length: should be less than 4, found 4"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayWrongItem() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                        .length(len -> len == 4)
+                        .item(2, isInteger(5))
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array at index 2 should equal to 5, found 3"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingItem() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                            .length(len -> len > 2)
+                            .item(6, isInteger(7))
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: an item at index 6"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingIntegerAtIndex() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                        .length(len -> len > 2)
+                        .item(1)
+                        .item(2)
+                        .item(3)
+                        .item(4)
+                        .item(5)
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: an integer value 5 at index 4"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingDoubleAtIndex() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                            .length(len -> len > 2)
+                            .item(1)
+                            .item(2)
+                            .item(3)
+                            .item(4)
+                            .item(5.5)
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: a double value 5.5 at index 4"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingBooleanAtIndex() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                            .length(len -> len > 2)
+                            .item(1)
+                            .item(2)
+                            .item(3)
+                            .item(4)
+                            .item(false)
+            );
+        } catch (WrongAnswer ex) {
+            System.out.println(ex.getFeedbackText());
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: a boolean value false at index 4"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingStringAtIndex() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                            .length(len -> len > 2)
+                            .item(1)
+                            .item(2)
+                            .item(3)
+                            .item(4)
+                            .item("123123")
+            );
+        } catch (WrongAnswer ex) {
+            System.out.println(ex.getFeedbackText());
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: a string \"123123\" at index 4"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayMissingPatternAtIndex() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray()
+                            .length(len -> len > 2)
+                            .item(1)
+                            .item(2)
+                            .item(3)
+                            .item(4)
+                            .item(Pattern.compile("\\d+"))
+            );
+        } catch (WrongAnswer ex) {
+            System.out.println(ex.getFeedbackText());
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array is missing an item: a string with pattern \"\\d+\" at index 4"));
         }
     }
 
@@ -406,7 +563,7 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/1\" should equal to 1"));
+                "The JSON array at index 1 should equal to 1, found 2"));
         }
     }
 
@@ -418,7 +575,7 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" shouldn't have the key \"2\""));
+                "The JSON object shouldn't have the key \"2\""));
         }
     }
 
@@ -433,7 +590,23 @@ public class TestJson {
             );
         } catch (WrongAnswer ex) {
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/\" should contain a key \"3\""));
+                "The JSON object should contain a key \"3\""));
+        }
+    }
+
+    @Test
+    public void testJsonObjectMissingKeyPattern() {
+        try {
+            expect("{\"1\" : 1 , \"2\" : 2}").asJson().check(
+                    isObject()
+                            .value("1", 1)
+                            .value("2", 2)
+                            .value(Pattern.compile("[4-9]"), 3)
+            );
+        } catch (WrongAnswer ex) {
+            System.out.println(ex.getFeedbackText());
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON object should contain a key with pattern \"[4-9]\""));
         }
     }
 
@@ -447,8 +620,9 @@ public class TestJson {
                         .value("3", isObject()))
             );
         } catch (WrongAnswer ex) {
+            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
-                "The element at path \"/2/3\" shouldn't have the key \"4\""));
+                "The JSON element at path \"/2/3\" shouldn't have the key \"4\""));
         }
     }
 

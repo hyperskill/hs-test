@@ -4,12 +4,7 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.Strin
 
 import java.util.regex.Pattern;
 
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isArray;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isBoolean;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isDouble;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.*;
 
 public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
 
@@ -86,15 +81,16 @@ public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
     }
 
     public JsonObjectBuilder value(String key, JsonBaseBuilder value) {
-        return value(k -> k.equals(key), value, "should contain a key \"" + key + "\"" );
+        return value(k -> k.equals(key), value, "should contain a key \"" + key + "\"");
     }
 
     public JsonObjectBuilder value(Pattern regex, JsonBaseBuilder value) {
-        return value(k -> regex.matcher(k).matches(), value);
+        return value(k -> regex.matcher(k).matches(), value,
+                "should contain a key with pattern \"" + regex + "\"");
     }
 
     public JsonObjectBuilder value(StringChecker key, JsonBaseBuilder value) {
-        return value(key, value, "should contain some keys that are missing");
+        return value(key, value, "is missing a key");
     }
 
     public JsonObjectBuilder value(StringChecker key, JsonBaseBuilder value, String failFeedback) {

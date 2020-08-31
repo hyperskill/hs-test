@@ -42,7 +42,7 @@ public class JsonIntegerBuilder extends JsonBaseBuilder {
         boolean result = checker.check(value);
 
         if (!result) {
-            feedback.fail(failFeedback);
+            feedback.fail(failFeedback + ", found " + value);
             return false;
         }
 

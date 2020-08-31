@@ -27,8 +27,32 @@ public class ExpectationJsonFeedback {
     public void fail(String feedback) {
         if (!isFailed) {
             isFailed = true;
-            String path = "/" + String.join("/", currPath.toArray(new String[0]));
-            this.feedback = "The element at path \"" + path + "\" " + feedback
+
+            this.feedback = "The JSON";
+            if (currPath.size() <= 1) {
+
+                if (originalElem.isJsonArray()) {
+                    this.feedback += " array";
+                    if (currPath.size() == 1) {
+                        this.feedback += " at index " + currPath.get(0);
+                    }
+
+                } else if (originalElem.isJsonObject()) {
+                    this.feedback += " object";
+                    if (currPath.size() == 1) {
+                        this.feedback += " at key " + currPath.get(0);
+                    }
+
+                } else {
+                    this.feedback += " element";
+                }
+
+            } else {
+                String path = "/" + String.join("/", currPath.toArray(new String[0]));
+                this.feedback += " element at path \"" + path + "\"";
+            }
+
+            this.feedback += " " + feedback
                 + "\n\nFull JSON:\n" + JsonUtils.getPrettyJson(originalElem);
         }
     }

@@ -16,20 +16,37 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         JsonBaseBuilder valueChecker;
         boolean requireMatch;
         boolean matched = false;
+        String itemDescription;
 
-        ArrayIndexChecker(IntegerChecker indexChecker, JsonBaseBuilder valueChecker, boolean requireMatch) {
+        ArrayIndexChecker(IntegerChecker indexChecker,
+                          JsonBaseBuilder valueChecker,
+                          boolean requireMatch,
+                          String itemDescription) {
             this.indexChecker = indexChecker;
             this.valueChecker = valueChecker;
             this.requireMatch = requireMatch;
+            this.itemDescription = itemDescription;
         }
     }
 
-    protected interface ArrayLengthChecker {
+    public interface ArrayLengthChecker {
         boolean check(int length);
     }
 
+    protected static class ArrayLengthCheckerWithFeedback {
+        ArrayLengthChecker checker;
+        String feedback;
+
+        ArrayLengthCheckerWithFeedback(ArrayLengthChecker checker, String feedback) {
+            this.checker = checker;
+            this.feedback = feedback;
+        }
+    }
+
+    protected int calculatedArrayLength = 0;
+
     JsonBaseBuilder itemTemplate = null;
-    ArrayLengthChecker requiredLength = null;
+    ArrayLengthCheckerWithFeedback requiredLength = null;
     final List<ArrayIndexChecker> arrayIndexCheckers = new ArrayList<>();
 
     @Override
@@ -43,11 +60,19 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
             return false;
         }
 
-        JsonArray array = elem.getAsJsonArray();
+        if (requiredLength == null && calculatedArrayLength >= 0 && this instanceof JsonArrayBuilder) {
+            ((JsonArrayBuilder) this).length(calculatedArrayLength);
+        }
 
+        JsonArray array = elem.getAsJsonArray();
         int length = array.size();
-        if (requiredLength != null && !requiredLength.check(length)) {
-            feedback.fail("has an incorrect length");
+
+        if (requiredLength != null && !requiredLength.checker.check(length)) {
+            String result = "has an incorrect length";
+            if (requiredLength.feedback != null) {
+                result += ": " + requiredLength.feedback + ", found " + length;
+            }
+            feedback.fail(result);
             return false;
         }
 
@@ -90,7 +115,11 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
 
         for (ArrayIndexChecker checker : arrayIndexCheckers) {
             if (checker.requireMatch && !checker.matched) {
-                feedback.fail("should have some items that are missing");
+                String result = "is missing an item";
+                if (checker.itemDescription != null) {
+                    result += ": " + checker.itemDescription;
+                }
+                feedback.fail(result);
                 return false;
             }
         }
