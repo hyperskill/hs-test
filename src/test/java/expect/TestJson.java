@@ -8,7 +8,15 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 import static org.hyperskill.hstest.testing.expect.Expectation.expect;
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.*;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isArray;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isBoolean;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isDouble;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isInteger;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNull;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isObject;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
 
 public class TestJson {
 

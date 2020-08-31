@@ -4,7 +4,12 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.Strin
 
 import java.util.regex.Pattern;
 
-import static org.hyperskill.hstest.testing.expect.json.JsonChecker.*;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.any;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isArray;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isBoolean;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isDouble;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
+import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
 
 public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
 
