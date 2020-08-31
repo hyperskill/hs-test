@@ -5,6 +5,7 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public final class SystemOutHandler {
 
@@ -25,8 +26,8 @@ public final class SystemOutHandler {
     }
 
     public static void replaceSystemOut() {
-        System.setOut(new PrintStream(MOCK_OUT, true));
-        System.setErr(new PrintStream(MOCK_ERR, true));
+        System.setOut(new PrintStream(MOCK_OUT, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(MOCK_ERR, true, StandardCharsets.UTF_8));
     }
 
     public static void revertSystemOut() {
@@ -41,15 +42,15 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(MOCK_OUT.getClonedOut().toString());
+        return Utils.cleanText(new String(MOCK_OUT.getClonedOut().toByteArray(), StandardCharsets.UTF_8));
     }
 
     public static String getDynamicOutput() {
-        return Utils.cleanText(MOCK_OUT.getDynamicOut().toString());
+        return Utils.cleanText(new String(MOCK_OUT.getDynamicOut().toByteArray(), StandardCharsets.UTF_8));
     }
 
     public static String getPartialOutput(ThreadGroup group) {
-        String output = Utils.cleanText(MOCK_OUT.getPartialOut(group).toString());
+        String output = Utils.cleanText(new String(MOCK_OUT.getPartialOut(group).toByteArray(), StandardCharsets.UTF_8));
         MOCK_OUT.getPartialOut(group).reset();
         return output;
     }

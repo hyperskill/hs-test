@@ -30,38 +30,38 @@ public class SuccessDynamicInput extends StageTest<String> {
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(
-            //new TestCase<String>()
-            //    .addInput(out -> out)
-            //    .setAttach("Hello\nHello\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "Hi")
-            //    .setAttach("Hello\nHi\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "Hihi1")
-            //    .addInput(o -> "Hihi2")
-            //    .setAttach("Hello\nHihi1\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "")
-            //    .addInput(o -> "Hihi3")
-            //    .setAttach("Hello\n\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "1\n")
-            //    .addInput(o -> "Hey")
-            //    .setAttach("Hello\nHey\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "2")
-            //    .addInput(o -> "Hey")
-            //    .setAttach("Hello\n2\n"),
-            //
-            //new TestCase<String>()
-            //    .addInput(o -> "Hi before\nHi after")
-            //    .addInput(o -> "Hey")
-            //    .setAttach("Hello\nHi before\n"),
+            new TestCase<String>()
+                .addInput(out -> out)
+                .setAttach("Hello\nHello\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "Hi")
+                .setAttach("Hello\nHi\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "Hihi1")
+                .addInput(o -> "Hihi2")
+                .setAttach("Hello\nHihi1\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "")
+                .addInput(o -> "Hihi3")
+                .setAttach("Hello\n\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "1\n")
+                .addInput(o -> "Hey")
+                .setAttach("Hello\nHey\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "2")
+                .addInput(o -> "Hey")
+                .setAttach("Hello\n2\n"),
+
+            new TestCase<String>()
+                .addInput(o -> "Hi before\nHi after")
+                .addInput(o -> "Hey")
+                .setAttach("Hello\nHi before\n"),
                 
                 new TestCase<String>()
                 .addInput(o -> "řĦπ")

@@ -37,7 +37,7 @@ public class SystemOutMock extends OutputStream {
                     originalStream.write(b);
                 }
             }
-        }, true);
+        }, true, StandardCharsets.UTF_8);
     }
 
     @Override
