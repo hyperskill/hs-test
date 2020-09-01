@@ -519,7 +519,6 @@ public class TestJson {
                             .item(false)
             );
         } catch (WrongAnswer ex) {
-            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                     "The JSON array is missing an item: a boolean value false at index 4"));
         }
@@ -538,7 +537,6 @@ public class TestJson {
                             .item("123123")
             );
         } catch (WrongAnswer ex) {
-            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                     "The JSON array is missing an item: a string \"123123\" at index 4"));
         }
@@ -557,7 +555,6 @@ public class TestJson {
                             .item(Pattern.compile("\\d+"))
             );
         } catch (WrongAnswer ex) {
-            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                     "The JSON array is missing an item: a string with pattern \"\\d+\" at index 4"));
         }
@@ -612,7 +609,6 @@ public class TestJson {
                             .value(Pattern.compile("[4-9]"), 3)
             );
         } catch (WrongAnswer ex) {
-            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                     "The JSON object should contain a key with pattern \"[4-9]\""));
         }
@@ -628,7 +624,6 @@ public class TestJson {
                         .value("3", isObject()))
             );
         } catch (WrongAnswer ex) {
-            System.out.println(ex.getFeedbackText());
             Assert.assertTrue(ex.getFeedbackText().startsWith(
                 "The JSON element at path \"/2/3\" shouldn't have the key \"4\""));
         }

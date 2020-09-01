@@ -5,8 +5,6 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 
 public final class SystemOutHandler {
 
@@ -27,16 +25,8 @@ public final class SystemOutHandler {
     }
 
     public static void replaceSystemOut() {
-        try {
-            System.setOut(new PrintStream(MOCK_OUT, true, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.setErr(new PrintStream(MOCK_ERR, true, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        System.setOut(new PrintStream(MOCK_OUT, true));
+        System.setErr(new PrintStream(MOCK_ERR, true));
     }
 
     public static void revertSystemOut() {
@@ -51,15 +41,15 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(new String(MOCK_OUT.getClonedOut().toByteArray(), StandardCharsets.UTF_8));
+        return Utils.cleanText(MOCK_OUT.getClonedOut().toString());
     }
 
     public static String getDynamicOutput() {
-        return Utils.cleanText(new String(MOCK_OUT.getDynamicOut().toByteArray(), StandardCharsets.UTF_8));
+        return Utils.cleanText(MOCK_OUT.getDynamicOut().toString());
     }
 
     public static String getPartialOutput(ThreadGroup group) {
-        String output = Utils.cleanText(new String(MOCK_OUT.getPartialOut(group).toByteArray(), StandardCharsets.UTF_8));
+        String output = Utils.cleanText(MOCK_OUT.getPartialOut(group).toString());
         MOCK_OUT.getPartialOut(group).reset();
         return output;
     }

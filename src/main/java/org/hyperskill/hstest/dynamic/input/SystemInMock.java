@@ -3,7 +3,6 @@ package org.hyperskill.hstest.dynamic.input;
 import org.hyperskill.hstest.dynamic.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.FatalError;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,7 +34,7 @@ public class SystemInMock extends InputStream {
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) {
         if (len == 0) {
             return 0;
         }
@@ -47,24 +46,21 @@ public class SystemInMock extends InputStream {
         b[off] = (byte) c;
 
         int i = 1;
-        try {
-            for (; i < len; i++) {
-                if (c == '\n') {
-                    break;
-                }
-                c = read();
-                if (c == -1) {
-                    break;
-                }
-                b[off + i] = (byte) c;
+        for (; i < len; i++) {
+            if (c == '\n') {
+                break;
             }
-        } catch (IOException ignored) {
+            c = read();
+            if (c == -1) {
+                break;
+            }
+            b[off + i] = (byte) c;
         }
         return i;
     }
 
     @Override
-    public int read() throws IOException {
+    public int read() {
         return handlers.get(TestingSecurityManager.getTestingGroup()).ejectChar();
     }
 }

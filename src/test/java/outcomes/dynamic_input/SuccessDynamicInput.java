@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 class SuccessDynamicInputMain {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in, "UTF-8");
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Hello");
         String line = scanner.nextLine();
         if (line.equals("1")) {
@@ -62,8 +62,8 @@ public class SuccessDynamicInput extends StageTest<String> {
                 .addInput(o -> "Hi before\nHi after")
                 .addInput(o -> "Hey")
                 .setAttach("Hello\nHi before\n"),
-                
-                new TestCase<String>()
+
+            new TestCase<String>()
                 .addInput(o -> "řĦπ")
                 .setAttach("Hello\nřĦπ\n")
         );
