@@ -21,7 +21,10 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.*;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.PUT;
 import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
 public abstract class SpringTest extends StageTest<Object> {
@@ -86,7 +89,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
                     String line;
                     String toSearch = "server.port";
-                    while((line = bufReader.readLine()) != null) {
+                    while ((line = bufReader.readLine()) != null) {
                         if (line.startsWith(toSearch) && line.contains("=")) {
                             String portNumber = line.substring(line.indexOf("=") + 1).trim();
                             return Integer.parseInt(portNumber);
@@ -123,9 +126,9 @@ public abstract class SpringTest extends StageTest<Object> {
             int status = post("/actuator/shutdown", "").send().getStatusCode();
 
             if (status != 200) {
-                throw new WrongAnswer("Cannot stop Spring application.\n" +
-                    "Please make POST \"/actuator/shutdown\" endpoint accessible without authentication.\n" +
-                    "The endpoint should return status code 200, returned " + status + ".");
+                throw new WrongAnswer("Cannot stop Spring application.\n"
+                    + "Please make POST \"/actuator/shutdown\" endpoint accessible without authentication.\n"
+                    + "The endpoint should return status code 200, returned " + status + ".");
             }
 
             springRunning = false;

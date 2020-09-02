@@ -15,7 +15,7 @@ public final class SystemHandler {
     private static Locale oldLocale;
     private static String oldLineSeparator;
 
-    private final static String separatorProperty = "line.separator";
+    private static final String separatorProperty = "line.separator";
 
     public static void setUpSystem() {
         SystemOutHandler.replaceSystemOut();

@@ -114,8 +114,8 @@ public class TestedProgram {
     private String waitOutput(String input) {
         if (!isWaitingInput()) {
             throw new UnexpectedError(
-                "Tested program is not waiting for the input " +
-                "(state == \"" + machine.getState() + "\")");
+                "Tested program is not waiting for the input "
+                    + "(state == \"" + machine.getState() + "\")");
         }
 
         if (noMoreInput) {
@@ -149,7 +149,7 @@ public class TestedProgram {
     private void invokeMain(String[] args) {
         try {
             machine.waitState(ProgramState.RUNNING);
-            methodToInvoke.invoke(null, new Object[] { args });
+            methodToInvoke.invoke(null, new Object[] {args});
             machine.setState(ProgramState.FINISHED);
         } catch (InvocationTargetException ex) {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {

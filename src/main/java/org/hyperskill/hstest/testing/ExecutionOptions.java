@@ -3,7 +3,9 @@ package org.hyperskill.hstest.testing;
 /**
  * Command-line options passed to the JVM listed in one place
  */
-public class ExecutionOptions {
+public final class ExecutionOptions {
+    private ExecutionOptions() { }
+
     /**
      * Unit tests contain slow tests (time limit tests)
      * and to skip them an argument "-DskipSlow=true" should be passed

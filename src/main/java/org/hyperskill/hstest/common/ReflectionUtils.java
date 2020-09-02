@@ -7,7 +7,8 @@ import java.lang.reflect.Modifier;
 
 public final class ReflectionUtils {
 
-    private ReflectionUtils() { }
+    private ReflectionUtils() {
+    }
 
     public static Method getMainMethod(Class<?> clazz) {
         Method mainMethod;

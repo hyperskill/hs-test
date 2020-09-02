@@ -80,7 +80,7 @@ public class ExpectationTextSearcher<T> {
     }
 
     public List<String> regex(String pattern) {
-        return regex(pattern,"words with pattern " + pattern);
+        return regex(pattern, "words with pattern " + pattern);
     }
 
     public List<String> regex(String pattern, String patternDescription) {

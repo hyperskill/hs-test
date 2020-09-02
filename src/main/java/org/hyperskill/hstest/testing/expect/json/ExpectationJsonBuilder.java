@@ -81,7 +81,7 @@ public class ExpectationJsonBuilder<T> {
                 JsonObject obj = elem.getAsJsonObject();
 
                 if (!obj.has(key)) {
-                    feedback += "\n\nJSON should contain an object with key \""+ key + "\"";
+                    feedback += "\n\nJSON should contain an object with key \"" + key + "\"";
 
                     if (key.matches("[0-9]+")) {
                         int index = Integer.parseInt(key);

@@ -178,8 +178,8 @@ public interface DynamicTesting {
                     if (!Modifier.isPublic(method.getModifiers())) {
                         String className = method.getDeclaringClass().getSimpleName();
                         String methodName = method.getName();
-                        feedback += " Try to declare method \"" +
-                            className + "." + methodName + "\" as public";
+                        feedback += " Try to declare method \""
+                            + className + "." + methodName + "\" as public";
                     }
                     throw new UnexpectedError(feedback, ex);
                 }
@@ -219,8 +219,8 @@ public interface DynamicTesting {
                     if (!Modifier.isPublic(field.getModifiers())) {
                         String className = field.getDeclaringClass().getSimpleName();
                         String fieldName = field.getName();
-                        feedback += " Try to declare field \"" +
-                            className + "." + fieldName + "\" as public";
+                        feedback += " Try to declare field \""
+                            + className + "." + fieldName + "\" as public";
                     }
                     throw new UnexpectedError(feedback, ex);
                 } catch (Exception ex) {

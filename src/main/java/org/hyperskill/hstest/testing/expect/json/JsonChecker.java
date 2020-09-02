@@ -19,7 +19,7 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.Strin
 
 import java.util.regex.Pattern;
 
-public class JsonChecker {
+public final class JsonChecker {
     private JsonChecker() { }
 
     public static JsonAnyBuilder any() {
