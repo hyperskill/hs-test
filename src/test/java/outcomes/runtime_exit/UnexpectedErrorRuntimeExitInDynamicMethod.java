@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.runtime_exit;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.stage.StageTest;
@@ -10,31 +10,40 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Scanner;
 
-class FatalErrorAddInput1DynamicMethodMain {
+class UnexpectedErrorRuntimeExitInDynamicMethodMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.nextLine());
+        System.out.print(scanner.nextLine());
     }
 }
 
-public class FatalErrorAddInput1DynamicMethod extends StageTest {
+public class UnexpectedErrorRuntimeExitInDynamicMethod extends StageTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
-        exception.expectMessage("java.lang.ArithmeticException: / by zero");
+        exception.expectMessage("Unexpected error in test #");
+        exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @DynamicTestingMethod
-    CheckResult test() {
+    CheckResult test1() {
         TestedProgram main = new TestedProgram(
-            FatalErrorAddInput1DynamicMethodMain.class);
+            UnexpectedErrorRuntimeExitInDynamicMethodMain.class);
         main.start();
-        int x = 0 / 0;
-        main.execute("Hello");
+        main.execute("123");
+        return CheckResult.correct();
+    }
+
+    @DynamicTestingMethod
+    CheckResult test2() {
+        TestedProgram main = new TestedProgram(
+            UnexpectedErrorRuntimeExitInDynamicMethodMain.class);
+        main.start();
+        Runtime.getRuntime().exit(0);
+        main.execute("123");
         return CheckResult.correct();
     }
 }

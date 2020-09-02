@@ -32,7 +32,7 @@ public class TestSystemExit extends StageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

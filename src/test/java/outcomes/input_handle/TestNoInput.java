@@ -37,7 +37,7 @@ public class TestNoInput extends StageTest {
         exception.expect(AssertionError.class);
         exception.expectMessage("Exception in test #2\n\n" +
             "Probably your program run out of input (Scanner tried to read more than expected).");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

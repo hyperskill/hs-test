@@ -36,7 +36,7 @@ public class TestNotWaitToFinishIfNotAccepted2 extends StageTest {
                 "\n" +
                 "Should show this feedback"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

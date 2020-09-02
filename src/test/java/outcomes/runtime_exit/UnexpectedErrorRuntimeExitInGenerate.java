@@ -10,16 +10,16 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-class FatalErrorRuntimeExitInCheckMain {
+class UnexpectedErrorRuntimeExitInGenerateMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
 
-public class FatalErrorRuntimeExitInCheck extends StageTest {
+public class UnexpectedErrorRuntimeExitInGenerate extends StageTest {
 
-    public FatalErrorRuntimeExitInCheck() {
-        super(FatalErrorRuntimeExitInCheckMain.class);
+    public UnexpectedErrorRuntimeExitInGenerate() {
+        super(UnexpectedErrorRuntimeExitInGenerateMain.class);
     }
 
     @Rule
@@ -28,12 +28,13 @@ public class FatalErrorRuntimeExitInCheck extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error during testing");
         exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @Override
     public List<TestCase> generate() {
+        Runtime.getRuntime().exit(0);
         return Arrays.asList(
             new TestCase()
         );
@@ -41,7 +42,6 @@ public class FatalErrorRuntimeExitInCheck extends StageTest {
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        Runtime.getRuntime().exit(0);
         return CheckResult.correct();
     }
 }

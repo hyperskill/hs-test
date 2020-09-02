@@ -55,7 +55,7 @@ public class TestDynamicMethodEarlyExit extends StageTest<String> {
                 "C1: Server started!"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

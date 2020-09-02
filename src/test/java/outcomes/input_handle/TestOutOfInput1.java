@@ -39,7 +39,7 @@ public class TestOutOfInput1 extends StageTest {
         exception.expectMessage("Probably your program run out of input " +
             "(Scanner tried to read more than expected)");
         exception.expectMessage("java.util.NoSuchElementException");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

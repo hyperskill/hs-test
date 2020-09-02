@@ -25,7 +25,7 @@ public class TestCommandLineArgumentsFailedWithSpaces extends StageTest<String> 
         exception.expectMessage(
             "Arguments: -spaces \"some argument with spaces\" -number 234 -onlySpaces \"      \""
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -36,7 +36,7 @@ public class WrongAnswerThrownInDynamicInput1 extends StageTest<Boolean> {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1\n\n" +
             "Add input test 1");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

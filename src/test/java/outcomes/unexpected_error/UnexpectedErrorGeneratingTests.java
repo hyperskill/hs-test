@@ -1,4 +1,4 @@
-package outcomes.runtime_exit;
+package outcomes.unexpected_error;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -10,16 +10,16 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-class FatalErrorRuntimeExitInGenerateMain {
+class UnexpectedErrorGeneratingTestsMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
 
-public class FatalErrorRuntimeExitInGenerate extends StageTest {
+public class UnexpectedErrorGeneratingTests extends StageTest {
 
-    public FatalErrorRuntimeExitInGenerate() {
-        super(FatalErrorRuntimeExitInGenerateMain.class);
+    public UnexpectedErrorGeneratingTests() {
+        super(UnexpectedErrorGeneratingTestsMain.class);
     }
 
     @Rule
@@ -28,13 +28,12 @@ public class FatalErrorRuntimeExitInGenerate extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
-        exception.expectMessage("CheckExitCalled: Tried to exit");
+        exception.expectMessage("Unexpected error during testing");
     }
 
     @Override
     public List<TestCase> generate() {
-        Runtime.getRuntime().exit(0);
+        System.out.println(1 / 0);
         return Arrays.asList(
             new TestCase()
         );

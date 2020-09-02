@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class TestDynamicTestingFatalErrorDoubleStartProgramServer {
+class TestDynamicTestingUnexpectedErrorNoCheckMethodServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
@@ -21,7 +21,7 @@ class TestDynamicTestingFatalErrorDoubleStartProgramServer {
     }
 }
 
-class TestDynamicTestingFatalErrorDoubleStartProgramClient {
+class TestDynamicTestingUnexpectedErrorNoCheckMethodClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -30,7 +30,7 @@ class TestDynamicTestingFatalErrorDoubleStartProgramClient {
     }
 }
 
-public class TestDynamicTestingFatalErrorDoubleStartProgram extends StageTest<String> {
+public class TestDynamicTestingUnexpectedErrorNoCheckMethod extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -38,11 +38,11 @@ public class TestDynamicTestingFatalErrorDoubleStartProgram extends StageTest<St
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Fatal error in test #1, please send the report to support@hyperskill.org"
+            "Unexpected error in test #1"
         );
 
         exception.expectMessage(
-            "FatalError: Cannot start the program twice"
+            "UnexpectedError: Can't check result: override \"check\" method"
         );
     }
 
@@ -51,16 +51,13 @@ public class TestDynamicTestingFatalErrorDoubleStartProgram extends StageTest<St
         return Arrays.asList(
             new TestCase<String>().setDynamicTesting(() -> {
                 TestedProgram server = new TestedProgram(
-                    TestDynamicTestingFatalErrorDoubleStartProgramServer.class);
+                    TestDynamicTestingUnexpectedErrorNoCheckMethodServer.class);
 
                 TestedProgram client = new TestedProgram(
-                    TestDynamicTestingFatalErrorDoubleStartProgramClient.class);
+                    TestDynamicTestingUnexpectedErrorNoCheckMethodClient.class);
 
                 String out1 = server.start();
                 String out2 = client.start();
-
-                server.start();
-
                 if (!out1.equals("Server started!\n")
                     || !out2.equals("Client started!\n")) {
                     return CheckResult.wrong("");
@@ -80,7 +77,7 @@ public class TestDynamicTestingFatalErrorDoubleStartProgram extends StageTest<St
                     return CheckResult.wrong("");
                 }
 
-                return CheckResult.correct();
+                return null;
             })
         );
     }

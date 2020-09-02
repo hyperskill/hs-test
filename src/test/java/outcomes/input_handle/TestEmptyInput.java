@@ -37,7 +37,7 @@ public class TestEmptyInput extends StageTest {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1");
         exception.expectMessage("> \n> \n0\n0");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

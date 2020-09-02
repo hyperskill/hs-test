@@ -34,7 +34,7 @@ public class TestPassedThrownInCheck1 extends StageTest<Boolean> {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1\n\n" +
             "test is not passed attach true");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

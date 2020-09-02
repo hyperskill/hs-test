@@ -31,7 +31,7 @@ public class TestCommandLineArgumentsFailedDynamicMethod4 extends StageTest<Stri
                 "0"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

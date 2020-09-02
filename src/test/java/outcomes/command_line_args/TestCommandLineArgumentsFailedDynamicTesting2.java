@@ -28,7 +28,7 @@ public class TestCommandLineArgumentsFailedDynamicTesting2 extends StageTest<Str
                 "Arguments: -in 123 -out 234"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class TestCommandLineArgsChanged extends StageTest {
                 "Arguments: 123 234 345"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

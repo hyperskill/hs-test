@@ -57,7 +57,7 @@ public class TestDynamicTestingEarlyExit extends StageTest<String> {
                 "C1: Server started!"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

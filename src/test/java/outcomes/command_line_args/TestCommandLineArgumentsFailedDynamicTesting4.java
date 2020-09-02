@@ -34,7 +34,7 @@ public class TestCommandLineArgumentsFailedDynamicTesting4 extends StageTest<Str
                 "0"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

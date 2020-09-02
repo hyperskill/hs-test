@@ -11,17 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class FatalErrorRuntimeExitInAddInputMain {
+class UnexpectedErrorRuntimeExitInAddInputMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(scanner.nextLine());
     }
 }
 
-public class FatalErrorRuntimeExitInAddInput extends StageTest {
+public class UnexpectedErrorRuntimeExitInAddInput extends StageTest {
 
-    public FatalErrorRuntimeExitInAddInput() {
-        super(FatalErrorRuntimeExitInAddInputMain.class);
+    public UnexpectedErrorRuntimeExitInAddInput() {
+        super(UnexpectedErrorRuntimeExitInAddInputMain.class);
     }
 
     @Rule
@@ -30,7 +30,7 @@ public class FatalErrorRuntimeExitInAddInput extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #2, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error in test #2");
         exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 

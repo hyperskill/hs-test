@@ -49,7 +49,7 @@ public class TestDynamicOutputWithInput extends StageTest<String> {
             "Another num:\n" +
             "> 248"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

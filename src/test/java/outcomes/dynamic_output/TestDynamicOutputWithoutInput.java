@@ -40,7 +40,7 @@ public class TestDynamicOutputWithoutInput extends StageTest<String> {
                 "Print x and y: 123 456\n" +
                 "Another num:"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

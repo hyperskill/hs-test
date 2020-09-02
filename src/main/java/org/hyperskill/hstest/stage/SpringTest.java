@@ -4,7 +4,7 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
@@ -148,7 +148,7 @@ public abstract class SpringTest extends StageTest<Object> {
         try {
             startSpring();
         } catch (Exception ex) {
-            throw new FatalError(ex.getMessage(), ex);
+            throw new UnexpectedError(ex.getMessage(), ex);
         }
     }
 

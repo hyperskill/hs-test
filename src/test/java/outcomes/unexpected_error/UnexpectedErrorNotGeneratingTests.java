@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.unexpected_error;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -6,16 +6,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-class FatalErrorNotGeneratingTestsMain {
+class UnexpectedErrorNotGeneratingTestsMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
 
-public class FatalErrorNotGeneratingTests extends StageTest {
+public class UnexpectedErrorNotGeneratingTests extends StageTest {
 
-    public FatalErrorNotGeneratingTests() {
-        super(FatalErrorNotGeneratingTestsMain.class);
+    public UnexpectedErrorNotGeneratingTests() {
+        super(UnexpectedErrorNotGeneratingTestsMain.class);
     }
 
     @Rule
@@ -24,7 +24,7 @@ public class FatalErrorNotGeneratingTests extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error during testing");
         exception.expectMessage("No tests found");
     }
 

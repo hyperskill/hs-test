@@ -32,7 +32,7 @@ public class TestPassedThrownInDynamicTesting1 extends StageTest<Boolean> {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #2\n\n" +
             "fail inside check");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.unexpected_error;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class FatalErrorAddInput3Main {
+class UnexpectedErrorAddInput3Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("1");
@@ -19,10 +19,10 @@ class FatalErrorAddInput3Main {
     }
 }
 
-public class FatalErrorAddInput3 extends StageTest<String> {
+public class UnexpectedErrorAddInput3 extends StageTest<String> {
 
-    public FatalErrorAddInput3() {
-        super(FatalErrorAddInput3Main.class);
+    public UnexpectedErrorAddInput3() {
+        super(UnexpectedErrorAddInput3Main.class);
     }
 
     @Rule
@@ -31,8 +31,8 @@ public class FatalErrorAddInput3 extends StageTest<String> {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #4, please send the report to support@hyperskill.org");
-        exception.expectMessage("FatalError: " +
+        exception.expectMessage("Unexpected error in test #4");
+        exception.expectMessage("UnexpectedError: " +
             "Dynamic input should return String or CheckResult objects only. Found: class java.lang.Integer");
     }
 

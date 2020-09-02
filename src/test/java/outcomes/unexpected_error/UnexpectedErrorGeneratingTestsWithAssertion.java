@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.unexpected_error;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -10,16 +10,16 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-class FatalErrorDuringCheckingMain {
+class UnexpectedErrorGeneratingTestsWithAssertionMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
 
-public class FatalErrorDuringChecking extends StageTest {
+public class UnexpectedErrorGeneratingTestsWithAssertion extends StageTest {
 
-    public FatalErrorDuringChecking() {
-        super(FatalErrorDuringCheckingMain.class);
+    public UnexpectedErrorGeneratingTestsWithAssertion() {
+        super(UnexpectedErrorGeneratingTestsWithAssertionMain.class);
     }
 
     @Rule
@@ -28,19 +28,19 @@ public class FatalErrorDuringChecking extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error during testing");
     }
 
     @Override
     public List<TestCase> generate() {
+        assert false;
         return Arrays.asList(
-            new TestCase()
+                new TestCase()
         );
     }
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        System.out.println(1 / 0);
         return CheckResult.correct();
     }
 }

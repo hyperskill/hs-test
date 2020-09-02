@@ -56,7 +56,7 @@ public class TestDynamicMethodStartInBackgroundWrongAnswer extends StageTest<Str
             "C1: 123\n" +
             "> 345\n" +
             "C2: 345");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

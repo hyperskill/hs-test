@@ -5,7 +5,7 @@ import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
-import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
@@ -107,19 +107,19 @@ public class TestedProgram {
             group = new ThreadGroup(runClass.getSimpleName());
             group.setDaemon(true);
         } catch (Exception ex) {
-            throw new FatalError("Error initializing tested program", ex);
+            throw new UnexpectedError("Error initializing tested program", ex);
         }
     }
 
     private String waitOutput(String input) {
         if (!isWaitingInput()) {
-            throw new FatalError(
+            throw new UnexpectedError(
                 "Tested program is not waiting for the input " +
                 "(state == \"" + machine.getState() + "\")");
         }
 
         if (noMoreInput) {
-            throw new FatalError(
+            throw new UnexpectedError(
                 "Can't input to the tested program - input was prohibited.");
         }
 
@@ -188,7 +188,7 @@ public class TestedProgram {
      */
     public String start(String... args) {
         if (machine.getState() != ProgramState.NOT_STARTED) {
-            throw new FatalError("Cannot start the program twice");
+            throw new UnexpectedError("Cannot start the program twice");
         }
 
         this.runArgs = new ArrayList<>(Arrays.asList(args));

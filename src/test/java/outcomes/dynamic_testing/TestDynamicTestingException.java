@@ -58,7 +58,7 @@ public class TestDynamicTestingException extends StageTest<String> {
                 "S1: Client started!"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
         exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
         exception.expectMessage(not(containsString("org.junit.")));
         exception.expectMessage(not(containsString("at sun.reflect.")));

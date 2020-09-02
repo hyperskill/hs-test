@@ -1,6 +1,7 @@
-package outcomes.fatal_error;
+package outcomes.runtime_exit;
 
 import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,16 +10,16 @@ import org.junit.rules.ExpectedException;
 import java.util.Arrays;
 import java.util.List;
 
-class FatalErrorNoCheckMethodMain {
+class UnexpectedErrorSystemExitInCheckMain {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
 
-public class FatalErrorNoCheckMethod extends StageTest {
+public class UnexpectedErrorSystemExitInCheck extends StageTest {
 
-    public FatalErrorNoCheckMethod() {
-        super(FatalErrorNoCheckMethodMain.class);
+    public UnexpectedErrorSystemExitInCheck() {
+        super(UnexpectedErrorSystemExitInCheckMain.class);
     }
 
     @Rule
@@ -27,8 +28,8 @@ public class FatalErrorNoCheckMethod extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
-        exception.expectMessage("Can't check result: override \"check\" method");
+        exception.expectMessage("Unexpected error in test #1");
+        exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @Override
@@ -36,5 +37,11 @@ public class FatalErrorNoCheckMethod extends StageTest {
         return Arrays.asList(
             new TestCase()
         );
+    }
+
+    @Override
+    public CheckResult check(String reply, Object attach) {
+        System.exit(0);
+        return CheckResult.correct();
     }
 }

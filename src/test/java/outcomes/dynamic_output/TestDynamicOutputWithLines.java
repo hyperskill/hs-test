@@ -51,7 +51,7 @@ public class TestDynamicOutputWithLines extends StageTest<String> {
             "print:> line2\n" +
             "> line3"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

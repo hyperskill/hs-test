@@ -1,15 +1,15 @@
 package org.hyperskill.hstest.exception.outcomes;
 
-public class FatalError extends OutcomeError {
+public class UnexpectedError extends OutcomeError {
 
     private final String errorText;
     private final Throwable cause;
 
-    public FatalError(String errorText) {
+    public UnexpectedError(String errorText) {
         this(errorText, null);
     }
 
-    public FatalError(String errorText, Throwable cause) {
+    public UnexpectedError(String errorText, Throwable cause) {
         super(errorText);
         this.errorText = errorText;
         this.cause = cause;

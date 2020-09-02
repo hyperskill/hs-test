@@ -28,7 +28,7 @@ public class MainMethodNotStatic extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error in test #1");
         exception.expectMessage("Main method is not static");
     }
 

@@ -10,7 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Scanner;
 
-class TestDynamicMethodFatalErrorNoCheckMethodServer {
+class TestDynamicMethodUnexpectedErrorDoubleStartProgramServer {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Server started!");
@@ -19,7 +19,7 @@ class TestDynamicMethodFatalErrorNoCheckMethodServer {
     }
 }
 
-class TestDynamicMethodFatalErrorNoCheckMethodClient {
+class TestDynamicMethodUnexpectedErrorDoubleStartProgramClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Client started!");
@@ -28,7 +28,7 @@ class TestDynamicMethodFatalErrorNoCheckMethodClient {
     }
 }
 
-public class TestDynamicMethodFatalErrorNoCheckMethod extends StageTest<String> {
+public class TestDynamicMethodUnexpectedErrorDoubleStartProgram extends StageTest<String> {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -36,24 +36,27 @@ public class TestDynamicMethodFatalErrorNoCheckMethod extends StageTest<String> 
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage(
-            "Fatal error in test #1, please send the report to support@hyperskill.org"
+            "Unexpected error in test #1"
         );
 
         exception.expectMessage(
-            "FatalError: Can't check result: override \"check\" method"
+            "UnexpectedError: Cannot start the program twice"
         );
     }
 
     @DynamicTestingMethod
     CheckResult test() {
         TestedProgram server = new TestedProgram(
-            TestDynamicMethodFatalErrorNoCheckMethodServer.class);
+            TestDynamicMethodUnexpectedErrorDoubleStartProgramServer.class);
 
         TestedProgram client = new TestedProgram(
-            TestDynamicMethodFatalErrorNoCheckMethodClient.class);
+            TestDynamicMethodUnexpectedErrorDoubleStartProgramClient.class);
 
         String out1 = server.start();
         String out2 = client.start();
+
+        server.start();
+
         if (!out1.equals("Server started!\n")
             || !out2.equals("Client started!\n")) {
             return CheckResult.wrong("");
@@ -73,6 +76,6 @@ public class TestDynamicMethodFatalErrorNoCheckMethod extends StageTest<String> 
             return CheckResult.wrong("");
         }
 
-        return null;
+        return CheckResult.correct();
     }
 }

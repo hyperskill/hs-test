@@ -43,7 +43,7 @@ public class TestDefaultTimeLimit extends StageTest {
         exception.expectMessage("In this test, " +
             "the program is running for a long time, more than 15 seconds. " +
             "Most likely, the program has gone into an infinite loop.");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

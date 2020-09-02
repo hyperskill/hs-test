@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.unexpected_error;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -9,17 +9,19 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
-class FatalErrorGeneratingTestsMain {
+class UnexpectedErrorAddInput1Main {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.nextLine());
     }
 }
 
-public class FatalErrorGeneratingTests extends StageTest {
+public class UnexpectedErrorAddInput1 extends StageTest {
 
-    public FatalErrorGeneratingTests() {
-        super(FatalErrorGeneratingTestsMain.class);
+    public UnexpectedErrorAddInput1() {
+        super(UnexpectedErrorAddInput1Main.class);
     }
 
     @Rule
@@ -28,14 +30,18 @@ public class FatalErrorGeneratingTests extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error in test #1");
+        exception.expectMessage("java.lang.ArithmeticException: / by zero");
     }
 
     @Override
     public List<TestCase> generate() {
-        System.out.println(1 / 0);
         return Arrays.asList(
             new TestCase()
+                .addInput(out -> {
+                    int x = 0 / 0;
+                    return "Hello";
+                })
         );
     }
 

@@ -45,7 +45,7 @@ public class TestDynamicTestingWrongAnswerInCheckMethod extends StageTest<String
                 "\n" +
                 "WA1"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

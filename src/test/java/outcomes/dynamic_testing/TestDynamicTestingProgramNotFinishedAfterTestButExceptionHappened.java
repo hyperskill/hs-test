@@ -53,7 +53,7 @@ public class TestDynamicTestingProgramNotFinishedAfterTestButExceptionHappened e
                 "\n" +
                 "java.util.NoSuchElementException: No line found"
         );
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

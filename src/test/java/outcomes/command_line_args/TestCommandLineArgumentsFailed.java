@@ -41,7 +41,7 @@ public class TestCommandLineArgumentsFailed extends StageTest<String> {
                 "234"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

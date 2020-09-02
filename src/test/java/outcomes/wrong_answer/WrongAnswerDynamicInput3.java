@@ -37,7 +37,7 @@ public class WrongAnswerDynamicInput3 extends StageTest<String> {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #3");
         exception.expectMessage("WA TEST 3");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -30,7 +30,7 @@ public class WrongAnswerDynamicMethod1 extends StageTest {
         exception.expect(AssertionError.class);
         exception.expectMessage("Wrong answer in test #1");
         exception.expectMessage("WA TEST 1");
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

@@ -51,7 +51,7 @@ public class WrongAnswerAndInfiniteLoop extends StageTest {
                 "> 9"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

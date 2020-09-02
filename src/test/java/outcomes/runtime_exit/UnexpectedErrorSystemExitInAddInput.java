@@ -1,4 +1,4 @@
-package outcomes.fatal_error;
+package outcomes.runtime_exit;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -11,17 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-class FatalErrorAddInput2Main {
+class UnexpectedErrorSystemExitInAddInputMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.hasNextLine());
+        System.out.print(scanner.nextLine());
     }
 }
 
-public class FatalErrorAddInput2 extends StageTest {
+public class UnexpectedErrorSystemExitInAddInput extends StageTest {
 
-    public FatalErrorAddInput2() {
-        super(FatalErrorAddInput2Main.class);
+    public UnexpectedErrorSystemExitInAddInput() {
+        super(UnexpectedErrorSystemExitInAddInputMain.class);
     }
 
     @Rule
@@ -30,8 +30,8 @@ public class FatalErrorAddInput2 extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #1, please send the report to support@hyperskill.org");
-        exception.expectMessage("java.lang.ArithmeticException: / by zero");
+        exception.expectMessage("Unexpected error in test #2");
+        exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @Override
@@ -39,14 +39,20 @@ public class FatalErrorAddInput2 extends StageTest {
         return Arrays.asList(
             new TestCase()
                 .addInput(out -> {
-                    int x = 0 / 0;
-                    return "Hello";
+                    return "123";
+                }),
+
+            new TestCase()
+                .addInput(out -> {
+                    System.exit(0);
+                    return "123";
                 })
         );
     }
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return CheckResult.correct();
+        return new CheckResult(reply.equals("123"), "");
     }
 }
+

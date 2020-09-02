@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.dynamic.TestingSecurityManager;
-import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class SystemInMock extends InputStream {
 
     void setDynamicInputFunction(ThreadGroup group, Supplier<String> func) {
         if (handlers.containsKey(group)) {
-            throw new FatalError("Cannot change dynamic input function");
+            throw new UnexpectedError("Cannot change dynamic input function");
         }
         handlers.put(group, new DynamicInputHandler(func));
     }

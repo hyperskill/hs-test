@@ -4,7 +4,7 @@ import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.dynamic.output.ColoredOutput;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.outcomes.Outcome;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -60,7 +60,7 @@ public abstract class StageTest<AttachType> {
         }
 
         if (testCases.size() == 0) {
-            throw new FatalError("No tests found");
+            throw new UnexpectedError("No tests found");
         }
 
         int currTest = 0;
@@ -112,6 +112,6 @@ public abstract class StageTest<AttachType> {
     }
 
     public CheckResult check(String reply, AttachType attach) {
-        throw new FatalError("Can't check result: override \"check\" method");
+        throw new UnexpectedError("Can't check result: override \"check\" method");
     }
 }

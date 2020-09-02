@@ -42,7 +42,7 @@ public class TestPresentationError1InDynamicInput extends StageTest {
                 "Hello world"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
         exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
         exception.expectMessage(not(containsString("org.junit.")));
         exception.expectMessage(not(containsString("at sun.reflect.")));

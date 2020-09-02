@@ -9,19 +9,17 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
-class FatalErrorSystemExitInAddInputMain {
+class UnexpectedErrorSystemExitInGenerateMain {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(scanner.nextLine());
+        System.out.println("Hello World");
     }
 }
 
-public class FatalErrorSystemExitInAddInput extends StageTest {
+public class UnexpectedErrorSystemExitInGenerate extends StageTest {
 
-    public FatalErrorSystemExitInAddInput() {
-        super(FatalErrorSystemExitInAddInputMain.class);
+    public UnexpectedErrorSystemExitInGenerate() {
+        super(UnexpectedErrorSystemExitInGenerateMain.class);
     }
 
     @Rule
@@ -30,29 +28,20 @@ public class FatalErrorSystemExitInAddInput extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #2, please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error during testing");
         exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @Override
     public List<TestCase> generate() {
+        System.exit(0);
         return Arrays.asList(
             new TestCase()
-                .addInput(out -> {
-                    return "123";
-                }),
-
-            new TestCase()
-                .addInput(out -> {
-                    System.exit(0);
-                    return "123";
-                })
         );
     }
 
     @Override
     public CheckResult check(String reply, Object attach) {
-        return new CheckResult(reply.equals("123"), "");
+        return CheckResult.correct();
     }
 }
-

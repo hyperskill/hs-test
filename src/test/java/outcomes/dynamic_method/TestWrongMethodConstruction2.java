@@ -15,10 +15,9 @@ public class TestWrongMethodConstruction2 extends StageTest {
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error during testing, " +
-            "please send the report to support@hyperskill.org");
+        exception.expectMessage("Unexpected error during testing");
 
-        exception.expectMessage("FatalError: " +
+        exception.expectMessage("UnexpectedError: " +
             "Method \"test\" should take 0 arguments. Found: 1");
     }
 

@@ -32,10 +32,6 @@ public abstract class Outcome {
 
     protected abstract String getType();
 
-    protected String getTypeSuffix() {
-        return "";
-    }
-
     @Override
     public final String toString() {
 
@@ -47,7 +43,7 @@ public abstract class Outcome {
         }
 
         String result =
-            getType() + whenErrorHappened + getTypeSuffix();
+            getType() + whenErrorHappened;
 
         if (!errorText.isEmpty()) {
             result += "\n\n" + errorText.trim();
@@ -131,7 +127,7 @@ public abstract class Outcome {
             return new ErrorOutcome(currTest, t);
 
         } else {
-            return new FatalErrorOutcome(currTest, t);
+            return new UnexpectedErrorOutcome(currTest, t);
         }
     }
 }

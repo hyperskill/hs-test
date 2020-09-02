@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.common.Utils;
-import org.hyperskill.hstest.exception.outcomes.FatalError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -100,7 +100,7 @@ public interface DynamicTesting {
                             throw new WrongAnswer(errorText);
                         }
                     } else {
-                        throw new FatalError("Dynamic input should return "
+                        throw new UnexpectedError("Dynamic input should return "
                             + "String or CheckResult objects only. Found: " + obj.getClass());
                     }
                 } catch (Throwable throwable) {
@@ -155,10 +155,10 @@ public interface DynamicTesting {
             .filter(method -> method.isAnnotationPresent(DynamicTestingMethod.class))
             .filter(method -> {
                 if (method.getReturnType() != CheckResult.class) {
-                    throw new FatalError("Method \"" + method.getName()
+                    throw new UnexpectedError("Method \"" + method.getName()
                         + "\" should return CheckResult object. Found: " + method.getReturnType());
                 } else if (method.getParameterCount() != 0) {
-                    throw new FatalError("Method \"" + method.getName()
+                    throw new UnexpectedError("Method \"" + method.getName()
                         + "\" should take 0 arguments. Found: " + method.getParameterCount());
                 }
                 return true;
@@ -172,7 +172,7 @@ public interface DynamicTesting {
                     if (ex.getCause() instanceof OutcomeError) {
                         throw (OutcomeError) ex.getCause();
                     }
-                    throw new FatalError("", ex.getCause());
+                    throw new UnexpectedError("", ex.getCause());
                 } catch (IllegalAccessException ex) {
                     String feedback = "Cannot invoke test.";
                     if (!Modifier.isPublic(method.getModifiers())) {
@@ -181,7 +181,7 @@ public interface DynamicTesting {
                         feedback += " Try to declare method \"" +
                             className + "." + methodName + "\" as public";
                     }
-                    throw new FatalError(feedback, ex);
+                    throw new UnexpectedError(feedback, ex);
                 }
             }).collect(toList());
     }
@@ -210,7 +210,7 @@ public interface DynamicTesting {
                     } else if (var instanceof DynamicTesting[]) {
                         tests = Arrays.asList((DynamicTesting[]) var);
                     } else {
-                        throw new FatalError("Cannot cast "
+                        throw new UnexpectedError("Cannot cast "
                             + "the field \"" + field.getName() + "\" to a List or array");
                     }
                     return tests.stream();
@@ -222,9 +222,9 @@ public interface DynamicTesting {
                         feedback += " Try to declare field \"" +
                             className + "." + fieldName + "\" as public";
                     }
-                    throw new FatalError(feedback, ex);
+                    throw new UnexpectedError(feedback, ex);
                 } catch (Exception ex) {
-                    throw new FatalError("Cannot get "
+                    throw new UnexpectedError("Cannot get "
                         + "dynamic methods from the field \"" + field.getName() + "\"", ex);
                 }
             })

@@ -10,28 +10,28 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Scanner;
 
-class FatalErrorSystemExitInDynamicMethodMain {
+class UnexpectedErrorSystemExitInDynamicMethodMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(scanner.nextLine());
     }
 }
 
-public class FatalErrorSystemExitInDynamicMethod extends StageTest {
+public class UnexpectedErrorSystemExitInDynamicMethod extends StageTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
         exception.expect(AssertionError.class);
-        exception.expectMessage("Fatal error in test #");
+        exception.expectMessage("Unexpected error in test #");
         exception.expectMessage("CheckExitCalled: Tried to exit");
     }
 
     @DynamicTestingMethod
     CheckResult test1() {
         TestedProgram main = new TestedProgram(
-            FatalErrorSystemExitInDynamicTestingMain.class);
+            UnexpectedErrorSystemExitInDynamicTestingMain.class);
         main.start();
         main.execute("123");
         return CheckResult.correct();
@@ -40,7 +40,7 @@ public class FatalErrorSystemExitInDynamicMethod extends StageTest {
     @DynamicTestingMethod
     CheckResult test2() {
         TestedProgram main = new TestedProgram(
-            FatalErrorSystemExitInDynamicTestingMain.class);
+            UnexpectedErrorSystemExitInDynamicTestingMain.class);
         main.start();
         System.exit(0);
         main.execute("123");

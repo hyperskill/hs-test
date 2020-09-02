@@ -44,7 +44,7 @@ public class TestThreadInterrupt1 extends StageTest {
                 "exited"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @DynamicTestingMethod

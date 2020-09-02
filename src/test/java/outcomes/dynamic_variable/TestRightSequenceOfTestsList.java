@@ -28,7 +28,7 @@ public class TestRightSequenceOfTestsList extends StageTest {
                 "14 == x"
         );
 
-        exception.expectMessage(not(containsString("Fatal error")));
+        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     int x = 0;
