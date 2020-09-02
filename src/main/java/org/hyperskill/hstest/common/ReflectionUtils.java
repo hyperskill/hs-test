@@ -1,15 +1,13 @@
 package org.hyperskill.hstest.common;
 
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public final class ReflectionUtils {
 
-    private ReflectionUtils() {
-    }
+    private ReflectionUtils() { }
 
     public static Method getMainMethod(Class<?> clazz) {
         Method mainMethod;
