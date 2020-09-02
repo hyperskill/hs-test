@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.common;
 
+import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.lang.reflect.Method;
@@ -16,13 +17,28 @@ public final class ReflectionUtils {
             mainMethod = clazz.getDeclaredMethod("main", String[].class);
             mainMethod.setAccessible(true);
         } catch (NoSuchMethodException ex) {
-            throw new UnexpectedError("No main method found");
+            throw new ErrorWithFeedback(
+                    "No main method found in class "
+                    + clazz.getCanonicalName()
+            );
         }
 
         boolean isMethodStatic = Modifier.isStatic(mainMethod.getModifiers());
 
         if (!isMethodStatic) {
-            throw new UnexpectedError("Main method is not static");
+            throw new ErrorWithFeedback(
+                    "Main method is not static in class "
+                    + clazz.getCanonicalName()
+            );
+        }
+
+        boolean isMethodPublic = Modifier.isPublic(mainMethod.getModifiers());
+
+        if (!isMethodPublic) {
+            throw new ErrorWithFeedback(
+                    "Main method is not public in class "
+                            + clazz.getCanonicalName()
+            );
         }
 
         return mainMethod;
