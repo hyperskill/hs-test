@@ -4,6 +4,7 @@ import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.stage.StageTest;
@@ -107,24 +108,24 @@ public abstract class Outcome {
 
     public static Outcome getOutcome(Throwable t, int currTest) {
         if (t instanceof WrongAnswer) {
-            return new WrongAnswerOutcome(currTest,
-                ((WrongAnswer) t).getFeedbackText().trim());
+            return new WrongAnswerOutcome(currTest, (WrongAnswer) t);
 
         } else if (t instanceof PresentationError) {
-            return new PresentationErrorOutcome(currTest,
-                ((PresentationError) t).getFeedbackText());
+            return new PresentationErrorOutcome(currTest, (PresentationError) t);
 
         } else if (t instanceof ExceptionWithFeedback) {
-            ExceptionWithFeedback ex = (ExceptionWithFeedback) t;
-            Throwable realUserException = ex.getRealException();
-            String errorText = ex.getErrorText();
-            return new ExceptionOutcome(currTest, realUserException, errorText);
+            return new ExceptionOutcome(currTest, (ExceptionWithFeedback) t);
 
         } else if (t instanceof ErrorWithFeedback
             || t instanceof FileSystemException
             || t instanceof TimeLimitException) {
 
             return new ErrorOutcome(currTest, t);
+
+        } else if (t instanceof UnexpectedError
+            && t.getCause() instanceof NumberFormatException) {
+
+            return new ErrorOutcome(currTest, t.getCause());
 
         } else {
             return new UnexpectedErrorOutcome(currTest, t);

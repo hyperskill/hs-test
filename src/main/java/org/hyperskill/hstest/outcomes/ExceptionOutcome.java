@@ -1,13 +1,17 @@
 package org.hyperskill.hstest.outcomes;
 
 import org.hyperskill.hstest.exception.StackTraceUtils;
+import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 public class ExceptionOutcome extends Outcome {
 
-    public ExceptionOutcome(int testNum, Throwable cause, String feedback) {
+    public ExceptionOutcome(int testNum, ExceptionWithFeedback ex) {
+        Throwable cause = ex.getRealException();
+        String feedback = ex.getErrorText();
+
         testNumber = testNum;
         stackTrace = StackTraceUtils.filterStackTrace(StackTraceUtils.getStackTrace(cause));
 

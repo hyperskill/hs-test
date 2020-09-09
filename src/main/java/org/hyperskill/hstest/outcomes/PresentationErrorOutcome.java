@@ -1,9 +1,11 @@
 package org.hyperskill.hstest.outcomes;
 
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
+
 public class PresentationErrorOutcome extends Outcome {
 
-    public PresentationErrorOutcome(int testNum, String feedback) {
-        super(testNum, feedback, "");
+    public PresentationErrorOutcome(int testNum, PresentationError ex) {
+        super(testNum, ex.getFeedbackText(), "");
     }
 
     @Override
