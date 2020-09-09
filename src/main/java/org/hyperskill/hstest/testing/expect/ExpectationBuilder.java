@@ -21,13 +21,12 @@ public class ExpectationBuilder<T> {
     }
 
     public ExpectationBuilder<T> fromFile() {
-        try {
-            expect.text = FileUtils.readFile(expect.text);
-            return this;
-        } catch (IOException ex) {
+        expect.text = FileUtils.readFile(expect.text);
+        if (expect.text == null) {
             throw new PresentationError("File \"" + expect.error
-                + "\" expected, but not found");
+                    + "\" expected, but not found");
         }
+        return this;
     }
 
     public ExpectationTextSearcher<T> toContain() {
