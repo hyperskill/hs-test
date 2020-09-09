@@ -68,13 +68,17 @@ public final class FileUtils {
         return getNonexistentFilePath(null);
     }
 
-    public static String readFile(String name) throws IOException {
+    public static String readFile(String name) {
         if (!name.startsWith(CURRENT_DIR)) {
             name = CURRENT_DIR + name;
         }
         Path path = Paths.get(name);
-        return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-        //return Files.readString(path); <- Java 11
+        try {
+            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+            //return Files.readString(path); <- Java 11
+        } catch (IOException ignored) {
+            return null;
+        }
     }
 
 }
