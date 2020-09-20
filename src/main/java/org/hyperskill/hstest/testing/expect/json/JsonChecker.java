@@ -8,6 +8,8 @@ import org.hyperskill.hstest.testing.expect.json.builder.JsonBooleanBuilder.Bool
 import org.hyperskill.hstest.testing.expect.json.builder.JsonDoubleBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonDoubleBuilder.DoubleChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedArrayBuilder;
+import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedArrayBuilder.ArrayLengthChecker;
+import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedObjectBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder.IntegerChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonNullBuilder;
@@ -30,8 +32,20 @@ public final class JsonChecker {
         return new JsonObjectBuilder();
     }
 
+    public static JsonFinishedObjectBuilder isObject(JsonAnyBuilder unused) {
+        return isObject().anyOtherValues();
+    }
+
+    public static JsonArrayBuilder isArray() {
+        return new JsonArrayBuilder();
+    }
+
     public static JsonArrayBuilder isArray(int length) {
         return isArray().length(length);
+    }
+
+    public static JsonArrayBuilder isArray(ArrayLengthChecker lengthChecker) {
+        return isArray().length(lengthChecker);
     }
 
     public static JsonArrayBuilder isArray(JsonBaseBuilder itemsTemplate) {
@@ -40,6 +54,10 @@ public final class JsonChecker {
 
     public static JsonArrayBuilder isArray(int length, JsonBaseBuilder itemsTemplate) {
         return isArray().length(length).everyItem(itemsTemplate);
+    }
+
+    public static JsonArrayBuilder isArray(ArrayLengthChecker lengthChecker, JsonBaseBuilder itemsTemplate) {
+        return isArray().length(lengthChecker).everyItem(itemsTemplate);
     }
 
     public static JsonFinishedArrayBuilder isArray(int... values) {
@@ -56,10 +74,6 @@ public final class JsonChecker {
 
     public static JsonFinishedArrayBuilder isArray(String... values) {
         return isArray().length(values.length).items(values);
-    }
-
-    public static JsonArrayBuilder isArray() {
-        return new JsonArrayBuilder();
     }
 
     public static JsonStringBuilder isString() {
