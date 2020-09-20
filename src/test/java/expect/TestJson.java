@@ -359,6 +359,21 @@ public class TestJson {
     }
 
     @Test
+    public void testJsonArrayAnyElements() {
+        expect("[]").asJson().check(isArray(any()));
+        expect("[1, 5]").asJson().check(isArray(any()));
+        expect("[{}]").asJson().check(isArray(any()));
+        expect("[1, 2, 3, 4, \"qwe\", [true, 1, null]]").asJson().check(isArray(any()));
+    }
+
+    @Test
+    public void testJsonObjectAnyElements() {
+        expect("{}").asJson().check(isObject(any()));
+        expect("{\"1\": 2}").asJson().check(isObject(any()));
+        expect("{2: {4: 5}, 3: [],6:null}").asJson().check(isObject(any()));
+    }
+
+    @Test
     public void testJsonArrayFirstIncorrect() {
         try {
             expect("[1, 2, 3, 4]").asJson().check(
@@ -487,6 +502,43 @@ public class TestJson {
                     "The JSON array is missing an item: an integer value 5 at index 4"));
         }
     }
+
+    @Test
+    public void testJsonArrayWrongArrayLength() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray(len -> len < 4)
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array has an incorrect length"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayWrongTemplate() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray(len -> len >= 4, isBoolean())
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array at index 0 should be boolean, found number"));
+        }
+    }
+
+    @Test
+    public void testJsonArrayWrongTemplate2() {
+        try {
+            expect("[1, 2, 3, 4]").asJson().check(
+                    isArray(isBoolean())
+            );
+        } catch (WrongAnswer ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                    "The JSON array at index 0 should be boolean, found number"));
+        }
+    }
+
 
     @Test
     public void testJsonArrayMissingDoubleAtIndex() {
@@ -632,77 +684,81 @@ public class TestJson {
     @Test
     public void testJsonComplexExample() {
         String text = "{\n" +
-            "    \"name\": \"123\",\n" +
-            "    \"car\": {\n" +
-            "        \"model\": \"Tesla Roadster\",\n" +
-            "        \"year\": 2018,\n" +
-            "        \"repairs\": [\n" +
-            "            {\n" +
-            "                \"date\": \"2019-10-11\",\n" +
-            "                \"time\": \"20:11\",\n" +
-            "                \"cost\": 12.32,\n" +
-            "                \"pic\": \"qwe.png\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"date\": \"2019-11-12\",\n" +
-            "                \"time\": \"21:12\",\n" +
-            "                \"cost\": 34,\n" +
-            "                \"pic\": \"wer.png\"\n" +
-            "            }\n" +
-            "        ]\n" +
-            "    },\n" +
-            "    \"rocket\": {\n" +
-            "        \"name\": \"Falcon 9\",\n" +
-            "        \"launches\": \"89+\",\n" +
-            "        \"mentioned\": [\n" +
-            "            12, 34, 56\n" +
-            "        ],\n" +
-            "        \"memorable\": [\n" +
-            "            {\n" +
-            "                \"num\": 12,\n" +
-            "                \"why\": \"flew high\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"number\": 23,\n" +
-            "                \"reason\": \"flew fast\"\n" +
-            "            },\n" +
-            "            45,\n" +
-            "            null,\n" +
-            "            false\n" +
-            "        ]\n" +
-            "    },\n" +
-            "    \"options\": {\n" +
-            "        \"12\": null\n" +
-            "    }\n" +
-            "}";
+                "    \"name\": \"123\",\n" +
+                "    \"car\": {\n" +
+                "        \"model\": \"Tesla Roadster\",\n" +
+                "        \"year\": 2018,\n" +
+                "        \"repairs\": [\n" +
+                "            {\n" +
+                "                \"date\": \"2019-10-11\",\n" +
+                "                \"time\": \"20:11\",\n" +
+                "                \"cost\": 12.32,\n" +
+                "                \"pic\": \"qwe.png\",\n" +
+                "                \"all_years\": [2011, 2013, 2014, 2020]\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"date\": \"2019-11-12\",\n" +
+                "                \"time\": \"21:12\",\n" +
+                "                \"cost\": 34,\n" +
+                "                \"img\": \"wer.png\",\n" +
+                "                \"all_years\": [2011, 2013, 2014, 2020]\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    },\n" +
+                "    \"rocket\": {\n" +
+                "        \"name\": \"Falcon 9\",\n" +
+                "        \"launches\": \"89+\",\n" +
+                "        \"mentioned\": [\n" +
+                "            12, 34, 56\n" +
+                "        ],\n" +
+                "        \"memorable\": [\n" +
+                "            {\n" +
+                "                \"num\": 12,\n" +
+                "                \"why\": \"flew high\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"number\": 23,\n" +
+                "                \"reason\": \"flew fast\"\n" +
+                "            },\n" +
+                "            45,\n" +
+                "            null,\n" +
+                "            false\n" +
+                "        ]\n" +
+                "    },\n" +
+                "    \"options\": {\n" +
+                "        \"12\": null\n" +
+                "    }\n" +
+                "}";
 
-        expect(text).asJson().check(
-            isObject()
-                .value("name", isString())
-                .value("car", isObject()
-                    .value("model", "Tesla Roadster")
-                    .value("year", 2018)
-                    .value("repairs", isArray(2,
-                        isObject()
-                            .value("date", compile("\\d{4}-\\d{2}-\\d{2}"))
-                            .value("time", compile("\\d{2}:\\d{2}"))
-                            .value("cost", isNumber())
-                            .value("pic", isString(s -> s.endsWith(".png"))))))
-                .value("rocket", isObject()
-                    .value("name", "Falcon 9")
-                    .value("launches", compile("[0-9]+\\+"))
-                    .value("mentioned", isArray(12, 34, 56))
-                    .value("memorable", isArray()
-                        .item(isObject()
-                            .value("num", isInteger(i -> i == 12 || i == 13))
-                            .value(compile("..y"), "flew high"))
-                        .item(isObject()
-                            .value("number", 23)
-                            .value("reason", "flew fast"))
-                        .item(45)
-                        .anyOtherItems()))
-                .value("options", any())
-        );
+            expect(text).asJson().check(
+                isObject()
+                    .value("name", isString())
+                    .value("car", isObject()
+                        .value("model", "Tesla Roadster")
+                        .value("year", 2018)
+                        .value("repairs", isArray(2,
+                            isObject()
+                                .value("date", compile("\\d{4}-\\d{2}-\\d{2}"))
+                                .value("time", compile("\\d{2}:\\d{2}"))
+                                .value("cost", isNumber())
+                                .value(compile("pic|img"), isString(s -> s.endsWith(".png")))
+                                .value(key -> key.endsWith("years"), 2011, 2013, 2014, 2020))))
+                    .value("rocket", isObject()
+                        .value("name", "Falcon 9")
+                        .value("launches", compile("[0-9]+\\+"))
+                        .value("mentioned", isArray(12, 34, 56))
+                        .value("memorable", isArray()
+                            .item(isObject()
+                                .value("num", isInteger(i -> i == 12 || i == 13))
+                                .value(compile("..y"), "flew high"))
+                            .item(isObject()
+                                .value("number", 23)
+                                .value("reason", "flew fast"))
+                            .item(45)
+                            .item(isNull())
+                            .anyOtherItems()))
+                    .value("options", any())
+            );
     }
 
 }
