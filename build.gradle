@@ -21,7 +21,6 @@ dependencies {
     // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     api 'org.assertj:assertj-swing-junit:3.8.0'
-    api 'com.github.stefanbirkner:system-rules:1.19.0'
     api 'org.apache.httpcomponents:httpclient:4.5.9'
     api 'com.google.code.gson:gson:2.8.5'
 }

@@ -2,6 +2,7 @@ package org.hyperskill.hstest.dynamic;
 
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 
 import java.util.Locale;
 

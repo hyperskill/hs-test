@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dynamic.output;
 
-import org.hyperskill.hstest.dynamic.TestingSecurityManager;
+import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

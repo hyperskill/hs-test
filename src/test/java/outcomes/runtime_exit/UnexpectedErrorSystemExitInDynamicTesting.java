@@ -27,7 +27,7 @@ public class UnexpectedErrorSystemExitInDynamicTesting extends StageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Unexpected error in test #2");
-        exception.expectMessage("CheckExitCalled: Tried to exit");
+        exception.expectMessage("ProgramExited: Tried to exit");
     }
 
     @Override

@@ -29,7 +29,7 @@ public class UnexpectedErrorRuntimeExitInGenerate extends StageTest {
     public void before() {
         exception.expect(AssertionError.class);
         exception.expectMessage("Unexpected error during testing");
-        exception.expectMessage("CheckExitCalled: Tried to exit");
+        exception.expectMessage("ProgramExited: Tried to exit");
     }
 
     @Override

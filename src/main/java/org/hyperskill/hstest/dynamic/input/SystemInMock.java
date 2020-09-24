@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dynamic.input;
 
-import org.hyperskill.hstest.dynamic.TestingSecurityManager;
+import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.io.InputStream;

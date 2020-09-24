@@ -1,10 +1,8 @@
-package org.hyperskill.hstest.dynamic;
-
-import org.junit.contrib.java.lang.system.internal.NoExitSecurityManager;
+package org.hyperskill.hstest.dynamic.security;
 
 import java.security.AccessControlException;
 
-public class TestingSecurityManager extends NoExitSecurityManager {
+public class TestingSecurityManager extends SecurityManagerWrapper {
     private static ThreadGroup rootGroup;
 
     public TestingSecurityManager(SecurityManager originalSecurityManager,
@@ -43,5 +41,10 @@ public class TestingSecurityManager extends NoExitSecurityManager {
         if (currGroup != rootGroup && g == rootGroup && !isPrivilegedAccess()) {
             throw new AccessControlException("Cannot access or create ThreadGroup objects");
         }
+    }
+
+    @Override
+    public void checkExit(int status) {
+        throw new ProgramExited(status);
     }
 }

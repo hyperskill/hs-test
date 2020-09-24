@@ -3,13 +3,13 @@ package org.hyperskill.hstest.testing;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.security.ProgramExited;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
-import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -155,7 +155,7 @@ public class TestedProgram {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
                 // CheckExitCalled is thrown in case of System.exit()
                 // consider System.exit() like normal exit
-                if (ex.getCause() instanceof CheckExitCalled) {
+                if (ex.getCause() instanceof ProgramExited) {
                     machine.setState(ProgramState.FINISHED);
                     return;
                 }

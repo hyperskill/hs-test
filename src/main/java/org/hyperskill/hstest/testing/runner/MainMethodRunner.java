@@ -5,6 +5,7 @@ import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.input.SystemInHandler;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.security.ProgramExited;
 import org.hyperskill.hstest.exception.FailureHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
@@ -14,7 +15,6 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.junit.contrib.java.lang.system.internal.CheckExitCalled;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
@@ -86,7 +86,7 @@ public class MainMethodRunner implements TestRunner {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
                 // CheckExitCalled is thrown in case of System.exit()
                 // consider System.exit() like normal exit
-                if (!(ex.getCause() instanceof CheckExitCalled)) {
+                if (!(ex.getCause() instanceof ProgramExited)) {
                     StageTest.getCurrTestRun().setErrorInTest(
                         new ExceptionWithFeedback("", FailureHandler.getUserException(ex)));
                 }
