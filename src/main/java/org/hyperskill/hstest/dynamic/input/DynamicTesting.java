@@ -191,6 +191,7 @@ public interface DynamicTesting {
      * and converts this variables into DynamicTesting objects.
      *
      * Requirements for the variable: must be a List that contain DynamicTesting objects.
+     * or must be an array with type DynamicTesting[]
      *
      * @param obj object that contain variables declared with DynamicTestingMethod annotation.
      * @return list of DynamicMethod objects that includes every DynamicTesting object found

@@ -35,11 +35,11 @@ import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
  * The main flow is:
  * 1. Create TestedProgram instance with the class, whose main method you want to run
  * 2. Start the test using TestedProgram::start
- * 4. The tested program will execute till it needs some input
- * 6. "Start" returns input that was obtained during tested program's execution
- * 7. Some testing code generates new input for the tested program
- * 8. Continue testing with the new input using TestedProgram::execute method
- * 9. The tested program will execute till it needs some input etc...
+ * 3. The tested program will execute till it needs some input
+ * 4. "Start" returns input that was obtained during tested program's execution
+ * 5. Some testing code generates new input for the tested program
+ * 6. Continue testing with the new input using TestedProgram::execute method
+ * 7. The tested program will execute till it needs some input etc...
  */
 public class TestedProgram {
 
@@ -48,7 +48,7 @@ public class TestedProgram {
      * Initial state in NOT_STARTED,
      * End state is either EXCEPTION_THROWN or FINISHED
      * WAITING means the tested program waits for the input
-     * RUNNING means teh tested program is currently running
+     * RUNNING means the tested program is currently running
      *
      * Only the following transitions are allowed:
      *
