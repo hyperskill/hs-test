@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.dynamic.security;
 
-public class ProgramExited extends SecurityException {
+public class ProgramExited extends Error {
     private final int status;
 
     public ProgramExited(int status) {
