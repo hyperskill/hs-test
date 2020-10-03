@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.testing;
 
+import java.lang.management.ManagementFactory;
+
 /**
  * Command-line options passed to the JVM listed in one place
  */
@@ -33,4 +35,12 @@ public final class ExecutionOptions {
      * an argument "-DinsideDocker=true" should be passed
      */
     public static boolean insideDocker = Boolean.getBoolean("insideDocker");
+
+    /**
+     * It is hard to debug the tests because of the 15 seconds timeout.
+     * To avoid any time limit timeouts, an argument "-DdebugMode=true" should be passed.
+     * In case you are under the debugger, this field should be automatically set to "true".
+     */
+    public static boolean debugMode = Boolean.getBoolean("debugMode")
+        || ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp");
 }

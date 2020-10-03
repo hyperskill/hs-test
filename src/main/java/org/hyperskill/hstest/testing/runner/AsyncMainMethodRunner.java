@@ -17,6 +17,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.debugMode;
+
 public class AsyncMainMethodRunner implements TestRunner {
 
     private CheckResult runMain(TestRun testRun) {
@@ -43,7 +45,7 @@ public class AsyncMainMethodRunner implements TestRunner {
             });
 
         try {
-            if (timeLimit <= 0) {
+            if (timeLimit <= 0 || debugMode) {
                 return future.get();
             } else {
                 return future.get(timeLimit, TimeUnit.MILLISECONDS);
