@@ -33,7 +33,6 @@ public class TestOutputHandler {
         String a = "ǿ˿Ͽ";
         String b = "ꇿꋿꏿ";
         System.out.print(a);
-        String sa = SystemOutHandler.getOutput();
         assertEquals(a, SystemOutHandler.getOutput());
         System.out.print(b);
         assertEquals(a + b, SystemOutHandler.getOutput());
@@ -70,6 +69,7 @@ public class TestOutputHandler {
     public void testRevertOutputHandler() {
         System.out.print("123");
         SystemOutHandler.revertSystemOut();
+        System.out.print("123");
         assertEquals("", SystemOutHandler.getOutput());
     }
 }
