@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -135,6 +136,10 @@ public class TestCase<AttachType> {
     public TestCase<AttachType> setTimeLimit(int timeLimitMs) {
         timeLimit = timeLimitMs;
         return this;
+    }
+
+    public TestCase<AttachType> setTimeLimit(int timeLimit, TimeUnit timeUnit) {
+        return setTimeLimit((int) TimeUnit.MILLISECONDS.convert(timeLimit, timeUnit));
     }
 
     public TestCase<AttachType> runWith(Process process) {
