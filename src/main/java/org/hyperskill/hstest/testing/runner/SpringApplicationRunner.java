@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.testing.runner;
 
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -25,6 +26,8 @@ public class SpringApplicationRunner implements TestRunner {
                     errorMessage += "\nMake sure that no other Spring application is running at the moment.";
                 }
                 throw new ExceptionWithFeedback(errorMessage, ex.getCause());
+            } catch (OutcomeError error) {
+                throw error;
             } catch (Throwable ex) {
                 throw new UnexpectedError(errorMessage, ex);
             }
