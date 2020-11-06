@@ -3,7 +3,6 @@ package org.hyperskill.hstest.testing.expect.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import org.hyperskill.hstest.common.JsonUtils;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -25,13 +24,8 @@ public class ExpectationJsonBuilder<T> {
 
     public ExpectationJsonBuilder(Expectation<T> expect) {
         this.expect = expect;
-        try {
-            elem = JsonUtils.getJson(expect.text);
-            originalElem = elem;
-        } catch (JsonSyntaxException ex) {
-            throw new PresentationError("Expected JSON, got something else.\n"
-                + ex.getMessage() + "\n\n" + "Content:\n" + expect.text);
-        }
+        elem = JsonUtils.getJson(expect.text);
+        originalElem = elem;
     }
 
     public ExpectationJsonBuilder(Expectation<T> expect, JsonElement elem) {

@@ -5,13 +5,21 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
 
 public final class JsonUtils {
 
     private JsonUtils() { }
 
     public static JsonElement getJson(String content) {
-        return new JsonParser().parse(content);
+        try {
+            return new JsonParser().parse(content);
+        } catch (JsonSyntaxException ex) {
+            throw new PresentationError("Expected JSON, got something else.\n"
+                + ex.getMessage() + "\n\n" + "Content:\n" + content);
+        }
     }
 
     public static String getPrettyJson(JsonElement json) {

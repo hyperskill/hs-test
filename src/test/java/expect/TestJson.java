@@ -1,5 +1,7 @@
 package expect;
 
+import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,8 +19,49 @@ import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNull;
 import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isNumber;
 import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isObject;
 import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
+import static org.junit.Assert.fail;
 
 public class TestJson {
+
+    @Test
+    public void testWrongConventionToJson() {
+        try {
+            JsonUtils.getJson("{");
+            fail("An exception should be thrown");
+        } catch (PresentationError ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                "Expected JSON, got something else.\n" +
+                    "java.io.EOFException: End of input at line 1 column 2 path $.\n" +
+                    "\n" +
+                    "Content:\n" +
+                    "{"));
+        }
+    }
+
+    @Test
+    public void testRightConversionToJson() {
+        JsonUtils.getJson("{}");
+    }
+
+    @Test
+    public void testWrongConventionToJsonViaCheck() {
+        try {
+            expect("{").asJson().check(any());
+            fail("An exception should be thrown");
+        } catch (PresentationError ex) {
+            Assert.assertTrue(ex.getFeedbackText().startsWith(
+                "Expected JSON, got something else.\n" +
+                    "java.io.EOFException: End of input at line 1 column 2 path $.\n" +
+                    "\n" +
+                    "Content:\n" +
+                    "{"));
+        }
+    }
+
+    @Test
+    public void testRightConversionToJsonViaCheck() {
+        expect("{}").asJson().check(any());
+    }
 
     @Test
     public void testJsonIterableCorrectElements() {
