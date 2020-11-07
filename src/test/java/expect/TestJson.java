@@ -470,38 +470,26 @@ public class TestJson {
 
     @Test
     public void testJsonArrayWrongArrayLength() {
-        try {
+        assertThrows(() ->
             expect("[1, 2, 3, 4]").asJson().check(
-                    isArray(len -> len < 4)
-            );
-        } catch (WrongAnswer ex) {
-            Assert.assertTrue(ex.getFeedbackText().startsWith(
-                    "The JSON array has an incorrect length"));
-        }
+                isArray(len -> len < 4)
+            ), "The JSON array has an incorrect length");
     }
 
     @Test
     public void testJsonArrayWrongTemplate() {
-        try {
+        assertThrows(() ->
             expect("[1, 2, 3, 4]").asJson().check(
-                    isArray(len -> len >= 4, isBoolean())
-            );
-        } catch (WrongAnswer ex) {
-            Assert.assertTrue(ex.getFeedbackText().startsWith(
-                    "The JSON array at index 0 should be boolean, found number"));
-        }
+                isArray(len -> len >= 4, isBoolean())
+            ), "The JSON array at index 0 should be boolean, found number");
     }
 
     @Test
     public void testJsonArrayWrongTemplate2() {
-        try {
+        assertThrows(() ->
             expect("[1, 2, 3, 4]").asJson().check(
-                    isArray(isBoolean())
-            );
-        } catch (WrongAnswer ex) {
-            Assert.assertTrue(ex.getFeedbackText().startsWith(
-                    "The JSON array at index 0 should be boolean, found number"));
-        }
+                isArray(isBoolean())
+            ), "The JSON array at index 0 should be boolean, found number");
     }
 
 
