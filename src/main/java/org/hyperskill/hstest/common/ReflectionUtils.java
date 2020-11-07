@@ -55,7 +55,7 @@ public final class ReflectionUtils {
 
         String className = method.getDeclaringClass().getSimpleName();
         String methodName = method.getName();
-        String feedback = "Cannot invoke method \""
+        String feedback = "Cannot invoke the method \""
             + className + "." + methodName + "\".";
 
         try {
@@ -79,7 +79,7 @@ public final class ReflectionUtils {
         String className = field.getDeclaringClass().getSimpleName();
         String methodName = field.getName();
         String feedback = "Error getting value of the field \""
-            + className + "." + methodName + "\" .";
+            + className + "." + methodName + "\".";
 
         try {
             Object var = field.get(obj);
@@ -94,7 +94,7 @@ public final class ReflectionUtils {
 
             List<V> objects = new ArrayList<>();
 
-            if (realClass == clazz) {
+            if (clazz.isAssignableFrom(realClass)) {
                 objects.add((V) var);
 
             } else if (var instanceof List) {
@@ -145,7 +145,7 @@ public final class ReflectionUtils {
 
             } else {
                 throw new UnexpectedError("Cannot cast "
-                    + "the field \"" + field.getName() + "\" to a List or array");
+                    + "the field \"" + field.getName() + "\" to List or array or " + clazz);
             }
 
             return objects.stream();
