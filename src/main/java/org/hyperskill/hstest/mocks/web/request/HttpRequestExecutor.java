@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.mocks.web.response.HttpResponse;
 
 import java.io.DataInputStream;
@@ -40,7 +41,13 @@ public final class HttpRequestExecutor {
     private static HttpResponse executeRequest(HttpRequestBase request, HttpRequest source) {
         try {
             HttpClient client = HttpClientBuilder.create().build();
-            org.apache.http.HttpResponse httpResponse = client.execute(request);
+
+            org.apache.http.HttpResponse httpResponse;
+            try {
+                httpResponse = client.execute(request);
+            } catch (IOException ex) {
+                throw new PresentationError(ex.getMessage());
+            }
 
             int statusCode = httpResponse.getStatusLine().getStatusCode();
 
