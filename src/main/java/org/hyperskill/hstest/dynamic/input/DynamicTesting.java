@@ -1,8 +1,8 @@
 package org.hyperskill.hstest.dynamic.input;
 
+import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.common.Utils;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
-import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.StageTest;
@@ -10,9 +10,7 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -164,26 +162,8 @@ public interface DynamicTesting {
                 return true;
             })
             .sorted(comparing(Method::getName, Utils::smartCompare))
-            .map(method -> (DynamicTesting) () -> {
-                method.setAccessible(true);
-                try {
-                    return (CheckResult) method.invoke(obj);
-                } catch (InvocationTargetException ex) {
-                    if (ex.getCause() instanceof OutcomeError) {
-                        throw (OutcomeError) ex.getCause();
-                    }
-                    throw new UnexpectedError("", ex.getCause());
-                } catch (IllegalAccessException ex) {
-                    String feedback = "Cannot invoke test.";
-                    if (!Modifier.isPublic(method.getModifiers())) {
-                        String className = method.getDeclaringClass().getSimpleName();
-                        String methodName = method.getName();
-                        feedback += " Try to declare method \""
-                            + className + "." + methodName + "\" as public";
-                    }
-                    throw new UnexpectedError(feedback, ex);
-                }
-            }).collect(toList());
+            .map(method -> (DynamicTesting) () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj))
+            .collect(toList());
     }
 
     /**
@@ -201,34 +181,7 @@ public interface DynamicTesting {
         return Arrays.stream(obj.getClass().getDeclaredFields())
             .filter(field -> field.isAnnotationPresent(DynamicTestingMethod.class))
             .sorted(comparing(Field::getName, Utils::smartCompare))
-            .flatMap(field -> {
-                field.setAccessible(true);
-                try {
-                    Object var = field.get(obj);
-                    List<DynamicTesting> tests;
-                    if (var instanceof List) {
-                        tests = (List<DynamicTesting>) var;
-                    } else if (var instanceof DynamicTesting[]) {
-                        tests = Arrays.asList((DynamicTesting[]) var);
-                    } else {
-                        throw new UnexpectedError("Cannot cast "
-                            + "the field \"" + field.getName() + "\" to a List or array");
-                    }
-                    return tests.stream();
-                } catch (IllegalAccessException ex) {
-                    String feedback = "Cannot invoke test.";
-                    if (!Modifier.isPublic(field.getModifiers())) {
-                        String className = field.getDeclaringClass().getSimpleName();
-                        String fieldName = field.getName();
-                        feedback += " Try to declare field \""
-                            + className + "." + fieldName + "\" as public";
-                    }
-                    throw new UnexpectedError(feedback, ex);
-                } catch (Exception ex) {
-                    throw new UnexpectedError("Cannot get "
-                        + "dynamic methods from the field \"" + field.getName() + "\"", ex);
-                }
-            })
+            .flatMap(field -> ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class))
             .collect(toList());
     }
 }
