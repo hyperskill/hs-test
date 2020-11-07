@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Utils {
 
@@ -45,22 +45,84 @@ public final class Utils {
             .replaceAll(nbsp, space);
     }
 
-    private static final Pattern methodSorter = Pattern.compile("^.*[^0-9]([0-9]+)$");
-
     public static int smartCompare(String s1, String s2) {
-        Matcher m1 = methodSorter.matcher(s1);
-        Matcher m2 = methodSorter.matcher(s2);
 
-        if (m1.matches() && m2.matches()) {
-            String num1 = m1.group(1);
-            String num2 = m2.group(1);
-            String name1 = s1.substring(0, s1.length() - num1.length());
-            String name2 = s2.substring(0, s2.length() - num2.length());
-            if (name1.equals(name2)) {
-                return Integer.parseInt(num1) - Integer.parseInt(num2);
+        class NamePair implements Comparable<NamePair> {
+            final String text;
+            final int num;
+
+            public NamePair(String text, String num) {
+                this.text = text;
+                this.num = Integer.parseInt(num);
+            }
+
+            @Override
+            public int compareTo(NamePair o) {
+                int textCompare = text.compareTo(o.text);
+                if (textCompare != 0) {
+                    return textCompare;
+                }
+                return num - o.num;
             }
         }
 
-        return s1.compareTo(s2);
+        class NameTokenizer implements Comparable<NameTokenizer> {
+            final List<NamePair> tokens = new ArrayList<>();
+
+            NameTokenizer(String name) {
+                StringBuilder partialText = new StringBuilder();
+                StringBuilder partialNum = new StringBuilder();
+                boolean parsingName = true;
+
+                for (char c : name.toCharArray()) {
+                    if (parsingName && c >= '0' && c <= '9') {
+                        parsingName = false;
+                    } else if (!parsingName && (c < '0' || c > '9')) {
+                        parsingName = true;
+                        tokens.add(new NamePair(partialText.toString(), partialNum.toString()));
+                        partialText = new StringBuilder();
+                        partialNum = new StringBuilder();
+                    }
+
+                    if (parsingName) {
+                        partialText.append(c);
+                    } else {
+                        partialNum.append(c);
+                    }
+                }
+
+                if (parsingName) {
+                    partialNum = new StringBuilder("-1");
+                }
+
+                tokens.add(new NamePair(partialText.toString(), partialNum.toString()));
+            }
+
+            @Override
+            public int compareTo(NameTokenizer o) {
+                for (int i = 0; true; i++) {
+                    if (tokens.size() == i && o.tokens.size() == i) {
+                        return 0;
+                    } else if (tokens.size() == i) {
+                        return -1;
+                    } else if (o.tokens.size() == i) {
+                        return 1;
+                    }
+
+                    NamePair thisPair = tokens.get(i);
+                    NamePair otherPair = o.tokens.get(i);
+                    int tokenCompare = thisPair.compareTo(otherPair);
+
+                    if (tokenCompare != 0) {
+                        return tokenCompare;
+                    }
+                }
+            }
+        }
+
+        NameTokenizer method1 = new NameTokenizer(s1);
+        NameTokenizer method2 = new NameTokenizer(s2);
+
+        return method1.compareTo(method2);
     }
 }
