@@ -75,6 +75,7 @@ public abstract class ExpectedFailTest<T> extends StageTest<T> {
                     exception.expect(new FalseMatcher("Cannot use both "
                         + "ContainsMessage and NotContainMessage annotations "
                         + "on field " + field.getName()));
+                    continue;
                 }
 
                 Stream<String> values = ReflectionUtils
