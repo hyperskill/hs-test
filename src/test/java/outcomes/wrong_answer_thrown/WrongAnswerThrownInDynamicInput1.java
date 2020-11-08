@@ -1,19 +1,14 @@
 package outcomes.wrong_answer_thrown;
 
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class WrongAnswerThrownInDynamicInput1Main {
     public static void main(String[] args) {
@@ -22,21 +17,15 @@ class WrongAnswerThrownInDynamicInput1Main {
     }
 }
 
-public class WrongAnswerThrownInDynamicInput1 extends StageTest<Boolean> {
+public class WrongAnswerThrownInDynamicInput1 extends UserErrorTest<Boolean> {
+
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #1\n\n" +
+        "Add input test 1";
 
     public WrongAnswerThrownInDynamicInput1() {
         super(WrongAnswerThrownInDynamicInput1Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1\n\n" +
-            "Add input test 1");
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

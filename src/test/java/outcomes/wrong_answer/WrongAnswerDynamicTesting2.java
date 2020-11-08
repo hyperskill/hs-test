@@ -1,19 +1,14 @@
 package outcomes.wrong_answer;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class WrongAnswerDynamicTesting2Main {
     public static void main(String[] args) {
@@ -23,17 +18,13 @@ class WrongAnswerDynamicTesting2Main {
     }
 }
 
-public class WrongAnswerDynamicTesting2 extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class WrongAnswerDynamicTesting2 extends UserErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #2");
-        exception.expectMessage("WA TEST 2");
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String[] m = {
+        "Wrong answer in test #2",
+        "WA TEST 2"
+    };
 
     @Override
     public List<TestCase<String>> generate() {

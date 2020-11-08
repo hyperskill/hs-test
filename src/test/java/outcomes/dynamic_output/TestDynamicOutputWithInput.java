@@ -1,18 +1,13 @@
 package outcomes.dynamic_output;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicOutputWithInputMain {
     public static void main(String[] args) {
@@ -27,29 +22,23 @@ class TestDynamicOutputWithInputMain {
 }
 
 
-public class TestDynamicOutputWithInput extends StageTest<String> {
+public class TestDynamicOutputWithInput extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String m1 = "Wrong answer in test #1";
+
+    @ContainsMessage
+    String m2 =
+        "Please find below the output of your program during this failed test.\n" +
+        "Note that the '>' character indicates the beginning of the input line.\n" +
+        "\n---\n\n" +
+        "Print x and y: > 123 456\n" +
+        "> 678\n" +
+        "Another num:\n" +
+        "> 248";
 
     public TestDynamicOutputWithInput() {
         super(TestDynamicOutputWithInputMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1");
-        exception.expectMessage(
-            "Please find below the output of your program during this failed test.\n" +
-            "Note that the '>' character indicates the beginning of the input line.\n" +
-            "\n---\n\n" +
-            "Print x and y: > 123 456\n" +
-            "> 678\n" +
-            "Another num:\n" +
-            "> 248"
-        );
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

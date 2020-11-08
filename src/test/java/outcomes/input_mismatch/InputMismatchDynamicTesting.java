@@ -1,12 +1,10 @@
 package outcomes.input_mismatch;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,19 +19,17 @@ class InputMismatchDynamicTestingMain {
     }
 }
 
-public class InputMismatchDynamicTesting extends StageTest {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class InputMismatchDynamicTesting extends UserErrorTest {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1");
-        exception.expectMessage("Probably you have nextInt() " +
-            "(or similar Scanner method) followed by nextLine() - " +
-            "in this situation nextLine() often gives an " +
-            "empty string and another one nextLine() call gives correct string.");
-    }
+    @ContainsMessage
+    String[] m = {
+        "Exception in test #1",
+
+        "Probably you have nextInt() " +
+        "(or similar Scanner method) followed by nextLine() - " +
+        "in this situation nextLine() often gives an " +
+        "empty string and another one nextLine() call gives correct string."
+    };
 
     @Override
     public List<TestCase> generate() {

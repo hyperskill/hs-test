@@ -2,17 +2,12 @@ package outcomes.wrong_answer_thrown;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class WrongAnswerThrownInDynamicMethod2Main {
     public static void main(String[] args) {
@@ -21,17 +16,13 @@ class WrongAnswerThrownInDynamicMethod2Main {
     }
 }
 
-public class WrongAnswerThrownInDynamicMethod2 extends StageTest<Boolean> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class WrongAnswerThrownInDynamicMethod2 extends UserErrorTest<Boolean> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #");
-        exception.expectMessage("\n\nAdd input test 2");
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String[] m = {
+        "Wrong answer in test #",
+        "\n\nAdd input test 2"
+    };
 
     @DynamicTestingMethod
     CheckResult test1() {

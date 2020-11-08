@@ -1,15 +1,11 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hyperskill.hstest.common.Utils.sleep;
 
 class TestNotWaitToFinishIfNotAccepted1Main {
@@ -22,21 +18,13 @@ class TestNotWaitToFinishIfNotAccepted1Main {
     }
 }
 
-public class TestNotWaitToFinishIfNotAccepted1 extends StageTest {
+public class TestNotWaitToFinishIfNotAccepted1 extends UserErrorTest {
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1\n" +
-                "\n" +
-                "Should show this feedback"
-        );
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "Should show this feedback";
 
     @DynamicTestingMethod
     CheckResult test() {

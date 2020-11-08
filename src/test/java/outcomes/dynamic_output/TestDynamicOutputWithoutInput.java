@@ -1,17 +1,12 @@
 package outcomes.dynamic_output;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicOutputWithoutInputMain {
     public static void main(String[] args) {
@@ -21,26 +16,20 @@ class TestDynamicOutputWithoutInputMain {
     }
 }
 
-public class TestDynamicOutputWithoutInput extends StageTest<String> {
+public class TestDynamicOutputWithoutInput extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String m = "Wrong answer in test #1";
+
+    @ContainsMessage
+    String m2 =
+        "Please find below the output of your program during this failed test.\n" +
+        "\n---\n\n" +
+        "Print x and y: 123 456\n" +
+        "Another num:";
 
     public TestDynamicOutputWithoutInput() {
         super(TestDynamicOutputWithoutInputMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1");
-        exception.expectMessage(
-                "Please find below the output of your program during this failed test.\n" +
-                "\n---\n\n" +
-                "Print x and y: 123 456\n" +
-                "Another num:"
-        );
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

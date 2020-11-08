@@ -1,12 +1,10 @@
 package outcomes.dynamic_testing;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Scanner;
 
@@ -18,18 +16,13 @@ class TestDynamicTestingBackgroundCantExecuteWithoutRequestMain {
     }
 }
 
-public class TestDynamicTestingBackgroundCantExecuteWithoutRequest extends StageTest {
+public class TestDynamicTestingBackgroundCantExecuteWithoutRequest extends UnexpectedErrorTest {
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error in test #1");
-
-        exception.expectMessage("Tested program is not waiting for the input (state == \"RUNNING\")");
-    }
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #1",
+        "Tested program is not waiting for the input (state == \"RUNNING\")"
+    };
 
     @DynamicTestingMethod
     CheckResult test() {

@@ -1,11 +1,9 @@
 package outcomes.unexpected_error;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,20 +16,16 @@ class UnexpectedErrorAddInput1Main {
     }
 }
 
-public class UnexpectedErrorAddInput1 extends StageTest {
+public class UnexpectedErrorAddInput1 extends UnexpectedErrorTest {
+
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #1",
+        "java.lang.ArithmeticException: / by zero"
+    };
 
     public UnexpectedErrorAddInput1() {
         super(UnexpectedErrorAddInput1Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error in test #1");
-        exception.expectMessage("java.lang.ArithmeticException: / by zero");
     }
 
     @Override

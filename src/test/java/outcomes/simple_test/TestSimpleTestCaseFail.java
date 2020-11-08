@@ -1,18 +1,13 @@
 package outcomes.simple_test;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.SimpleTestCase;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestSimpleTestCaseFailMain {
     public static void main(String[] args) {
@@ -22,20 +17,13 @@ class TestSimpleTestCaseFailMain {
     }
 }
 
-public class TestSimpleTestCaseFail extends StageTest {
+public class TestSimpleTestCaseFail extends UserErrorTest {
+
+    @ContainsMessage
+    String m = "Wrong answer in test #1";
 
     public TestSimpleTestCaseFail() {
         super(TestSimpleTestCaseFailMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1");
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

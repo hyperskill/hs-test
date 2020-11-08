@@ -1,17 +1,13 @@
 package outcomes.presentation_error;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hyperskill.hstest.testing.expect.Expectation.expect;
 
 class TestPresentationError1InDynamicMethodMain {
@@ -22,29 +18,17 @@ class TestPresentationError1InDynamicMethodMain {
     }
 }
 
-public class TestPresentationError1InDynamicMethod extends StageTest {
+public class TestPresentationError1InDynamicMethod extends UserErrorTest {
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+    @ContainsMessage
+    String m1 = "Presentation error in test #";
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Presentation error in test #"
-        );
-        exception.expectMessage("\n" +
-            "\n" +
-            "The following output contains wrong number of words (expected to be equal to 3, found 2):\n" +
-            "Hello world"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
-        exception.expectMessage(not(containsString("org.junit.")));
-        exception.expectMessage(not(containsString("at sun.reflect.")));
-        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
-    }
+    @ContainsMessage
+    String m2 =
+        "\n" +
+        "\n" +
+        "The following output contains wrong number of words (expected to be equal to 3, found 2):\n" +
+        "Hello world";
 
     @DynamicTestingMethod
     CheckResult test1() {

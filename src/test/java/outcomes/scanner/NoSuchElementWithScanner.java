@@ -1,11 +1,9 @@
 package outcomes.scanner;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,21 +15,18 @@ class NoSuchElementWithScannerMain {
     }
 }
 
-public class NoSuchElementWithScanner extends StageTest {
+public class NoSuchElementWithScanner extends UserErrorTest {
+
+    @ContainsMessage
+    String[] m = {
+        "Exception in test #1",
+
+        "Probably your program run out of input " +
+        "(Scanner tried to read more than expected)."
+    };
 
     public NoSuchElementWithScanner() {
         super(NoSuchElementWithScannerMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1");
-        exception.expectMessage("Probably your program run out of input " +
-            "(Scanner tried to read more than expected).");
     }
 
     @Override

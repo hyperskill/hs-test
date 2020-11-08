@@ -1,18 +1,13 @@
 package outcomes.dynamic_output;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicOutputWithLinesMain {
     public static void main(String[] args) {
@@ -30,28 +25,21 @@ class TestDynamicOutputWithLinesMain {
 }
 
 
-public class TestDynamicOutputWithLines extends StageTest<String> {
+public class TestDynamicOutputWithLines extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #1\n\n" +
+        "Please find below the output of your program during this failed test.\n" +
+        "Note that the '>' character indicates the beginning of the input line.\n" +
+        "\n---\n\n" +
+        "123\n" +
+        "> line1\n" +
+        "print:> line2\n" +
+        "> line3";
 
     public TestDynamicOutputWithLines() {
         super(TestDynamicOutputWithLinesMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Wrong answer in test #1\n\n" +
-            "Please find below the output of your program during this failed test.\n" +
-            "Note that the '>' character indicates the beginning of the input line.\n" +
-            "\n---\n\n" +
-            "123\n" +
-            "> line1\n" +
-            "print:> line2\n" +
-            "> line3"
-        );
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -1,17 +1,12 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicMethodStartInBackgroundWrongAnswerServer {
     public static void main(String[] args) {
@@ -37,27 +32,20 @@ class TestDynamicMethodStartInBackgroundWrongAnswerClient {
     }
 }
 
-public class TestDynamicMethodStartInBackgroundWrongAnswer extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicMethodStartInBackgroundWrongAnswer extends UserErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1"
-        );
-        exception.expectMessage(
-            "java.lang.InterruptedException: sleep interrupted\n" +
-            "Server interrupted!");
-        exception.expectMessage(
-            "Client started!\n" +
+    @ContainsMessage
+    String[] m = {
+        "Wrong answer in test #1",
+
+        "java.lang.InterruptedException: sleep interrupted\nServer interrupted!",
+
+        "Client started!\n" +
             "> 123\n" +
             "C1: 123\n" +
             "> 345\n" +
-            "C2: 345");
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+            "C2: 345"
+    };
 
     @DynamicTestingMethod
     CheckResult test() {

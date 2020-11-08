@@ -1,12 +1,10 @@
 package outcomes.runtime_exit;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Scanner;
 
@@ -17,16 +15,13 @@ class UnexpectedErrorRuntimeExitInDynamicMethodMain {
     }
 }
 
-public class UnexpectedErrorRuntimeExitInDynamicMethod extends StageTest {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class UnexpectedErrorRuntimeExitInDynamicMethod extends UnexpectedErrorTest {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error in test #");
-        exception.expectMessage("ProgramExited: Tried to exit");
-    }
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #",
+        "ProgramExited: Tried to exit"
+    };
 
     @DynamicTestingMethod
     CheckResult test1() {

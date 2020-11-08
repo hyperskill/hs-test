@@ -1,20 +1,16 @@
 package outcomes.timeout;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hyperskill.hstest.testing.ExecutionOptions.skipSlow;
 
 class TestTimeout2Main {
@@ -26,7 +22,16 @@ class TestTimeout2Main {
     }
 }
 
-public class TestTimeout2 extends StageTest {
+public class TestTimeout2 extends UserErrorTest {
+
+    @ContainsMessage
+    String[] m = {
+        "Error in test #3",
+
+        "In this test, " +
+        "the program is running for a long time, more than 300 milliseconds. " +
+        "Most likely, the program has gone into an infinite loop."
+    };
 
     @BeforeClass
     public static void stopSlow() {
@@ -35,19 +40,6 @@ public class TestTimeout2 extends StageTest {
 
     public TestTimeout2() {
         super(TestTimeout2Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Error in test #3");
-        exception.expectMessage("In this test, " +
-            "the program is running for a long time, more than 300 milliseconds. " +
-            "Most likely, the program has gone into an infinite loop.");
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

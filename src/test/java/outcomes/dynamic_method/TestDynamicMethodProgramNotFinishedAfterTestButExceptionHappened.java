@@ -1,18 +1,13 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappenedServer {
     public static void main(String[] args) {
@@ -38,22 +33,15 @@ class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappenedClient {
     }
 }
 
-public class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappened extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappened extends UserErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Exception in test #1\n" +
-                "\n" +
-                "Probably your program run out of input (Scanner tried to read more than expected).\n" +
-                "\n" +
-                "java.util.NoSuchElementException: No line found"
-        );
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m =
+        "Exception in test #1\n" +
+        "\n" +
+        "Probably your program run out of input (Scanner tried to read more than expected).\n" +
+        "\n" +
+        "java.util.NoSuchElementException: No line found";
 
     @DynamicTestingMethod
     CheckResult test() {

@@ -1,25 +1,17 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
-public class TestWrongMethodConstruction2 extends StageTest {
+public class TestWrongMethodConstruction2 extends UnexpectedErrorTest {
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error during testing");
-
-        exception.expectMessage("UnexpectedError: " +
-            "Method \"test\" should take 0 arguments. Found: 1");
-    }
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error during testing",
+        "UnexpectedError: Method \"test\" should take 0 arguments. Found: 1"
+    };
 
     @DynamicTestingMethod
     CheckResult test(int x) {

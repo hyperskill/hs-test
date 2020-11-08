@@ -1,12 +1,10 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Scanner;
 
@@ -28,21 +26,13 @@ class TestDynamicMethodUnexpectedErrorDoubleStartProgramClient {
     }
 }
 
-public class TestDynamicMethodUnexpectedErrorDoubleStartProgram extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicMethodUnexpectedErrorDoubleStartProgram extends UnexpectedErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Unexpected error in test #1"
-        );
-
-        exception.expectMessage(
-            "UnexpectedError: Cannot start the program twice"
-        );
-    }
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #1",
+        "UnexpectedError: Cannot start the program twice"
+    };
 
     @DynamicTestingMethod
     CheckResult test() {

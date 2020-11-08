@@ -1,12 +1,10 @@
 package outcomes.dynamic_testing;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,21 +28,13 @@ class TestDynamicTestingUnexpectedErrorNoCheckMethodClient {
     }
 }
 
-public class TestDynamicTestingUnexpectedErrorNoCheckMethod extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicTestingUnexpectedErrorNoCheckMethod extends UnexpectedErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Unexpected error in test #1"
-        );
-
-        exception.expectMessage(
-            "UnexpectedError: Can't check result: override \"check\" method"
-        );
-    }
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #1",
+        "UnexpectedError: Can't check result: override \"check\" method"
+    };
 
     @Override
     public List<TestCase<String>> generate() {

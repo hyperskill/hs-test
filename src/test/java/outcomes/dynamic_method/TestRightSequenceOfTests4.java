@@ -1,31 +1,17 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
+public class TestRightSequenceOfTests4 extends UserErrorTest {
 
-public class TestRightSequenceOfTests4 extends StageTest {
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #70\n" +
-                "\n" +
-                "x == 69"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #70\n" +
+        "\n" +
+        "x == 69";
 
     int x = 0;
 

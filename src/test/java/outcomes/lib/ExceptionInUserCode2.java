@@ -1,17 +1,12 @@
 package outcomes.lib;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class ExceptionInUserCode2Main {
     public static void main(String[] args) {
@@ -24,36 +19,24 @@ class ExceptionInUserCode2Main {
     }
 }
 
-public class ExceptionInUserCode2 extends StageTest {
+public class ExceptionInUserCode2 extends UserErrorTest {
+
+    @ContainsMessage
+    String m1 =
+        "Exception in test #1\n" +
+        "\n" +
+        "java.lang.ArithmeticException: / by zero";
+
+    @ContainsMessage
+    String m2 =
+        "Please find below the output of your program during this failed test.\n" +
+        "\n" +
+        "---\n" +
+        "\n" +
+        "Hello World";
 
     public ExceptionInUserCode2() {
         super(ExceptionInUserCode2Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-                "Exception in test #1\n" +
-                        "\n" +
-                        "java.lang.ArithmeticException: / by zero"
-        );
-        exception.expectMessage(
-                "Please find below the output of your program during this failed test.\n" +
-                        "\n" +
-                        "---\n" +
-                        "\n" +
-                        "Hello World"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
-        exception.expectMessage(not(containsString("org.junit.")));
-        exception.expectMessage(not(containsString("at sun.reflect.")));
-        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
     }
 
     @Override

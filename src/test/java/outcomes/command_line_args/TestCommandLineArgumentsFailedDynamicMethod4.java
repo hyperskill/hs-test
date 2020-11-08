@@ -1,38 +1,24 @@
 package outcomes.command_line_args;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
+public class TestCommandLineArgumentsFailedDynamicMethod4 extends UserErrorTest<String> {
 
-public class TestCommandLineArgumentsFailedDynamicMethod4 extends StageTest<String> {
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1\n" +
-                "\n" +
-                "Please find below the output of your program during this failed test.\n" +
-                "\n" +
-                "---\n" +
-                "\n" +
-                "Arguments for Main2: --second main\n" +
-                "\n" +
-                "0"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "Please find below the output of your program during this failed test.\n" +
+        "\n" +
+        "---\n" +
+        "\n" +
+        "Arguments for Main2: --second main\n" +
+        "\n" +
+        "0";
 
     @DynamicTestingMethod
     CheckResult test1() {

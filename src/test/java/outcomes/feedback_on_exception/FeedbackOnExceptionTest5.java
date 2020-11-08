@@ -1,11 +1,9 @@
 package outcomes.feedback_on_exception;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,23 +16,18 @@ class FeedbackOnExceptionTest5Main {
     }
 }
 
-public class FeedbackOnExceptionTest5 extends StageTest {
+public class FeedbackOnExceptionTest5 extends UserErrorTest {
+
+    @ContainsMessage
+    String m =
+        "Exception in test #1\n" +
+        "\n" +
+        "BASE EX thrown\n" +
+        "\n" +
+        "java.lang.ArithmeticException";
 
     public FeedbackOnExceptionTest5() {
         super(FeedbackOnExceptionTest5Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Exception in test #1\n" +
-            "\n" +
-            "BASE EX thrown\n" +
-            "\n" +
-            "java.lang.ArithmeticException");
     }
 
     @Override

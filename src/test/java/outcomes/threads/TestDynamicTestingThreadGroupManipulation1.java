@@ -1,19 +1,14 @@
 package outcomes.threads;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicTestingThreadGroupManipulation1Server {
     public static void main(String[] args) throws Exception {
@@ -32,25 +27,13 @@ class TestDynamicTestingThreadGroupManipulation1Server {
     }
 }
 
-public class TestDynamicTestingThreadGroupManipulation1 extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicTestingThreadGroupManipulation1 extends UserErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Exception in test #1\n" +
-                "\n" +
-                "java.security.AccessControlException: Cannot access or create ThreadGroup objects"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-        exception.expectMessage(not(containsString("at org.hyperskill.hstest")));
-        exception.expectMessage(not(containsString("org.junit.")));
-        exception.expectMessage(not(containsString("at sun.reflect.")));
-        exception.expectMessage(not(containsString("at java.base/jdk.internal.reflect.")));
-    }
+    @ContainsMessage
+    String m =
+        "Exception in test #1\n" +
+        "\n" +
+        "java.security.AccessControlException: Cannot access or create ThreadGroup objects";
 
     @Override
     public List<TestCase<String>> generate() {

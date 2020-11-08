@@ -1,17 +1,12 @@
 package outcomes.lib;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class MainMethodNutPublic1 {
     private static void main(String[] args) {
@@ -19,23 +14,16 @@ class MainMethodNutPublic1 {
     }
 }
 
-public class MainMethodNotPublic1 extends StageTest {
+public class MainMethodNotPublic1 extends UserErrorTest {
+
+    @ContainsMessage
+    String m =
+        "Error in test #1\n" +
+        "\n" +
+        "Main method is not public in class outcomes.lib.MainMethodNutPublic1";
 
     public MainMethodNotPublic1() {
         super(MainMethodNutPublic1.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-                "Error in test #1\n"
-                        + "\n"
-                        + "Main method is not public in class outcomes.lib.MainMethodNutPublic1");
-        exception.expectMessage(not(containsString("Unexpected error")));
     }
 
     @Override

@@ -1,11 +1,9 @@
 package outcomes.lib;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,20 +17,16 @@ class TestCustomCheckerFailMain {
     }
 }
 
-public class TestCustomCheckerFail extends StageTest<String> {
+public class TestCustomCheckerFail extends UnexpectedErrorTest<String> {
+
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #2",
+        "Can't check result: override \"check\" method"
+    };
 
     public TestCustomCheckerFail() {
         super(TestCustomCheckerFailMain.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error in test #2");
-        exception.expectMessage("Can't check result: override \"check\" method");
     }
 
     @Override

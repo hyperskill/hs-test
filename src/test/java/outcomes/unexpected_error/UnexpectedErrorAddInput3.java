@@ -1,11 +1,9 @@
 package outcomes.unexpected_error;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,21 +17,18 @@ class UnexpectedErrorAddInput3Main {
     }
 }
 
-public class UnexpectedErrorAddInput3 extends StageTest<String> {
+public class UnexpectedErrorAddInput3 extends UnexpectedErrorTest<String> {
+
+    @ContainsMessage
+    String[] m = {
+        "Unexpected error in test #4",
+
+        "UnexpectedError: " +
+        "Dynamic input should return String or CheckResult objects only. Found: class java.lang.Integer"
+    };
 
     public UnexpectedErrorAddInput3() {
         super(UnexpectedErrorAddInput3Main.class);
-    }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage("Unexpected error in test #4");
-        exception.expectMessage("UnexpectedError: " +
-            "Dynamic input should return String or CheckResult objects only. Found: class java.lang.Integer");
     }
 
     @Override

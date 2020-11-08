@@ -1,17 +1,12 @@
 package outcomes.timeout;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class WrongAnswerAndInfiniteLoopMain {
     public static void main(String[] args) {
@@ -22,37 +17,29 @@ class WrongAnswerAndInfiniteLoopMain {
     }
 }
 
-public class WrongAnswerAndInfiniteLoop extends StageTest {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class WrongAnswerAndInfiniteLoop extends UserErrorTest {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1\n" +
-                "\n" +
-                "Test tried all the possible numbers but didn't guess the number\n" +
-                "\n" +
-                "Please find below the output of your program during this failed test.\n" +
-                "Note that the '>' character indicates the beginning of the input line.\n" +
-                "\n" +
-                "---\n" +
-                "\n" +
-                "> 0\n" +
-                "> 1\n" +
-                "> 2\n" +
-                "> 3\n" +
-                "> 4\n" +
-                "> 5\n" +
-                "> 6\n" +
-                "> 7\n" +
-                "> 8\n" +
-                "> 9"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "Test tried all the possible numbers but didn't guess the number\n" +
+        "\n" +
+        "Please find below the output of your program during this failed test.\n" +
+        "Note that the '>' character indicates the beginning of the input line.\n" +
+        "\n" +
+        "---\n" +
+        "\n" +
+        "> 0\n" +
+        "> 1\n" +
+        "> 2\n" +
+        "> 3\n" +
+        "> 4\n" +
+        "> 5\n" +
+        "> 6\n" +
+        "> 7\n" +
+        "> 8\n" +
+        "> 9";
 
     @DynamicTestingMethod
     CheckResult test() {

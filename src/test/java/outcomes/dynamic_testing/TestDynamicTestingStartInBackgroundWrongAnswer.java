@@ -1,19 +1,14 @@
 package outcomes.dynamic_testing;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicTestingStartInBackgroundWrongAnswerServer {
     public static void main(String[] args) {
@@ -39,27 +34,23 @@ class TestDynamicTestingStartInBackgroundWrongAnswerClient {
     }
 }
 
-public class TestDynamicTestingStartInBackgroundWrongAnswer extends StageTest<String> {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
+public class TestDynamicTestingStartInBackgroundWrongAnswer extends UserErrorTest<String> {
 
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1"
-        );
-        exception.expectMessage(
-            "java.lang.InterruptedException: sleep interrupted\n" +
-            "Server interrupted!");
-        exception.expectMessage(
-            "Client started!\n" +
-            "> 123\n" +
-            "C1: 123\n" +
-            "> 345\n" +
-            "C2: 345");
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String m1 = "Wrong answer in test #1";
+
+    @ContainsMessage
+    String m2 =
+        "java.lang.InterruptedException: sleep interrupted\n" +
+        "Server interrupted!";
+
+    @ContainsMessage
+    String m3 =
+        "Client started!\n" +
+        "> 123\n" +
+        "C1: 123\n" +
+        "> 345\n" +
+        "C2: 345";
 
     @Override
     public List<TestCase<String>> generate() {
