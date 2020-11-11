@@ -1,9 +1,9 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.common.Utils;
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -134,7 +134,14 @@ public interface DynamicTesting {
                 }
                 output = program.execute(input);
             }
-            program.stop();
+
+            Throwable errorInTest = StageTest.getCurrTestRun().getErrorInTest();
+            if (errorInTest instanceof TestPassed) {
+                return CheckResult.correct();
+            } else if (errorInTest instanceof WrongAnswer) {
+                return CheckResult.wrong(((WrongAnswer) errorInTest).getFeedbackText());
+            }
+
             return null;
         };
     }
