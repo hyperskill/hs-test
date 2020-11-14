@@ -1,19 +1,14 @@
 package outcomes.dynamic_input;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 
 class TestDynamicInputFailInfiniteLoop2Main {
     public static void main(String[] args) throws IOException {
@@ -25,22 +20,13 @@ class TestDynamicInputFailInfiniteLoop2Main {
     }
 }
 
-public class TestDynamicInputFailInfiniteLoop2 extends StageTest {
+public class TestDynamicInputFailInfiniteLoop2 extends UserErrorTest {
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void before() {
-        exception.expect(AssertionError.class);
-        exception.expectMessage(
-            "Wrong answer in test #1\n" +
-                "\n" +
-                "Wrong"
-        );
-
-        exception.expectMessage(not(containsString("Unexpected error")));
-    }
+    @ContainsMessage
+    String s =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "Wrong";
 
     public TestDynamicInputFailInfiniteLoop2() {
         super(TestDynamicInputFailInfiniteLoop2Main.class);
