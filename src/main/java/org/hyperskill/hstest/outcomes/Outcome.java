@@ -118,11 +118,9 @@ public abstract class Outcome {
 
         } else if (t instanceof ErrorWithFeedback
             || t instanceof FileSystemException
-            || t instanceof TimeLimitException) {
+            || t instanceof TimeLimitException
+            || t instanceof NumberFormatException) {
 
-            return new ErrorOutcome(currTest, t);
-
-        } else if (t instanceof NumberFormatException) {
             return new ErrorOutcome(currTest, t);
 
         } else if (t instanceof UnexpectedError
