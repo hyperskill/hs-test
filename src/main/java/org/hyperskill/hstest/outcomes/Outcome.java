@@ -122,6 +122,9 @@ public abstract class Outcome {
 
             return new ErrorOutcome(currTest, t);
 
+        } else if (t instanceof NumberFormatException) {
+            return new ErrorOutcome(currTest, t);
+
         } else if (t instanceof UnexpectedError
             && t.getCause() instanceof NumberFormatException) {
 
