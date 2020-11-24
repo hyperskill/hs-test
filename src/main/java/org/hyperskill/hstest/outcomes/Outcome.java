@@ -71,7 +71,7 @@ public abstract class Outcome {
                 if (testedPrograms.size() > 1) {
                     argumentsBuilder
                         .append(" for ")
-                        .append(pr.getRunClass().getSimpleName());
+                        .append(pr.toString());
                 }
                 List<String> prArgs = pr.getRunArgs().stream()
                     .map(arg -> arg.contains(" ") ? "\"" + arg + "\"" : arg)

@@ -50,6 +50,24 @@ public final class ReflectionUtils {
         return mainMethod;
     }
 
+    public static boolean hasMainMethod(Class<?> clazz) {
+        for (Method m : clazz.getDeclaredMethods()) {
+            if (m.getName().equals("main")
+                && m.getReturnType() == Void.TYPE
+                && m.getParameterTypes().length == 1
+                && m.getParameterTypes()[0] == String[].class) {
+
+                boolean isMethodPublic = Modifier.isPublic(m.getModifiers());
+                boolean isMethodStatic = Modifier.isStatic(m.getModifiers());
+
+                if (isMethodPublic && isMethodStatic) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static Object invokeMethod(Method method, Object obj) {
         method.setAccessible(true);
 

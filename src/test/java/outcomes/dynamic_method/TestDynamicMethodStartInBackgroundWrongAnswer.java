@@ -38,13 +38,14 @@ public class TestDynamicMethodStartInBackgroundWrongAnswer extends UserErrorTest
     String[] m = {
         "Wrong answer in test #1",
 
-        "java.lang.InterruptedException: sleep interrupted\nServer interrupted!",
+        "java.lang.InterruptedException: sleep interrupted\n" +
+        "Server interrupted!",
 
         "Client started!\n" +
-            "> 123\n" +
-            "C1: 123\n" +
-            "> 345\n" +
-            "C2: 345"
+        "> 123\n" +
+        "C1: 123\n" +
+        "> 345\n" +
+        "C2: 345"
     };
 
     @DynamicTestingMethod

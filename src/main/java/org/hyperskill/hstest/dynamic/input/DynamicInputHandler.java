@@ -28,8 +28,20 @@ public class DynamicInputHandler {
         return character;
     }
 
+    String ejectLine() {
+        if (noInputPrepared()) {
+            ejectNextLine();
+        }
+        pos = currentReader.length;
+        return new String(currentReader, 0, currentReader.length - 1);
+    }
+
+    private boolean noInputPrepared() {
+        return currentReader == null || pos >= currentReader.length;
+    }
+
     private int nextByte() {
-        if (currentReader == null || pos >= currentReader.length) {
+        if (noInputPrepared()) {
             return -1;
         }
         return currentReader[pos++];

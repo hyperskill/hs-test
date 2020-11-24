@@ -1,27 +1,12 @@
 package org.hyperskill.hstest.testing;
 
-import org.hyperskill.hstest.dynamic.DynamicClassLoader;
-import org.hyperskill.hstest.dynamic.input.SystemInHandler;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.dynamic.security.ProgramExited;
-import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
-import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
-import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
-import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
-import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
-import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
-import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
 
 /**
  * Class for running user program and asynchronously test it with input that can be generated while
@@ -36,138 +21,39 @@ import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
  * 1. Create TestedProgram instance with the class, whose main method you want to run
  * 2. Start the test using TestedProgram::start
  * 3. The tested program will execute till it needs some input
- * 4. "Start" returns input that was obtained during tested program's execution
+ * 4. "Start" returns output that was collected during tested program's execution
  * 5. Some testing code generates new input for the tested program
  * 6. Continue testing with the new input using TestedProgram::execute method
  * 7. The tested program will execute till it needs some input etc...
  */
 public class TestedProgram {
 
-    /**
-     * States that tested program can be in
-     * Initial state in NOT_STARTED,
-     * End state is either EXCEPTION_THROWN or FINISHED
-     * WAITING means the tested program waits for the input
-     * RUNNING means the tested program is currently running
-     *
-     * Only the following transitions are allowed:
-     *
-     * NOT_STARTED -> WAITING <-> RUNNING --> FINISHED
-     *                                   `'-> EXCEPTION_THROWN
-     */
-    private enum ProgramState {
-        NOT_STARTED, WAITING, RUNNING, EXCEPTION_THROWN, FINISHED
-    }
+    //private volatile String input;
 
-    private final StateMachine<ProgramState> machine =
-        new StateMachine<>(ProgramState.NOT_STARTED);
+    //private final Method methodToInvoke;
+    //private final ThreadGroup group;
+    //private ExecutorService executor;
+    //private Future<?> task;
 
-    {
-        machine.addTransition(ProgramState.NOT_STARTED, ProgramState.WAITING);
-
-        machine.addTransition(ProgramState.WAITING, ProgramState.RUNNING);
-        machine.addTransition(ProgramState.RUNNING, ProgramState.WAITING);
-
-        machine.addTransition(ProgramState.RUNNING, ProgramState.EXCEPTION_THROWN);
-        machine.addTransition(ProgramState.RUNNING, ProgramState.FINISHED);
-    }
-
-    private volatile String input;
-
-    private boolean inBackground = false;
-    private boolean noMoreInput = false;
-
-    private boolean returnOutputAfterExecution = true;
-
-    private final Method methodToInvoke;
-    private final ThreadGroup group;
-    private ExecutorService executor;
-    private Future<?> task;
+    private ProgramExecutor programExecutor;
 
     private List<String> runArgs;
-    private final Class<?> runClass;
+    //private final Class<?> runClass;
 
     public List<String> getRunArgs() {
         return runArgs;
     }
 
-    public Class<?> getRunClass() {
-        return runClass;
-    }
+    //public Class<?> getRunClass() {
+    //    return runClass;
+    //}
 
     /**
      * Creates TestedProgram instance, but doesn't run the class
      * @param testedClass class, whose main method you want to test
      */
     public TestedProgram(Class<?> testedClass) {
-        ClassLoader dcl = new DynamicClassLoader(testedClass);
-        try {
-            runClass = dcl.loadClass(testedClass.getName());
-            methodToInvoke = getMainMethod(runClass);
-            group = new ThreadGroup(runClass.getSimpleName());
-            group.setDaemon(true);
-        } catch (Exception ex) {
-            throw new UnexpectedError("Error initializing tested program", ex);
-        }
-    }
-
-    private String waitOutput(String input) {
-        if (!isWaitingInput()) {
-            throw new UnexpectedError(
-                "Tested program is not waiting for the input "
-                    + "(state == \"" + machine.getState() + "\")");
-        }
-
-        if (noMoreInput) {
-            throw new UnexpectedError(
-                "Can't input to the tested program - input was prohibited.");
-        }
-
-        this.input = input;
-        if (inBackground) {
-            machine.setState(ProgramState.RUNNING);
-            return "";
-        }
-
-        machine.setAndWait(ProgramState.RUNNING);
-        if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
-            throw new TestedProgramThrewException();
-        }
-        return returnOutputAfterExecution ? getOutput() : "";
-    }
-
-    private String waitInput() {
-        if (noMoreInput) {
-            return null;
-        }
-        machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
-        String inputLocal = input;
-        input = null;
-        return inputLocal;
-    }
-
-    private void invokeMain(String[] args) {
-        try {
-            machine.waitState(ProgramState.RUNNING);
-            methodToInvoke.invoke(null, new Object[] {args});
-            machine.setState(ProgramState.FINISHED);
-        } catch (InvocationTargetException ex) {
-            if (StageTest.getCurrTestRun().getErrorInTest() == null) {
-                // CheckExitCalled is thrown in case of System.exit()
-                // consider System.exit() like normal exit
-                if (ex.getCause() instanceof ProgramExited) {
-                    machine.setState(ProgramState.FINISHED);
-                    return;
-                }
-
-                StageTest.getCurrTestRun().setErrorInTest(
-                    new ExceptionWithFeedback("", getUserException(ex)));
-            }
-            machine.setState(ProgramState.EXCEPTION_THROWN);
-        } catch (IllegalAccessException ex) {
-            StageTest.getCurrTestRun().setErrorInTest(ex);
-            machine.setState(ProgramState.FINISHED);
-        }
+        programExecutor = new MainMethodExecutor(testedClass);
     }
 
     /**
@@ -175,8 +61,7 @@ public class TestedProgram {
      * @param args arguments you want tested program to start with
      */
     public void startInBackground(String... args) {
-        inBackground = true;
-        start(args);
+        programExecutor.startInBackground(args);
     }
 
     /**
@@ -187,18 +72,9 @@ public class TestedProgram {
      *         Returns an empty string if returnOutputAfterExecution is set to false.
      */
     public String start(String... args) {
-        if (machine.getState() != ProgramState.NOT_STARTED) {
-            throw new UnexpectedError("Cannot start the program twice");
-        }
-
         this.runArgs = new ArrayList<>(Arrays.asList(args));
-
-        machine.setState(ProgramState.WAITING);
-        SystemInHandler.setDynamicInputFunc(group, this::waitInput);
-
         StageTest.getCurrTestRun().addTestedProgram(this);
-        executor = newDaemonThreadPool(1, group);
-        task = executor.submit(() -> invokeMain(args));
+        programExecutor.start(args);
         return execute("");
     }
 
@@ -211,20 +87,7 @@ public class TestedProgram {
      *         2. The execution is done in the background.
      */
     public String execute(String input) {
-        if (isFinished()) {
-            StageTest.getCurrTestRun().setErrorInTest(
-                new ErrorWithFeedback("The main method of the class "
-                    + methodToInvoke.getDeclaringClass().getSimpleName()
-                    + " has unexpectedly terminated"));
-            throw new TestedProgramFinishedEarly();
-        }
-
-        if (input == null) {
-            stopInput();
-            return "";
-        }
-
-        return waitOutput(input);
+        return programExecutor.execute(input);
     }
 
     /**
@@ -237,7 +100,7 @@ public class TestedProgram {
      *         to the whole output of the tested program.
      */
     public String getOutput() {
-        return SystemOutHandler.getPartialOutput(group);
+        return programExecutor.getOutput();
     }
 
     /**
@@ -245,16 +108,7 @@ public class TestedProgram {
      * or just by a plain return.
      */
     public void stop() {
-        executor.shutdownNow();
-        task.cancel(true);
-        group.interrupt();
-        synchronized (machine) {
-            inBackground = true;
-            while (!isFinished()) {
-                this.input = null;
-                machine.setAndWait(ProgramState.RUNNING);
-            }
-        }
+        programExecutor.stop();
     }
 
     /**
@@ -262,8 +116,7 @@ public class TestedProgram {
      *         otherwise false
      */
     public boolean isFinished() {
-        return machine.getState() == ProgramState.FINISHED
-            || machine.getState() == ProgramState.EXCEPTION_THROWN;
+        return programExecutor.isFinished();
     }
 
     /**
@@ -277,7 +130,7 @@ public class TestedProgram {
      * in the background regardless of the value of returnOutputAfterExecution.
      */
     public void setReturnOutputAfterExecution(boolean value) {
-        this.returnOutputAfterExecution = value;
+        programExecutor.setReturnOutputAfterExecution(value);
     }
 
     /**
@@ -288,11 +141,7 @@ public class TestedProgram {
      * Note, that this cannot be undone and indicates the end of the input.
      */
     public void stopInput() {
-        inBackground = true;
-        noMoreInput = true;
-        if (isWaitingInput()) {
-            machine.setState(ProgramState.RUNNING);
-        }
+        programExecutor.stopInput();
     }
 
     /**
@@ -300,7 +149,7 @@ public class TestedProgram {
      *         for the tested program that is executed in the background.
      */
     public boolean isWaitingInput() {
-        return machine.getState() == ProgramState.WAITING;
+        return programExecutor.isWaitingInput();
     }
 
     /**
@@ -310,7 +159,7 @@ public class TestedProgram {
      * Nothing happens if tested program is already in background mode.
      */
     public void goBackground() {
-        inBackground = true;
+        programExecutor.goBackground();
     }
 
     /**
@@ -319,11 +168,15 @@ public class TestedProgram {
      * Otherwise waits for the input request and then returns.
      */
     public void stopBackground() {
-        inBackground = false;
-        machine.waitState(ProgramState.WAITING);
+        programExecutor.stopBackground();
     }
 
     public boolean isInBackground() {
-        return inBackground;
+        return programExecutor.isInBackground();
+    }
+
+    @Override
+    public String toString() {
+        return programExecutor.toString();
     }
 }
