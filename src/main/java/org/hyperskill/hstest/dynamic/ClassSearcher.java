@@ -50,7 +50,13 @@ public class ClassSearcher {
                         // loader, and we don't care.
                     }
                 } else if ((tmpDirectory = new File(directory, file)).isDirectory()) {
-                    checkDirectory(tmpDirectory, pckgname + "." + file, classes);
+                    String newPackage;
+                    if (pckgname.isEmpty()) {
+                        newPackage = file;
+                    } else {
+                        newPackage = pckgname + "." + file;
+                    }
+                    checkDirectory(tmpDirectory, newPackage, classes);
                 }
             }
         }
