@@ -113,7 +113,7 @@ public class TestCase<AttachType> {
 
     public DynamicTesting getDynamicTesting() {
         if (dynamicTesting == null) {
-            dynamicTesting = DynamicTesting.toDynamicTesting(testedClass, args, inputFuncs);
+            dynamicTesting = DynamicTesting.toDynamicTesting(testedClass.getName(), args, inputFuncs);
         }
         return dynamicTesting;
     }

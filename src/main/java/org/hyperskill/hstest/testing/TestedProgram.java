@@ -33,8 +33,10 @@ public class TestedProgram {
 
     /**
      * Creates TestedProgram instance, but doesn't run the class
+     * It is deprecated, use other constructors instead
      * @param testedClass class, whose main method you want to test
      */
+    @Deprecated
     public TestedProgram(Class<?> testedClass) {
         programExecutor = new MainMethodExecutor(testedClass.getName());
     }
