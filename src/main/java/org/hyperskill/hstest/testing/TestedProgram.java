@@ -28,32 +28,32 @@ import java.util.List;
  */
 public class TestedProgram {
 
-    //private volatile String input;
-
-    //private final Method methodToInvoke;
-    //private final ThreadGroup group;
-    //private ExecutorService executor;
-    //private Future<?> task;
-
-    private ProgramExecutor programExecutor;
-
+    private final ProgramExecutor programExecutor;
     private List<String> runArgs;
-    //private final Class<?> runClass;
-
-    public List<String> getRunArgs() {
-        return runArgs;
-    }
-
-    //public Class<?> getRunClass() {
-    //    return runClass;
-    //}
 
     /**
      * Creates TestedProgram instance, but doesn't run the class
      * @param testedClass class, whose main method you want to test
      */
     public TestedProgram(Class<?> testedClass) {
-        programExecutor = new MainMethodExecutor(testedClass);
+        programExecutor = new MainMethodExecutor(testedClass.getName());
+    }
+
+    /**
+     * Creates TestedProgram instance that will be able to run
+     * a particular class if sourceName is a class or a class in
+     * a particular package if sourceName is a package name
+     */
+    public TestedProgram(String sourceName) {
+        programExecutor = new MainMethodExecutor(sourceName);
+    }
+
+    /**
+     * Creates TestedProgram instance that will search for a class to run
+     * and will be able to run it
+     */
+    public TestedProgram() {
+        programExecutor = new MainMethodExecutor();
     }
 
     /**
@@ -173,6 +173,10 @@ public class TestedProgram {
 
     public boolean isInBackground() {
         return programExecutor.isInBackground();
+    }
+
+    public List<String> getRunArgs() {
+        return runArgs;
     }
 
     @Override

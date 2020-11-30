@@ -51,6 +51,9 @@ public final class ReflectionUtils {
     }
 
     public static boolean hasMainMethod(Class<?> clazz) {
+        if (clazz == null) {
+            return false;
+        }
         for (Method m : clazz.getDeclaredMethods()) {
             if (m.getName().equals("main")
                 && m.getReturnType() == Void.TYPE

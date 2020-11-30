@@ -35,19 +35,19 @@ public class MainMethodExecutor extends ProgramExecutor {
     private ExecutorService executor;
     private Future<?> task;
 
-    public MainMethodExecutor(Class<?> testedClass) {
-        initByClass(testedClass);
-    }
-
-    public MainMethodExecutor(String className) {
-        initByName(className);
-    }
-
     public MainMethodExecutor() {
         initByNothing();
     }
 
-    private void initByClass(Class<?> clazz) {
+    public MainMethodExecutor(String sourceName) {
+        if (Package.getPackage(sourceName) != null) {
+            initByPackageName(sourceName);
+        } else {
+            initByClassName(sourceName);
+        }
+    }
+
+    private void initByClassInstance(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
             if (clazz.getName().startsWith("outcomes.separate_package.")) {
                 initByNothing(clazz.getPackage().getName());
@@ -69,13 +69,21 @@ public class MainMethodExecutor extends ProgramExecutor {
         }
     }
 
-    private void initByName(String name) {
+    private void initByPackageName(String packageName) {
+        initByNothing(packageName);
+    }
+
+    private void initByClassName(String className) {
         try {
-            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(name);
-            initByClass(clazz);
+            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+            initByClassInstance(clazz);
         } catch (ClassNotFoundException ex) {
             initByNothing();
         }
+    }
+
+    private void initByNothing() {
+        initByNothing("");
     }
 
     private void initByNothing(String userPackage) {
@@ -90,7 +98,6 @@ public class MainMethodExecutor extends ProgramExecutor {
         int count = classesWithMainMethod.size();
 
         if (count == 0) {
-            // TODO add tests on it
             throw new ErrorWithFeedback("Cannot find a class with a main method.\n" +
                 "Check if you declared it as \"public static void main(String[] args)\".");
         }
@@ -106,11 +113,7 @@ public class MainMethodExecutor extends ProgramExecutor {
                     + "Leave only one of them to be executed.");
         }
 
-        initByClass(classesWithMainMethod.get(0));
-    }
-
-    private void initByNothing() {
-        initByNothing("");
+        initByClassInstance(classesWithMainMethod.get(0));
     }
 
     private void invokeMain(String[] args) {
