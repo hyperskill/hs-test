@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.testing;
 
+import lombok.Getter;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
 import org.hyperskill.hstest.testing.execution.ProgramExecutor;
@@ -29,6 +30,8 @@ import java.util.List;
 public class TestedProgram {
 
     private final ProgramExecutor programExecutor;
+
+    @Getter
     private List<String> runArgs;
 
     /**
@@ -175,10 +178,6 @@ public class TestedProgram {
 
     public boolean isInBackground() {
         return programExecutor.isInBackground();
-    }
-
-    public List<String> getRunArgs() {
-        return runArgs;
     }
 
     @Override
