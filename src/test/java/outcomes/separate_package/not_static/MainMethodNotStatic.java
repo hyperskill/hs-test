@@ -1,4 +1,4 @@
-package outcomes.lib;
+package outcomes.separate_package.not_static;
 
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
@@ -8,20 +8,23 @@ import outcomes.base.UserErrorTest;
 import java.util.Arrays;
 import java.util.List;
 
-class NoMainMethodFoundMain {
-
+class MainMethodNotStaticMain {
+    public void main(String[] args) {
+        System.out.println("Hello World!");
+    }
 }
 
-public class NoMainMethodFound extends UserErrorTest {
+public class MainMethodNotStatic extends UserErrorTest {
 
     @ContainsMessage
     String m =
         "Error in test #1\n" +
         "\n" +
-        "No main method found in class outcomes.lib.NoMainMethodFoundMain";
+        "Cannot find a class with a main method.\n" +
+        "Check if you declared it as \"public static void main(String[] args)\".";
 
-    public NoMainMethodFound() {
-        super(NoMainMethodFoundMain.class);
+    public MainMethodNotStatic() {
+        super(MainMethodNotStaticMain.class);
     }
 
     @Override

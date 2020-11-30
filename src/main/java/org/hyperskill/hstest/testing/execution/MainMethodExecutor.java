@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
@@ -47,7 +49,11 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     private void initByClass(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
-            initByNothing();
+            if (clazz.getName().startsWith("outcomes.separate_package.")) {
+                initByNothing(clazz.getPackage().getName());
+            } else {
+                initByNothing();
+            }
             return;
         }
 
@@ -72,16 +78,39 @@ public class MainMethodExecutor extends ProgramExecutor {
         }
     }
 
-    private void initByNothing() {
+    private void initByNothing(String userPackage) {
         // TODO use javap and regex "public static( final)? void main\(java\.lang\.String(\[\]|\.\.\.)\)"
 
-        List<Class<?>> classesFound = ClassSearcher.getClassesForPackage("");
+        List<Class<?>> classesWithMainMethod = ClassSearcher
+            .getClassesForPackage(userPackage)
+            .stream()
+            .filter(ReflectionUtils::hasMainMethod)
+            .collect(toList());
 
+        int count = classesWithMainMethod.size();
 
+        if (count == 0) {
+            // TODO add tests on it
+            throw new ErrorWithFeedback("Cannot find a class with a main method.\n" +
+                "Check if you declared it as \"public static void main(String[] args)\".");
+        }
 
+        if (count > 1) {
+            String allClassesNames = classesWithMainMethod
+                .stream()
+                .map(Class::getSimpleName)
+                .collect(joining(", "));
 
-        throw new UnexpectedError(
-            "Searching a class with main method is not supported right now");
+            throw new ErrorWithFeedback(
+                "There are " + count + " classes with main method: " + allClassesNames + ".\n"
+                    + "Leave only one of them to be executed.");
+        }
+
+        initByClass(classesWithMainMethod.get(0));
+    }
+
+    private void initByNothing() {
+        initByNothing("");
     }
 
     private void invokeMain(String[] args) {

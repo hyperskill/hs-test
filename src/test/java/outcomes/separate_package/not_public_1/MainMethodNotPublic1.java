@@ -1,4 +1,4 @@
-package outcomes.lib;
+package outcomes.separate_package.not_public_1;
 
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
@@ -8,22 +8,23 @@ import outcomes.base.UserErrorTest;
 import java.util.Arrays;
 import java.util.List;
 
-class MainMethodNutPublic3 {
-    static void main(String[] args) {
+class MainMethodNotPublic1Main {
+    private static void main(String[] args) {
         System.out.print("Hello World");
     }
 }
 
-public class MainMethodNotPublic3 extends UserErrorTest {
+public class MainMethodNotPublic1 extends UserErrorTest {
 
     @ContainsMessage
     String m =
         "Error in test #1\n" +
         "\n" +
-        "Main method is not public in class outcomes.lib.MainMethodNutPublic3";
+        "Cannot find a class with a main method.\n" +
+        "Check if you declared it as \"public static void main(String[] args)\".";
 
-    public MainMethodNotPublic3() {
-        super(MainMethodNutPublic3.class);
+    public MainMethodNotPublic1() {
+        super(MainMethodNotPublic1Main.class);
     }
 
     @Override

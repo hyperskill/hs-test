@@ -43,6 +43,11 @@ public class TestGettingOutputWhileProgramInBackground extends StageTest {
             return CheckResult.wrong("");
         }
 
+        main.stop();
+        if (!main.isFinished()) {
+            return CheckResult.wrong("");
+        }
+
         return CheckResult.correct();
     }
 }
