@@ -32,8 +32,8 @@ public class TestDynamicTestingEarlyExit extends UserErrorTest<String> {
     String m =
         "Error in test #1\n" +
         "\n" +
-        "The main method of the class TestDynamicTestingEarlyExitServer " +
-        "has unexpectedly terminated\n" +
+        "The program TestDynamicTestingEarlyExitServer has unexpectedly terminated.\n" +
+        "It finished execution too early, should continue running.\n" +
         "\n" +
         "Please find below the output of your program during this failed test.\n" +
         "Note that the '>' character indicates the beginning of the input line.\n" +

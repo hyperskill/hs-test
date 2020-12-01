@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dynamic.output;
 
+import lombok.Getter;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 
 import java.io.ByteArrayOutputStream;
@@ -14,15 +15,15 @@ public class SystemOutMock extends OutputStream {
 
     // original stream is used to actually see
     // the test in the console and nothing else
-    private final PrintStream original;
+    @Getter private final PrintStream original;
 
     // cloned stream is used to collect all output
     // from the test and redirect to check function
-    private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
+    @Getter private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
 
     // dynamic stream contains not only output
     // but also injected input from the test
-    private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
+    @Getter private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
 
     // partial stream is used to collect output between
     // dynamic input calls in SystemInMock
@@ -73,19 +74,7 @@ public class SystemOutMock extends OutputStream {
         partial.clear();
     }
 
-    public PrintStream getOriginal() {
-        return original;
-    }
-
-    public ByteArrayOutputStream getClonedOut() {
-        return cloned;
-    }
-
-    public ByteArrayOutputStream getDynamicOut() {
-        return dynamic;
-    }
-
-    public synchronized ByteArrayOutputStream getPartialOut(ThreadGroup group) {
+    public synchronized ByteArrayOutputStream getPartial(ThreadGroup group) {
         return partial.getOrDefault(group, new ByteArrayOutputStream());
     }
 }

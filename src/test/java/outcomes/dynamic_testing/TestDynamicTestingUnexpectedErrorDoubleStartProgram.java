@@ -33,7 +33,8 @@ public class TestDynamicTestingUnexpectedErrorDoubleStartProgram extends Unexpec
     @ContainsMessage
     String[] m = {
         "Unexpected error in test #1",
-        "UnexpectedError: Cannot start the program twice"
+        "UnexpectedError: Cannot start the program " +
+        "TestDynamicTestingUnexpectedErrorDoubleStartProgramServer twice"
     };
 
     @Override

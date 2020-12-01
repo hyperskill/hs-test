@@ -79,8 +79,7 @@ public class TestedProgram {
     public String start(String... args) {
         this.runArgs = new ArrayList<>(Arrays.asList(args));
         StageTest.getCurrTestRun().addTestedProgram(this);
-        programExecutor.start(args);
-        return execute("");
+        return programExecutor.start(args);
     }
 
     /**

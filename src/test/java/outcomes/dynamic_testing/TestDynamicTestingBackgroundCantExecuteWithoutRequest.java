@@ -21,7 +21,8 @@ public class TestDynamicTestingBackgroundCantExecuteWithoutRequest extends Unexp
     @ContainsMessage
     String[] m = {
         "Unexpected error in test #1",
-        "Tested program is not waiting for the input (state == \"RUNNING\")"
+        "Program TestDynamicTestingBackgroundCantExecuteWithoutRequestMain " +
+        "is not waiting for the input (state == \"RUNNING\")"
     };
 
     @DynamicTestingMethod

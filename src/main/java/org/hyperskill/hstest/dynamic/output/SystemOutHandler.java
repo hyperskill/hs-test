@@ -41,16 +41,16 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(MOCK_OUT.getClonedOut().toString());
+        return Utils.cleanText(MOCK_OUT.getCloned().toString());
     }
 
     public static String getDynamicOutput() {
-        return Utils.cleanText(MOCK_OUT.getDynamicOut().toString());
+        return Utils.cleanText(MOCK_OUT.getDynamic().toString());
     }
 
     public static String getPartialOutput(ThreadGroup group) {
-        String output = Utils.cleanText(MOCK_OUT.getPartialOut(group).toString());
-        MOCK_OUT.getPartialOut(group).reset();
+        String output = Utils.cleanText(MOCK_OUT.getPartial(group).toString());
+        MOCK_OUT.getPartial(group).reset();
         return output;
     }
 

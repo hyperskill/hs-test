@@ -1,6 +1,17 @@
 package org.hyperskill.hstest.testing.execution;
 
+import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
+import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
+import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.StateMachine;
+
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.FINISHED;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.NOT_STARTED;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.RUNNING;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.WAITING;
 
 public abstract class ProgramExecutor {
 
@@ -9,41 +20,103 @@ public abstract class ProgramExecutor {
     /**
      * States that tested program can be in
      * Initial state in NOT_STARTED,
+     * State just before running the program is READY
      * End state is either EXCEPTION_THROWN or FINISHED
      * WAITING means the tested program waits for the input
      * RUNNING means the tested program is currently running
-     *
-     * Only the following transitions are allowed:
-     *
-     * NOT_STARTED -> WAITING <-> RUNNING --> FINISHED
-     *                                   `'-> EXCEPTION_THROWN
      */
     protected enum ProgramState {
         NOT_STARTED, WAITING, RUNNING, EXCEPTION_THROWN, FINISHED
     }
 
-    protected final StateMachine<ProgramState> machine =
-        new StateMachine<>(ProgramState.NOT_STARTED);
+    protected final StateMachine<ProgramState> machine = new StateMachine<>(NOT_STARTED);
 
     {
-        machine.addTransition(ProgramState.NOT_STARTED, ProgramState.WAITING);
+        machine.addTransition(NOT_STARTED, RUNNING);
 
-        machine.addTransition(ProgramState.WAITING, ProgramState.RUNNING);
-        machine.addTransition(ProgramState.RUNNING, ProgramState.WAITING);
+        machine.addTransition(WAITING, RUNNING);
+        machine.addTransition(RUNNING, WAITING);
 
-        machine.addTransition(ProgramState.RUNNING, ProgramState.EXCEPTION_THROWN);
-        machine.addTransition(ProgramState.RUNNING, ProgramState.FINISHED);
+        machine.addTransition(RUNNING, EXCEPTION_THROWN);
+        machine.addTransition(RUNNING, FINISHED);
     }
 
-    protected boolean inBackground = false;
-    protected boolean noMoreInput = false;
-    protected boolean returnOutputAfterExecution = true;
+    private boolean inBackground = false;
+    private boolean noMoreInput = false;
+    private boolean returnOutputAfterExecution = true;
 
-    public abstract void start(String... args);
-    public abstract String execute(String input);
+    protected abstract void launch(String... args);
+    public abstract String getOutput();
     public abstract void stop();
 
-    public abstract String getOutput();
+    public final String start(String... args) {
+        if (!machine.inState(NOT_STARTED)) {
+            throw new UnexpectedError("Cannot start the program " + this + " twice");
+        }
+
+        launch(args);
+
+        if (inBackground) {
+            machine.waitNotState(NOT_STARTED);
+            return "";
+        }
+
+        machine.waitNotStates(NOT_STARTED, RUNNING);
+        return getExecutionOutput();
+    }
+
+    public final String execute(String input) {
+        if (isFinished()) {
+            StageTest.getCurrTestRun().setErrorInTest(new ErrorWithFeedback(
+                "The program " + this + " has unexpectedly terminated.\n" +
+                    "It finished execution too early, should continue running."));
+            throw new TestedProgramFinishedEarly();
+        }
+
+        if (input == null) {
+            stopInput();
+            return "";
+        }
+
+        if (!isWaitingInput()) {
+            throw new UnexpectedError(
+                "Program " + this + " is not waiting for the input "
+                    + "(state == \"" + machine.getState() + "\")");
+        }
+
+        if (noMoreInput) {
+            throw new UnexpectedError(
+                "Can't pass input to the program " + this + " - input was prohibited.");
+        }
+
+        this.input = input;
+        if (inBackground) {
+            machine.setState(RUNNING);
+            return "";
+        }
+
+        // suspends thread while the program is executing,
+        // waits for non-RUNNING state to be reached
+        machine.setAndWait(RUNNING);
+        return getExecutionOutput();
+    }
+
+    private String getExecutionOutput() {
+        if (machine.inState(EXCEPTION_THROWN)) {
+            throw new TestedProgramThrewException();
+        }
+        return returnOutputAfterExecution ? getOutput() : "";
+    }
+
+    protected final String requestInput() {
+        if (noMoreInput) {
+            return null;
+        }
+        machine.setAndWait(WAITING, RUNNING);
+        String inputLocal = input;
+        input = null;
+        return inputLocal;
+    }
 
     /**
      * If set to false, methods "execute" and "start" will no longer return output but return
@@ -64,8 +137,7 @@ public abstract class ProgramExecutor {
      *         otherwise false
      */
     public boolean isFinished() {
-        return machine.getState() == ProgramState.FINISHED
-            || machine.getState() == ProgramState.EXCEPTION_THROWN;
+        return machine.inState(FINISHED) || machine.inState(EXCEPTION_THROWN);
     }
 
     /**
@@ -79,7 +151,7 @@ public abstract class ProgramExecutor {
         inBackground = true;
         noMoreInput = true;
         if (isWaitingInput()) {
-            machine.setState(ProgramState.RUNNING);
+            machine.setState(RUNNING);
         }
     }
 
@@ -88,7 +160,7 @@ public abstract class ProgramExecutor {
      *         for the tested program that is executed in the background.
      */
     public boolean isWaitingInput() {
-        return machine.getState() == ProgramState.WAITING;
+        return machine.inState(WAITING);
     }
 
     /**
@@ -98,7 +170,6 @@ public abstract class ProgramExecutor {
     public void startInBackground(String... args) {
         inBackground = true;
         start(args);
-        execute("");
     }
 
     /**
@@ -118,7 +189,7 @@ public abstract class ProgramExecutor {
      */
     public void stopBackground() {
         inBackground = false;
-        machine.waitState(ProgramState.WAITING);
+        machine.waitState(WAITING);
     }
 
     public boolean isInBackground() {

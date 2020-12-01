@@ -9,8 +9,6 @@ import org.hyperskill.hstest.dynamic.security.ProgramExited;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
-import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
-import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +23,9 @@ import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.stage.StageTest.LIB_TEST_PACKAGE;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.FINISHED;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.RUNNING;
 
 public class MainMethodExecutor extends ProgramExecutor {
 
@@ -128,93 +129,32 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     private void invokeMain(String[] args) {
         try {
-            machine.waitState(ProgramState.RUNNING);
+            machine.setState(RUNNING);
             methodToInvoke.invoke(null, new Object[] {args});
-            machine.setState(ProgramState.FINISHED);
+            machine.setState(FINISHED);
         } catch (InvocationTargetException ex) {
-            if (StageTest.getCurrTestRun().getErrorInTest() == null) {
-                // CheckExitCalled is thrown in case of System.exit()
-                // consider System.exit() like normal exit
-                if (ex.getCause() instanceof ProgramExited) {
-                    machine.setState(ProgramState.FINISHED);
-                    return;
-                }
-
-                StageTest.getCurrTestRun().setErrorInTest(
-                    new ExceptionWithFeedback("", getUserException(ex)));
+            // ProgramExited is thrown in case of System.exit()
+            // consider System.exit() like normal exit
+            if (ex.getCause() instanceof ProgramExited) {
+                machine.setState(FINISHED);
+                return;
             }
-            machine.setState(ProgramState.EXCEPTION_THROWN);
+
+            StageTest.getCurrTestRun().setErrorInTest(
+                new ExceptionWithFeedback("", getUserException(ex)));
+
+            machine.setState(EXCEPTION_THROWN);
         } catch (IllegalAccessException ex) {
             StageTest.getCurrTestRun().setErrorInTest(ex);
-            machine.setState(ProgramState.FINISHED);
+            machine.setState(FINISHED);
         }
-    }
-
-    private String waitOutput(String input) {
-        if (!isWaitingInput()) {
-            throw new UnexpectedError(
-                "Tested program is not waiting for the input "
-                    + "(state == \"" + machine.getState() + "\")");
-        }
-
-        if (noMoreInput) {
-            throw new UnexpectedError(
-                "Can't input to the tested program - input was prohibited.");
-        }
-
-        this.input = input;
-        if (inBackground) {
-            machine.setState(ProgramState.RUNNING);
-            return "";
-        }
-
-        machine.setAndWait(ProgramState.RUNNING);
-        if (machine.getState() == ProgramState.EXCEPTION_THROWN) {
-            throw new TestedProgramThrewException();
-        }
-        return returnOutputAfterExecution ? getOutput() : "";
-    }
-
-    private String waitInput() {
-        if (noMoreInput) {
-            return null;
-        }
-        machine.setAndWait(ProgramState.WAITING, ProgramState.RUNNING);
-        String inputLocal = input;
-        input = null;
-        return inputLocal;
     }
 
     @Override
-    public void start(String... args) {
-        if (machine.getState() != ProgramState.NOT_STARTED) {
-            throw new UnexpectedError("Cannot start the program twice");
-        }
-
-        machine.setState(ProgramState.WAITING);
-        SystemInHandler.setDynamicInputFunc(group, this::waitInput);
-
+    protected void launch(String... args) {
+        SystemInHandler.setDynamicInputFunc(group, this::requestInput);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
-    }
-
-    @Override
-    public String execute(String input) {
-
-        if (isFinished()) {
-            StageTest.getCurrTestRun().setErrorInTest(
-                new ErrorWithFeedback("The main method of the class "
-                    + methodToInvoke.getDeclaringClass().getSimpleName()
-                    + " has unexpectedly terminated"));
-            throw new TestedProgramFinishedEarly();
-        }
-
-        if (input == null) {
-            stopInput();
-            return "";
-        }
-
-        return waitOutput(input);
     }
 
     @Override
@@ -223,10 +163,12 @@ public class MainMethodExecutor extends ProgramExecutor {
         task.cancel(true);
         group.interrupt();
         synchronized (machine) {
-            inBackground = true;
             while (!isFinished()) {
                 this.input = null;
-                machine.setAndWait(ProgramState.RUNNING);
+                machine.waitNotState(RUNNING);
+                if (isWaitingInput()) {
+                    machine.setState(RUNNING);
+                }
             }
         }
     }
