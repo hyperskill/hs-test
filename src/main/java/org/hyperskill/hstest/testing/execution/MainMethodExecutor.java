@@ -37,15 +37,16 @@ public class MainMethodExecutor extends ProgramExecutor {
     private Future<?> task;
 
     public MainMethodExecutor() {
-        initByNothing();
+        String testSourceName = StageTest.getCurrTestRun().getTestCase().getSourceName();
+        if (testSourceName.startsWith(LIB_TEST_PACKAGE)) {
+            initByName(testSourceName);
+        } else {
+            initByNothing();
+        }
     }
 
     public MainMethodExecutor(String sourceName) {
-        if (Package.getPackage(sourceName) != null) {
-            initByPackageName(sourceName);
-        } else {
-            initByClassName(sourceName);
-        }
+        initByName(sourceName);
     }
 
     private void initByClassInstance(Class<?> clazz) {
@@ -67,6 +68,14 @@ public class MainMethodExecutor extends ProgramExecutor {
             group.setDaemon(true);
         } catch (Exception ex) {
             throw new UnexpectedError("Error initializing MainMethodExecutor " + className, ex);
+        }
+    }
+
+    private void initByName(String sourceName) {
+        if (Package.getPackage(sourceName) != null) {
+            initByPackageName(sourceName);
+        } else {
+            initByClassName(sourceName);
         }
     }
 
