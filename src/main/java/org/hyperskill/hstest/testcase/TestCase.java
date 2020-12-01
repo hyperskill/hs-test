@@ -2,6 +2,7 @@ package org.hyperskill.hstest.testcase;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hyperskill.hstest.dynamic.input.DynamicInputFunction;
 import org.hyperskill.hstest.dynamic.input.DynamicTesting;
 
@@ -15,29 +16,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@Accessors(chain = true)
 public class TestCase<AttachType> {
-
     private static final int DEFAULT_TIME_LIMIT = 15000;
 
-    @Getter @Setter String sourceName;
-
     @Getter private final List<String> args = new ArrayList<>();
-    @Getter private AttachType attach;
 
-    @Getter private int timeLimit = DEFAULT_TIME_LIMIT;
+    @Getter @Setter String sourceName;
+    @Getter @Setter private AttachType attach;
+    @Getter @Setter private int timeLimit = DEFAULT_TIME_LIMIT;
+    @Getter @Setter private BiFunction<String, AttachType, CheckResult> checkFunc;
 
-    @Getter private BiFunction<String, AttachType, CheckResult> checkFunc;
-    @Getter @Deprecated private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
+    @Getter private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
     @Getter private String input;
     private DynamicTesting dynamicTesting;
 
-    // files needed to be set up before test
     @Getter private final Map<String, String> files = new LinkedHashMap<>();
-
-    @Getter private final Map<Class<? extends Throwable>, String>
-        feedbackOnExceptions = new LinkedHashMap<>();
-
-    // runnables that should be run before test
+    @Getter private final Map<Class<? extends Throwable>, String> feedbackOnExceptions = new LinkedHashMap<>();
     @Getter private final List<Process> processes = new ArrayList<>();
 
     public TestCase() {
@@ -99,11 +94,6 @@ public class TestCase<AttachType> {
         return dynamicTesting;
     }
 
-    public TestCase<AttachType> setAttach(AttachType attach) {
-        this.attach = attach;
-        return this;
-    }
-
     public TestCase<AttachType> addArguments(String... arguments) {
         args.addAll(Arrays.asList(arguments));
         return this;
@@ -111,11 +101,6 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> addFile(String filename, String content) {
         files.put(filename, content);
-        return this;
-    }
-
-    public TestCase<AttachType> setTimeLimit(int timeLimitMs) {
-        timeLimit = timeLimitMs;
         return this;
     }
 
@@ -130,11 +115,6 @@ public class TestCase<AttachType> {
 
     public TestCase<AttachType> feedbackOnException(Class<? extends Throwable> clazz, String feedback) {
         feedbackOnExceptions.put(clazz, feedback);
-        return this;
-    }
-
-    public TestCase<AttachType> setCheckFunc(BiFunction<String, AttachType, CheckResult> func) {
-        this.checkFunc = func;
         return this;
     }
 }
