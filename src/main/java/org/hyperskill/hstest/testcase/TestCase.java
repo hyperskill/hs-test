@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.testcase;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hyperskill.hstest.dynamic.input.DynamicInputFunction;
 import org.hyperskill.hstest.dynamic.input.DynamicTesting;
 
@@ -17,55 +19,35 @@ public class TestCase<AttachType> {
 
     private static final int DEFAULT_TIME_LIMIT = 15000;
 
-    private Class<?> testedClass = null;
-    private Object testedObject = null;
+    @Getter @Setter private Class<?> testedClass = null;
+    @Getter @Setter private Object testedObject = null;
 
-    private final List<String> args = new ArrayList<>();
-    private AttachType attach = null;
+    @Getter private final List<String> args = new ArrayList<>();
+    @Getter private AttachType attach = null;
 
-    private int timeLimit = DEFAULT_TIME_LIMIT;
+    @Getter private int timeLimit = DEFAULT_TIME_LIMIT;
 
-    private BiFunction<String, AttachType, CheckResult> checkFunction = null;
-    private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
-    private String staticInput = null;
+    @Getter private BiFunction<String, AttachType, CheckResult> checkFunc = null;
+    @Getter @Deprecated private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
+    @Getter private String input = null;
     private DynamicTesting dynamicTesting = null;
 
     // files needed to be set up before test
-    private final Map<String, String> files = new LinkedHashMap<>();
+    @Getter private final Map<String, String> files = new LinkedHashMap<>();
 
-    private final Map<Class<? extends Throwable>, String>
+    @Getter private final Map<Class<? extends Throwable>, String>
         feedbackOnExceptions = new LinkedHashMap<>();
 
     // runnables that should be run before test
-    private final List<Process> processes = new ArrayList<>();
+    @Getter private final List<Process> processes = new ArrayList<>();
 
     public TestCase() {
         // use methods to configure TestCase
     }
 
-    public void setTestedClass(Class<?> testedClass) {
-        this.testedClass = testedClass;
-    }
-
-    public Class<?> getTestedClass() {
-        return testedClass;
-    }
-
-    public void setTestedObject(Object testedObject) {
-        this.testedObject = testedObject;
-    }
-
-    public Object getTestedObject() {
-        return testedObject;
-    }
-
-    public String getInput() {
-        return staticInput;
-    }
-
     public TestCase<AttachType> setInput(String input) {
         inputFuncs.clear();
-        staticInput = input;
+        this.input = input;
         addInput(1, out -> input);
         return this;
     }
@@ -153,40 +135,7 @@ public class TestCase<AttachType> {
     }
 
     public TestCase<AttachType> setCheckFunc(BiFunction<String, AttachType, CheckResult> func) {
-        this.checkFunction = func;
+        this.checkFunc = func;
         return this;
-    }
-
-    @Deprecated
-    public List<DynamicInputFunction> getInputFuncs() {
-        return inputFuncs;
-    }
-
-    public List<String> getArgs() {
-        return args;
-    }
-
-    public AttachType getAttach() {
-        return attach;
-    }
-
-    public Map<String, String> getFiles() {
-        return files;
-    }
-
-    public int getTimeLimit() {
-        return timeLimit;
-    }
-
-    public List<Process> getProcesses() {
-        return processes;
-    }
-
-    public BiFunction<String, AttachType, CheckResult> getCheckFunc() {
-        return checkFunction;
-    }
-
-    public Map<Class<? extends Throwable>, String> getFeedbackOnExceptions() {
-        return feedbackOnExceptions;
     }
 }

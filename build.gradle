@@ -23,6 +23,9 @@ dependencies {
     api 'org.assertj:assertj-swing-junit:3.8.0'
     api 'org.apache.httpcomponents:httpclient:4.5.9'
     api 'com.google.code.gson:gson:2.8.5'
+
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
 }
 
 compileJava.options.encoding = 'UTF-8'
