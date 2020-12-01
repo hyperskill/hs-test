@@ -2,6 +2,7 @@ package org.hyperskill.hstest.outcomes;
 
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.exception.testing.InfiniteLoopException;
 import org.hyperskill.hstest.exception.testing.TimeLimitException;
 
 import java.nio.file.FileSystemException;
@@ -23,6 +24,9 @@ public class ErrorOutcome extends Outcome {
 
         } else if (cause instanceof ErrorWithFeedback) {
             errorText = ((ErrorWithFeedback) cause).getErrorText();
+
+        } else if (cause instanceof InfiniteLoopException) {
+            errorText = "Infinite loop detected.\n" + cause.getMessage();
         }
     }
 

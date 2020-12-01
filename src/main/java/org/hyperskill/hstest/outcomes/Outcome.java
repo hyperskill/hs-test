@@ -6,6 +6,7 @@ import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
+import org.hyperskill.hstest.exception.testing.InfiniteLoopException;
 import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
@@ -119,7 +120,8 @@ public abstract class Outcome {
         } else if (t instanceof ErrorWithFeedback
             || t instanceof FileSystemException
             || t instanceof TimeLimitException
-            || t instanceof NumberFormatException) {
+            || t instanceof NumberFormatException
+            || t instanceof InfiniteLoopException) {
 
             return new ErrorOutcome(currTest, t);
 

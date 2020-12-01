@@ -46,6 +46,8 @@ public class SystemOutMock extends OutputStream {
         cloned.write(b);
         dynamic.write(b);
 
+        InfiniteLoopDetector.write(b);
+
         ThreadGroup currGroup = TestingSecurityManager.getTestingGroup();
         partial.putIfAbsent(currGroup, new ByteArrayOutputStream());
         partial.get(currGroup).write(b);
@@ -72,6 +74,7 @@ public class SystemOutMock extends OutputStream {
         cloned.reset();
         dynamic.reset();
         partial.clear();
+        InfiniteLoopDetector.reset();
     }
 
     public synchronized ByteArrayOutputStream getPartial(ThreadGroup group) {

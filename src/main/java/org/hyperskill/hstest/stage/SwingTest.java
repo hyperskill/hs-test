@@ -5,6 +5,7 @@ import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JComponentFixture;
+import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,6 +27,7 @@ public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
         super(SwingTest.class);
         this.frame = frame;
         //needReloadClass = false;
+        InfiniteLoopDetector.setWorking(false);
     }
 
     @BeforeClass

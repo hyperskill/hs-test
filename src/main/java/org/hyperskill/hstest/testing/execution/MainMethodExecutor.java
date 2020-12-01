@@ -133,15 +133,17 @@ public class MainMethodExecutor extends ProgramExecutor {
             methodToInvoke.invoke(null, new Object[] {args});
             machine.setState(FINISHED);
         } catch (InvocationTargetException ex) {
-            // ProgramExited is thrown in case of System.exit()
-            // consider System.exit() like normal exit
-            if (ex.getCause() instanceof ProgramExited) {
-                machine.setState(FINISHED);
-                return;
-            }
+            if (StageTest.getCurrTestRun().getErrorInTest() == null) {
+                // ProgramExited is thrown in case of System.exit()
+                // consider System.exit() like normal exit
+                if (ex.getCause() instanceof ProgramExited) {
+                    machine.setState(FINISHED);
+                    return;
+                }
 
-            StageTest.getCurrTestRun().setErrorInTest(
-                new ExceptionWithFeedback("", getUserException(ex)));
+                StageTest.getCurrTestRun().setErrorInTest(
+                    new ExceptionWithFeedback("", getUserException(ex)));
+            }
 
             machine.setState(EXCEPTION_THROWN);
         } catch (IllegalAccessException ex) {

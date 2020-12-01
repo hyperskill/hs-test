@@ -3,6 +3,7 @@ package org.hyperskill.hstest.stage;
 import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
+import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -50,6 +51,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public SpringTest(Class<?> clazz, int port) {
         super(SpringTest.class);
+        InfiniteLoopDetector.setWorking(false);
         runner = SpringApplicationRunner.class;
         springClass = clazz;
         this.port = port;

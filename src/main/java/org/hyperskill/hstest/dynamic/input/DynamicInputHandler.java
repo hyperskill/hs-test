@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.dynamic.input;
 
+import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class DynamicInputHandler {
 
     private void ejectNextInput() {
         String newInput = dynamicInputFunction.get();
+        InfiniteLoopDetector.inputRequested();
 
         if (newInput == null) {
             return;
