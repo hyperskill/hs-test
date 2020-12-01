@@ -19,18 +19,17 @@ public class TestCase<AttachType> {
 
     private static final int DEFAULT_TIME_LIMIT = 15000;
 
-    @Getter @Setter private Class<?> testedClass = null;
-    @Getter @Setter private Object testedObject = null;
+    @Getter @Setter String sourceName;
 
     @Getter private final List<String> args = new ArrayList<>();
-    @Getter private AttachType attach = null;
+    @Getter private AttachType attach;
 
     @Getter private int timeLimit = DEFAULT_TIME_LIMIT;
 
-    @Getter private BiFunction<String, AttachType, CheckResult> checkFunc = null;
+    @Getter private BiFunction<String, AttachType, CheckResult> checkFunc;
     @Getter @Deprecated private final List<DynamicInputFunction> inputFuncs = new LinkedList<>();
-    @Getter private String input = null;
-    private DynamicTesting dynamicTesting = null;
+    @Getter private String input;
+    private DynamicTesting dynamicTesting;
 
     // files needed to be set up before test
     @Getter private final Map<String, String> files = new LinkedHashMap<>();
@@ -95,7 +94,7 @@ public class TestCase<AttachType> {
 
     public DynamicTesting getDynamicTesting() {
         if (dynamicTesting == null) {
-            dynamicTesting = DynamicTesting.toDynamicTesting(testedClass.getName(), args, inputFuncs);
+            dynamicTesting = DynamicTesting.toDynamicTesting(sourceName, args, inputFuncs);
         }
         return dynamicTesting;
     }

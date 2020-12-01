@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.stage;
 
+import lombok.Getter;
 import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.dynamic.output.ColoredOutput;
@@ -23,28 +24,29 @@ import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
 
-    private final Class<?> testedClass;
-    private final Object testedObject;
-
     protected Class<? extends TestRunner> runner = AsyncMainMethodRunner.class;
 
-    private static TestRun currTestRun;
+    @Getter private static TestRun currTestRun;
+    private final String sourceName;
 
-    public static TestRun getCurrTestRun() {
-        return currTestRun;
-    }
+    public static final String LIB_TEST_PACKAGE = "outcomes.separate_package.";
 
     public StageTest() {
-        this(null, null);
+        this("");
     }
 
+    public StageTest(String sourceName) {
+        String currPackage = getClass().getPackage().getName();
+        if (sourceName.isEmpty() && currPackage.startsWith(LIB_TEST_PACKAGE)) {
+            this.sourceName = currPackage;
+        } else {
+            this.sourceName = sourceName;
+        }
+    }
+
+    @Deprecated
     public StageTest(Class<?> testedClass) {
-        this(testedClass, null);
-    }
-
-    public StageTest(Class<?> testedClass, Object testedObject) {
-        this.testedClass = testedClass;
-        this.testedObject = testedObject;
+        this(testedClass.getName());
     }
 
     private List<TestRun> initTests() throws Exception {
@@ -66,8 +68,7 @@ public abstract class StageTest<AttachType> {
         int currTest = 0;
         int testCount = testCases.size();
         for (TestCase<AttachType> testCase : testCases) {
-            testCase.setTestedClass(testedClass);
-            testCase.setTestedObject(testedObject);
+            testCase.setSourceName(sourceName);
             if (testCase.getCheckFunc() == null) {
                 testCase.setCheckFunc(this::check);
             }

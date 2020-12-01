@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
 import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
+import static org.hyperskill.hstest.stage.StageTest.LIB_TEST_PACKAGE;
 
 public class MainMethodExecutor extends ProgramExecutor {
 
@@ -49,7 +50,7 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     private void initByClassInstance(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
-            if (clazz.getName().startsWith("outcomes.separate_package.")) {
+            if (clazz.getName().startsWith(LIB_TEST_PACKAGE)) {
                 initByNothing(clazz.getPackage().getName());
             } else {
                 initByNothing();

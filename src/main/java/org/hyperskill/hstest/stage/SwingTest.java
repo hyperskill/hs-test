@@ -23,7 +23,7 @@ public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
     protected FrameFixture window;
 
     public SwingTest(JFrame frame) {
-        super(SwingTest.class, frame);
+        super(SwingTest.class);
         this.frame = frame;
         //needReloadClass = false;
     }
