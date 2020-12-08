@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 @Accessors(chain = true)
 public class TestCase<AttachType> {
-    private static final int DEFAULT_TIME_LIMIT = 15000;
+    public static final int DEFAULT_TIME_LIMIT = 15000;
 
     @Getter private final List<String> args = new ArrayList<>();
 

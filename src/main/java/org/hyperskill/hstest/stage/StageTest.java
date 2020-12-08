@@ -2,7 +2,6 @@ package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
 import org.hyperskill.hstest.dynamic.SystemHandler;
-import org.hyperskill.hstest.dynamic.input.DynamicTesting;
 import org.hyperskill.hstest.dynamic.output.ColoredOutput;
 import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
@@ -51,10 +50,7 @@ public abstract class StageTest<AttachType> {
     private List<TestRun> initTests() throws Exception {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
-
-        for (DynamicTesting method : searchDynamicTests(this)) {
-            testCases.add(new TestCase<AttachType>().setDynamicTesting(method));
-        }
+        testCases.addAll(searchDynamicTests(this));
 
         if (testCases.size() == 0) {
             throw new UnexpectedError("No tests found");

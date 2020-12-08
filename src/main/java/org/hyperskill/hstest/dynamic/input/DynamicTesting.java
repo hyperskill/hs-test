@@ -7,8 +7,10 @@ import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
+import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -154,11 +156,12 @@ public interface DynamicTesting {
      * @return list of DynamicMethod objects that represent every method marked
      *         with DynamicTestingMethod annotation.
      */
-    static List<DynamicTesting> searchDynamicTests(Object obj) {
+    static <Attach> List<TestCase<Attach>> searchDynamicTests(Object obj) {
         class DynamicTestElement implements Comparable<DynamicTestElement> {
             final List<DynamicTesting> tests;
             final String name;
             int order = 0;
+            int timeLimit = TestCase.DEFAULT_TIME_LIMIT;
 
             DynamicTestElement(DynamicTesting test, String name) {
                 this(Collections.singletonList(test), name);
@@ -193,8 +196,11 @@ public interface DynamicTesting {
                     DynamicTesting dt = () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj);
                     DynamicTestElement dte = new DynamicTestElement(dt, method.getName());
 
+                    // in case it's old annotation we cannot set params
                     if (method.isAnnotationPresent(DynamicTest.class)) {
-                        dte.order = method.getAnnotation(DynamicTest.class).order();
+                        DynamicTest annotation = method.getAnnotation(DynamicTest.class);
+                        dte.order = annotation.order();
+                        dte.timeLimit = annotation.timeLimit();
                     }
 
                     return dte;
@@ -217,7 +223,16 @@ public interface DynamicTesting {
 
         return Stream.concat(testMethods, testVariables)
             .sorted()
-            .flatMap(dte -> dte.tests.stream())
+            .flatMap(dte -> {
+                List<TestCase<Attach>> tests = new ArrayList<>();
+                for (DynamicTesting test : dte.tests) {
+                    tests.add(new TestCase<Attach>()
+                        .setDynamicTesting(test)
+                        .setTimeLimit(dte.timeLimit)
+                    );
+                }
+                return tests.stream();
+            })
             .collect(toList());
     }
 }
