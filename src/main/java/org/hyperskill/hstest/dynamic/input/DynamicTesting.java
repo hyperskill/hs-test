@@ -133,13 +133,6 @@ public interface DynamicTesting {
                 output = program.execute(input);
             }
 
-            Throwable errorInTest = StageTest.getCurrTestRun().getErrorInTest();
-            if (errorInTest instanceof TestPassed) {
-                return CheckResult.correct();
-            } else if (errorInTest instanceof WrongAnswer) {
-                return CheckResult.wrong(((WrongAnswer) errorInTest).getFeedbackText());
-            }
-
             return null;
         };
     }
