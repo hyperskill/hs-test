@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.common.ReflectionUtils;
-import org.hyperskill.hstest.common.Utils;
+import org.hyperskill.hstest.dynamic.DynamicTest;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -9,16 +9,16 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.Utils.cleanText;
+import static org.hyperskill.hstest.common.Utils.smartCompare;
 
 /**
  * Interface for creating tests with dynamic input.
@@ -138,50 +138,86 @@ public interface DynamicTesting {
     }
 
     /**
-     * Searches for methods with annotation DynamicTestingMethod in the obj object
+     * Searches for methods and variables with annotation DynamicTest in the obj object
      * and converts this methods into DynamicTesting objects.
      *
      * Requirements for the method: must return CheckResult object
      * and doesn't take any parameters.
      *
-     * @param obj object that contain methods declared with DynamicTestingMethod annotation.
-     * @return list of DynamicMethod objects that represent every method marked
-     *         with DynamicTestingMethod annotation.
-     */
-    static List<DynamicTesting> searchDynamicTestingMethods(Object obj) {
-        return Arrays.stream(obj.getClass().getDeclaredMethods())
-            .filter(method -> method.isAnnotationPresent(DynamicTestingMethod.class))
-            .filter(method -> {
-                if (method.getReturnType() != CheckResult.class) {
-                    throw new UnexpectedError("Method \"" + method.getName()
-                        + "\" should return CheckResult object. Found: " + method.getReturnType());
-                } else if (method.getParameterCount() != 0) {
-                    throw new UnexpectedError("Method \"" + method.getName()
-                        + "\" should take 0 arguments. Found: " + method.getParameterCount());
-                }
-                return true;
-            })
-            .sorted(comparing(Method::getName, Utils::smartCompare))
-            .map(method -> (DynamicTesting) () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj))
-            .collect(toList());
-    }
-
-    /**
-     * Searches for variables with annotation DynamicTestingMethod in the obj object
-     * and converts this variables into DynamicTesting objects.
-     *
      * Requirements for the variable: must be a List that contain DynamicTesting objects.
      * or must be an array with type DynamicTesting[]
      *
-     * @param obj object that contain variables declared with DynamicTestingMethod annotation.
-     * @return list of DynamicMethod objects that includes every DynamicTesting object found
-     *         in variables marked with DynamicTestingMethod annotation.
+     * Sorts methods according to their order specified in the DynamicTest annotation,
+     * otherwise sorts by their name using Utils::smartCompare method.
+     *
+     * @param obj object that contain methods and variables declared with DynamicTest annotation.
+     * @return list of DynamicMethod objects that represent every method marked
+     *         with DynamicTestingMethod annotation.
      */
-    static List<DynamicTesting> searchDynamicTestingVariables(Object obj) {
-        return Arrays.stream(obj.getClass().getDeclaredFields())
-            .filter(field -> field.isAnnotationPresent(DynamicTestingMethod.class))
-            .sorted(comparing(Field::getName, Utils::smartCompare))
-            .flatMap(field -> ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class))
+    static List<DynamicTesting> searchDynamicTests(Object obj) {
+        class DynamicTestElement implements Comparable<DynamicTestElement> {
+            final List<DynamicTesting> tests;
+            final String name;
+            int order = 0;
+
+            DynamicTestElement(DynamicTesting test, String name) {
+                this(Collections.singletonList(test), name);
+            }
+
+            DynamicTestElement(List<DynamicTesting> tests, String name) {
+                this.tests = tests;
+                this.name = name;
+            }
+
+            @Override
+            public int compareTo(DynamicTestElement o) {
+                if (order != o.order) {
+                    return order - o.order;
+                }
+                return smartCompare(name, o.name);
+            }
+        }
+
+        Stream<DynamicTestElement> testMethods =
+            Arrays.stream(obj.getClass().getDeclaredMethods())
+                .filter(ReflectionUtils::isDynamicTest)
+                .map(method -> {
+                    if (method.getReturnType() != CheckResult.class) {
+                        throw new UnexpectedError("Method \"" + method.getName()
+                            + "\" should return CheckResult object. Found: " + method.getReturnType());
+                    } else if (method.getParameterCount() != 0) {
+                        throw new UnexpectedError("Method \"" + method.getName()
+                            + "\" should take 0 arguments. Found: " + method.getParameterCount());
+                    }
+
+                    DynamicTesting dt = () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj);
+                    DynamicTestElement dte = new DynamicTestElement(dt, method.getName());
+
+                    if (method.isAnnotationPresent(DynamicTest.class)) {
+                        dte.order = method.getAnnotation(DynamicTest.class).order();
+                    }
+
+                    return dte;
+                });
+
+        Stream<DynamicTestElement> testVariables =
+            Arrays.stream(obj.getClass().getDeclaredFields())
+                .filter(ReflectionUtils::isDynamicTest)
+                .map(field -> {
+                    List<DynamicTesting> dt =
+                        ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class);
+                    DynamicTestElement dte = new DynamicTestElement(dt, field.getName());
+
+                    if (field.isAnnotationPresent(DynamicTest.class)) {
+                        dte.order = field.getAnnotation(DynamicTest.class).order();
+                    }
+
+                    return dte;
+                });
+
+        return Stream.concat(testMethods, testVariables)
+            .sorted()
+            .flatMap(dte -> dte.tests.stream())
             .collect(toList());
     }
 }

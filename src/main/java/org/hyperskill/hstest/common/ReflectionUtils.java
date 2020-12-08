@@ -1,9 +1,12 @@
 package org.hyperskill.hstest.common;
 
+import org.hyperskill.hstest.dynamic.DynamicTest;
+import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +14,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class ReflectionUtils {
 
@@ -94,7 +96,7 @@ public final class ReflectionUtils {
         }
     }
 
-    public static <V, C extends Class<V>> Stream<V> getObjectsFromField(Field field, Object obj, C clazz) {
+    public static <V, C extends Class<V>> List<V> getObjectsFromField(Field field, Object obj, C clazz) {
         field.setAccessible(true);
 
         String className = field.getDeclaringClass().getSimpleName();
@@ -169,7 +171,7 @@ public final class ReflectionUtils {
                     + "the field \"" + field.getName() + "\" to List or array or " + clazz);
             }
 
-            return objects.stream();
+            return objects;
 
         } catch (IllegalAccessException ex) {
             if (!Modifier.isPublic(field.getModifiers())) {
@@ -177,5 +179,14 @@ public final class ReflectionUtils {
             }
             throw new UnexpectedError(feedback, ex);
         }
+    }
+
+    /**
+     * Checks if this annotated element can be used as dynamic test.
+     * It can be of type Method or Field.
+     */
+    public static boolean isDynamicTest(AnnotatedElement elem) {
+        return elem.isAnnotationPresent(DynamicTest.class)
+            || elem.isAnnotationPresent(DynamicTestingMethod.class);
     }
 }

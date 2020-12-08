@@ -78,7 +78,7 @@ public abstract class ExpectedFailTest<T> extends StageTest<T> {
                     continue;
                 }
 
-                Stream<String> values = ReflectionUtils
+                List<String> values = ReflectionUtils
                     .getObjectsFromField(field, this, String.class);
 
                 if (contains) {
