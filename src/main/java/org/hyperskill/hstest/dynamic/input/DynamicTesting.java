@@ -10,6 +10,7 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -172,6 +173,14 @@ public interface DynamicTesting {
                 this.name = name;
             }
 
+            public void fillFields(AnnotatedElement elem) {
+                if (elem.isAnnotationPresent(DynamicTest.class)) {
+                    DynamicTest annotation = elem.getAnnotation(DynamicTest.class);
+                    order = annotation.order();
+                    timeLimit = annotation.timeLimit();
+                }
+            }
+
             @Override
             public int compareTo(DynamicTestElement o) {
                 if (order != o.order) {
@@ -195,14 +204,7 @@ public interface DynamicTesting {
 
                     DynamicTesting dt = () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj);
                     DynamicTestElement dte = new DynamicTestElement(dt, method.getName());
-
-                    // in case it's old annotation we cannot set params
-                    if (method.isAnnotationPresent(DynamicTest.class)) {
-                        DynamicTest annotation = method.getAnnotation(DynamicTest.class);
-                        dte.order = annotation.order();
-                        dte.timeLimit = annotation.timeLimit();
-                    }
-
+                    dte.fillFields(method);
                     return dte;
                 });
 
@@ -213,11 +215,7 @@ public interface DynamicTesting {
                     List<DynamicTesting> dt =
                         ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class);
                     DynamicTestElement dte = new DynamicTestElement(dt, field.getName());
-
-                    if (field.isAnnotationPresent(DynamicTest.class)) {
-                        dte.order = field.getAnnotation(DynamicTest.class).order();
-                    }
-
+                    dte.fillFields(field);
                     return dte;
                 });
 
