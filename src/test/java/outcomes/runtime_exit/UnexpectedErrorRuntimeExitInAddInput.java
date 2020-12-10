@@ -21,7 +21,7 @@ public class UnexpectedErrorRuntimeExitInAddInput extends UnexpectedErrorTest {
     @ContainsMessage
     String[] m = {
         "Unexpected error in test #2",
-        "ProgramExited: Tried to exit"
+        "ExitException: Tried to exit"
     };
 
     public UnexpectedErrorRuntimeExitInAddInput() {

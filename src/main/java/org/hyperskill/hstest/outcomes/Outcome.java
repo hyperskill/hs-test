@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.outcomes;
 
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
@@ -55,7 +55,7 @@ public abstract class Outcome {
             result += "\n\n" + stackTrace.trim();
         }
 
-        String fullLog = SystemOutHandler.getDynamicOutput();
+        String fullLog = OutputHandler.getDynamicOutput();
         boolean worthToShowLog =
             fullLog.trim().length() != 0 && !result.contains(fullLog.trim());
 

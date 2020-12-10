@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.testing;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,7 +9,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class StateMachine<T extends Enum<T>> {
-    private volatile T state;
+    @Getter private volatile T state;
     private final Map<T, Set<T>> transitions = new HashMap<>();
 
     public StateMachine(T initialValue) {
@@ -23,10 +25,6 @@ public class StateMachine<T extends Enum<T>> {
 
     public boolean inState(T state) {
         return getState() == state;
-    }
-
-    public T getState() {
-        return state;
     }
 
     public synchronized void setAndWait(T newState) {

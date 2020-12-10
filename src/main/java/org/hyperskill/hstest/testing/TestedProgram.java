@@ -61,11 +61,17 @@ public class TestedProgram {
         programExecutor = new MainMethodExecutor();
     }
 
+    private void initProgram(String... args) {
+        this.runArgs = new ArrayList<>(Arrays.asList(args));
+        StageTest.getCurrTestRun().addTestedProgram(this);
+    }
+
     /**
      * Starts tested program in the background
      * @param args arguments you want tested program to start with
      */
     public void startInBackground(String... args) {
+        initProgram(args);
         programExecutor.startInBackground(args);
     }
 
@@ -77,8 +83,7 @@ public class TestedProgram {
      *         Returns an empty string if returnOutputAfterExecution is set to false.
      */
     public String start(String... args) {
-        this.runArgs = new ArrayList<>(Arrays.asList(args));
-        StageTest.getCurrTestRun().addTestedProgram(this);
+        initProgram(args);
         return programExecutor.start(args);
     }
 

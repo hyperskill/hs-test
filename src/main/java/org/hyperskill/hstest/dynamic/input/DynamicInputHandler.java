@@ -1,12 +1,11 @@
 package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
@@ -14,9 +13,9 @@ public class DynamicInputHandler {
     private byte[] currentReader = null;
     private int pos = 0;
     private final List<String> inputLines = new ArrayList<>();
-    private final Supplier<String> dynamicInputFunction;
+    private final DynamicTestFunction dynamicInputFunction;
 
-    DynamicInputHandler(Supplier<String> func) {
+    DynamicInputHandler(DynamicTestFunction func) {
         dynamicInputFunction = func;
     }
 
@@ -58,7 +57,7 @@ public class DynamicInputHandler {
         String nextLine = inputLines.remove(0) + "\n";
         currentReader = nextLine.getBytes();
         pos = 0;
-        SystemOutHandler.injectInput("> " + nextLine);
+        OutputHandler.injectInput("> " + nextLine);
     }
 
     private void ejectNextInput() {

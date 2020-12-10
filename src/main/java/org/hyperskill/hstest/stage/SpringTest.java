@@ -4,7 +4,7 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
@@ -140,7 +140,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
             int i = 100;
             while (--i != 0) {
-                if (SystemOutHandler.getOutput().contains("Shutdown completed.\n")) {
+                if (OutputHandler.getOutput().contains("Shutdown completed.\n")) {
                     break;
                 }
                 sleep(100);

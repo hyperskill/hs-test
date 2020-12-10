@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class SystemInMock extends InputStream {
+public class InputMock extends InputStream {
     private final Map<ThreadGroup, DynamicInputHandler> handlers = new HashMap<>();
 
     @Deprecated
@@ -26,7 +25,7 @@ public class SystemInMock extends InputStream {
         // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
     }
 
-    void setDynamicInputFunction(ThreadGroup group, Supplier<String> func) {
+    void setDynamicInputFunction(ThreadGroup group, DynamicTestFunction func) {
         if (handlers.containsKey(group)) {
             throw new UnexpectedError("Cannot change dynamic input function");
         }

@@ -2,8 +2,7 @@ package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
 import org.hyperskill.hstest.dynamic.SystemHandler;
-import org.hyperskill.hstest.dynamic.output.ColoredOutput;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.outcomes.Outcome;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTests;
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RED_BOLD;
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RESET;
 import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
@@ -73,13 +74,13 @@ public abstract class StageTest<AttachType> {
     public final void start() {
         int currTest = 0;
         try {
-            SystemHandler.setUpSystem();
+            SystemHandler.setUp();
             List<TestRun> testRuns = initTests();
 
             for (TestRun testRun : testRuns) {
                 currTest++;
-                SystemOutHandler.getRealOut().println(
-                    ColoredOutput.RED_BOLD + "\nStart test " + currTest + ColoredOutput.RESET
+                OutputHandler.getRealOut().println(
+                    RED_BOLD + "\nStart test " + currTest + RESET
                 );
 
                 currTestRun = testRun;

@@ -22,7 +22,7 @@ public class UnexpectedErrorRuntimeExitInDynamicTesting extends UnexpectedErrorT
     @ContainsMessage
     String[] m = {
         "Unexpected error in test #2",
-        "ProgramExited: Tried to exit"
+        "ExitException: Tried to exit"
     };
 
     @Override

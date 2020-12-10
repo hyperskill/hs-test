@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.testing.runner;
 
 import org.hyperskill.hstest.common.ProcessUtils;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
@@ -75,7 +75,7 @@ public class AsyncMainMethodRunner implements TestRunner {
             if (error == null) {
                 try {
                     return testCase.getCheckFunc().apply(
-                        SystemOutHandler.getOutput(), testCase.getAttach());
+                        OutputHandler.getOutput(), testCase.getAttach());
                 } catch (Throwable ex) {
                     error = ex;
                     testRun.setErrorInTest(error);

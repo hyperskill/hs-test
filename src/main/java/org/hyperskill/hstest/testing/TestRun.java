@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.testing;
 
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import lombok.Getter;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -21,15 +22,13 @@ import static org.hyperskill.hstest.testcase.CheckResult.correct;
 public class TestRun {
 
     private final TestRunner testRunner;
+    @Getter private final int testNum;
+    @Getter private final int testCount;
+    @Getter private final TestCase<?> testCase;
 
-    private final int testNum;
-    private final int testCount;
-    private final TestCase<?> testCase;
-    private boolean inputUsed = false;
-
-    private Throwable errorInTest = null;
-
-    private final List<TestedProgram> testedPrograms = new ArrayList<>();
+    @Getter private boolean inputUsed = false;
+    @Getter Throwable errorInTest = null;
+    @Getter private final List<TestedProgram> testedPrograms = new ArrayList<>();
 
     public TestRun(int testNum, int testCount, TestCase<?> testCase, TestRunner testRunner) {
         this.testNum = testNum;
@@ -38,42 +37,18 @@ public class TestRun {
         this.testRunner = testRunner;
     }
 
-    public int getTestNum() {
-        return testNum;
-    }
-
-    public int getTestCount() {
-        return testCount;
-    }
-
-    public TestCase<?> getTestCase() {
-        return testCase;
-    }
-
-    public boolean isInputUsed() {
-        return inputUsed;
-    }
-
-    public void setInputUsed() {
-        inputUsed = true;
-    }
-
-    public Throwable getErrorInTest() {
-        return errorInTest;
-    }
-
     public void setErrorInTest(Throwable errorInTest) {
         if (this.errorInTest == null) {
             this.errorInTest = errorInTest;
         }
     }
 
-    public void addTestedProgram(TestedProgram testedProgram) {
-        testedPrograms.add(testedProgram);
+    public void setInputUsed() {
+        this.inputUsed = true;
     }
 
-    public List<TestedProgram> getTestedPrograms() {
-        return testedPrograms;
+    public void addTestedProgram(TestedProgram testedProgram) {
+        testedPrograms.add(testedProgram);
     }
 
     public void stopTestedPrograms() {
@@ -86,7 +61,7 @@ public class TestRun {
         createFiles(testCase.getFiles());
         ExecutorService pool = startThreads(testCase.getProcesses());
 
-        SystemOutHandler.resetOutput();
+        OutputHandler.resetOutput();
         CheckResult result = testRunner.test(this);
 
         stopThreads(testCase.getProcesses(), pool);
@@ -120,7 +95,7 @@ public class TestRun {
 
             for (Class<? extends Throwable> exClass : feedbackOnExceptions.keySet()) {
                 String feedback = feedbackOnExceptions.get(exClass);
-                if (userException != null && exClass.isAssignableFrom(userException.getClass())) {
+                if (exClass != null && exClass.isAssignableFrom(userException.getClass())) {
                     throw new ExceptionWithFeedback(feedback, userException);
                 }
             }

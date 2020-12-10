@@ -1,9 +1,9 @@
 package org.hyperskill.hstest.dynamic.security;
 
-public class ProgramExited extends Error {
+public class ExitException extends Error {
     private final int status;
 
-    public ProgramExited(int status) {
+    public ExitException(int status) {
         super("Tried to exit with status " + status + ".");
         this.status = status;
     }

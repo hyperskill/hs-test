@@ -19,7 +19,7 @@ public class UnexpectedErrorSystemExitInGenerate extends UnexpectedErrorTest {
     @ContainsMessage
     String[] m = {
         "Unexpected error during testing",
-        "ProgramExited: Tried to exit"
+        "ExitException: Tried to exit"
     };
 
     public UnexpectedErrorSystemExitInGenerate() {

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.hyperskill.hstest.testing.ExecutionOptions.ignoreStdout;
 
-public class SystemOutMock extends OutputStream {
+public class OutputMock extends OutputStream {
 
     // original stream is used to actually see
     // the test in the console and nothing else
@@ -19,17 +19,17 @@ public class SystemOutMock extends OutputStream {
 
     // cloned stream is used to collect all output
     // from the test and redirect to check function
-    @Getter private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream cloned = new ByteArrayOutputStream();
 
     // dynamic stream contains not only output
     // but also injected input from the test
-    @Getter private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream dynamic = new ByteArrayOutputStream();
 
     // partial stream is used to collect output between
     // dynamic input calls in SystemInMock
     private final Map<ThreadGroup, ByteArrayOutputStream> partial = new HashMap<>();
 
-    SystemOutMock(PrintStream originalStream) {
+    OutputMock(PrintStream originalStream) {
         this.original = new PrintStream(new OutputStream() {
             @Override
             public void write(int b) {
@@ -77,7 +77,20 @@ public class SystemOutMock extends OutputStream {
         InfiniteLoopDetector.reset();
     }
 
-    public synchronized ByteArrayOutputStream getPartial(ThreadGroup group) {
-        return partial.getOrDefault(group, new ByteArrayOutputStream());
+    public String getCloned() {
+        return cloned.toString();
+    }
+
+    public String getDynamic() {
+        return dynamic.toString();
+    }
+
+    public synchronized String getPartial(ThreadGroup group) {
+        ByteArrayOutputStream s =
+            partial.getOrDefault(group, new ByteArrayOutputStream());
+
+        String output = s.toString();
+        s.reset();
+        return output;
     }
 }

@@ -1,7 +1,7 @@
 package dynamic;
 
 import org.hyperskill.hstest.dynamic.SystemHandler;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,7 @@ public class TestOutputHandler {
 
     @Before
     public void setUp() {
-        SystemHandler.setUpSystem();
+        SystemHandler.setUp();
     }
 
     @After
@@ -23,9 +23,9 @@ public class TestOutputHandler {
     @Test
     public void testNormalOutputHandler() {
         System.out.print("123");
-        assertEquals("123", SystemOutHandler.getOutput());
+        assertEquals("123", OutputHandler.getOutput());
         System.out.print("456");
-        assertEquals("123456", SystemOutHandler.getOutput());
+        assertEquals("123456", OutputHandler.getOutput());
     }
 
     @Test
@@ -33,17 +33,17 @@ public class TestOutputHandler {
         String a = "ǿ˿Ͽ";
         String b = "ꇿꋿꏿ";
         System.out.print(a);
-        assertEquals(a, SystemOutHandler.getOutput());
+        assertEquals(a, OutputHandler.getOutput());
         System.out.print(b);
-        assertEquals(a + b, SystemOutHandler.getOutput());
+        assertEquals(a + b, OutputHandler.getOutput());
     }
 
     @Test
     public void testNormalOutputHandlerWithNewLines() {
         System.out.println("123");
-        assertEquals("123\n", SystemOutHandler.getOutput());
+        assertEquals("123\n", OutputHandler.getOutput());
         System.out.println("456");
-        assertEquals("123\n456\n", SystemOutHandler.getOutput());
+        assertEquals("123\n456\n", OutputHandler.getOutput());
     }
 
     @Test
@@ -51,25 +51,25 @@ public class TestOutputHandler {
         String a = "ǿ˿Ͽ";
         String b = "ꇿꋿꏿ";
         System.out.println(a);
-        assertEquals(a + "\n", SystemOutHandler.getOutput());
+        assertEquals(a + "\n", OutputHandler.getOutput());
         System.out.println(b);
-        assertEquals(a + "\n" + b + "\n", SystemOutHandler.getOutput());
+        assertEquals(a + "\n" + b + "\n", OutputHandler.getOutput());
     }
 
     @Test
     public void testResetOutputHandler() {
         System.out.print("123");
-        SystemOutHandler.resetOutput();
-        assertEquals("", SystemOutHandler.getOutput());
+        OutputHandler.resetOutput();
+        assertEquals("", OutputHandler.getOutput());
         System.out.print("456");
-        assertEquals("456", SystemOutHandler.getOutput());
+        assertEquals("456", OutputHandler.getOutput());
     }
 
     @Test
     public void testRevertOutputHandler() {
         System.out.print("123");
-        SystemOutHandler.revertSystemOut();
+        OutputHandler.revertOutput();
         System.out.print("123");
-        assertEquals("", SystemOutHandler.getOutput());
+        assertEquals("", OutputHandler.getOutput());
     }
 }

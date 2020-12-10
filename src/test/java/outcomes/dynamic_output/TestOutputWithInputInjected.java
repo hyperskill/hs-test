@@ -1,6 +1,6 @@
 package outcomes.dynamic_output;
 
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
@@ -36,7 +36,7 @@ public class TestOutputWithInputInjected extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String attach) {
-        String dynamicOutput = SystemOutHandler.getDynamicOutput();
+        String dynamicOutput = OutputHandler.getDynamicOutput();
         if (!dynamicOutput.equals("Print x and y: > 123 456\n> 678\nAnother num:\n> 248\n")) {
             throw new RuntimeException();
         }

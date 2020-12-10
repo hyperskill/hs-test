@@ -3,24 +3,23 @@ package org.hyperskill.hstest.dynamic.input;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Supplier;
 
-public final class SystemInHandler {
+public final class InputHandler {
 
-    private SystemInHandler() { }
+    private InputHandler() { }
 
     private static final InputStream realIn = System.in;
-    private static final SystemInMock mockIn = new SystemInMock();
+    private static final InputMock mockIn = new InputMock();
 
-    public static void replaceSystemIn() {
+    public static void replaceInput() {
         System.setIn(mockIn);
     }
 
-    public static void revertSystemIn() {
+    public static void revertInput() {
         System.setIn(realIn);
     }
 
-    public static void setDynamicInputFunc(ThreadGroup group, Supplier<String> func) {
+    public static void setDynamicInputFunc(ThreadGroup group, DynamicTestFunction func) {
         mockIn.setDynamicInputFunction(group, func);
     }
 

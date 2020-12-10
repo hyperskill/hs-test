@@ -20,7 +20,7 @@ public class UnexpectedErrorSystemExitInDynamicMethod extends UnexpectedErrorTes
     @ContainsMessage
     String[] m = {
         "Unexpected error in test #",
-        "ProgramExited: Tried to exit"
+        "ExitException: Tried to exit"
     };
 
     @DynamicTestingMethod

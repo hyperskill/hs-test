@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.common;
 
 import org.hyperskill.hstest.dynamic.output.ColoredOutput;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.testcase.Process;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public final class ProcessUtils {
                 executor.shutdownNow();
                 terminated = executor.awaitTermination(sleepAwaitTimeLong, TimeUnit.MILLISECONDS);
                 if (!terminated) {
-                    SystemOutHandler.getRealOut().println(
+                    OutputHandler.getRealOut().println(
                         ColoredOutput.RED_BOLD + "SOME PROCESSES ARE NOT TERMINATED" + ColoredOutput.RESET
                     );
                 }
@@ -71,7 +71,7 @@ public final class ProcessUtils {
             for (int i = 1; i <= processes.size(); i++) {
                 Process process = processes.get(i - 1);
                 if (!process.isStopped()) {
-                    SystemOutHandler.getRealOut().println(
+                    OutputHandler.getRealOut().println(
                         ColoredOutput.RED_BOLD + "PROCESS #" + i + " IS NOT TERMINATED" + ColoredOutput.RESET
                     );
                 }

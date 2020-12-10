@@ -1,5 +1,7 @@
 package org.hyperskill.hstest.testcase;
 
+import lombok.Getter;
+
 public class CheckResult {
 
     public static CheckResult correct() {
@@ -10,24 +12,16 @@ public class CheckResult {
         return new CheckResult(false, feedback);
     }
 
-    private final boolean isCorrect;
-    private final String feedback;
+    @Getter private final boolean correct;
+    @Getter private final String feedback;
 
     @Deprecated
     public CheckResult(boolean isCorrect) {
         this(isCorrect, "");
     }
 
-    public CheckResult(boolean isCorrect, String feedback) {
-        this.isCorrect = isCorrect;
+    public CheckResult(boolean correct, String feedback) {
+        this.correct = correct;
         this.feedback = feedback;
-    }
-
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public String getFeedback() {
-        return feedback;
     }
 }

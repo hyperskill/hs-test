@@ -1,7 +1,7 @@
 package org.hyperskill.hstest.dynamic;
 
-import org.hyperskill.hstest.dynamic.input.SystemInHandler;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
+import org.hyperskill.hstest.dynamic.input.InputHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 
 import java.util.Locale;
@@ -18,9 +18,9 @@ public final class SystemHandler {
 
     private static final String separatorProperty = "line.separator";
 
-    public static void setUpSystem() {
-        SystemOutHandler.replaceSystemOut();
-        SystemInHandler.replaceSystemIn();
+    public static void setUp() {
+        OutputHandler.replaceOutput();
+        InputHandler.replaceInput();
 
         oldSecurityManager = getSecurityManager();
         System.setSecurityManager(
@@ -37,8 +37,8 @@ public final class SystemHandler {
     }
 
     public static void tearDownSystem() {
-        SystemOutHandler.revertSystemOut();
-        SystemInHandler.revertSystemIn();
+        OutputHandler.revertOutput();
+        InputHandler.revertInput();
         System.setSecurityManager(oldSecurityManager);
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);

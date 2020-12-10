@@ -6,15 +6,15 @@ import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
 
-public final class SystemOutHandler {
+public final class OutputHandler {
 
-    private SystemOutHandler() { }
+    private OutputHandler() { }
 
     private static final PrintStream REAL_OUT = System.out;
     private static final PrintStream REAL_ERR = System.err;
 
-    private static final SystemOutMock MOCK_OUT = new SystemOutMock(REAL_OUT);
-    private static final SystemOutMock MOCK_ERR = new SystemOutMock(REAL_ERR);
+    private static final OutputMock MOCK_OUT = new OutputMock(REAL_OUT);
+    private static final OutputMock MOCK_ERR = new OutputMock(REAL_ERR);
 
     public static PrintStream getRealOut() {
         return MOCK_OUT.getOriginal();
@@ -24,12 +24,12 @@ public final class SystemOutHandler {
         return MOCK_ERR.getOriginal();
     }
 
-    public static void replaceSystemOut() {
+    public static void replaceOutput() {
         System.setOut(new PrintStream(MOCK_OUT, true));
         System.setErr(new PrintStream(MOCK_ERR, true));
     }
 
-    public static void revertSystemOut() {
+    public static void revertOutput() {
         resetOutput();
         System.setOut(REAL_OUT);
         System.setErr(REAL_ERR);
@@ -41,17 +41,15 @@ public final class SystemOutHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(MOCK_OUT.getCloned().toString());
+        return Utils.cleanText(MOCK_OUT.getCloned());
     }
 
     public static String getDynamicOutput() {
-        return Utils.cleanText(MOCK_OUT.getDynamic().toString());
+        return Utils.cleanText(MOCK_OUT.getDynamic());
     }
 
     public static String getPartialOutput(ThreadGroup group) {
-        String output = Utils.cleanText(MOCK_OUT.getPartial(group).toString());
-        MOCK_OUT.getPartial(group).reset();
-        return output;
+        return Utils.cleanText(MOCK_OUT.getPartial(group));
     }
 
     public static void injectInput(String input) {

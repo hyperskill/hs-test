@@ -45,6 +45,6 @@ public class TestingSecurityManager extends SecurityManagerWrapper {
 
     @Override
     public void checkExit(int status) {
-        throw new ProgramExited(status);
+        throw new ExitException(status);
     }
 }

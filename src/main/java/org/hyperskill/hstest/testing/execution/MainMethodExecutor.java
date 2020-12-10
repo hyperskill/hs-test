@@ -3,9 +3,9 @@ package org.hyperskill.hstest.testing.execution;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
-import org.hyperskill.hstest.dynamic.input.SystemInHandler;
-import org.hyperskill.hstest.dynamic.output.SystemOutHandler;
-import org.hyperskill.hstest.dynamic.security.ProgramExited;
+import org.hyperskill.hstest.dynamic.input.InputHandler;
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
@@ -136,7 +136,7 @@ public class MainMethodExecutor extends ProgramExecutor {
             if (StageTest.getCurrTestRun().getErrorInTest() == null) {
                 // ProgramExited is thrown in case of System.exit()
                 // consider System.exit() like normal exit
-                if (ex.getCause() instanceof ProgramExited) {
+                if (ex.getCause() instanceof ExitException) {
                     machine.setState(FINISHED);
                     return;
                 }
@@ -154,7 +154,7 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     @Override
     protected void launch(String... args) {
-        SystemInHandler.setDynamicInputFunc(group, this::requestInput);
+        InputHandler.setDynamicInputFunc(group, this::requestInput);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
     }
@@ -177,7 +177,7 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     @Override
     public String getOutput() {
-        return SystemOutHandler.getPartialOutput(group);
+        return OutputHandler.getPartialOutput(group);
     }
 
     @Override

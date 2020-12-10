@@ -2,7 +2,7 @@ package org.hyperskill.hstest.dynamic.output;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hyperskill.hstest.dynamic.security.ProgramExited;
+import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.testing.InfiniteLoopException;
 import org.hyperskill.hstest.stage.StageTest;
 
@@ -29,6 +29,9 @@ public class InfiniteLoopDetector {
     private static final int CHARS_SINCE_LAST_INPUT_MAX = 5000;
     private static final int LINES_SINCE_LAST_INPUT_MAX = 500;
 
+    private static int charsSinceLastCheck = 0;
+    private static final int CHARS_SINCE_LAST_CHECK_MAX = 100;
+
     static void write(int b) {
         if (!working) return;
 
@@ -36,6 +39,7 @@ public class InfiniteLoopDetector {
         sinceLastInput.write(b);
 
         charsSinceLastInput++;
+        charsSinceLastCheck++;
 
         if (b == '\n') {
             linesSinceLastInput++;
@@ -48,16 +52,16 @@ public class InfiniteLoopDetector {
 
         }
 
-        if (charsSinceLastInput >= 100 && charsSinceLastInput % 100 == 0) {
+        if (charsSinceLastCheck >= CHARS_SINCE_LAST_CHECK_MAX) {
             checkInfLoopChars();
+            charsSinceLastCheck = 0;
         }
     }
 
     static void reset() {
-        if (!working) return;
-
         currLine.reset();
         charsSinceLastInput = 0;
+        charsSinceLastCheck = 0;
         linesSinceLastInput = 0;
         betweenInputRequests.clear();
         everyLine.clear();
@@ -134,6 +138,6 @@ public class InfiniteLoopDetector {
 
     private static void fail(String reason) {
         StageTest.getCurrTestRun().setErrorInTest(new InfiniteLoopException(reason));
-        throw new ProgramExited(0);
+        throw new ExitException(0);
     }
 }
