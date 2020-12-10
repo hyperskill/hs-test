@@ -1,4 +1,4 @@
-package outcomes.infinite_loop;
+package outcomes.kotlin_input;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.stage.StageTest;
