@@ -53,12 +53,12 @@ public interface DynamicTesting {
     /**
      * Converter from old way of constructing dynamic testing (multiple methods)
      * to new way (using single method)
-     * @param sourceRun class that is tested. May be a package or a class name
+     * @param sourceName class that is tested. May be a package or a class name
      * @param args arguments for the testedClass's main method
      * @param inputFuncs old way of constructing dynamic testing
      * @return DynamicTesting's single method that provides dynamic input.
      */
-    static DynamicTesting toDynamicTesting(String sourceRun, List<String> args,
+    static DynamicTesting toDynamicTesting(String sourceName, List<String> args,
                                            List<DynamicInputFunction> inputFuncs) {
 
         class InputFunctionHandler {
@@ -122,7 +122,7 @@ public interface DynamicTesting {
         }
 
         return () -> {
-            TestedProgram program = new TestedProgram(sourceRun);
+            TestedProgram program = new TestedProgram(sourceName);
             String output = program.start(args.toArray(new String[0]));
 
             InputFunctionHandler handler = new InputFunctionHandler(inputFuncs);
