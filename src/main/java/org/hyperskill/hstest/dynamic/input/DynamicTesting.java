@@ -11,17 +11,21 @@ import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.hyperskill.hstest.common.ReflectionUtils.canBeBoxed;
 import static org.hyperskill.hstest.common.Utils.cleanText;
 import static org.hyperskill.hstest.common.Utils.smartCompare;
+import static org.hyperskill.hstest.dynamic.ParametrizedDataExtractor.extractParametrizedData;
 
 /**
  * Interface for creating tests with dynamic input.
@@ -145,7 +149,7 @@ public interface DynamicTesting {
      * and converts this methods into DynamicTesting objects.
      *
      * Requirements for the method: must return CheckResult object
-     * and doesn't take any parameters.
+     * and doesn't take any parameters (allowed to take if it is parametrized test).
      *
      * Requirements for the variable: must be a List that contain DynamicTesting objects.
      * or must be an array with type DynamicTesting[]
@@ -157,28 +161,83 @@ public interface DynamicTesting {
      * @return list of DynamicMethod objects that represent every method marked
      *         with DynamicTestingMethod annotation.
      */
-    static <Attach> List<TestCase<Attach>> searchDynamicTests(Object obj) {
-        class DynamicTestElement implements Comparable<DynamicTestElement> {
-            final List<DynamicTesting> tests;
+    static <A, T extends StageTest<A>> List<TestCase<A>> searchDynamicTests(T obj) {
+        class DynamicTestElement<M extends Member & AnnotatedElement>
+            implements Comparable<DynamicTestElement<M>> {
+
+            final List<DynamicTestingWithoutParams> tests;
             final String name;
             int order = 0;
             int timeLimit = TestCase.DEFAULT_TIME_LIMIT;
+            List<Object[]> argsList = new ArrayList<>();
 
-            DynamicTestElement(DynamicTesting test, String name) {
-                this(Collections.singletonList(test), name);
-            }
-
-            DynamicTestElement(List<DynamicTesting> tests, String name) {
+            DynamicTestElement(List<DynamicTestingWithoutParams> tests, M member) {
                 this.tests = tests;
-                this.name = name;
+                this.name = member.getName();
+                fillFields(member);
+                checkErrors(member);
             }
 
-            public void fillFields(AnnotatedElement elem) {
+            private void fillFields(M elem) {
                 if (elem.isAnnotationPresent(DynamicTest.class)) {
                     DynamicTest annotation = elem.getAnnotation(DynamicTest.class);
                     order = annotation.order();
                     timeLimit = annotation.timeLimit();
+                    String data = annotation.data();
+
+                    if (elem instanceof Method && !data.isEmpty()) {
+                        argsList = extractParametrizedData(data, obj);
+                    }
                 }
+            }
+
+            private void checkErrors(M member) {
+                if (member instanceof Method) {
+                    Method method = (Method) member;
+                    if (argsList.isEmpty() && method.getParameterCount() != 0) {
+                        throw new UnexpectedError("Method \"" + method.getName()
+                            + "\" should take 0 arguments. Found: " + method.getParameterCount());
+                    }
+
+                    if (!argsList.isEmpty()) {
+                        for (Object[] args : argsList) {
+                            if (args.length != method.getParameterCount()) {
+                                throw new UnexpectedError("Arguments count mismatch: method \""
+                                    + method.getName() + "\" should take " + args.length + " parameters, "
+                                    + "found " + method.getParameterCount() + ".");
+                            }
+
+                            Class<?>[] types = method.getParameterTypes();
+
+                            for (int i = 0; i < types.length; i++) {
+                                Class<?> methodType = types[i];
+                                Class<?> argsType = args[i].getClass();
+
+                                if (!methodType.isAssignableFrom(argsType)
+                                    && !canBeBoxed(methodType, argsType)) {
+                                    throw new UnexpectedError("Arguments mismatch: method \""
+                                        + method.getName() + "\" should take object of type " + argsType.getName()
+                                        + " found " + methodType.getName() + ".");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            public List<DynamicTesting> getTests() {
+                return tests
+                    .stream()
+                    .flatMap(dt -> {
+                        List<DynamicTesting> tests = new ArrayList<>();
+                        if (argsList.size() == 0) {
+                            tests.add(() -> dt.handle(new Object[]{ }));
+                        } else {
+                            argsList.forEach(args -> tests.add(() -> dt.handle(args)));
+                        }
+                        return tests.stream();
+                    })
+                    .collect(toList());
             }
 
             @Override
@@ -190,41 +249,38 @@ public interface DynamicTesting {
             }
         }
 
-        Stream<DynamicTestElement> testMethods =
-            Arrays.stream(obj.getClass().getDeclaredMethods())
-                .filter(ReflectionUtils::isDynamicTest)
-                .map(method -> {
+        return Stream.concat(
+            Arrays.stream(obj.getClass().getDeclaredMethods()),
+            Arrays.stream(obj.getClass().getDeclaredFields()))
+            .filter(ReflectionUtils::isDynamicTest)
+            .map(member -> {
+                List<DynamicTestingWithoutParams> dt = new ArrayList<>();
+
+                if (member instanceof Method) {
+                    Method method = (Method) member;
                     if (method.getReturnType() != CheckResult.class) {
                         throw new UnexpectedError("Method \"" + method.getName()
                             + "\" should return CheckResult object. Found: " + method.getReturnType());
-                    } else if (method.getParameterCount() != 0) {
-                        throw new UnexpectedError("Method \"" + method.getName()
-                            + "\" should take 0 arguments. Found: " + method.getParameterCount());
                     }
+                    dt.add(args -> (CheckResult) ReflectionUtils.invokeMethod(method, obj, args));
 
-                    DynamicTesting dt = () -> (CheckResult) ReflectionUtils.invokeMethod(method, obj);
-                    DynamicTestElement dte = new DynamicTestElement(dt, method.getName());
-                    dte.fillFields(method);
-                    return dte;
-                });
+                } else if (member instanceof Field) {
+                    Field field = (Field) member;
+                    ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class)
+                        .forEach(elem -> dt.add(args -> elem.handle()));
 
-        Stream<DynamicTestElement> testVariables =
-            Arrays.stream(obj.getClass().getDeclaredFields())
-                .filter(ReflectionUtils::isDynamicTest)
-                .map(field -> {
-                    List<DynamicTesting> dt =
-                        ReflectionUtils.getObjectsFromField(field, obj, DynamicTesting.class);
-                    DynamicTestElement dte = new DynamicTestElement(dt, field.getName());
-                    dte.fillFields(field);
-                    return dte;
-                });
+                } else {
+                    throw new UnexpectedError("DynamicTest annotation "
+                        + " should be applied only to methods and fields.");
+                }
 
-        return Stream.concat(testMethods, testVariables)
+                return new DynamicTestElement<>(dt, member);
+            })
             .sorted()
             .flatMap(dte -> {
-                List<TestCase<Attach>> tests = new ArrayList<>();
-                for (DynamicTesting test : dte.tests) {
-                    tests.add(new TestCase<Attach>()
+                List<TestCase<A>> tests = new ArrayList<>();
+                for (DynamicTesting test : dte.getTests()) {
+                    tests.add(new TestCase<A>()
                         .setDynamicTesting(test)
                         .setTimeLimit(dte.timeLimit)
                     );

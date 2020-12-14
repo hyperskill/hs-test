@@ -73,7 +73,7 @@ public final class ReflectionUtils {
         return false;
     }
 
-    public static Object invokeMethod(Method method, Object obj) {
+    public static Object invokeMethod(Method method, Object obj, Object[] args) {
         method.setAccessible(true);
 
         String className = method.getDeclaringClass().getSimpleName();
@@ -82,7 +82,7 @@ public final class ReflectionUtils {
             + className + "." + methodName + "\".";
 
         try {
-            return method.invoke(obj);
+            return method.invoke(obj, args);
         } catch (InvocationTargetException ex) {
             if (ex.getCause() instanceof OutcomeError) {
                 throw (OutcomeError) ex.getCause();
@@ -188,5 +188,16 @@ public final class ReflectionUtils {
     public static boolean isDynamicTest(AnnotatedElement elem) {
         return elem.isAnnotationPresent(DynamicTest.class)
             || elem.isAnnotationPresent(DynamicTestingMethod.class);
+    }
+
+    public static boolean canBeBoxed(Class<?> typeFrom, Class<?> typeTo) {
+        return typeFrom == int.class && typeTo == Integer.class
+            || typeFrom == long.class && typeTo == Long.class
+            || typeFrom == short.class && typeTo == Short.class
+            || typeFrom == char.class && typeTo == Character.class
+            || typeFrom == byte.class && typeTo == Byte.class
+            || typeFrom == boolean.class && typeTo == Boolean.class
+            || typeFrom == float.class && typeTo == Float.class
+            || typeFrom == double.class && typeTo == Double.class;
     }
 }
