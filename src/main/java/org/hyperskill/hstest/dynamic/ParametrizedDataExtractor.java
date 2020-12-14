@@ -113,6 +113,10 @@ public class ParametrizedDataExtractor {
     }
 
     private static List<Object[]> analyzeData(Object rawData, String providerName) {
+        if (rawData == null) {
+            throw new UnexpectedError(providerName + " should not return null, found null");
+        }
+
         Object[] objects = getAsObjectArray(rawData);
 
         if (objects == null) {
@@ -130,6 +134,11 @@ public class ParametrizedDataExtractor {
         int argsLength = 0;
 
         for (Object obj : objects) {
+            if (obj == null) {
+                throw new UnexpectedError(providerName
+                    + " should not be/should not return an array that contains null inside.");
+            }
+
             if (obj instanceof Object[]) {
                 foundArraysInside = true;
                 int currLength = ((Object[]) obj).length;
