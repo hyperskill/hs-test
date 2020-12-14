@@ -168,6 +168,7 @@ public interface DynamicTesting {
             final List<DynamicTestingWithoutParams> tests;
             final String name;
             int order = 0;
+            int repeat = 1;
             int timeLimit = TestCase.DEFAULT_TIME_LIMIT;
             List<Object[]> argsList = new ArrayList<>();
 
@@ -183,6 +184,7 @@ public interface DynamicTesting {
                     DynamicTest annotation = elem.getAnnotation(DynamicTest.class);
                     order = annotation.order();
                     timeLimit = annotation.timeLimit();
+                    repeat = annotation.repeat();
                     String data = annotation.data();
 
                     if (elem instanceof Method && !data.isEmpty()) {
@@ -192,6 +194,11 @@ public interface DynamicTesting {
             }
 
             private void checkErrors(M member) {
+                if (repeat <= 0) {
+                    throw new UnexpectedError("DynamicTest \"" + member.getName()
+                        + "\" should not be repeated <= 1 times, found " + repeat);
+                }
+
                 if (member instanceof Method) {
                     Method method = (Method) member;
                     if (argsList.isEmpty() && method.getParameterCount() != 0) {
@@ -230,10 +237,12 @@ public interface DynamicTesting {
                     .stream()
                     .flatMap(dt -> {
                         List<DynamicTesting> tests = new ArrayList<>();
-                        if (argsList.size() == 0) {
-                            tests.add(() -> dt.handle(new Object[]{ }));
-                        } else {
-                            argsList.forEach(args -> tests.add(() -> dt.handle(args)));
+                        for (int i = 0; i < repeat; i++) {
+                            if (argsList.size() == 0) {
+                                tests.add(() -> dt.handle(new Object[]{ }));
+                            } else {
+                                argsList.forEach(args -> tests.add(() -> dt.handle(args)));
+                            }
                         }
                         return tests.stream();
                     })
