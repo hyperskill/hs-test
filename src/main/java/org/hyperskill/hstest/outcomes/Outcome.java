@@ -44,8 +44,7 @@ public abstract class Outcome {
             whenErrorHappened = " in test #" + testNumber;
         }
 
-        String result =
-            getType() + whenErrorHappened;
+        String result = getType() + whenErrorHappened;
 
         if (!errorText.isEmpty()) {
             result += "\n\n" + errorText.trim();
@@ -56,13 +55,13 @@ public abstract class Outcome {
         }
 
         String fullLog = OutputHandler.getDynamicOutput();
-        boolean worthToShowLog =
+        boolean worthShowingLog =
             fullLog.trim().length() != 0 && !result.contains(fullLog.trim());
 
         String arguments = "";
         TestRun testRun = StageTest.getCurrTestRun();
         if (testRun != null) {
-            List<TestedProgram> testedPrograms = StageTest.getCurrTestRun().getTestedPrograms();
+            List<TestedProgram> testedPrograms = testRun.getTestedPrograms();
             List<TestedProgram> programsWithArgs = testedPrograms
                 .stream().filter(pr -> pr.getRunArgs().size() > 0).collect(Collectors.toList());
 
@@ -85,11 +84,11 @@ public abstract class Outcome {
             arguments = argumentsBuilder.toString().trim();
         }
 
-        if (worthToShowLog || arguments.length() > 0) {
+        if (worthShowingLog || arguments.length() > 0) {
             result += "\n\n";
-            if (worthToShowLog) {
+            if (worthShowingLog) {
                 result += "Please find below the output of your program during this failed test.\n";
-                if (StageTest.getCurrTestRun().isInputUsed()) {
+                if (testRun.isInputUsed()) {
                     result += "Note that the '>' character indicates the beginning of the input line.\n";
                 }
                 result += "\n---\n\n";
@@ -99,7 +98,7 @@ public abstract class Outcome {
                 result += arguments + "\n\n";
             }
 
-            if (worthToShowLog) {
+            if (worthShowingLog) {
                 result += fullLog;
             }
         }
@@ -107,31 +106,31 @@ public abstract class Outcome {
         return result.trim();
     }
 
-    public static Outcome getOutcome(Throwable t, int currTest) {
-        if (t instanceof WrongAnswer) {
-            return new WrongAnswerOutcome(currTest, (WrongAnswer) t);
+    public static Outcome getOutcome(Throwable ex, int currTest) {
+        if (ex instanceof WrongAnswer) {
+            return new WrongAnswerOutcome(currTest, (WrongAnswer) ex);
 
-        } else if (t instanceof PresentationError) {
-            return new PresentationErrorOutcome(currTest, (PresentationError) t);
+        } else if (ex instanceof PresentationError) {
+            return new PresentationErrorOutcome(currTest, (PresentationError) ex);
 
-        } else if (t instanceof ExceptionWithFeedback) {
-            return new ExceptionOutcome(currTest, (ExceptionWithFeedback) t);
+        } else if (ex instanceof ExceptionWithFeedback) {
+            return new ExceptionOutcome(currTest, (ExceptionWithFeedback) ex);
 
-        } else if (t instanceof ErrorWithFeedback
-            || t instanceof FileSystemException
-            || t instanceof TimeLimitException
-            || t instanceof NumberFormatException
-            || t instanceof InfiniteLoopException) {
+        } else if (ex instanceof ErrorWithFeedback
+            || ex instanceof FileSystemException
+            || ex instanceof TimeLimitException
+            || ex instanceof NumberFormatException
+            || ex instanceof InfiniteLoopException) {
 
-            return new ErrorOutcome(currTest, t);
+            return new ErrorOutcome(currTest, ex);
 
-        } else if (t instanceof UnexpectedError
-            && t.getCause() instanceof NumberFormatException) {
+        } else if (ex instanceof UnexpectedError
+            && ex.getCause() instanceof NumberFormatException) {
 
-            return new ErrorOutcome(currTest, t.getCause());
+            return new ErrorOutcome(currTest, ex.getCause());
 
         } else {
-            return new UnexpectedErrorOutcome(currTest, t);
+            return new UnexpectedErrorOutcome(currTest, ex);
         }
     }
 }

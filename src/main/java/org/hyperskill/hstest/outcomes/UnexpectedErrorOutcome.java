@@ -1,7 +1,8 @@
 package org.hyperskill.hstest.outcomes;
 
 import org.hyperskill.hstest.exception.FailureHandler;
-import org.hyperskill.hstest.exception.StackTraceUtils;
+
+import static org.hyperskill.hstest.exception.StackTraceUtils.getStackTrace;
 
 public class UnexpectedErrorOutcome extends Outcome {
 
@@ -9,9 +10,9 @@ public class UnexpectedErrorOutcome extends Outcome {
         testNumber = testNum;
         errorText = "We have recorded this bug and will fix it soon.\n\n"
                 + FailureHandler.getReport();
-        stackTrace = StackTraceUtils.getStackTrace(cause);
+        stackTrace = getStackTrace(cause);
         if (cause.getCause() != null) {
-            stackTrace += "\n" + StackTraceUtils.getStackTrace(cause.getCause());
+            stackTrace += "\n" + getStackTrace(cause.getCause());
         }
     }
 

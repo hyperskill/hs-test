@@ -1,10 +1,11 @@
 package org.hyperskill.hstest.dynamic.output;
 
-import org.hyperskill.hstest.common.Utils;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
 
 import java.io.PrintStream;
+
+import static org.hyperskill.hstest.common.Utils.cleanText;
 
 public final class OutputHandler {
 
@@ -41,15 +42,15 @@ public final class OutputHandler {
     }
 
     public static String getOutput() {
-        return Utils.cleanText(MOCK_OUT.getCloned());
+        return cleanText(MOCK_OUT.getCloned());
     }
 
     public static String getDynamicOutput() {
-        return Utils.cleanText(MOCK_OUT.getDynamic());
+        return cleanText(MOCK_OUT.getDynamic());
     }
 
     public static String getPartialOutput(ThreadGroup group) {
-        return Utils.cleanText(MOCK_OUT.getPartial(group));
+        return cleanText(MOCK_OUT.getPartial(group));
     }
 
     public static void injectInput(String input) {
