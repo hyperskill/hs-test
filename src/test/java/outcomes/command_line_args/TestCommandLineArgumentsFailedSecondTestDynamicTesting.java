@@ -9,10 +9,25 @@ import outcomes.base.UserErrorTest;
 import java.util.Arrays;
 import java.util.List;
 
+class TestCommandLineArgumentsFailedSecondTestDynamicTestingMain {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+}
+
+class TestCommandLineArgumentsFailedSecondTestDynamicTestingMain2 {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedSecondTestDynamicTesting extends UserErrorTest<Boolean> {
 
     public TestCommandLineArgumentsFailedSecondTestDynamicTesting() {
-        super(Main2.class);
+        super(TestCommandLineArgumentsFailedSecondTestDynamicTestingMain2.class);
     }
 
     @ContainsMessage
@@ -35,14 +50,16 @@ public class TestCommandLineArgumentsFailedSecondTestDynamicTesting extends User
     public List<TestCase<Boolean>> generate() {
         return Arrays.asList(
             new TestCase<Boolean>().setDynamicTesting(() -> {
-                TestedProgram pr2 = new TestedProgram(Main2.class);
+                TestedProgram pr2 = new TestedProgram(
+                    TestCommandLineArgumentsFailedSecondTestDynamicTestingMain2.class);
                 pr2.start("--second", "main");
 
                 return new CheckResult(true, "");
             }),
 
             new TestCase<Boolean>().setDynamicTesting(() -> {
-                TestedProgram pr = new TestedProgram(Main.class);
+                TestedProgram pr = new TestedProgram(
+                    TestCommandLineArgumentsFailedSecondTestDynamicTestingMain.class);
                 pr.start("-in", "123", "-out", "234");
 
                 return new CheckResult(false, "");

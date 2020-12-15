@@ -6,6 +6,21 @@ import org.hyperskill.hstest.testing.TestedProgram;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
+class TestCommandLineArgumentsFailedDynamicMethod4Main {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+}
+
+class TestCommandLineArgumentsFailedDynamicMethod4Main2 {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedDynamicMethod4 extends UserErrorTest<String> {
 
     @ContainsMessage
@@ -22,10 +37,10 @@ public class TestCommandLineArgumentsFailedDynamicMethod4 extends UserErrorTest<
 
     @DynamicTestingMethod
     CheckResult test1() {
-        TestedProgram pr = new TestedProgram(Main.class);
+        TestedProgram pr = new TestedProgram(TestCommandLineArgumentsFailedDynamicMethod4Main.class);
         pr.start();
 
-        TestedProgram pr2 = new TestedProgram(Main2.class);
+        TestedProgram pr2 = new TestedProgram(TestCommandLineArgumentsFailedDynamicMethod4Main2.class);
         pr2.start("--second", "main");
 
         return new CheckResult(false, "");

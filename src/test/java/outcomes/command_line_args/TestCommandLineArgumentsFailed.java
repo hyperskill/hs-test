@@ -8,10 +8,19 @@ import outcomes.base.UserErrorTest;
 import java.util.Arrays;
 import java.util.List;
 
+class TestCommandLineArgumentsFailedMain {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+}
+
 public class TestCommandLineArgumentsFailed extends UserErrorTest<String> {
 
     public TestCommandLineArgumentsFailed() {
-        super(Main.class);
+        super(TestCommandLineArgumentsFailedMain.class);
     }
 
     @ContainsMessage

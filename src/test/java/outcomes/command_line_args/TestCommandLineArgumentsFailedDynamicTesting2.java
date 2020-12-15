@@ -9,6 +9,12 @@ import outcomes.base.UserErrorTest;
 import java.util.Collections;
 import java.util.List;
 
+class TestCommandLineArgumentsFailedDynamicTesting2Main {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedDynamicTesting2 extends UserErrorTest<String> {
 
     @ContainsMessage
@@ -21,7 +27,8 @@ public class TestCommandLineArgumentsFailedDynamicTesting2 extends UserErrorTest
     public List<TestCase<String>> generate() {
         return Collections.singletonList(
             new TestCase<String>().setDynamicTesting(() -> {
-                TestedProgram pr = new TestedProgram(Main2.class);
+                TestedProgram pr = new TestedProgram(
+                    TestCommandLineArgumentsFailedDynamicTesting2Main.class);
                 pr.start("-in", "123", "-out", "234");
                 return new CheckResult(false, "");
             })

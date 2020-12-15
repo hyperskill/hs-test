@@ -6,6 +6,12 @@ import org.hyperskill.hstest.testing.TestedProgram;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
+class TestCommandLineArgumentsFailedDynamicMethod2Main {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedDynamicMethod2 extends UserErrorTest<String> {
 
     @ContainsMessage
@@ -16,7 +22,7 @@ public class TestCommandLineArgumentsFailedDynamicMethod2 extends UserErrorTest<
 
     @DynamicTestingMethod
     CheckResult test1() {
-        TestedProgram pr = new TestedProgram(Main2.class);
+        TestedProgram pr = new TestedProgram(TestCommandLineArgumentsFailedDynamicMethod2Main.class);
         pr.start("-in", "123", "-out", "234");
         return new CheckResult(false, "");
     }

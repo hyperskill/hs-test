@@ -8,10 +8,16 @@ import outcomes.base.UserErrorTest;
 import java.util.Arrays;
 import java.util.List;
 
+class TestCommandLineArgumentsFailedSecondTestMain {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedSecondTest extends UserErrorTest<Boolean> {
 
     public TestCommandLineArgumentsFailedSecondTest() {
-        super(Main2.class);
+        super(TestCommandLineArgumentsFailedSecondTestMain.class);
     }
 
     @ContainsMessage

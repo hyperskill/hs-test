@@ -9,6 +9,15 @@ import outcomes.base.UserErrorTest;
 import java.util.Collections;
 import java.util.List;
 
+class TestCommandLineArgumentsFailedWithSpacesMain {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+}
+
 public class TestCommandLineArgumentsFailedWithSpaces extends UserErrorTest<String> {
 
     @ContainsMessage
@@ -18,7 +27,8 @@ public class TestCommandLineArgumentsFailedWithSpaces extends UserErrorTest<Stri
     public List<TestCase<String>> generate() {
         return Collections.singletonList(
             new TestCase<String>().setDynamicTesting(() -> {
-                TestedProgram pr = new TestedProgram(Main.class);
+                TestedProgram pr = new TestedProgram(
+                    TestCommandLineArgumentsFailedWithSpacesMain.class);
                 String out = pr.start(
                     "-spaces", "some argument with spaces",
                     "-number", "234", "-onlySpaces", "      ");

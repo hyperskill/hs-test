@@ -6,6 +6,21 @@ import org.hyperskill.hstest.testing.TestedProgram;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
+class TestCommandLineArgumentsFailedDynamicMethod3Main {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+}
+
+class TestCommandLineArgumentsFailedDynamicMethod3Main2 {
+    public static void main(String[] args) {
+
+    }
+}
+
 public class TestCommandLineArgumentsFailedDynamicMethod3 extends UserErrorTest<String> {
 
     @ContainsMessage
@@ -16,8 +31,8 @@ public class TestCommandLineArgumentsFailedDynamicMethod3 extends UserErrorTest<
         "\n" +
         "---\n" +
         "\n" +
-        "Arguments for Main: -in 123 -out 234\n" +
-        "Arguments for Main2: --second main\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicMethod3Main: -in 123 -out 234\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicMethod3Main2: --second main\n" +
         "\n" +
         "4\n" +
         "-in\n" +
@@ -27,10 +42,12 @@ public class TestCommandLineArgumentsFailedDynamicMethod3 extends UserErrorTest<
 
     @DynamicTestingMethod
     CheckResult test1() {
-        TestedProgram pr = new TestedProgram(Main.class);
+        TestedProgram pr = new TestedProgram(
+            TestCommandLineArgumentsFailedDynamicMethod3Main.class);
         pr.start("-in", "123", "-out", "234");
 
-        TestedProgram pr2 = new TestedProgram(Main2.class);
+        TestedProgram pr2 = new TestedProgram(
+            TestCommandLineArgumentsFailedDynamicMethod3Main2.class);
         pr2.start("--second", "main");
 
         return new CheckResult(false, "");

@@ -6,6 +6,12 @@ import org.hyperskill.hstest.testing.TestedProgram;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
+class TestCommandLineArgsChangedMain {
+    public static void main(String[] args) {
+        args[0] = null;
+    }
+}
+
 public class TestCommandLineArgsChanged extends UserErrorTest {
 
     @ContainsMessage
@@ -16,7 +22,7 @@ public class TestCommandLineArgsChanged extends UserErrorTest {
 
     @DynamicTestingMethod
     public CheckResult test() {
-        TestedProgram main = new TestedProgram(Main3.class);
+        TestedProgram main = new TestedProgram(TestCommandLineArgsChangedMain.class);
         main.start("123", "234", "345");
         return CheckResult.wrong("");
     }
