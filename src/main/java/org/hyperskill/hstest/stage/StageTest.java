@@ -48,6 +48,8 @@ public abstract class StageTest<AttachType> {
         this(testedClass.getName());
     }
 
+    static int currTestGlobal = 0;
+
     private List<TestRun> initTests() throws Exception {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
@@ -79,8 +81,10 @@ public abstract class StageTest<AttachType> {
 
             for (TestRun testRun : testRuns) {
                 currTest++;
+                currTestGlobal++;
+                String totalTests = currTest == currTestGlobal ? "" : " (" + currTestGlobal + ")";
                 OutputHandler.getRealOut().println(
-                    RED_BOLD + "\nStart test " + currTest + RESET
+                    RED_BOLD + "\nStart test " + currTest + totalTests + RESET
                 );
 
                 currTestRun = testRun;
