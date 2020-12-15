@@ -25,6 +25,7 @@ public abstract class ExpectedFailTest<T> extends StageTest<T> {
         super();
     }
 
+    @Deprecated
     public ExpectedFailTest(Class<?> testedClass) {
         super(testedClass);
     }

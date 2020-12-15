@@ -6,6 +6,7 @@ public abstract class UnexpectedErrorTest<T> extends ExpectedFailTest<T> {
         super();
     }
 
+    @Deprecated
     public UnexpectedErrorTest(Class<?> testedClass) {
         super(testedClass);
     }
