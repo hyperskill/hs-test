@@ -28,6 +28,7 @@ public abstract class StageTest<AttachType> {
     @Getter private static TestRun currTestRun;
     private final String sourceName;
 
+    static int currTestGlobal = 0;
     public static final String LIB_TEST_PACKAGE = "outcomes.separate_package.";
 
     public StageTest() {
@@ -47,8 +48,6 @@ public abstract class StageTest<AttachType> {
     public StageTest(Class<?> testedClass) {
         this(testedClass.getName());
     }
-
-    static int currTestGlobal = 0;
 
     private List<TestRun> initTests() throws Exception {
         List<TestRun> testRuns = new ArrayList<>();
