@@ -34,8 +34,8 @@ public class TestCommandLineArgumentsFailedDynamicTesting5 extends UserErrorTest
         "\n" +
         "---\n" +
         "\n" +
-        "Arguments for Main2: --second main\n" +
-        "Arguments for Main: -in 123 -out 234\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicTesting5Main2: --second main\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicTesting5Main: -in 123 -out 234\n" +
         "\n" +
         "4\n" +
         "-in\n" +

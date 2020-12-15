@@ -31,8 +31,8 @@ public class TestCommandLineArgumentsFailedDynamicMethod5 extends UserErrorTest<
         "\n" +
         "---\n" +
         "\n" +
-        "Arguments for Main2: --second main\n" +
-        "Arguments for Main: -in 123 -out 234\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicMethod5Main2: --second main\n" +
+        "Arguments for TestCommandLineArgumentsFailedDynamicMethod5Main: -in 123 -out 234\n" +
         "\n" +
         "4\n" +
         "-in\n" +
