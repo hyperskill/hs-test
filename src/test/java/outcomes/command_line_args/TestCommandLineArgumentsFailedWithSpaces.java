@@ -21,7 +21,23 @@ class TestCommandLineArgumentsFailedWithSpacesMain {
 public class TestCommandLineArgumentsFailedWithSpaces extends UserErrorTest<String> {
 
     @ContainsMessage
-    String s = "Arguments: -spaces \"some argument with spaces\" -number 234 -onlySpaces \"      \"";
+    String s =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "See arguments below:\n" +
+        "\n" +
+        "Please find below the output of your program during this failed test.\n" +
+        "\n" +
+        "---\n" +
+        "\n" +
+        "Arguments: -spaces \"some argument with spaces\" -number 234 -onlySpaces \"      \"\n" +
+        "\n" +
+        "6\n" +
+        "-spaces\n" +
+        "some argument with spaces\n" +
+        "-number\n" +
+        "234\n" +
+        "-onlySpaces";
 
     @Override
     public List<TestCase<String>> generate() {
