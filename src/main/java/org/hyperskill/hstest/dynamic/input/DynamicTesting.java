@@ -196,7 +196,7 @@ public interface DynamicTesting {
             private void checkErrors(M member) {
                 if (repeat <= 0) {
                     throw new UnexpectedError("DynamicTest \"" + member.getName()
-                        + "\" should not be repeated <= 1 times, found " + repeat);
+                        + "\" should not be repeated < 0 times, found " + repeat);
                 }
 
                 if (member instanceof Method) {

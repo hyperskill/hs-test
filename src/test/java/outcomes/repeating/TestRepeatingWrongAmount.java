@@ -8,9 +8,9 @@ import outcomes.base.UnexpectedErrorTest;
 public class TestRepeatingWrongAmount extends UnexpectedErrorTest {
 
     @ContainsMessage
-    String m = "DynamicTest \"test\" should not be repeated <= 1 times, found 0";
+    String m = "DynamicTest \"test\" should not be repeated < 0 times, found -1";
 
-    @DynamicTest(repeat = 0)
+    @DynamicTest(repeat = -1)
     CheckResult test(int x) {
         return CheckResult.correct();
     }
