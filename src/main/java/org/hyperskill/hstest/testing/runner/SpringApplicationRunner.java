@@ -2,8 +2,8 @@ package org.hyperskill.hstest.testing.runner;
 
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.stage.SpringTest;
 import org.hyperskill.hstest.testcase.CheckResult;
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class SpringApplicationRunner implements TestRunner {
     @Override
-    public <T> CheckResult test(TestRun testRun) {
+    public CheckResult test(TestRun testRun) {
         TestCase<?> testCase = testRun.getTestCase();
 
         if (testRun.getTestNum() == 1) {
