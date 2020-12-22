@@ -46,8 +46,8 @@ public abstract class ProgramExecutor {
     private boolean returnOutputAfterExecution = true;
 
     protected abstract void launch(String... args);
+    protected abstract void terminate();
     public abstract String getOutput();
-    public abstract void stop();
 
     public final String start(String... args) {
         if (!machine.inState(NOT_STARTED)) {
@@ -101,6 +101,11 @@ public abstract class ProgramExecutor {
         return getExecutionOutput();
     }
 
+    public final void stop() {
+        noMoreInput = true;
+        terminate();
+    }
+
     private String getExecutionOutput() {
         if (machine.inState(EXCEPTION_THROWN)) {
             throw new TestedProgramThrewException();
@@ -147,7 +152,7 @@ public abstract class ProgramExecutor {
      *
      * Note, that this cannot be undone and indicates the end of the input.
      */
-    public void stopInput() {
+    public final void stopInput() {
         inBackground = true;
         noMoreInput = true;
         if (isWaitingInput()) {

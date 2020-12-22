@@ -160,7 +160,7 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     @Override
-    public void stop() {
+    protected void terminate() {
         executor.shutdownNow();
         task.cancel(true);
         group.interrupt();
