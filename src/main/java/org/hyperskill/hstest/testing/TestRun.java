@@ -78,7 +78,10 @@ public class TestRun {
         createFiles(testCase.getFiles());
         ExecutorService pool = startThreads(testCase.getProcesses());
 
-        OutputHandler.resetOutput();
+        if (Settings.doResetOutput) {
+            OutputHandler.resetOutput();
+        }
+
         CheckResult result = testRunner.test(this);
 
         stopThreads(testCase.getProcesses(), pool);

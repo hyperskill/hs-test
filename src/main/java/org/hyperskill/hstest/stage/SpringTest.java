@@ -8,6 +8,7 @@ import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
+import org.hyperskill.hstest.testing.Settings;
 import org.hyperskill.hstest.testing.runner.SpringApplicationRunner;
 import org.junit.After;
 
@@ -52,6 +53,7 @@ public abstract class SpringTest extends StageTest<Object> {
     public SpringTest(Class<?> clazz, int port) {
         super(SpringTest.class);
         InfiniteLoopDetector.setWorking(false);
+        Settings.doResetOutput = false;
         runner = SpringApplicationRunner.class;
         springClass = clazz;
         this.port = port;
