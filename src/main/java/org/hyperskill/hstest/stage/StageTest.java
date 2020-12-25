@@ -75,9 +75,17 @@ public abstract class StageTest<AttachType> {
         return testRuns;
     }
 
+    private void printTestNum(int num) {
+        String totalTests = num == currTestGlobal ? "" : " (" + currTestGlobal + ")";
+        OutputHandler.getRealOut().println(
+            RED_BOLD + "\nStart test " + num + totalTests + RESET
+        );
+    }
+
     @Test
     public final void start() {
         int currTest = 0;
+        boolean needTearDown = false;
         try {
             SystemHandler.setUp();
             List<TestRun> testRuns = initTests();
@@ -85,10 +93,12 @@ public abstract class StageTest<AttachType> {
             for (TestRun testRun : testRuns) {
                 currTest++;
                 currTestGlobal++;
-                String totalTests = currTest == currTestGlobal ? "" : " (" + currTestGlobal + ")";
-                OutputHandler.getRealOut().println(
-                    RED_BOLD + "\nStart test " + currTest + totalTests + RESET
-                );
+                printTestNum(currTest);
+
+                if (testRun.isFirstTest()) {
+                    testRun.setUp();
+                    needTearDown = true;
+                }
 
                 currTestRun = testRun;
                 CheckResult result = testRun.test();
@@ -96,8 +106,18 @@ public abstract class StageTest<AttachType> {
                 if (!result.isCorrect()) {
                     throw new WrongAnswer(result.getFeedback());
                 }
+
+                if (testRun.isLastTest()) {
+                    needTearDown = false;
+                    testRun.tearDown();
+                }
             }
         } catch (Throwable t) {
+            if (needTearDown) {
+                try {
+                    currTestRun.tearDown();
+                } catch (Throwable ignored) { }
+            }
             Outcome outcome = Outcome.getOutcome(t, currTest);
             String failText = outcome.toString();
             fail(failText);

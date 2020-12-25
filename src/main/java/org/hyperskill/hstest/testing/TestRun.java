@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.runner.TestRunner;
@@ -37,6 +38,14 @@ public class TestRun {
         this.testRunner = testRunner;
     }
 
+    public final boolean isFirstTest() {
+        return testNum == 1;
+    }
+
+    public final boolean isLastTest() {
+        return testNum == testCount;
+    }
+
     public void setErrorInTest(Throwable errorInTest) {
         if (this.errorInTest == null) {
             this.errorInTest = errorInTest;
@@ -57,6 +66,14 @@ public class TestRun {
         }
     }
 
+    public final void setUp() {
+        testRunner.setUp(testCase);
+    }
+
+    public final void tearDown() {
+        testRunner.tearDown(testCase);
+    }
+
     public CheckResult test() throws Throwable {
         createFiles(testCase.getFiles());
         ExecutorService pool = startThreads(testCase.getProcesses());
@@ -72,8 +89,13 @@ public class TestRun {
         }
 
         if (errorInTest instanceof TestPassed) {
-            return correct();
+            result = correct();
         }
+
+        if (result == null) {
+            throw new UnexpectedError("Result == null after testing");
+        }
+
         return result;
     }
 

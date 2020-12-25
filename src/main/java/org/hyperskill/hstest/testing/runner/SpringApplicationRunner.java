@@ -31,12 +31,13 @@ public class SpringApplicationRunner implements TestRunner {
     }
 
     @Override
+    public void setUp(TestCase<?> testCase) {
+        launchSpringBootApplication(testCase);
+    }
+
+    @Override
     public CheckResult test(TestRun testRun) {
         TestCase<?> testCase = testRun.getTestCase();
-
-        if (testRun.getTestNum() == 1) {
-            launchSpringBootApplication(testCase);
-        }
 
         try {
             return testCase.getDynamicTesting().handle();
