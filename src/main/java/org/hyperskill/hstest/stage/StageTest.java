@@ -24,6 +24,7 @@ import static org.junit.Assert.fail;
 public abstract class StageTest<AttachType> {
 
     protected Class<? extends TestRunner> runner = AsyncMainMethodRunner.class;
+    protected AttachType attach = null;
 
     @Getter private static TestRun currTestRun;
     private final String sourceName;
@@ -64,6 +65,9 @@ public abstract class StageTest<AttachType> {
             testCase.setSourceName(sourceName);
             if (testCase.getCheckFunc() == null) {
                 testCase.setCheckFunc(this::check);
+            }
+            if (testCase.getAttach() == null) {
+                testCase.setAttach(attach);
             }
             testRuns.add(new TestRun(++currTest, testCount, testCase, runner.newInstance()));
         }
