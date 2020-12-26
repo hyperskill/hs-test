@@ -82,7 +82,12 @@ public class TestRun {
             OutputHandler.resetOutput();
         }
 
-        CheckResult result = testRunner.test(this);
+        CheckResult result = null;
+        try {
+            result = testRunner.test(this);
+        } catch (Throwable ex) {
+            setErrorInTest(ex);
+        }
 
         stopThreads(testCase.getProcesses(), pool);
         deleteFiles(testCase.getFiles());
