@@ -88,7 +88,7 @@ public abstract class Outcome {
             result += "\n\n";
             if (worthShowingLog) {
                 result += "Please find below the output of your program during this failed test.\n";
-                if (testRun.isInputUsed()) {
+                if (testRun != null && testRun.isInputUsed()) {
                     result += "Note that the '>' character indicates the beginning of the input line.\n";
                 }
                 result += "\n---\n\n";
