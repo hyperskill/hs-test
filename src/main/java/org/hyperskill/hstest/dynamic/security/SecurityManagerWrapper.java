@@ -4,7 +4,6 @@ import java.io.FileDescriptor;
 import java.net.InetAddress;
 import java.security.Permission;
 
-@SuppressWarnings("deprecation")
 public class SecurityManagerWrapper extends SecurityManager {
     private final SecurityManager originalSecurityManager;
 
@@ -16,12 +15,6 @@ public class SecurityManagerWrapper extends SecurityManager {
     public void checkExit(int status) {
         if (originalSecurityManager != null)
             originalSecurityManager.checkExit(status);
-    }
-
-    @Override
-    public boolean getInCheck() {
-        return (originalSecurityManager != null)
-            && originalSecurityManager.getInCheck();
     }
 
     @Override
@@ -139,12 +132,6 @@ public class SecurityManagerWrapper extends SecurityManager {
     }
 
     @Override
-    public void checkMulticast(InetAddress addr, byte ttl) {
-        if (originalSecurityManager != null)
-            originalSecurityManager.checkMulticast(addr, ttl);
-    }
-
-    @Override
     public void checkPropertiesAccess() {
         if (originalSecurityManager != null)
             originalSecurityManager.checkPropertiesAccess();
@@ -157,27 +144,9 @@ public class SecurityManagerWrapper extends SecurityManager {
     }
 
     @Override
-    public boolean checkTopLevelWindow(Object window) {
-        return (originalSecurityManager == null) ? super.checkTopLevelWindow(window)
-            : originalSecurityManager.checkTopLevelWindow(window);
-    }
-
-    @Override
     public void checkPrintJobAccess() {
         if (originalSecurityManager != null)
             originalSecurityManager.checkPrintJobAccess();
-    }
-
-    @Override
-    public void checkSystemClipboardAccess() {
-        if (originalSecurityManager != null)
-            originalSecurityManager.checkSystemClipboardAccess();
-    }
-
-    @Override
-    public void checkAwtEventQueueAccess() {
-        if (originalSecurityManager != null)
-            originalSecurityManager.checkAwtEventQueueAccess();
     }
 
     @Override
@@ -196,12 +165,6 @@ public class SecurityManagerWrapper extends SecurityManager {
     public void checkSetFactory() {
         if (originalSecurityManager != null)
             originalSecurityManager.checkSetFactory();
-    }
-
-    @Override
-    public void checkMemberAccess(Class<?> clazz, int which) {
-        if (originalSecurityManager != null)
-            originalSecurityManager.checkMemberAccess(clazz, which);
     }
 
     @Override
