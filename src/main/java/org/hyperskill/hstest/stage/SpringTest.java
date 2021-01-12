@@ -18,6 +18,8 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
@@ -76,14 +78,25 @@ public abstract class SpringTest extends StageTest<Object> {
                 continue;
             }
 
-            File[] files = folder.getAbsoluteFile().listFiles();
-
-            if (files == null) {
+            File[] filesArray = folder.getAbsoluteFile().listFiles();
+            if (filesArray == null) {
                 continue;
             }
 
-            for (File file : files) {
+            List<File> files = Arrays.asList(filesArray);
+
+            while (!files.isEmpty()) {
+                File file = files.remove(0);
+
                 try {
+                    if (file.isDirectory()) {
+                        filesArray = folder.getAbsoluteFile().listFiles();
+                        if (filesArray != null) {
+                            files.addAll(Arrays.asList(filesArray));
+                        }
+                        continue;
+                    }
+
                     String content = FileUtils.readFile(file.getAbsolutePath());
                     if (content == null) {
                         continue;
