@@ -85,6 +85,10 @@ public abstract class SpringTest extends StageTest<Object> {
             for (File file : files) {
                 try {
                     String content = FileUtils.readFile(file.getAbsolutePath());
+                    if (content == null) {
+                        continue;
+                    }
+
                     BufferedReader bufReader = new BufferedReader(new StringReader(content));
 
                     String line;
