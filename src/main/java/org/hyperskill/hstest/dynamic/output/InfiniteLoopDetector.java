@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfiniteLoopDetector {
-    @Getter @Setter
-    private static boolean working = true;
+    @Getter @Setter private static boolean working = true;
+
+    @Getter @Setter private static boolean checkSameInputBetweenRequests = true;
+    @Getter @Setter private static boolean checkNoInputRequestsForLong = false;
+    @Getter @Setter private static boolean checkRepeatableOutput = true;
 
     private static final ByteArrayOutputStream currLine = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream sinceLastInput = new ByteArrayOutputStream();
@@ -82,14 +85,18 @@ public class InfiniteLoopDetector {
     }
 
     private static void checkInfLoopChars() {
-        if (charsSinceLastInput >= CHARS_SINCE_LAST_INPUT_MAX) {
+        if (checkNoInputRequestsForLong && charsSinceLastInput >= CHARS_SINCE_LAST_INPUT_MAX) {
             fail("No input request for the last " + charsSinceLastInput + " characters being printed.");
         }
     }
 
     private static void checkInfLoopLines() {
-        if (linesSinceLastInput >= LINES_SINCE_LAST_INPUT_MAX) {
+        if (checkNoInputRequestsForLong && linesSinceLastInput >= LINES_SINCE_LAST_INPUT_MAX) {
             fail("No input request for the last " + linesSinceLastInput + " lines being printed.");
+        }
+
+        if (!checkRepeatableOutput) {
+            return;
         }
 
         if (everyLine.size() != EVERY_LINE_SAVED_SIZE) {
@@ -125,6 +132,10 @@ public class InfiniteLoopDetector {
     }
 
     private static void checkInfLoopInputRequests() {
+        if (!checkSameInputBetweenRequests) {
+            return;
+        }
+
         String firstElem = betweenInputRequests.get(0);
         for (String curr : betweenInputRequests) {
             if (!curr.equals(firstElem)) {

@@ -1,8 +1,11 @@
 package outcomes.infinite_loop;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
+import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import org.junit.After;
+import org.junit.Before;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
@@ -32,6 +35,19 @@ public class InfiniteLoopTestLine11 extends UserErrorTest {
         "\n" +
         "Infinite loop detected.\n" +
         "No input request for the last 500 lines being printed.";
+
+    boolean before;
+
+    @Before
+    public void before() {
+        before = InfiniteLoopDetector.isCheckNoInputRequestsForLong();
+        InfiniteLoopDetector.setCheckNoInputRequestsForLong(true);
+    }
+
+    @After
+    public void after() {
+        InfiniteLoopDetector.setCheckNoInputRequestsForLong(before);
+    }
 
     @DynamicTestingMethod
     CheckResult test() {
