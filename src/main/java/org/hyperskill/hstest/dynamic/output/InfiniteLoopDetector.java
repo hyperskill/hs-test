@@ -80,6 +80,7 @@ public class InfiniteLoopDetector {
         }
 
         sinceLastInput.reset();
+        everyLine.clear();
         charsSinceLastInput = 0;
         linesSinceLastInput = 0;
     }
