@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public abstract class SpringTest extends StageTest<Object> {
                 continue;
             }
 
-            List<File> files = Arrays.asList(filesArray);
+            List<File> files = new ArrayList<>(Arrays.asList(filesArray));
 
             while (!files.isEmpty()) {
                 File file = files.remove(0);
