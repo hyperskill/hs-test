@@ -3,6 +3,7 @@ package outcomes.dynamic_method;
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import org.junit.Ignore;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
@@ -27,6 +28,7 @@ class TestDynamicMethodStartInBackgroundWrongAnswerMain {
     }
 }
 
+@Ignore
 public class TestDynamicMethodStartInBackgroundWrongAnswer extends UserErrorTest<String> {
 
     @ContainsMessage
