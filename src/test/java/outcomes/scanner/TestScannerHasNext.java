@@ -25,7 +25,7 @@ public class TestScannerHasNext extends UserErrorTest<String> {
     String s =
         "Error in test #1\n" +
         "\n" +
-        "Program run out of input. You tried to read more, than expected.";
+        "Program ran out of input. You tried to read more, than expected.";
 
     public TestScannerHasNext() {
         super(TestScannerHasNextMain.class);

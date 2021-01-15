@@ -23,7 +23,7 @@ public class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappened ex
     String m =
         "Error in test #1\n" +
         "\n" +
-        "Program run out of input. You tried to read more, than expected.";
+        "Program ran out of input. You tried to read more, than expected.";
 
     @DynamicTest
     CheckResult test() {
