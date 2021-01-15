@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testing.Settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class DynamicInputHandler {
             ejectNextLine();
             character = nextByte();
         }
-        if (character == -1) {
+        if (character == -1 && !Settings.allowOutOfInput) {
             StageTest.getCurrTestRun().setErrorInTest(new ErrorWithFeedback(
                 "Program ran out of input. You tried to read more, than expected."));
             throw new ExitException(0);
