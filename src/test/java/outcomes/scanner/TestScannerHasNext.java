@@ -1,8 +1,9 @@
 package outcomes.scanner;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,13 @@ class TestScannerHasNextMain {
     }
 }
 
-public class TestScannerHasNext extends StageTest<String> {
+public class TestScannerHasNext extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String s =
+        "Error in test #1\n" +
+        "\n" +
+        "Program run out of input. You tried to read more, than expected.";
 
     public TestScannerHasNext() {
         super(TestScannerHasNextMain.class);

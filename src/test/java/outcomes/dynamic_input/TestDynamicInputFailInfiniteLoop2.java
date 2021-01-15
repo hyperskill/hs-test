@@ -35,7 +35,9 @@ public class TestDynamicInputFailInfiniteLoop2 extends UserErrorTest {
     @Override
     public List<TestCase> generate() {
         return Arrays.asList(
-            new TestCase<>().addInput(x -> CheckResult.wrong("Wrong"))
+            new TestCase<>().addInput(
+                x -> CheckResult.wrong("Wrong")
+            )
         );
     }
 

@@ -21,11 +21,9 @@ public class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappened ex
 
     @ContainsMessage
     String m =
-        "Exception in test #1\n" +
+        "Error in test #1\n" +
         "\n" +
-        "Probably your program run out of input (Scanner tried to read more than expected).\n" +
-        "\n" +
-        "java.util.NoSuchElementException: No line found";
+        "Program run out of input. You tried to read more, than expected.";
 
     @DynamicTest
     CheckResult test() {

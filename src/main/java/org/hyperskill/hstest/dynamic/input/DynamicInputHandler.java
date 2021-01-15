@@ -2,6 +2,9 @@ package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.dynamic.security.ExitException;
+import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.stage.StageTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +27,11 @@ public class DynamicInputHandler {
         if (character == -1) {
             ejectNextLine();
             character = nextByte();
+        }
+        if (character == -1) {
+            StageTest.getCurrTestRun().setErrorInTest(new ErrorWithFeedback(
+                "Program run out of input. You tried to read more, than expected."));
+            throw new ExitException(0);
         }
         return character;
     }
@@ -58,11 +66,11 @@ public class DynamicInputHandler {
         currentReader = nextLine.getBytes();
         pos = 0;
         OutputHandler.injectInput("> " + nextLine);
+        InfiniteLoopDetector.inputRequested();
     }
 
     private void ejectNextInput() {
         String newInput = dynamicInputFunction.get();
-        InfiniteLoopDetector.inputRequested();
 
         if (newInput == null) {
             return;

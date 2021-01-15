@@ -28,8 +28,7 @@ public class InfiniteLoopTestInputRequest extends UserErrorTest {
     String m =
         "Error in test #1\n" +
         "\n" +
-        "Infinite loop detected.\n" +
-        "Between the last 20 input requests the texts being printed are identical.";
+        "Program run out of input. You tried to read more, than expected.";
 
     @DynamicTestingMethod
     CheckResult test() {

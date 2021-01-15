@@ -1,9 +1,10 @@
 package outcomes.dynamic_testing;
 
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestedProgram;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,14 @@ class TestDynamicTestingProgramNotFinishedAfterTestButShutDownClient {
     }
 }
 
-public class TestDynamicTestingProgramNotFinishedAfterTestButShutDown extends StageTest<String> {
+public class TestDynamicTestingProgramNotFinishedAfterTestButShutDown extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String s =
+        "Error in test #1\n" +
+        "\n" +
+        "Program run out of input. You tried to read more, than expected.";
+
     @Override
     public List<TestCase<String>> generate() {
         return Arrays.asList(

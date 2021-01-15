@@ -1,9 +1,10 @@
 package outcomes.dynamic_method;
 
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
-import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import outcomes.base.ContainsMessage;
+import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
 
@@ -20,7 +21,14 @@ class TestDynamicMethodProgramNotFinishedAfterTestButShutDownMain {
     }
 }
 
-public class TestDynamicMethodProgramNotFinishedAfterTestButShutDown extends StageTest<String> {
+public class TestDynamicMethodProgramNotFinishedAfterTestButShutDown extends UserErrorTest<String> {
+
+    @ContainsMessage
+    String s =
+        "Error in test #1\n" +
+        "\n" +
+        "Program run out of input. You tried to read more, than expected.";
+
     @DynamicTestingMethod
     CheckResult test() {
         TestedProgram server = new TestedProgram(

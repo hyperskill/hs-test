@@ -23,8 +23,9 @@ public class TestNoInput extends UserErrorTest {
 
     @ContainsMessage
     String m =
-        "Exception in test #2\n\n" +
-        "Probably your program run out of input (Scanner tried to read more than expected).";
+        "Error in test #2\n" +
+        "\n" +
+        "Program run out of input. You tried to read more, than expected.";
 
     public TestNoInput() {
         super(TestNoInputMain.class);
