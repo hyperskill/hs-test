@@ -20,7 +20,10 @@ class TestSimpleTestCaseFailMain {
 public class TestSimpleTestCaseFail extends UserErrorTest {
 
     @ContainsMessage
-    String m = "Wrong answer in test #1";
+    String m =
+        "Wrong answer in test #1\n" +
+        "\n" +
+        "You should output a number twice";
 
     public TestSimpleTestCaseFail() {
         super(TestSimpleTestCaseFailMain.class);
