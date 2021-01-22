@@ -21,10 +21,13 @@ public class WebServerMockTest {
     private ExecutorService service;
     private List<Process> processes;
 
+    int port = 23456;
+    String address = "127.0.0.1:" + port + '/';
+
     @Before
     public void setUp() {
         processes = Arrays.asList(
-            new WebServerMock(12345)
+            new WebServerMock(port)
                 .setPage("/", "123\n456")
                 .setPage("/page1", "342\n678")
                 .setPage("/page2", "0987\n5432")
@@ -55,22 +58,22 @@ public class WebServerMockTest {
 
     @Test
     public void testCorrectContent1() throws IOException {
-        assertEquals("342\n678", Utils.getUrlPage("127.0.0.1:12345/page1"));
-        assertEquals("0987\n5432", Utils.getUrlPage("127.0.0.1:12345/page2"));
-        assertEquals("type1", Utils.getUrlPage("127.0.0.1:12345/type1"));
-        assertEquals("type2", Utils.getUrlPage("127.0.0.1:12345/type2"));
+        assertEquals("342\n678", Utils.getUrlPage(address + "page1"));
+        assertEquals("0987\n5432", Utils.getUrlPage(address + "page2"));
+        assertEquals("type1", Utils.getUrlPage(address + "type1"));
+        assertEquals("type2", Utils.getUrlPage(address + "type2"));
     }
 
     @Test
     public void testCorrectContent2() throws IOException {
-        assertEquals("123\n456", Utils.getUrlPage("127.0.0.1:12345/"));
-        assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3"));
-        assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4"));
+        assertEquals("123\n456", Utils.getUrlPage(address));
+        assertEquals("page3", Utils.getUrlPage(address + "page3"));
+        assertEquals("page4", Utils.getUrlPage(address + "page4"));
     }
 
     @Test
     public void testWithGetParams() throws IOException {
-        assertEquals("page3", Utils.getUrlPage("127.0.0.1:12345/page3?type=123"));
-        assertEquals("page4", Utils.getUrlPage("127.0.0.1:12345/page4?abc=def&1=2"));
+        assertEquals("page3", Utils.getUrlPage(address + "page3?type=123"));
+        assertEquals("page4", Utils.getUrlPage(address + "page4?abc=def&1=2"));
     }
 }
