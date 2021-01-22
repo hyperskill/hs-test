@@ -24,6 +24,7 @@ public class TestCase<AttachType> {
 
     @Getter @Setter String sourceName;
     @Getter @Setter private AttachType attach;
+    @Getter @Setter private String feedback = "";
     @Getter @Setter private int timeLimit = DEFAULT_TIME_LIMIT;
     @Getter @Setter private BiFunction<String, AttachType, CheckResult> checkFunc;
 

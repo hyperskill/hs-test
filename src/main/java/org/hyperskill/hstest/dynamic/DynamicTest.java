@@ -11,4 +11,5 @@ public @interface DynamicTest {
     int timeLimit() default TestCase.DEFAULT_TIME_LIMIT;
     String data() default "";
     int repeat() default 1;
+    String feedback() default "";
 }

@@ -170,6 +170,7 @@ public interface DynamicTesting {
             int order = 0;
             int repeat = 1;
             int timeLimit = TestCase.DEFAULT_TIME_LIMIT;
+            String feedback = "";
             List<Object[]> argsList = new ArrayList<>();
 
             DynamicTestElement(List<DynamicTestingWithoutParams> tests, M member) {
@@ -185,6 +186,7 @@ public interface DynamicTesting {
                     order = annotation.order();
                     timeLimit = annotation.timeLimit();
                     repeat = annotation.repeat();
+                    feedback = annotation.feedback();
                     String data = annotation.data();
 
                     if (elem instanceof Method && !data.isEmpty()) {
@@ -292,6 +294,7 @@ public interface DynamicTesting {
                     tests.add(new TestCase<A>()
                         .setDynamicTesting(test)
                         .setTimeLimit(dte.timeLimit)
+                        .setFeedback(dte.feedback)
                     );
                 }
                 return tests.stream();

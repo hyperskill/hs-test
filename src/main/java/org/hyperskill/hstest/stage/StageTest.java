@@ -104,7 +104,9 @@ public abstract class StageTest<AttachType> {
                 CheckResult result = testRun.test();
 
                 if (!result.isCorrect()) {
-                    throw new WrongAnswer(result.getFeedback());
+                    String fullFeedback = result.getFeedback() + "\n\n"
+                        + testRun.getTestCase().getFeedback();
+                    throw new WrongAnswer(fullFeedback.trim());
                 }
 
                 if (testRun.isLastTest()) {

@@ -54,7 +54,6 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public SpringTest(Class<?> clazz, int port) {
-        super(SpringTest.class);
         InfiniteLoopDetector.setWorking(false);
         Settings.doResetOutput = false;
         runner = SpringApplicationRunner.class;

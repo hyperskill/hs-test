@@ -23,7 +23,15 @@ public class TestSimpleTestCaseFail extends UserErrorTest {
     String m =
         "Wrong answer in test #1\n" +
         "\n" +
-        "You should output a number twice";
+        "You should output a number twice\n" +
+        "\n" +
+        "Please find below the output of your program during this failed test.\n" +
+        "Note that the '>' character indicates the beginning of the input line.\n" +
+        "\n" +
+        "---\n" +
+        "\n" +
+        "> 123\n" +
+        "123";
 
     public TestSimpleTestCaseFail() {
         super(TestSimpleTestCaseFailMain.class);
