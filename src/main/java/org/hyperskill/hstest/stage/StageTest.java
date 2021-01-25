@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
 
-    protected Class<? extends TestRunner> runner = AsyncMainMethodRunner.class;
+    protected TestRunner runner = new AsyncMainMethodRunner();
     protected AttachType attach = null;
 
     @Getter private static TestRun currTestRun;
@@ -50,7 +50,7 @@ public abstract class StageTest<AttachType> {
         this(testedClass.getName());
     }
 
-    private List<TestRun> initTests() throws Exception {
+    private List<TestRun> initTests() {
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
         testCases.addAll(searchDynamicTests(this));
@@ -69,7 +69,7 @@ public abstract class StageTest<AttachType> {
             if (testCase.getAttach() == null) {
                 testCase.setAttach(attach);
             }
-            testRuns.add(new TestRun(++currTest, testCount, testCase, runner.newInstance()));
+            testRuns.add(new TestRun(++currTest, testCount, testCase, runner));
         }
 
         return testRuns;
