@@ -10,12 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -57,17 +52,7 @@ public abstract class ExpectedFailTest<T> extends StageTest<T> {
 
         boolean hasFields = false;
 
-        List<Field> uniqueFields =
-            Stream.of(getClass().getDeclaredFields(), getClass().getFields())
-                .flatMap(Stream::of)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue() == 1)
-                .map(Map.Entry::getKey)
-                .collect(toList());
-
-        for (Field field : uniqueFields) {
+        for (Field field : ReflectionUtils.getAllFields(this)) {
             boolean contains = field.isAnnotationPresent(ContainsMessage.class);
             boolean notContain = field.isAnnotationPresent(NotContainMessage.class);
 

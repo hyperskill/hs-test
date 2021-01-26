@@ -45,6 +45,11 @@ public final class Utils {
             .replaceAll(nbsp, space);
     }
 
+    public static String capitalize(String str) {
+        return str.substring(0, 1).toUpperCase()
+            + (str.length() > 1 ? str.substring(1) : "");
+    }
+
     public static int smartCompare(String s1, String s2) {
 
         class NamePair implements Comparable<NamePair> {

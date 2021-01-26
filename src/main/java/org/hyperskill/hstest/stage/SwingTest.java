@@ -1,14 +1,14 @@
 package org.hyperskill.hstest.stage;
 
-import org.assertj.swing.core.ComponentLookupScope;
-import org.assertj.swing.edt.GuiActionRunner;
+import lombok.Getter;
+import lombok.Setter;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JComponentFixture;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.hyperskill.hstest.testcase.attach.SwingSettings;
+import org.hyperskill.hstest.testing.Settings;
+import org.hyperskill.hstest.testing.runner.SwingApplicationRunner;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,38 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class SwingTest<AttachType> extends StageTest<AttachType> {
+public abstract class SwingTest extends StageTest<SwingSettings> {
 
     public static void main(String[] args) { }
 
     protected JFrame frame;
-    protected FrameFixture window;
+    @Getter @Setter protected FrameFixture window;
 
     public SwingTest(JFrame frame) {
-        super(SwingTest.class);
-        this.frame = frame;
-        //needReloadClass = false;
         InfiniteLoopDetector.setWorking(false);
-    }
-
-    @BeforeClass
-    public static void setUpOnce() {
-        // FailOnThreadViolationRepaintManager.install();
-    }
-
-    @Before
-    public void setUpUI() {
-        window = new FrameFixture(GuiActionRunner.execute(() -> frame));
-        window.robot().settings().componentLookupScope(ComponentLookupScope.ALL);
-        Rectangle savedFrameBounds = frame.getBounds();
-        window.show();
-        frame.setBounds(savedFrameBounds);
-        frame.setAlwaysOnTop(true);
-    }
-
-    @After
-    public void tearDown() {
-        window.cleanUp();
+        Settings.doResetOutput = false;
+        runner = new SwingApplicationRunner();
+        attach = new SwingSettings(this, frame);
+        this.frame = frame;
     }
 
     public static List<Component> getAllComponents(final Container c) {

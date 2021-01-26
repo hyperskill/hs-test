@@ -20,7 +20,7 @@ dependencies {
 
     // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    api 'org.assertj:assertj-swing-junit:3.8.0'
+    api 'org.assertj:assertj-swing-junit:3.9.2'
     api 'org.apache.httpcomponents:httpclient:4.5.9'
     api 'com.google.code.gson:gson:2.8.5'
 

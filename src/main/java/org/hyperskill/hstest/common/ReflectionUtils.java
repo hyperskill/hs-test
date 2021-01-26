@@ -14,6 +14,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public final class ReflectionUtils {
 
@@ -78,8 +84,7 @@ public final class ReflectionUtils {
 
         String className = method.getDeclaringClass().getSimpleName();
         String methodName = method.getName();
-        String feedback = "Cannot invoke the method \""
-            + className + "." + methodName + "\".";
+        String location = "\"" + className + "." + methodName + "\"";
 
         try {
             return method.invoke(obj, args);
@@ -87,8 +92,10 @@ public final class ReflectionUtils {
             if (ex.getCause() instanceof OutcomeError) {
                 throw (OutcomeError) ex.getCause();
             }
+            String feedback = "An exception happened while running the method " + location + ".";
             throw new UnexpectedError(feedback, ex.getCause());
         } catch (IllegalAccessException ex) {
+            String feedback = "Cannot invoke the method " + location + ".";
             if (!Modifier.isPublic(method.getModifiers())) {
                 feedback += " Try to declare method as public.";
             }
@@ -199,5 +206,18 @@ public final class ReflectionUtils {
             || typeFrom == boolean.class && typeTo == Boolean.class
             || typeFrom == float.class && typeTo == Float.class
             || typeFrom == double.class && typeTo == Double.class;
+    }
+
+    public static List<Field> getAllFields(Object obj) {
+        return Stream.of(
+            obj.getClass().getDeclaredFields(),
+            obj.getClass().getFields())
+            .flatMap(Stream::of)
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+            .entrySet()
+            .stream()
+            .filter(e -> e.getValue() == 1)
+            .map(Map.Entry::getKey)
+            .collect(toList());
     }
 }
