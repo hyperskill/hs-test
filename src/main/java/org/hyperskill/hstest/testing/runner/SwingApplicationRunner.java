@@ -84,7 +84,7 @@ public class SwingApplicationRunner implements TestRunner {
         settings.window.show();
         settings.stageTest.setWindow(settings.window);
         settings.frame.setBounds(savedFrameBounds);
-        settings.frame.setAlwaysOnTop(true);
+        // settings.frame.setAlwaysOnTop(true);
     }
 
     private void stopWindow() {
