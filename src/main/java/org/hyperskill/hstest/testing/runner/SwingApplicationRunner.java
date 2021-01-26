@@ -55,6 +55,7 @@ public class SwingApplicationRunner implements TestRunner {
         final Field field;
         final String name;
         final Class<?> fixtureClass;
+        AbstractComponentFixture<?, ?, ?> fixture = null;
 
         FieldFixtureItem(Field field, String name,
                          Class<?> fixtureClass) {
@@ -135,7 +136,6 @@ public class SwingApplicationRunner implements TestRunner {
         final Class<? extends AbstractComponentFixture<?, ?, ?>> fixtureClass;
         final Class<? extends Component> realClass;
         final Function<String, ? extends AbstractComponentFixture<?, ?, ?>> func;
-        AbstractComponentFixture<?, ?, ?> fixture = null;
 
         private FixtureMapItem(Class<? extends AbstractComponentFixture<?, ?, ?>> fixtureClass,
                                Class<? extends Component> realClass,
@@ -273,6 +273,15 @@ public class SwingApplicationRunner implements TestRunner {
             name -> settings.window.tree(name)),
     };
 
+    public String fixtureToName(AbstractComponentFixture<?, ?, ?> fixture) {
+        for (FieldFixtureItem item : stageComponents) {
+            if (item.fixture == fixture) {
+                return item.name;
+            }
+        }
+        throw new UnexpectedError("Cannot find fixture");
+    }
+
     private void setFixtureFields() {
         for (FieldFixtureItem item : stageComponents) {
             for (FixtureMapItem mapItem : fixtureMap) {
@@ -287,10 +296,10 @@ public class SwingApplicationRunner implements TestRunner {
                             if (fixture == null) {
                                 throw new ComponentLookupException("");
                             }
-                            mapItem.fixture = fixture;
+                            item.fixture = fixture;
                             item.field.set(settings.stageTest, fixture);
                         } catch (ComponentLookupException ex) {
-                            if (mapItem.fixture == null) {
+                            if (item.fixture == null) {
                                 throw new ErrorWithFeedback(
                                     "Cannot find a component of class "
                                         + mapItem.realClass.getSimpleName() + " with name " + item.name);
