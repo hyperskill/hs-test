@@ -64,14 +64,14 @@ public abstract class SwingTest extends StageTest<SwingSettings> {
         require(elements, AbstractComponentFixture::requireFocused, "should be in focus");
     }
 
-    public <T extends AbstractComponentFixture<?, ?, ?> & EditableComponentFixture<?>>
+    public <T extends AbstractComponentFixture<T, ?, ?> & EditableComponentFixture<T>>
     void requireEditable(T... elements) {
-        require(elements, e -> e.requireEditable(), "should be editable");
+        require(elements, EditableComponentFixture::requireEditable, "should be editable");
     }
 
-    public <T extends AbstractComponentFixture<?, ?, ?> & EditableComponentFixture<?>>
+    public <T extends AbstractComponentFixture<T, ?, ?> & EditableComponentFixture<T>>
     void requireNotEditable(T... elements) {
-        require(elements, e -> e.requireEditable(), "should not be editable");
+        require(elements, EditableComponentFixture::requireEditable, "should not be editable");
     }
 
     public static List<Component> getAllComponents(final Container c) {
