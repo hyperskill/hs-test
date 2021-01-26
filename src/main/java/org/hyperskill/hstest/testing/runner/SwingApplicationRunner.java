@@ -136,6 +136,7 @@ public class SwingApplicationRunner implements TestRunner {
         final Class<? extends AbstractComponentFixture<?, ?, ?>> fixtureClass;
         final Class<? extends Component> realClass;
         final Function<String, ? extends AbstractComponentFixture<?, ?, ?>> func;
+        AbstractComponentFixture<?, ?, ?> fixture = null;
 
         private FixtureMapItem(Class<? extends AbstractComponentFixture<?, ?, ?>> fixtureClass,
                                Class<? extends Component> realClass,
@@ -287,13 +288,15 @@ public class SwingApplicationRunner implements TestRunner {
                             if (fixture == null) {
                                 throw new ComponentLookupException("");
                             }
+                            mapItem.fixture = fixture;
+                            item.field.set(settings.stageTest, fixture);
                         } catch (ComponentLookupException ex) {
-                            throw new ErrorWithFeedback(
-                                "Cannot find a component of class "
-                                    + mapItem.realClass.getSimpleName() + " with name " + item.name);
+                            if (mapItem.fixture == null) {
+                                throw new ErrorWithFeedback(
+                                    "Cannot find a component of class "
+                                        + mapItem.realClass.getSimpleName() + " with name " + item.name);
+                            }
                         }
-
-                        item.field.set(settings.stageTest, mapItem.func.apply(item.name));
                     } catch (IllegalAccessException ex) {
                         throw new UnexpectedError("Cannot set a value to the field "
                             + item.field.getName());
