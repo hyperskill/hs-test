@@ -79,12 +79,7 @@ public class SwingApplicationRunner implements TestRunner {
     private void setUpWindow() {
         settings.window = new FrameFixture(GuiActionRunner.execute(() -> settings.frame));
         settings.window.robot().settings().componentLookupScope(ComponentLookupScope.ALL);
-
-        Rectangle savedFrameBounds = settings.frame.getBounds();
-        settings.window.show();
         settings.stageTest.setWindow(settings.window);
-        settings.frame.setBounds(savedFrameBounds);
-        // settings.frame.setAlwaysOnTop(true);
     }
 
     private void stopWindow() {
