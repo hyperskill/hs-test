@@ -75,7 +75,7 @@ public abstract class SwingTest extends StageTest<SwingSettings> {
         require(elements, EditableComponentFixture::requireEditable, "should not be editable");
     }
 
-    void requireEmpty(JTextComponentFixture... elements) {
+    public void requireEmpty(JTextComponentFixture... elements) {
         require(elements, JTextComponentFixture::requireEmpty, "should be empty");
     }
 
