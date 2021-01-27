@@ -50,6 +50,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SwingApplicationRunner implements TestRunner {
     private static class FieldFixtureItem {
@@ -347,10 +349,30 @@ public class SwingApplicationRunner implements TestRunner {
 
         // assertj-swing-junit throws ActionFailedException on some actions
         } else if (cause instanceof ActionFailedException) {
-            if (cause.getMessage().startsWith(
+            if (cause.getMessage().contains(
                 "The component to click is out of the boundaries of the screen")) {
-                throw new ErrorWithFeedback(cause.getMessage() + "\n\n" +
+                throw new ErrorWithFeedback(cause.getMessage() + "\n" +
                     "Please, make the component visible on the screen.");
+            }
+
+
+        } else if (cause instanceof IllegalStateException) {
+            String message = cause.getMessage();
+
+            if (message.contains("Expecting component") &&
+                message.contains("to be showing on the screen")) {
+
+                Matcher m = Pattern
+                    .compile("name='([^']+)'")
+                    .matcher(message);
+
+                if (m.find()) {
+                    String name = m.group(1);
+                    throw new ErrorWithFeedback("Expecting component " +
+                        "\"" + name + "\" to be showing on the screen, but it isn't.");
+                }
+
+                throw new ErrorWithFeedback(message);
             }
         }
     }
