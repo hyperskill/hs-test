@@ -2,6 +2,7 @@ package org.hyperskill.hstest.testing.runner;
 
 import org.assertj.swing.core.ComponentLookupScope;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.exception.ActionFailedException;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.fixture.AbstractComponentFixture;
 import org.assertj.swing.fixture.DialogFixture;
@@ -347,6 +348,13 @@ public class SwingApplicationRunner implements TestRunner {
                         "Use \"feedback\" parameter in the \"DynamicTest\" annotation");
                 }
                 return new CheckResult(false, "");
+            } catch (ActionFailedException ex) {
+                if (ex.getMessage().startsWith(
+                    "The component to click is out of the boundaries of the screen")) {
+                    throw new ErrorWithFeedback(ex.getMessage() + "\n\n" +
+                        "Please, make the component visible on the screen.");
+                }
+                throw ex;
             }
         } catch (Throwable ex) {
             testRun.setErrorInTest(ex);
