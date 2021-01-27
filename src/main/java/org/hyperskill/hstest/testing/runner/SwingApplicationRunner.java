@@ -333,6 +333,28 @@ public class SwingApplicationRunner implements TestRunner {
         stopWindow();
     }
 
+    private void handleError(TestCase<?> testCase, Throwable cause) {
+        // assertj-swing-junit throws AssertionError on .requireEnabled() / .requireEmpty() etc
+        // ans we want to show such errors as "Wrong answer".
+        // Feedback on the DynamicTest annotation is required.
+        if (cause instanceof AssertionError) {
+            if (testCase.getFeedback().isEmpty()) {
+                throw new UnexpectedError("No feedback for the Swing test. " +
+                    "Use \"feedback\" parameter in the \"DynamicTest\" annotation");
+            } else {
+                throw new WrongAnswer("");
+            }
+
+        // assertj-swing-junit throws ActionFailedException on some actions
+        } else if (cause instanceof ActionFailedException) {
+            if (cause.getMessage().startsWith(
+                "The component to click is out of the boundaries of the screen")) {
+                throw new ErrorWithFeedback(cause.getMessage() + "\n\n" +
+                    "Please, make the component visible on the screen.");
+            }
+        }
+    }
+
     @Override
     public CheckResult test(TestRun testRun) {
         setFixtureFields();
@@ -342,18 +364,8 @@ public class SwingApplicationRunner implements TestRunner {
         try {
             try {
                 return testCase.getDynamicTesting().handle();
-            } catch (AssertionError ex) {
-                if (testCase.getFeedback().isEmpty()) {
-                    throw new UnexpectedError("No feedback for the Swing test. " +
-                        "Use \"feedback\" parameter in the \"DynamicTest\" annotation");
-                }
-                return new CheckResult(false, "");
-            } catch (ActionFailedException ex) {
-                if (ex.getMessage().startsWith(
-                    "The component to click is out of the boundaries of the screen")) {
-                    throw new ErrorWithFeedback(ex.getMessage() + "\n\n" +
-                        "Please, make the component visible on the screen.");
-                }
+            } catch (UnexpectedError ex) {
+                handleError(testCase, ex.getCause());
                 throw ex;
             }
         } catch (Throwable ex) {
