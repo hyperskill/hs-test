@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.assertj.swing.fixture.AbstractComponentFixture;
 import org.assertj.swing.fixture.EditableComponentFixture;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JTextComponentFixture;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.testcase.attach.SwingSettings;
@@ -72,6 +73,10 @@ public abstract class SwingTest extends StageTest<SwingSettings> {
     public <T extends AbstractComponentFixture<T, ?, ?> & EditableComponentFixture<T>>
     void requireNotEditable(T... elements) {
         require(elements, EditableComponentFixture::requireEditable, "should not be editable");
+    }
+
+    void requireEmpty(JTextComponentFixture... elements) {
+        require(elements, JTextComponentFixture::requireEmpty, "should be empty");
     }
 
     public static List<Component> getAllComponents(final Container c) {
