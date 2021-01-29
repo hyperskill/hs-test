@@ -37,9 +37,15 @@ public abstract class StageTest<AttachType> {
     }
 
     public StageTest(String sourceName) {
-        String currPackage = getClass().getPackage().getName();
-        if (sourceName.isEmpty() && currPackage.startsWith(LIB_TEST_PACKAGE)) {
-            this.sourceName = currPackage;
+        Package currPackage = getClass().getPackage();
+
+        String strPackage = "";
+        if (currPackage != null) {
+            strPackage = currPackage.getName();
+        }
+
+        if (sourceName.isEmpty() && strPackage.startsWith(LIB_TEST_PACKAGE)) {
+            this.sourceName = strPackage;
         } else {
             this.sourceName = sourceName;
         }
