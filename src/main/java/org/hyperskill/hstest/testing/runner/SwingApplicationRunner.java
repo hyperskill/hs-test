@@ -181,11 +181,6 @@ public class SwingApplicationRunner implements TestRunner {
             name -> settings.window.internalFrame(name)),
 
         new FixtureMapItem(
-            JInternalFrameFixture.class,
-            JInternalFrame.class,
-            name -> settings.window.internalFrame(name)),
-
-        new FixtureMapItem(
             JLabelFixture.class,
             JLabel.class,
             name -> settings.window.label(name)),
