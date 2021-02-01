@@ -24,7 +24,9 @@ public class TwoMains6 extends UserErrorTest {
     String m =
         "Error in test #1\n" +
         "\n" +
-        "There are 2 classes with main method: TwoMains6Main1, TwoMains6Main2.\n" +
+        "There are 2 classes with main method in package \"outcomes.separate_package.two_mains_6\": " +
+            "outcomes.separate_package.two_mains_6.TwoMains6Main1, " +
+            "outcomes.separate_package.two_mains_6.TwoMains6Main2.\n" +
         "Leave only one of them to be executed.";
 
     @DynamicTestingMethod

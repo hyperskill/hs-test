@@ -53,7 +53,7 @@ public class MainMethodExecutor extends ProgramExecutor {
     private void initByClassInstance(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
             if (clazz.getName().startsWith(LIB_TEST_PACKAGE)) {
-                initByNothing(clazz.getPackage().getName());
+                initByNothing(clazz.getPackage().getName(), false);
             } else {
                 initByNothing();
             }
@@ -81,7 +81,7 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByPackageName(String packageName) {
-        initByNothing(packageName);
+        initByNothing(packageName, false);
     }
 
     private void initByClassName(String className) {
@@ -89,7 +89,7 @@ public class MainMethodExecutor extends ProgramExecutor {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             initByClassInstance(clazz);
         } catch (ClassNotFoundException ex) {
-            initByNothing();
+            initByNothing(className);
         }
     }
 
@@ -98,6 +98,10 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByNothing(String userPackage) {
+        initByNothing(userPackage, true);
+    }
+
+    private void initByNothing(String userPackage, boolean tryEmptyPackage) {
         // TODO use javap and regex "public static( final)? void main\(java\.lang\.String(\[\]|\.\.\.)\)"
 
         List<Class<?>> classesWithMainMethod = ClassSearcher
@@ -108,19 +112,35 @@ public class MainMethodExecutor extends ProgramExecutor {
 
         int count = classesWithMainMethod.size();
 
+        String inPackage = "";
+        if (!userPackage.isEmpty()) {
+            inPackage = " in package \"" + userPackage + "\"";
+        }
+
         if (count == 0) {
-            throw new ErrorWithFeedback("Cannot find a class with a main method.\n" +
+            if (tryEmptyPackage) {
+                initByNothing("", false);
+                return;
+            }
+            throw new ErrorWithFeedback(
+                "Cannot find a class with a main method" + inPackage + ".\n" +
                 "Check if you declared it as \"public static void main(String[] args)\".");
         }
 
         if (count > 1) {
+            if (tryEmptyPackage) {
+                initByNothing("", false);
+                return;
+            }
+
             String allClassesNames = classesWithMainMethod
                 .stream()
-                .map(Class::getSimpleName)
+                .map(Class::getName)
                 .collect(joining(", "));
 
             throw new ErrorWithFeedback(
-                "There are " + count + " classes with main method: " + allClassesNames + ".\n"
+                "There are " + count + " classes with main method"
+                    + inPackage + ": " + allClassesNames + ".\n"
                     + "Leave only one of them to be executed.");
         }
 

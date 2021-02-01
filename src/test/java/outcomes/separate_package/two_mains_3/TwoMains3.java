@@ -26,7 +26,9 @@ public class TwoMains3 extends UserErrorTest {
     String s =
         "Error in test #1\n" +
         "\n" +
-        "There are 2 classes with main method: Main1, Main2.\n" +
+        "There are 2 classes with main method in package \"outcomes.separate_package.two_mains_3\": " +
+            "outcomes.separate_package.two_mains_3.Main1, " +
+            "outcomes.separate_package.two_mains_3.Main2.\n" +
         "Leave only one of them to be executed.";
 
     @Override

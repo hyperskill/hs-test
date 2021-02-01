@@ -20,7 +20,7 @@ public class MainMethodNotPublic3 extends UserErrorTest {
     String m =
         "Error in test #1\n" +
         "\n" +
-        "Cannot find a class with a main method.\n" +
+        "Cannot find a class with a main method in package \"outcomes.separate_package.not_public_3\".\n" +
         "Check if you declared it as \"public static void main(String[] args)\".";
 
     public MainMethodNotPublic3() {
