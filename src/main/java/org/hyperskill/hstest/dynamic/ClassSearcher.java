@@ -38,9 +38,17 @@ public class ClassSearcher {
             final String[] files = directory.list();
 
             for (final String file : files) {
-                if (file.endsWith(".class")) {
+
+                String fullName;
+                if (pckgname.isEmpty()) {
+                    fullName = file;
+                } else {
+                    fullName = pckgname + "." + file;
+                }
+
+                if (fullName.endsWith(".class")) {
                     try {
-                        String className = pckgname + '.' + file.substring(0, file.length() - 6);
+                        String className = fullName.substring(0, fullName.length() - 6);
                         Class<?> clazz = Thread.currentThread()
                             .getContextClassLoader().loadClass(className);
 
@@ -50,13 +58,7 @@ public class ClassSearcher {
                         // loader, and we don't care.
                     }
                 } else if ((tmpDirectory = new File(directory, file)).isDirectory()) {
-                    String newPackage;
-                    if (pckgname.isEmpty()) {
-                        newPackage = file;
-                    } else {
-                        newPackage = pckgname + "." + file;
-                    }
-                    checkDirectory(tmpDirectory, newPackage, classes);
+                    checkDirectory(tmpDirectory, fullName, classes);
                 }
             }
         }
