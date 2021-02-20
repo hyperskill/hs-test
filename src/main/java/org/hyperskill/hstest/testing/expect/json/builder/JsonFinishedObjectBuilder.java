@@ -3,8 +3,8 @@ package org.hyperskill.hstest.testing.expect.json.builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.testing.expect.base.checker.StringChecker;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.StringChecker;
 
 import java.util.ArrayList;
 import java.util.List;

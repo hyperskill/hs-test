@@ -3,13 +3,10 @@ package org.hyperskill.hstest.testing.expect.json.builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.testing.expect.base.checker.DoubleChecker;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
 
 public class JsonDoubleBuilder extends JsonBaseBuilder {
-    public interface DoubleChecker {
-        boolean check(double value);
-    }
-
     final DoubleChecker checker;
     final String failFeedback;
 

@@ -1,6 +1,8 @@
 package org.hyperskill.hstest.testing.expect.json.builder;
 
-import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder.IntegerChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.ArrayIndexChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.ArrayLengthChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.IntegerChecker;
 
 import java.util.regex.Pattern;
 
@@ -121,13 +123,13 @@ public class JsonArrayBuilder extends JsonFinishedArrayBuilder {
         return length(len -> len == length, feedback);
     }
 
-    public JsonArrayBuilder length(ArrayLengthChecker lengthChecker) {
+    public JsonArrayBuilder length(IntegerChecker lengthChecker) {
         return length(lengthChecker, null);
     }
 
-    public JsonArrayBuilder length(ArrayLengthChecker lengthChecker, String feedback) {
+    public JsonArrayBuilder length(IntegerChecker lengthChecker, String feedback) {
         calculatedArrayLength = -1;
-        requiredLength = new ArrayLengthCheckerWithFeedback(lengthChecker, feedback);
+        requiredLength = new ArrayLengthChecker(lengthChecker, feedback);
         return this;
     }
 

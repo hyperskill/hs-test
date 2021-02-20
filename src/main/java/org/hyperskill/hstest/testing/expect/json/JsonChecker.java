@@ -1,23 +1,22 @@
 package org.hyperskill.hstest.testing.expect.json;
 
+import org.hyperskill.hstest.testing.expect.base.checker.BooleanChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.DoubleChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.IntegerChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.NumberChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.StringChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonAnyBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonArrayBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonBaseBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonBooleanBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonBooleanBuilder.BooleanChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonDoubleBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonDoubleBuilder.DoubleChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedArrayBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedArrayBuilder.ArrayLengthChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonFinishedObjectBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder.IntegerChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonNullBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonNumberBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonNumberBuilder.NumberChecker;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonObjectBuilder;
 import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.StringChecker;
 
 import java.util.regex.Pattern;
 
@@ -44,7 +43,7 @@ public final class JsonChecker {
         return isArray().length(length);
     }
 
-    public static JsonArrayBuilder isArray(ArrayLengthChecker lengthChecker) {
+    public static JsonArrayBuilder isArray(IntegerChecker lengthChecker) {
         return isArray().length(lengthChecker);
     }
 
@@ -56,7 +55,7 @@ public final class JsonChecker {
         return isArray().length(length).everyItem(itemsTemplate);
     }
 
-    public static JsonArrayBuilder isArray(ArrayLengthChecker lengthChecker, JsonBaseBuilder itemsTemplate) {
+    public static JsonArrayBuilder isArray(IntegerChecker lengthChecker, JsonBaseBuilder itemsTemplate) {
         return isArray().length(lengthChecker).everyItem(itemsTemplate);
     }
 

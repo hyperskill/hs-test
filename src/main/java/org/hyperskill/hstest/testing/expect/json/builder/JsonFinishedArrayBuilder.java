@@ -3,50 +3,18 @@ package org.hyperskill.hstest.testing.expect.json.builder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.testing.expect.base.checker.ArrayIndexChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.ArrayLengthChecker;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
-import org.hyperskill.hstest.testing.expect.json.builder.JsonIntegerBuilder.IntegerChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
-
-    protected static class ArrayIndexChecker {
-        IntegerChecker indexChecker;
-        JsonBaseBuilder valueChecker;
-        boolean requireMatch;
-        boolean matched = false;
-        String itemDescription;
-
-        ArrayIndexChecker(IntegerChecker indexChecker,
-                          JsonBaseBuilder valueChecker,
-                          boolean requireMatch,
-                          String itemDescription) {
-            this.indexChecker = indexChecker;
-            this.valueChecker = valueChecker;
-            this.requireMatch = requireMatch;
-            this.itemDescription = itemDescription;
-        }
-    }
-
-    public interface ArrayLengthChecker {
-        boolean check(int length);
-    }
-
-    protected static class ArrayLengthCheckerWithFeedback {
-        ArrayLengthChecker checker;
-        String feedback;
-
-        ArrayLengthCheckerWithFeedback(ArrayLengthChecker checker, String feedback) {
-            this.checker = checker;
-            this.feedback = feedback;
-        }
-    }
-
     protected int calculatedArrayLength = 0;
 
     JsonBaseBuilder itemTemplate = null;
-    ArrayLengthCheckerWithFeedback requiredLength = null;
+    ArrayLengthChecker requiredLength = null;
     final List<ArrayIndexChecker> arrayIndexCheckers = new ArrayList<>();
 
     @Override
@@ -67,7 +35,7 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
         JsonArray array = elem.getAsJsonArray();
         int length = array.size();
 
-        if (requiredLength != null && !requiredLength.checker.check(length)) {
+        if (requiredLength != null && !requiredLength.lengthChecker.check(length)) {
             String result = "has an incorrect length";
             if (requiredLength.feedback != null) {
                 result += ": " + requiredLength.feedback + ", found " + length;

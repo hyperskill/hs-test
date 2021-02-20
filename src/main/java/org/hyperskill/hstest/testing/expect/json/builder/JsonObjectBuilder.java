@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.testing.expect.json.builder;
 
-import org.hyperskill.hstest.testing.expect.json.builder.JsonStringBuilder.StringChecker;
+import org.hyperskill.hstest.testing.expect.base.checker.StringChecker;
 
 import java.util.regex.Pattern;
 

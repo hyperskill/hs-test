@@ -3,13 +3,10 @@ package org.hyperskill.hstest.testing.expect.json.builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.hyperskill.hstest.common.JsonUtils;
+import org.hyperskill.hstest.testing.expect.base.checker.StringChecker;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonFeedback;
 
 public class JsonStringBuilder extends JsonBaseBuilder {
-    public interface StringChecker {
-        boolean check(String value);
-    }
-
     final StringChecker checker;
     final String failFeedback;
 
