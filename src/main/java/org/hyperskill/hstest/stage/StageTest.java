@@ -3,6 +3,7 @@ package org.hyperskill.hstest.stage;
 import lombok.Getter;
 import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.outcomes.Outcome;
@@ -120,13 +121,17 @@ public abstract class StageTest<AttachType> {
                     testRun.tearDown();
                 }
             }
-        } catch (Throwable t) {
+        } catch (Throwable ex) {
             if (needTearDown) {
                 try {
                     currTestRun.tearDown();
-                } catch (Throwable ignored) { }
+                } catch (Throwable newEx) {
+                    if (newEx instanceof OutcomeError) {
+                        ex = newEx;
+                    }
+                }
             }
-            Outcome outcome = Outcome.getOutcome(t, currTest);
+            Outcome outcome = Outcome.getOutcome(ex, currTest);
             String failText = outcome.toString();
             fail(failText);
         } finally {
