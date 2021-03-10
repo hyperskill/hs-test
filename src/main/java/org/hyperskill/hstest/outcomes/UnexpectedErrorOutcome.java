@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.outcomes;
 
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.FailureHandler;
 
 import static org.hyperskill.hstest.exception.StackTraceUtils.getStackTrace;
@@ -13,6 +14,11 @@ public class UnexpectedErrorOutcome extends Outcome {
         stackTrace = getStackTrace(cause);
         if (cause.getCause() != null) {
             stackTrace += "\n" + getStackTrace(cause.getCause());
+        }
+
+        String programStderr = OutputHandler.getErr();
+        if (programStderr.length() > 0) {
+            stackTrace = stackTrace.trim() + "\n\n" + programStderr;
         }
     }
 

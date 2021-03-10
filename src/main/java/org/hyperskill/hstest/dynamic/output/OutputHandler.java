@@ -45,6 +45,10 @@ public final class OutputHandler {
         return cleanText(MOCK_OUT.getCloned());
     }
 
+    public static String getErr() {
+        return cleanText(MOCK_ERR.getCloned());
+    }
+
     public static String getDynamicOutput() {
         return cleanText(MOCK_OUT.getDynamic());
     }
