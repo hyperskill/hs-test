@@ -40,9 +40,9 @@ public final class Utils {
         String nbsp = "\u00a0";
         String space = "\u0020";
         return str
-            .replaceAll("\r\n", "\n")
-            .replaceAll("\r", "\n")
-            .replaceAll(nbsp, space);
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
+            .replace(nbsp, space);
     }
 
     public static String capitalize(String str) {
