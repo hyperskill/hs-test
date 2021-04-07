@@ -1,39 +1,43 @@
 package org.hyperskill.hstest.common;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class Utils {
 
     private Utils() { }
 
+    /**
+     * Sleep function that doesn't require catching exception
+     * @param ms milliseconds to sleep
+     */
     public static void sleep(int ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException ignored) { }
     }
 
+    /**
+     * Try some action many times, but not infinitely
+     * @param timesToTry maximum number of tries
+     * @param sleepTime sleeping time between every check
+     * @param exitFunc function that checks for exit condition
+     * @return true, if exitFunc yielded true once, otherwise false
+     */
+    public static boolean tryManyTimes(int timesToTry, int sleepTime, Supplier<Boolean> exitFunc) {
+        while (timesToTry-- > 0) {
+            if (exitFunc.get()) {
+                return true;
+            }
+            sleep(sleepTime);
+        }
+        return false;
+    }
+
     public static String getUrlPage(String url) throws IOException {
-        if (!url.matches("^https?://.*")) {
-            url = "http://" + url;
-        }
-        InputStream inputStream = new URL(url).openStream();
-        BufferedReader reader = new BufferedReader(
-            new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        StringBuilder stringBuilder = new StringBuilder();
-        String nextLine;
-        String newLine = System.getProperty("line.separator");
-        while ((nextLine = reader.readLine()) != null) {
-            stringBuilder.append(nextLine);
-            stringBuilder.append(newLine);
-        }
-        return cleanText(stringBuilder.toString()).trim();
+        return NetworkUtils.getUrlPage(url);
     }
 
     public static String cleanText(String str) {
