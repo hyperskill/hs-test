@@ -2,6 +2,7 @@ package org.hyperskill.hstest.stage;
 
 import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.FileUtils;
+import org.hyperskill.hstest.common.NetworkUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.hyperskill.hstest.common.Utils.sleep;
+import static org.hyperskill.hstest.common.Utils.tryManyTimes;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
@@ -157,12 +158,11 @@ public abstract class SpringTest extends StageTest<Object> {
                 return;
             }
 
-            int i = 100;
-            while (--i != 0) {
-                if (OutputHandler.getOutput().contains("Shutdown completed.\n")) {
-                    break;
-                }
-                sleep(100);
+            tryManyTimes(100, 100,
+                () -> OutputHandler.getOutput().contains("Shutdown completed.\n"));
+
+            if (!tryManyTimes(100, 100, () -> NetworkUtils.isPortAvailable(port))) {
+                throw new UnexpectedError("Cannot stop Spring application, port is not freed");
             }
         }
     }
