@@ -45,7 +45,7 @@ public abstract class SpringTest extends StageTest<Object> {
     protected final int port;
     protected String databasePath;
 
-    public static void main(String[] args) throws Exception {
+    public static void launchSpring(String[] args) throws Exception {
         SpringTest.args = args;
         startSpring();
     }

@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
+import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
@@ -13,9 +14,13 @@ import org.hyperskill.hstest.testing.TestRun;
 import org.hyperskill.hstest.testing.runner.AsyncMainMethodRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTests;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RED_BOLD;
@@ -146,5 +151,23 @@ public abstract class StageTest<AttachType> {
 
     public CheckResult check(String reply, AttachType attach) {
         throw new UnexpectedError("Can't check result: override \"check\" method");
+    }
+
+    public static void main(String[] args) {
+        Class<?>[] tests = ClassSearcher.getClassesForPackage("")
+            .stream()
+            .filter(StageTest.class::isAssignableFrom)
+            .filter(c -> !Modifier.isAbstract(c.getModifiers()))
+            .collect(Collectors.toList()).toArray(new Class<?>[]{});
+
+        Result result = JUnitCore.runClasses(tests);
+
+        if (result.wasSuccessful()) {
+            return;
+        }
+
+        String failMessage = result.getFailures().get(0).getMessage();
+        System.out.println(failMessage);
+        System.exit(-1);
     }
 }

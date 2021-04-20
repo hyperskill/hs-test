@@ -27,7 +27,7 @@ public class TestDynamicMethodProgramNotFinishedAfterTestButShutDown extends Use
     String s =
         "Error in test #1\n" +
         "\n" +
-        "Program ran out of input. You tried to read more, than expected.";
+        "Program ran out of input. You tried to read more than expected.";
 
     @DynamicTestingMethod
     CheckResult test() {

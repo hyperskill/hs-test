@@ -17,7 +17,7 @@ public class SpringApplicationRunner implements TestRunner {
     private void launchSpringBootApplication(TestCase<?> testCase) {
         String errorMessage = "Cannot start Spring application";
         try {
-            SpringTest.main(testCase.getArgs().toArray(new String[0]));
+            SpringTest.launchSpring(testCase.getArgs().toArray(new String[0]));
         } catch (InvocationTargetException ex) {
             if (ex.getCause().getClass().getSimpleName().equals("PortInUseException")) {
                 errorMessage += "\nMake sure that no other Spring application is running at the moment.";

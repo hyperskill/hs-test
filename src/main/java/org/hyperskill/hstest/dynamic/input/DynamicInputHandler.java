@@ -31,7 +31,7 @@ public class DynamicInputHandler {
         }
         if (character == -1 && !Settings.allowOutOfInput) {
             StageTest.getCurrTestRun().setErrorInTest(new ErrorWithFeedback(
-                "Program ran out of input. You tried to read more, than expected."));
+                "Program ran out of input. You tried to read more than expected."));
             throw new ExitException(0);
         }
         return character;
