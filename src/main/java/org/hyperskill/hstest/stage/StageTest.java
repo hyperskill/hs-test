@@ -160,6 +160,14 @@ public abstract class StageTest<AttachType> {
             .filter(c -> !Modifier.isAbstract(c.getModifiers()))
             .collect(Collectors.toList()).toArray(new Class<?>[]{});
 
+        if (tests.length == 0) {
+            Outcome o = Outcome.getOutcome(
+                new UnexpectedError("No tests found"), 0);
+            System.out.println(o);
+            System.exit(-1);
+            return;
+        }
+
         Result result = JUnitCore.runClasses(tests);
 
         if (result.wasSuccessful()) {
