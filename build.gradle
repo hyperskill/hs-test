@@ -61,3 +61,14 @@ task resolveDependencies {
         }
     }
 }
+
+task createFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.hyperskill.hstest.stage.StageTest'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
