@@ -141,7 +141,9 @@ public abstract class StageTest<AttachType> {
             fail(failText);
         } finally {
             currTestRun = null;
-            SystemHandler.tearDownSystem();
+            try {
+                SystemHandler.tearDownSystem();
+            } catch (Throwable ignored) { }
         }
     }
 

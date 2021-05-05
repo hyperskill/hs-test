@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hyperskill.hstest.common.Utils.sleep;
 import static org.hyperskill.hstest.mocks.web.constants.Headers.AUTHORIZATION;
 import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_TYPE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
@@ -157,6 +158,8 @@ public class HttpRequest {
         if (method.equals(POST) && !params.isEmpty()) {
             content = packUrlParams(params);
         }
-        return HttpRequestExecutor.send(this);
+        HttpResponse response = HttpRequestExecutor.send(this);
+        sleep(1); // So that we cannot send 2 requests in the same microsecond
+        return response;
     }
 }
