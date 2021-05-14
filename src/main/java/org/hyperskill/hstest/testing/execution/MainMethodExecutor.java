@@ -136,6 +136,7 @@ public class MainMethodExecutor extends ProgramExecutor {
             String allClassesNames = classesWithMainMethod
                 .stream()
                 .map(Class::getName)
+                .sorted()
                 .collect(joining(", "));
 
             throw new ErrorWithFeedback(
