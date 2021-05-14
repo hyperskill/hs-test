@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -34,6 +32,14 @@ public class NetworkUtils {
     }
 
     public static boolean isPortAvailable(int port) {
+        try (Socket ignored = new Socket("localhost", port)) {
+            return false;
+        } catch (IOException ignored) {
+            return true;
+        }
+
+        /*
+
         try (ServerSocket serverSocket = new ServerSocket()) {
             // setReuseAddress(false) is required only on OSX,
             // otherwise the code will not work correctly on that platform
@@ -43,6 +49,8 @@ public class NetworkUtils {
         } catch (Exception ex) {
             return false;
         }
+
+        */
     }
 
 }
