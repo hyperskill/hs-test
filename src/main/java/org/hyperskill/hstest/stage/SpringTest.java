@@ -162,8 +162,8 @@ public abstract class SpringTest extends StageTest<Object> {
                 () -> OutputHandler.getOutput().contains("Shutdown completed.\n"));
 
             if (!tryManyTimes(200, 100, () -> NetworkUtils.isPortAvailable(port))) {
-                throw new UnexpectedError("Cannot stop Spring application, " +
-                    "port " + port + " is not freed after POST \"/actuator/shutdown\"");
+                //throw new UnexpectedError("Cannot stop Spring application, " +
+                //    "port " + port + " is not freed after POST \"/actuator/shutdown\"");
             }
         }
     }
