@@ -20,6 +20,21 @@ public final class Utils {
     }
 
     /**
+     * Time how long the function will be executing.
+     * Prints the time to the stdout.
+     * You can wrap any method/lambda with this function for easy debugging.
+     */
+    public static <T> T timed(Supplier<T> func) {
+        long start = System.nanoTime();
+        T result = func.get();
+        long end = System.nanoTime();
+
+        System.out.println("Timed: took " + (end - start) + " nanoseconds");
+
+        return result;
+    }
+
+    /**
      * Try some action many times, but not infinitely
      * @param timesToTry maximum number of tries
      * @param sleepTime sleeping time between every check

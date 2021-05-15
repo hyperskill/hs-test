@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.hyperskill.hstest.common.Utils.timed;
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
@@ -161,7 +162,7 @@ public abstract class SpringTest extends StageTest<Object> {
             tryManyTimes(100, 100,
                 () -> OutputHandler.getOutput().contains("Shutdown completed.\n"));
 
-            if (!tryManyTimes(200, 100, () -> NetworkUtils.isPortAvailable(port))) {
+            if (!tryManyTimes(200, 100, () -> timed(() -> NetworkUtils.isPortAvailable(port)))) {
                 //throw new UnexpectedError("Cannot stop Spring application, " +
                 //    "port " + port + " is not freed after POST \"/actuator/shutdown\"");
             }
