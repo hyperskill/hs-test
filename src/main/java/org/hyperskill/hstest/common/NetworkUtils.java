@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -34,23 +35,22 @@ public class NetworkUtils {
     }
 
     public static boolean isPortAvailable(int port) {
-        /*
-        try (Socket ignored = new Socket("localhost", port)) {
-            return false;
-        } catch (IOException ignored) {
-            return true;
-        }
-         */
+        if (OsUtils.isWindows()) {
+            // faster way to check port availability, but works only on Windows
+            try (ServerSocket serverSocket = new ServerSocket()) {
+                serverSocket.setReuseAddress(false);
+                serverSocket.bind(new InetSocketAddress(InetAddress.getByName("localhost"), port), 1);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
 
-
-        try (ServerSocket serverSocket = new ServerSocket()) {
-            // setReuseAddress(false) is required only on OSX,
-            // otherwise the code will not work correctly on that platform
-            serverSocket.setReuseAddress(false);
-            serverSocket.bind(new InetSocketAddress(InetAddress.getByName("localhost"), port), 1);
-            return true;
-        } catch (Exception ex) {
-            return false;
+        } else {
+            try (Socket ignored = new Socket("localhost", port)) {
+                return false;
+            } catch (IOException ignored) {
+                return true;
+            }
         }
     }
 
