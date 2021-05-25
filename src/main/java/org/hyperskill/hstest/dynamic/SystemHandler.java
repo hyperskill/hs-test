@@ -5,6 +5,7 @@ import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -20,8 +21,10 @@ public final class SystemHandler {
     private static SecurityManager oldSecurityManager;
     private static Locale oldLocale;
     private static String oldLineSeparator;
+    private static String oldUserDir;
 
     private static final String separatorProperty = "line.separator";
+    private static final String userDirProperty = "user.dir";
 
     public static void setUp() {
         boolean success = locked.compareAndSet(false, true);
@@ -45,6 +48,17 @@ public final class SystemHandler {
 
         oldLineSeparator = System.getProperty(separatorProperty);
         System.setProperty(separatorProperty, "\n");
+
+        oldUserDir = System.getProperty(userDirProperty);
+        File dir = new File(oldUserDir);
+        if (dir.getName().equals("task")) {
+            // EduTools when testing sets user dir to subproject,
+            // but when the user is running their code user dir is set to root dir
+            // Since testing should be consistent with running the code we should
+            // revert back user dir to the root dir.
+            dir = dir.getParentFile().getParentFile();
+            System.setProperty(userDirProperty, dir.getAbsolutePath());
+        }
     }
 
     public static void tearDownSystem() {
@@ -63,5 +77,6 @@ public final class SystemHandler {
         System.setSecurityManager(oldSecurityManager);
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);
+        System.setProperty(userDirProperty, oldUserDir);
     }
 }
