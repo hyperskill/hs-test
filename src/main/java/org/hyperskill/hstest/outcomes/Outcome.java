@@ -13,6 +13,7 @@ import org.hyperskill.hstest.testing.TestRun;
 import org.hyperskill.hstest.testing.TestedProgram;
 
 import java.nio.file.FileSystemException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,8 +99,17 @@ public abstract class Outcome {
                 result += arguments + "\n\n";
             }
 
+            int MAX_LINES_IN_OUTPUT = 250;
+
             if (worthShowingLog) {
-                result += fullLog;
+                String[] lines = fullLog.split("\n");
+                if (lines.length > MAX_LINES_IN_OUTPUT) {
+                    String[] lastLines =
+                        Arrays.copyOfRange(lines, lines.length - MAX_LINES_IN_OUTPUT, lines.length);
+                    result += String.join("\n", lastLines);
+                } else {
+                    result += fullLog;
+                }
             }
         }
 
