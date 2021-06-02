@@ -21,7 +21,7 @@ class TestLabelOnLongOutputMain {
 public class TestLabelOnLongOutput extends UserErrorTest<String> {
 
     @ContainsMessage
-    String label = "[last 250 lines of output are shown]";
+    String label = "[last 250 lines of output are shown, " + (TestLabelOnLongOutputMain.TOTAL_LINES - 250) + " skipped]";
 
     @ContainsMessage
     static String[] correctLines = new String[250];
