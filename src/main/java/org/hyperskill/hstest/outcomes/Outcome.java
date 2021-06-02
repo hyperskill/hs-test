@@ -85,6 +85,11 @@ public abstract class Outcome {
             arguments = argumentsBuilder.toString().trim();
         }
 
+        int MAX_LINES_IN_OUTPUT = 250;
+        String[] lines = fullLog.split("\n");
+
+        boolean isOutputTooLong = lines.length > MAX_LINES_IN_OUTPUT;
+
         if (worthShowingLog || arguments.length() > 0) {
             result += "\n\n";
             if (worthShowingLog) {
@@ -95,15 +100,16 @@ public abstract class Outcome {
                 result += "\n---\n\n";
             }
 
+            if (isOutputTooLong) {
+                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown]\n\n";
+            }
+
             if (arguments.length() > 0) {
                 result += arguments + "\n\n";
             }
 
-            int MAX_LINES_IN_OUTPUT = 250;
-
             if (worthShowingLog) {
-                String[] lines = fullLog.split("\n");
-                if (lines.length > MAX_LINES_IN_OUTPUT) {
+                if (isOutputTooLong) {
                     String[] lastLines =
                         Arrays.copyOfRange(lines, lines.length - MAX_LINES_IN_OUTPUT, lines.length);
                     result += String.join("\n", lastLines);
