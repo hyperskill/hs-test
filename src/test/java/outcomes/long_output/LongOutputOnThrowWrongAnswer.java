@@ -1,29 +1,42 @@
-package outcomes.test_with_long_output;
+package outcomes.long_output;
 
 import org.hyperskill.hstest.dynamic.DynamicTest;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import outcomes.base.ContainsMessage;
 import outcomes.base.NotContainMessage;
 import outcomes.base.UserErrorTest;
 
 class LongOutputOnThrowWrongAnswerMain {
+    public static final int TOTAL_LINES = 600;
+
     public static void main(String[] args) {
-        for (int i = 0; i < 600; i++) {
-            System.out.println("This is line number " + i);
+        for (int i = 0; i < TOTAL_LINES; i++) {
+            System.out.println("A " + i + " line");
         }
     }
 }
 
 public class LongOutputOnThrowWrongAnswer extends UserErrorTest {
 
+    @ContainsMessage
+    static String[] correctLines = new String[250];
+
     @NotContainMessage
-    String[] lines = new String[]{
-        "This is line number 12",
-        "This is line number 86",
-        "This is line number 241",
-        "This is line number 335",
-    };
+    static String[] wrongLines = new String[LongOutputOnThrowWrongAnswerMain.TOTAL_LINES - correctLines.length];
+
+    static {
+        int lineNumber = 0;
+
+        for (int i = 0; i < wrongLines.length; i++) {
+            wrongLines[i] = "A " + lineNumber++ + " line";
+        }
+
+        for (int i = 0; i < correctLines.length; i++) {
+            correctLines[i] = "A " + lineNumber++ + " line";
+        }
+    }
 
     @DynamicTest
     CheckResult testOutput() {
