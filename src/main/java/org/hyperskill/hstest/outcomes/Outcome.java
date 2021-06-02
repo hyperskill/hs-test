@@ -100,12 +100,12 @@ public abstract class Outcome {
                 result += "\n---\n\n";
             }
 
-            if (isOutputTooLong) {
-                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown, " + (lines.length - MAX_LINES_IN_OUTPUT) + " skipped]\n";
-            }
-
             if (arguments.length() > 0) {
                 result += arguments + "\n\n";
+            }
+
+            if (isOutputTooLong) {
+                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown, " + (lines.length - MAX_LINES_IN_OUTPUT) + " skipped]\n";
             }
 
             if (worthShowingLog) {
