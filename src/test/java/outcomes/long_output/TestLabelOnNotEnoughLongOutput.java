@@ -20,7 +20,7 @@ class TestLabelOnNotEnoughLongOutputMain {
 public class TestLabelOnNotEnoughLongOutput extends UserErrorTest<String> {
 
     @NotContainMessage
-    String label = "[last 250 lines of output are shown]";
+    String label = "last 250 lines of output are shown";
 
     @ContainsMessage
     static String[] correctLines = new String[250];

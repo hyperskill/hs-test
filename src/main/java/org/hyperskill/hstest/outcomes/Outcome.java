@@ -101,7 +101,7 @@ public abstract class Outcome {
             }
 
             if (isOutputTooLong) {
-                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown]\n\n";
+                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown, " + (lines.length - MAX_LINES_IN_OUTPUT) + " skipped]\n";
             }
 
             if (arguments.length() > 0) {
