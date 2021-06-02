@@ -86,36 +86,36 @@ public abstract class Outcome {
         }
 
 
-    if (worthShowingLog || arguments.length() > 0) {
-        result += "\n\n";
-        if (worthShowingLog) {
-            result += "Please find below the output of your program during this failed test.\n";
-            if (testRun != null && testRun.isInputUsed()) {
-                result += "Note that the '>' character indicates the beginning of the input line.\n";
+        if (worthShowingLog || arguments.length() > 0) {
+            result += "\n\n";
+            if (worthShowingLog) {
+                result += "Please find below the output of your program during this failed test.\n";
+                if (testRun != null && testRun.isInputUsed()) {
+                    result += "Note that the '>' character indicates the beginning of the input line.\n";
+                }
+                result += "\n---\n\n";
             }
-            result += "\n---\n\n";
-        }
 
-        if (arguments.length() > 0) {
-            result += arguments + "\n\n";
-        }
+            if (arguments.length() > 0) {
+                result += arguments + "\n\n";
+            }
 
-        int MAX_LINES_IN_OUTPUT = 250;
-        String[] lines = fullLog.split("\n");
-        boolean isOutputTooLong = lines.length > MAX_LINES_IN_OUTPUT;
+            int MAX_LINES_IN_OUTPUT = 250;
+            String[] lines = fullLog.split("\n");
+            boolean isOutputTooLong = lines.length > MAX_LINES_IN_OUTPUT;
 
-        if (worthShowingLog) {
-            if (isOutputTooLong) {
-                result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown, "
-                    + (lines.length - MAX_LINES_IN_OUTPUT) + " skipped]\n";
-                String[] lastLines =
-                    Arrays.copyOfRange(lines, lines.length - MAX_LINES_IN_OUTPUT, lines.length);
-                result += String.join("\n", lastLines);
-            } else {
-                result += fullLog;
+            if (worthShowingLog) {
+                if (isOutputTooLong) {
+                    result += "[last " + MAX_LINES_IN_OUTPUT + " lines of output are shown, "
+                        + (lines.length - MAX_LINES_IN_OUTPUT) + " skipped]\n";
+                    String[] lastLines =
+                        Arrays.copyOfRange(lines, lines.length - MAX_LINES_IN_OUTPUT, lines.length);
+                    result += String.join("\n", lastLines);
+                } else {
+                    result += fullLog;
+                }
             }
         }
-    }
 
         return result.trim();
     }
