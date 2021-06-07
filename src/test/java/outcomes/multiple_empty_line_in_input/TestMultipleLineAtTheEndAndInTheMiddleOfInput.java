@@ -14,7 +14,12 @@ class TestMultipleLineAtTheEndAndInTheMiddleOfMain {
         int index = 1;
 
         while (scanner.hasNextLine()) {
-            scanner.nextLine();
+            String line = scanner.nextLine();
+            if (line.equals("")) {
+                System.out.println("Empty line");
+            } else {
+                System.out.println(line);
+            }
             System.out.println("Input line number " + index++);
         }
     }
@@ -22,33 +27,23 @@ class TestMultipleLineAtTheEndAndInTheMiddleOfMain {
 
 public class TestMultipleLineAtTheEndAndInTheMiddleOfInput extends StageTest<String> {
 
-    private static final String[] input = new String[]{
-        "\ntest",
-        "\n\ntest\n",
-        "test\ntest\n\n\ntest\n\n\n",
-        "\n\ntest\ntest\ntest\n\n",
+    private static final Object[][] input = {
+        {"\ntest", 2},
+        {"\n\ntest\n", 3},
+        {"test\ntest\n\n\ntest\n\n\n", 7},
+        {"\n\ntest\ntest\ntest\n\n", 6}
     };
 
     @DynamicTest(data = "input")
-    CheckResult testOutput(String input) {
+    CheckResult testOutput(String input, int correctLinesNumbers) {
 
         TestedProgram testedProgram = new TestedProgram(TestMultipleLineAtTheEndAndInTheMiddleOfMain.class);
         testedProgram.start();
 
-        String cleanedInput;
-
-        if (input.endsWith("\n")) {
-            cleanedInput = input.substring(0, input.length() - 1);
-        } else {
-            cleanedInput = input;
-        }
-
-        String[] lines = cleanedInput.split("\n", Integer.MAX_VALUE);
-        int totalLines = lines.length;
 
         String output = testedProgram.execute(input);
-        if (!output.contains("Input line number " + totalLines) ||
-            output.contains("Input line number " + (totalLines + 1))) {
+        if (!output.contains("Input line number " + correctLinesNumbers) ||
+            output.contains("Input line number " + (correctLinesNumbers + 1))) {
             return CheckResult.wrong("");
         }
 

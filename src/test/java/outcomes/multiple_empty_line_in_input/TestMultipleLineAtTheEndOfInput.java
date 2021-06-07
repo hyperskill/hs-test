@@ -22,34 +22,24 @@ class TestMultipleLineAtTheEndOfInputMain {
 
 public class TestMultipleLineAtTheEndOfInput extends StageTest<String> {
 
-    private static final String[] input = new String[]{
-        "test",
-        "test\n",
-        "test\n\n",
-        "test\n\n\n",
-        "test\n\n\n\n",
+    private static final Object[][] input = {
+        {"test", 1},
+        {"test\n", 1},
+        {"test\n\n", 2},
+        {"test\n\n\n", 3},
+        {"test\n\n\n\b", 4}
     };
 
     @DynamicTest(data = "input")
-    CheckResult testOutput(String input) {
+    CheckResult testOutput(String input, int correctLinesNumbers) {
 
-        TestedProgram testedProgram = new TestedProgram(TestMultipleLineAtTheEndOfInputMain.class);
+        TestedProgram testedProgram = new TestedProgram(TestMultipleLineAtTheEndAndInTheMiddleOfMain.class);
         testedProgram.start();
 
-        String cleanedInput;
-
-        if (input.endsWith("\n")) {
-            cleanedInput = input.substring(0, input.length() - 1);
-        } else {
-            cleanedInput = input;
-        }
-
-        String[] lines = cleanedInput.split("\n", Integer.MAX_VALUE);
-        int totalLines = lines.length;
 
         String output = testedProgram.execute(input);
-        if (!output.contains("Input line number " + totalLines) ||
-            output.contains("Input line number " + (totalLines + 1))) {
+        if (!output.contains("Input line number " + correctLinesNumbers) ||
+            output.contains("Input line number " + (correctLinesNumbers + 1))) {
             return CheckResult.wrong("");
         }
 
