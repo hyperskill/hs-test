@@ -78,6 +78,11 @@ public class DynamicInputHandler {
         }
 
         newInput = cleanText(newInput);
-        inputLines.addAll(Arrays.asList(newInput.split("\n")));
+
+        if (newInput.endsWith("\n")) {
+            newInput = newInput.substring(0, newInput.length() - 1);
+        }
+
+        inputLines.addAll(Arrays.asList(newInput.split("\n", Integer.MAX_VALUE)));
     }
 }
