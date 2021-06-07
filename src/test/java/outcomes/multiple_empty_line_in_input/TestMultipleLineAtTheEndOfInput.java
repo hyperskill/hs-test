@@ -27,7 +27,7 @@ public class TestMultipleLineAtTheEndOfInput extends StageTest<String> {
         {"test\n", 1},
         {"test\n\n", 2},
         {"test\n\n\n", 3},
-        {"test\n\n\n\b", 4}
+        {"test\n\n\n\n", 4}
     };
 
     @DynamicTest(data = "input")
