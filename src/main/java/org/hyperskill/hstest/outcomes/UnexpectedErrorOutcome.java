@@ -15,11 +15,6 @@ public class UnexpectedErrorOutcome extends Outcome {
         if (cause.getCause() != null) {
             stackTrace += "\n" + getStackTrace(cause.getCause());
         }
-
-        String programStderr = OutputHandler.getErr();
-        if (programStderr.length() > 0) {
-            stackTrace = stackTrace.trim() + "\n\n" + programStderr;
-        }
     }
 
     @Override
