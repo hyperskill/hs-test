@@ -85,7 +85,7 @@ public abstract class Outcome {
                 if (worthShowingProgramStderr) {
                     result += "stdout:\n";
                 }
-                result += trimmedOut;
+                result += trimmedOut + "\n\n";
             }
 
             if (worthShowingProgramStderr) {
@@ -141,9 +141,8 @@ public abstract class Outcome {
         } else {
             result += fullLog;
         }
-        result += "\n";
 
-        return result;
+        return result.trim();
     }
 
     public static Outcome getOutcome(Throwable ex, int currTest) {
