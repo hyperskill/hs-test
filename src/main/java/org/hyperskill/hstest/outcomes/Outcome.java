@@ -55,15 +55,15 @@ public abstract class Outcome {
             result += "\n\n" + stackTrace.trim();
         }
 
-        String fullLog = OutputHandler.getDynamicOutput();
-        String programStderr = OutputHandler.getErr();
+        String fullOut = OutputHandler.getDynamicOutput();
+        String fullErr = OutputHandler.getErr();
         String arguments = getArguments();
-        String trimmedLog = getTrimmedLog(fullLog);
+        String trimmedOut = getTrimmedOut(fullOut);
 
-        boolean worthShowingProgramStderr = programStderr.length() > 0;
+        boolean worthShowingProgramStderr = fullErr.length() > 0;
         boolean worthShowingArguments = arguments.length() > 0;
         boolean worthShowingLog =
-            fullLog.trim().length() != 0 && !result.contains(fullLog.trim());
+            fullOut.trim().length() != 0 && !result.contains(fullOut.trim());
 
         TestRun testRun = StageTest.getCurrTestRun();
 
@@ -85,11 +85,11 @@ public abstract class Outcome {
                 if (worthShowingProgramStderr) {
                     result += "stdout:\n";
                 }
-                result += trimmedLog;
+                result += trimmedOut;
             }
 
             if (worthShowingProgramStderr) {
-                result += "stderr:\n" + programStderr;
+                result += "stderr:\n" + fullErr;
             }
         }
 
@@ -125,7 +125,7 @@ public abstract class Outcome {
         return arguments;
     }
 
-    private String getTrimmedLog(String fullLog) {
+    private String getTrimmedOut(String fullLog) {
         String result = "";
 
         int MAX_LINES_IN_OUTPUT = 250;
