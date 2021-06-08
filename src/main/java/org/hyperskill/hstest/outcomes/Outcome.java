@@ -61,7 +61,7 @@ public abstract class Outcome {
         String trimmedOut = trimLines(fullOut);
         String trimmedErr = trimLines(fullErr);
 
-        boolean worthShowingErr = fullErr.length() > 0;
+        boolean worthShowingErr = fullErr.length() > 0 && !result.contains(fullErr.trim());
         boolean worthShowingArguments = arguments.length() > 0;
         boolean worthShowingOut =
             fullOut.trim().length() != 0 && !result.contains(fullOut.trim());
