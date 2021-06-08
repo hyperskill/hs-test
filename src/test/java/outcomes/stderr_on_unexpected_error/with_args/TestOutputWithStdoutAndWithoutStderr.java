@@ -11,10 +11,6 @@ class TestOutputWithStdoutAndWithoutStderrMain {
         for (int i = 0; i < 3; i++) {
             System.out.println("User stdout output!");
         }
-
-//        for (int i = 0; i < 3; i++) {
-//            System.err.println("User stderr output!");
-//        }
     }
 }
 
