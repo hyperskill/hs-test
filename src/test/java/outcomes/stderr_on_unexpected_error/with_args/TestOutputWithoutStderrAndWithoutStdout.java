@@ -4,6 +4,7 @@ import org.hyperskill.hstest.dynamic.DynamicTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
 import outcomes.base.ContainsMessage;
+import outcomes.base.NotContainMessage;
 import outcomes.base.UnexpectedErrorTest;
 
 class TestOutputWithoutStderrAndWithoutStdoutMain {
@@ -20,9 +21,10 @@ public class TestOutputWithoutStderrAndWithoutStdout extends UnexpectedErrorTest
         "java.lang.ArithmeticException: / by zero"
     };
 
+    @NotContainMessage
     String[] wrongLines = {
-        "stderr",
-        "stdout"
+        "stderr:",
+        "stdout:"
     };
 
     @DynamicTest
