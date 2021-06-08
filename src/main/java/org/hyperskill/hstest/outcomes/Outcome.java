@@ -58,7 +58,8 @@ public abstract class Outcome {
         String fullOut = OutputHandler.getDynamicOutput();
         String fullErr = OutputHandler.getErr();
         String arguments = getArguments();
-        String trimmedOut = getTrimmedOut(fullOut);
+        String trimmedOut = trimLines(fullOut);
+        String trimmedErr = trimLines(fullErr);
 
         boolean worthShowingProgramStderr = fullErr.length() > 0;
         boolean worthShowingArguments = arguments.length() > 0;
@@ -89,7 +90,7 @@ public abstract class Outcome {
             }
 
             if (worthShowingProgramStderr) {
-                result += "stderr:\n" + fullErr;
+                result += "stderr:\n" + trimmedErr;
             }
         }
 
@@ -125,11 +126,11 @@ public abstract class Outcome {
         return arguments;
     }
 
-    private String getTrimmedOut(String fullLog) {
+    private String trimLines(String output) {
         String result = "";
 
         int MAX_LINES_IN_OUTPUT = 250;
-        String[] lines = fullLog.split("\n");
+        String[] lines = output.split("\n");
         boolean isOutputTooLong = lines.length > MAX_LINES_IN_OUTPUT;
 
         if (isOutputTooLong) {
@@ -139,7 +140,7 @@ public abstract class Outcome {
                 Arrays.copyOfRange(lines, lines.length - MAX_LINES_IN_OUTPUT, lines.length);
             result += String.join("\n", lastLines);
         } else {
-            result += fullLog;
+            result += output;
         }
 
         return result.trim();
