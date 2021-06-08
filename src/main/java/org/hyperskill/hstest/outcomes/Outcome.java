@@ -61,16 +61,16 @@ public abstract class Outcome {
         String trimmedOut = trimLines(fullOut);
         String trimmedErr = trimLines(fullErr);
 
-        boolean worthShowingProgramStderr = fullErr.length() > 0;
+        boolean worthShowingErr = fullErr.length() > 0;
         boolean worthShowingArguments = arguments.length() > 0;
-        boolean worthShowingLog =
+        boolean worthShowingOut =
             fullOut.trim().length() != 0 && !result.contains(fullOut.trim());
 
         TestRun testRun = StageTest.getCurrTestRun();
 
-        if (worthShowingLog || worthShowingProgramStderr || worthShowingArguments) {
+        if (worthShowingOut || worthShowingErr || worthShowingArguments) {
             result += "\n\n";
-            if (worthShowingLog || worthShowingProgramStderr) {
+            if (worthShowingOut || worthShowingErr) {
                 result += "Please find below the output of your program during this failed test.\n";
                 if (testRun != null && testRun.isInputUsed()) {
                     result += "Note that the '>' character indicates the beginning of the input line.\n";
@@ -82,14 +82,14 @@ public abstract class Outcome {
                 result += arguments + "\n\n";
             }
 
-            if (worthShowingLog) {
-                if (worthShowingProgramStderr) {
+            if (worthShowingOut) {
+                if (worthShowingErr) {
                     result += "stdout:\n";
                 }
                 result += trimmedOut + "\n\n";
             }
 
-            if (worthShowingProgramStderr) {
+            if (worthShowingErr) {
                 result += "stderr:\n" + trimmedErr;
             }
         }
