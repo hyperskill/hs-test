@@ -29,6 +29,7 @@ import java.util.List;
  */
 public class TestedProgram {
 
+    @Getter
     private final ProgramExecutor programExecutor;
 
     @Getter

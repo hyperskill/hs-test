@@ -25,6 +25,7 @@ import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.stage.StageTest.LIB_TEST_PACKAGE;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.FINISHED;
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.NOT_STARTED;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.RUNNING;
 
 public class MainMethodExecutor extends ProgramExecutor {
@@ -36,6 +37,8 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     private ExecutorService executor;
     private Future<?> task;
+
+    private boolean useSeparateClassLoader = true;
 
     public MainMethodExecutor() {
         String testSourceName = StageTest.getCurrTestRun().getTestCase().getSourceName();
@@ -60,13 +63,20 @@ public class MainMethodExecutor extends ProgramExecutor {
             return;
         }
 
-        ClassLoader dcl = new DynamicClassLoader(clazz);
         try {
+            ClassLoader cl;
+            if (useSeparateClassLoader) {
+                cl = new DynamicClassLoader(clazz);
+            } else {
+                cl = clazz.getClassLoader();
+            }
+
             className = clazz.getName();
-            runClass = dcl.loadClass(className);
+            runClass = cl.loadClass(className);
             methodToInvoke = getMainMethod(runClass);
             group = new ThreadGroup(runClass.getSimpleName());
             group.setDaemon(true);
+
         } catch (Exception ex) {
             throw new UnexpectedError("Error initializing MainMethodExecutor " + className, ex);
         }
@@ -204,6 +214,22 @@ public class MainMethodExecutor extends ProgramExecutor {
     @Override
     public String toString() {
         return runClass.getSimpleName();
+    }
+
+    /**
+     * This method should be used before the "start" or "startInBackground" method.
+     *
+     * If set to false, after starting the program will be loaded in to a system class loader.
+     *
+     * If set to true, all classes will be loaded to a separate class loader. It's useful because
+     * in this case all static variables will be reset after each run.
+     * It's a default behavior.
+     */
+    public void setUseSeparateClassLoader(boolean value) {
+        if (!machine.inState(NOT_STARTED)) {
+            throw new UnexpectedError("Cannot change class loader after the program has started");
+        }
+        this.useSeparateClassLoader = value;
     }
 
 }
