@@ -63,23 +63,7 @@ public class MainMethodExecutor extends ProgramExecutor {
             return;
         }
 
-        try {
-            ClassLoader cl;
-            if (useSeparateClassLoader) {
-                cl = new DynamicClassLoader(clazz);
-            } else {
-                cl = clazz.getClassLoader();
-            }
-
-            className = clazz.getName();
-            runClass = cl.loadClass(className);
-            methodToInvoke = getMainMethod(runClass);
-            group = new ThreadGroup(runClass.getSimpleName());
-            group.setDaemon(true);
-
-        } catch (Exception ex) {
-            throw new UnexpectedError("Error initializing MainMethodExecutor " + className, ex);
-        }
+        runClass = clazz;
     }
 
     private void initByName(String sourceName) {
@@ -158,6 +142,31 @@ public class MainMethodExecutor extends ProgramExecutor {
         initByClassInstance(classesWithMainMethod.get(0));
     }
 
+    private void initMethod() {
+        Class<?> clazz = runClass;
+
+        try {
+            if (useSeparateClassLoader) {
+                ClassLoader cl = new DynamicClassLoader(clazz);
+
+                className = clazz.getName();
+                runClass = cl.loadClass(className);
+                methodToInvoke = getMainMethod(runClass);
+                group = new ThreadGroup(runClass.getSimpleName());
+                group.setDaemon(true);
+
+            } else {
+                className = clazz.getName();
+                methodToInvoke = getMainMethod(runClass);
+                group = new ThreadGroup(runClass.getSimpleName());
+                group.setDaemon(true);
+            }
+
+        } catch (Exception ex) {
+            throw new UnexpectedError("Error initializing MainMethodExecutor " + className, ex);
+        }
+    }
+
     private void invokeMain(String[] args) {
         try {
             machine.setState(RUNNING);
@@ -185,6 +194,7 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     @Override
     protected void launch(String... args) {
+        initMethod();
         InputHandler.setDynamicInputFunc(group, this::requestInput);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
