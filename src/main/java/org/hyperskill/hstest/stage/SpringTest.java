@@ -4,7 +4,6 @@ import org.apache.http.entity.ContentType;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.NetworkUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
-import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
@@ -138,9 +137,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public static void startSpring() throws Exception {
         if (!springRunning) {
-            DynamicClassLoader loader = new DynamicClassLoader(springClass);
-            Class<?> runClass = loader.loadClass(springClass.getName());
-            Method mainMethod = ReflectionUtils.getMainMethod(runClass);
+            Method mainMethod = ReflectionUtils.getMainMethod(springClass);
             mainMethod.invoke(null, new Object[] {args});
             springRunning = true;
         }
