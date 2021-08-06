@@ -23,6 +23,8 @@ public class InfiniteLoopDetector {
     private static final List<String> betweenInputRequests = new ArrayList<>();
     private static final int BETWEEN_INPUT_SAVED_SIZE = 20;
 
+    private static final int REPEATABLE_LINES_MAX = 20;
+
     private static final List<String> everyLine = new ArrayList<>();
     private static final int EVERY_LINE_SAVED_SIZE = 100;
 
@@ -105,7 +107,7 @@ public class InfiniteLoopDetector {
         }
 
         nextRepetitionSize:
-        for (int linesRepeated = 1; linesRepeated <= 10; linesRepeated++) {
+        for (int linesRepeated = 1; linesRepeated <= REPEATABLE_LINES_MAX; linesRepeated++) {
             int howManyRepetitions = everyLine.size() / linesRepeated;
             int linesToCheck = linesRepeated * howManyRepetitions;
             int startingFromIndex = everyLine.size() - linesToCheck;
