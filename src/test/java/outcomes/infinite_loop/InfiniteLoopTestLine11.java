@@ -12,17 +12,9 @@ import outcomes.base.UserErrorTest;
 class InfiniteLoopTestLine11Main {
     public static void main(String[] args) {
         while (true) {
-            System.out.println("Line1");
-            System.out.println("Line2");
-            System.out.println("Line3");
-            System.out.println("Line4");
-            System.out.println("Line5");
-            System.out.println("Line6");
-            System.out.println("Line7");
-            System.out.println("Line8");
-            System.out.println("Line9");
-            System.out.println("Line10");
-            System.out.println("Line11");
+            for (int i = 0; i < 25; i++) {
+                System.out.println("Line" + i);
+            }
         }
     }
 }
