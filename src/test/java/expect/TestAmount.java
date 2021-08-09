@@ -15,7 +15,7 @@ public class TestAmount {
             expect("").toContain().integers();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
-                "Since the last input no output was printed, but should.");
+                "The output is empty, but should contain integers");
             return;
         }
         fail();
@@ -27,7 +27,31 @@ public class TestAmount {
             expect("").asText().toContain().integers();
         } catch (PresentationError ex) {
             assertEquals(ex.getFeedbackText(),
-                "Since the last input no output was printed, but should.");
+                "The output is empty, but should contain integers");
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void checkEmptyButShouldContainIntegers() {
+        try {
+            expect("").asText().toContain(5).doubles();
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The output is empty, but should contain doubles (expected to be equal to 5, found 0)");
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void checkEmptyButShouldContainLines() {
+        try {
+            expect("").asText().toContainAtLeast(3).lines();
+        } catch (PresentationError ex) {
+            assertEquals(ex.getFeedbackText(),
+                "The output is empty, but should contain lines (expected to be at least 3, found 0)");
             return;
         }
         fail();

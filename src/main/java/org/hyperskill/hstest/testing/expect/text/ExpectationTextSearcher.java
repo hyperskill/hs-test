@@ -22,60 +22,59 @@ public class ExpectationTextSearcher<T> {
     }
 
     public List<String> lines() {
-        return custom(this::findLines, "contains wrong number of lines");
+        return custom(this::findLines, "lines");
     }
 
     public List<String> words() {
-        return custom(this::findWords, "contains wrong number of words");
+        return custom(this::findWords, "words");
     }
 
     public List<String> words(String delim) {
         scanner.useDelimiter("\\s*" + delim + "\\s*");
-        return custom(this::findWords, "contains wrong number of words separated by \"" + delim + "\"");
+        return custom(this::findWords, "words separated by \"" + delim + "\"");
     }
 
     public List<String> wordsFrom(String... words) {
-        return custom(() -> findAcrossText(patternForSpecificWords(words)),
-            "contains wrong number of specific words");
+        return custom(() -> findAcrossText(patternForSpecificWords(words)), "specific words");
     }
 
     public List<String> wordsOnlyFrom(String... words) {
         Expectation<String> exp = expect.copy(() -> findWords(patternForSpecificWords(words)));
-        exp.whatsWrongFunc = feedbackWithScanner(exp, "specific words");
+        exp.whatSearchedFor = feedbackWithScanner(exp, "specific words");
         return exp.check();
     }
 
     public List<Integer> integers() {
-        return custom(this::findIntegers, "contains wrong number of integers");
+        return custom(this::findIntegers, "integers");
     }
 
     public List<Integer> integersOnly() {
         Expectation<Integer> exp = expect.copy(this::findIntegersOnly);
-        exp.whatsWrongFunc = feedbackWithScanner(exp, "integers");
+        exp.whatSearchedFor = feedbackWithScanner(exp, "integers");
         return exp.check();
     }
 
     public List<Integer> integersOnly(String delim) {
         scanner.useDelimiter("\\s*" + delim + "\\s*");
         Expectation<Integer> exp = expect.copy(this::findIntegersOnly);
-        exp.whatsWrongFunc = feedbackWithScanner(exp, "integers", delim);
+        exp.whatSearchedFor = feedbackWithScanner(exp, "integers", delim);
         return exp.check();
     }
 
     public List<Double> doubles() {
-        return custom(this::findDoubles, "contains wrong number of doubles");
+        return custom(this::findDoubles, "doubles");
     }
 
     public List<Double> doublesOnly() {
         Expectation<Double> exp = expect.copy(this::findDoublesOnly);
-        exp.whatsWrongFunc = feedbackWithScanner(exp, "doubles");
+        exp.whatSearchedFor = feedbackWithScanner(exp, "doubles");
         return exp.check();
     }
 
     public List<Double> doublesOnly(String delim) {
         scanner.useDelimiter("\\s*" + delim + "\\s*");
         Expectation<Double> exp = expect.copy(this::findDoublesOnly);
-        exp.whatsWrongFunc = feedbackWithScanner(exp, "doubles", delim);
+        exp.whatSearchedFor = feedbackWithScanner(exp, "doubles", delim);
         return exp.check();
     }
 
@@ -84,16 +83,16 @@ public class ExpectationTextSearcher<T> {
     }
 
     public List<String> regex(String pattern, String patternDescription) {
-        return custom(() -> findAcrossText(pattern), "contains wrong number of " + patternDescription);
+        return custom(() -> findAcrossText(pattern),  patternDescription);
     }
 
-    public <X> List<X> custom(Supplier<List<X>> findAllElemsFunc, String whatsWrong) {
-        return custom(findAllElemsFunc, () -> whatsWrong);
+    public <X> List<X> custom(Supplier<List<X>> findAllElemsFunc, String whatSearchedFor) {
+        return custom(findAllElemsFunc, () -> whatSearchedFor);
     }
 
-    public <X> List<X> custom(Supplier<List<X>> findAllElemsFunc, Supplier<String> whatsWrongFunc) {
+    public <X> List<X> custom(Supplier<List<X>> findAllElemsFunc, Supplier<String> whatSearchedFor) {
         Expectation<X> exp = expect.copy(findAllElemsFunc);
-        exp.whatsWrongFunc = whatsWrongFunc;
+        exp.whatSearchedFor = whatSearchedFor;
         return exp.check();
     }
 
@@ -196,14 +195,15 @@ public class ExpectationTextSearcher<T> {
     <X> Supplier<String> feedbackWithScanner(Expectation<X> expect, String type, String delim) {
         return () -> {
             if (scanner.hasNext()) {
-                expect.hintFunc = i -> "but also \"" + scanner.next() + "\"";
-                return "contains not only " + type;
+                expect.hint = i -> "but also \"" + scanner.next() + "\"";
+                expect.whyFailed = "not only";
+                return type;
             }
             String separated = "";
             if (delim != null) {
                 separated = " separated by \"" + delim + "\"";
             }
-            return "contains wrong number of " + type + separated;
+            return type + separated;
         };
     }
 }

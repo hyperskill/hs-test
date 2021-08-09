@@ -20,8 +20,10 @@ public class Expectation<T> {
 
     public Function<Integer, Boolean> checkAmount;
     public Supplier<List<T>> findAllElemsFunc;
-    public Supplier<String> whatsWrongFunc;
-    public Function<Integer, String> hintFunc = i -> null;
+
+    public String whyFailed = "wrong number of";
+    public Supplier<String> whatSearchedFor;
+    public Function<Integer, String> hint = i -> null;
 
     public ThrowExpectationError error = err -> {
         throw new PresentationError(err);
@@ -39,8 +41,9 @@ public class Expectation<T> {
         Expectation<X> result = new Expectation<>(text);
         result.checkAmount = checkAmount;
         result.findAllElemsFunc = findAllElemsFunc;
-        result.whatsWrongFunc = whatsWrongFunc;
-        result.hintFunc = hintFunc;
+        result.whatSearchedFor = whatSearchedFor;
+        result.hint = hint;
+        result.whyFailed = whyFailed;
         return result;
     }
 
@@ -58,19 +61,24 @@ public class Expectation<T> {
 
     private String constructFeedback(int foundSize) {
         String feedback;
-        if (text.length() == 0) {
-            feedback = "Since the last input no output was printed, but should.";
-        } else {
-            String whatsWrong = whatsWrongFunc.get();
-            String hint = hintFunc.apply(foundSize);
-            if (hint == null) {
-                hint = "";
-            }
-            if (hint.length() != 0) {
-                hint = " (" + hint + ")";
-            }
-            feedback = "The following output " + whatsWrong + hint + ":\n" + text;
+
+        String whatSearchedFor = this.whatSearchedFor.get();
+        String hint = this.hint.apply(foundSize);
+
+        if (hint == null) {
+            hint = "";
         }
+
+        if (hint.length() != 0) {
+            hint = " (" + hint + ")";
+        }
+
+        if (text.length() != 0) {
+            feedback = "The following output contains " + whyFailed + " " + whatSearchedFor + hint + ":\n" + text;
+        } else {
+            feedback = "The output is empty, but should contain " + whatSearchedFor + hint;
+        }
+
         return feedback;
     }
 }
