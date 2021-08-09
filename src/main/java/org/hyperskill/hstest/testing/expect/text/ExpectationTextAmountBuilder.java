@@ -50,7 +50,7 @@ public class ExpectationTextAmountBuilder<T> {
 
     public ExpectationTextSearcher<T> toContain(Function<Integer, Boolean> checkAmount, Function<Integer, String> hint) {
         expect.checkAmount = checkAmount;
-        expect.hintFunc = hint;
+        expect.hint = hint;
         return new ExpectationTextSearcher<>(expect);
     }
 
