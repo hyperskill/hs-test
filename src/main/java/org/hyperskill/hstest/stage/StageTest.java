@@ -136,8 +136,22 @@ public abstract class StageTest<AttachType> {
                     }
                 }
             }
-            Outcome outcome = Outcome.getOutcome(ex, currTest);
-            String failText = outcome.toString();
+
+            Outcome outcome;
+            String failText;
+            try {
+                outcome = Outcome.getOutcome(ex, currTest);
+                failText = outcome.toString();
+            } catch (Throwable newEx) {
+                try {
+                    outcome = Outcome.getOutcome(newEx, currTest);
+                    failText = outcome.toString();
+                } catch (Throwable ignored) {
+                    // no code execution here allowed so not to throw an exception
+                    failText = "Unexpected error\\n\\nCannot check the submission";
+                }
+            }
+
             fail(failText);
         } finally {
             currTestRun = null;
