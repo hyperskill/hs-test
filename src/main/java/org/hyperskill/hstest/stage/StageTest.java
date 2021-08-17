@@ -148,7 +148,7 @@ public abstract class StageTest<AttachType> {
                     failText = outcome.toString();
                 } catch (Throwable ignored) {
                     // no code execution here allowed so not to throw an exception
-                    failText = "Unexpected error\\n\\nCannot check the submission";
+                    failText = "Unexpected error\n\nCannot check the submission";
                 }
             }
 
