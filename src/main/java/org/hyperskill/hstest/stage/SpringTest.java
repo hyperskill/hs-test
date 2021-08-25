@@ -147,6 +147,10 @@ public abstract class SpringTest extends StageTest<Object> {
         if (springRunning) {
             int status = post("/actuator/shutdown", "").send().getStatusCode();
 
+            if (isTearDown) {
+                return;
+            }
+
             if (status != 200) {
                 throw new WrongAnswer("Cannot stop Spring application.\n"
                     + "Please make POST \"/actuator/shutdown\" endpoint accessible without authentication.\n"
@@ -154,9 +158,6 @@ public abstract class SpringTest extends StageTest<Object> {
             }
 
             springRunning = false;
-            if (isTearDown) {
-                return;
-            }
 
             tryManyTimes(100, 100,
                 () -> OutputHandler.getOutput().contains("Shutdown completed.\n"));
