@@ -26,11 +26,7 @@ public final class SystemHandler {
     // private static final String userDirProperty = "user.dir";
 
     public static void setUp() {
-        boolean success = locked.compareAndSet(false, true);
-        if (!success) {
-            throw new ErrorWithFeedback("Cannot start the testing process more than once");
-        }
-        lockerThread = Thread.currentThread();
+        lockSystemForTesting();
 
         OutputHandler.replaceOutput();
         InputHandler.replaceInput();
@@ -63,6 +59,26 @@ public final class SystemHandler {
     }
 
     public static void tearDownSystem() {
+        unlockSystemForTesting();
+
+        OutputHandler.revertOutput();
+        InputHandler.revertInput();
+        System.setSecurityManager(oldSecurityManager);
+        Locale.setDefault(oldLocale);
+        System.setProperty(separatorProperty, oldLineSeparator);
+
+        // System.setProperty(userDirProperty, oldUserDir);
+    }
+
+    private static void lockSystemForTesting() {
+        boolean success = locked.compareAndSet(false, true);
+        if (!success) {
+            throw new ErrorWithFeedback("Cannot start the testing process more than once");
+        }
+        lockerThread = Thread.currentThread();
+    }
+
+    private static void unlockSystemForTesting() {
         if (Thread.currentThread() != lockerThread) {
             throw new ErrorWithFeedback("Cannot tear down the testing process from the other thread");
         }
@@ -72,13 +88,5 @@ public final class SystemHandler {
             throw new ErrorWithFeedback("Cannot tear down the testing process more than once");
         }
         lockerThread = null;
-
-        OutputHandler.revertOutput();
-        InputHandler.revertInput();
-        System.setSecurityManager(oldSecurityManager);
-        Locale.setDefault(oldLocale);
-        System.setProperty(separatorProperty, oldLineSeparator);
-
-        // System.setProperty(userDirProperty, oldUserDir);
     }
 }
