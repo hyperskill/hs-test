@@ -105,6 +105,15 @@ public class TestCase<AttachType> {
         return this;
     }
 
+    public TestCase<AttachType> setFiles(Map<String, String> files) {
+        if (files != null) {
+            for (String filename : files.keySet()) {
+                addFile(filename, files.get(filename));
+            }
+        }
+        return this;
+    }
+
     public TestCase<AttachType> setTimeLimit(int timeLimit, TimeUnit timeUnit) {
         return setTimeLimit((int) TimeUnit.MILLISECONDS.convert(timeLimit, timeUnit));
     }

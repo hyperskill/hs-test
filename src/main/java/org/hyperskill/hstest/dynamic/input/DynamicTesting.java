@@ -2,6 +2,8 @@ package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.DynamicTest;
+import org.hyperskill.hstest.dynamic.extractors.AnnotatedDataExtractor;
+import org.hyperskill.hstest.dynamic.extractors.AnnotatedFilesExtractor;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -25,7 +28,6 @@ import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.ReflectionUtils.canBeBoxed;
 import static org.hyperskill.hstest.common.Utils.cleanText;
 import static org.hyperskill.hstest.common.Utils.smartCompare;
-import static org.hyperskill.hstest.dynamic.ParametrizedDataExtractor.extractParametrizedData;
 
 /**
  * Interface for creating tests with dynamic input.
@@ -172,6 +174,7 @@ public interface DynamicTesting {
             int timeLimit = TestCase.DEFAULT_TIME_LIMIT;
             String feedback = "";
             List<Object[]> argsList = new ArrayList<>();
+            Map<String, String> filesMap = null;
 
             DynamicTestElement(List<DynamicTestingWithoutParams> tests, M member) {
                 this.tests = tests;
@@ -188,9 +191,14 @@ public interface DynamicTesting {
                     repeat = annotation.repeat();
                     feedback = annotation.feedback();
                     String data = annotation.data();
+                    String files = annotation.files();
 
                     if (elem instanceof Method && !data.isEmpty()) {
-                        argsList = extractParametrizedData(data, obj);
+                        argsList = new AnnotatedDataExtractor(data, obj).extract();
+                    }
+
+                    if (!files.isEmpty()) {
+                        filesMap = new AnnotatedFilesExtractor(files, obj).extract();
                     }
                 }
             }
@@ -295,6 +303,7 @@ public interface DynamicTesting {
                         .setDynamicTesting(test)
                         .setTimeLimit(dte.timeLimit)
                         .setFeedback(dte.feedback)
+                        .setFiles(dte.filesMap)
                     );
                 }
                 return tests.stream();

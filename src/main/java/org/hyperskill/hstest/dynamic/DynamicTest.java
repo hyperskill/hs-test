@@ -12,4 +12,5 @@ public @interface DynamicTest {
     String data() default "";
     int repeat() default 1;
     String feedback() default "";
+    String files() default "";
 }
