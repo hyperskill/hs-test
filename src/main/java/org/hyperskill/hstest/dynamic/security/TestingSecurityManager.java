@@ -5,10 +5,12 @@ import java.security.AccessControlException;
 public class TestingSecurityManager extends SecurityManagerWrapper {
     private static ThreadGroup rootGroup;
 
-    public TestingSecurityManager(SecurityManager originalSecurityManager,
-                                  ThreadGroup rootGroup) {
+    public TestingSecurityManager(SecurityManager originalSecurityManager) {
         super(originalSecurityManager);
-        TestingSecurityManager.rootGroup = rootGroup;
+    }
+
+    public static void setTestingGroup(ThreadGroup group) {
+        rootGroup = group;
     }
 
     public static ThreadGroup getTestingGroup() {

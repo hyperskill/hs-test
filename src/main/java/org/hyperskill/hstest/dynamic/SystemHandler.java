@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.System.getSecurityManager;
+import static org.hyperskill.hstest.common.JavaUtils.isSecurityManagerAllowed;
 
 public final class SystemHandler {
 
@@ -31,12 +32,14 @@ public final class SystemHandler {
         OutputHandler.replaceOutput();
         InputHandler.replaceInput();
 
-        oldSecurityManager = getSecurityManager();
-        System.setSecurityManager(
-            new TestingSecurityManager(
-                oldSecurityManager,
-                Thread.currentThread().getThreadGroup())
-        );
+        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
+
+        if (isSecurityManagerAllowed()) {
+            oldSecurityManager = getSecurityManager();
+            System.setSecurityManager(new TestingSecurityManager(oldSecurityManager));
+        }
+
+        TestingSecurityManager.setTestingGroup(rootGroup);
 
         oldLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
@@ -63,7 +66,13 @@ public final class SystemHandler {
 
         OutputHandler.revertOutput();
         InputHandler.revertInput();
-        System.setSecurityManager(oldSecurityManager);
+
+        if (isSecurityManagerAllowed()) {
+            System.setSecurityManager(oldSecurityManager);
+        }
+
+        TestingSecurityManager.setTestingGroup(null);
+
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);
 

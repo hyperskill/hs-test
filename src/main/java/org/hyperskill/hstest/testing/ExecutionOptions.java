@@ -1,6 +1,6 @@
 package org.hyperskill.hstest.testing;
 
-import java.lang.management.ManagementFactory;
+import static org.hyperskill.hstest.common.JavaUtils.isUnderDebugger;
 
 /**
  * Command-line options passed to the JVM listed in one place
@@ -41,6 +41,12 @@ public final class ExecutionOptions {
      * To avoid any time limit timeouts, an argument "-DdebugMode=true" should be passed.
      * In case you are under the debugger, this field should be automatically set to "true".
      */
-    public static boolean debugMode = Boolean.getBoolean("debugMode")
-        || ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp");
+    public static boolean debugMode = Boolean.getBoolean("debugMode") || isUnderDebugger();
+
+    /**
+     * Enables SecurityManager even though it's not recommended being used in Java 17
+     * In Java 8-16 it still will be used, on Java 17 it's not unless this flag is set to true.
+     * Use "-DforceSecurityManager=true" to set this flag.
+     */
+    public static boolean forceSecurityManager = Boolean.getBoolean("forceSecurityManager");
 }

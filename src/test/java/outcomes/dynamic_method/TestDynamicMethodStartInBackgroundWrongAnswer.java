@@ -3,7 +3,6 @@ package outcomes.dynamic_method;
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
-import org.junit.Ignore;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
@@ -22,13 +21,12 @@ class TestDynamicMethodStartInBackgroundWrongAnswerMain {
             Thread.sleep(100000);
             System.out.println("S4");
         } catch (InterruptedException ex) {
-            System.out.println(ex.toString());
+            System.out.println(ex);
             System.out.println("Server interrupted!");
         }
     }
 }
 
-@Ignore
 public class TestDynamicMethodStartInBackgroundWrongAnswer extends UserErrorTest<String> {
 
     @ContainsMessage

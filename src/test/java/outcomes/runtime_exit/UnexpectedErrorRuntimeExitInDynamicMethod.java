@@ -3,10 +3,14 @@ package outcomes.runtime_exit;
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Scanner;
+
+import static org.hyperskill.hstest.common.JavaUtils.isSystemExitAllowed;
 
 class UnexpectedErrorRuntimeExitInDynamicMethodMain {
     public static void main(String[] args) {
@@ -16,6 +20,11 @@ class UnexpectedErrorRuntimeExitInDynamicMethodMain {
 }
 
 public class UnexpectedErrorRuntimeExitInDynamicMethod extends UnexpectedErrorTest {
+
+    @BeforeClass
+    public static void check() {
+        Assume.assumeTrue(isSystemExitAllowed());
+    }
 
     @ContainsMessage
     String[] m = {

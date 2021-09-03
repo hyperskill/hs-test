@@ -3,10 +3,14 @@ package outcomes.threads;
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
 import java.util.Scanner;
+
+import static org.hyperskill.hstest.common.JavaUtils.isSecurityManagerAllowed;
 
 class TestDynamicMethodThreadGroupManipulation1Server {
     public static void main(String[] args) throws Exception {
@@ -26,6 +30,11 @@ class TestDynamicMethodThreadGroupManipulation1Server {
 }
 
 public class TestDynamicMethodThreadGroupManipulation1 extends UserErrorTest<String> {
+
+    @BeforeClass
+    public static void check() {
+        Assume.assumeTrue(isSecurityManagerAllowed());
+    }
 
     @ContainsMessage
     String m =

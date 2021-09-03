@@ -2,12 +2,16 @@ package outcomes.runtime_exit;
 
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UnexpectedErrorTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import static org.hyperskill.hstest.common.JavaUtils.isSystemExitAllowed;
 
 class UnexpectedErrorSystemExitInAddInputMain {
     public static void main(String[] args) {
@@ -17,6 +21,11 @@ class UnexpectedErrorSystemExitInAddInputMain {
 }
 
 public class UnexpectedErrorSystemExitInAddInput extends UnexpectedErrorTest {
+
+    @BeforeClass
+    public static void check() {
+        Assume.assumeTrue(isSystemExitAllowed());
+    }
 
     @ContainsMessage
     String[] m = {
