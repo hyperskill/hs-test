@@ -33,7 +33,7 @@ public class JavaUtils {
     }
 
     public static boolean isSecurityManagerAllowed() {
-        return getJavaVersion() < 17 || forceSecurityManager;
+        return getJavaVersion() <= 17 || forceSecurityManager;
     }
 
     /**
