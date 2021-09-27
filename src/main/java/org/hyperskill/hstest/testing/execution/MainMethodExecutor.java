@@ -82,7 +82,7 @@ public class MainMethodExecutor extends ProgramExecutor {
         try {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             initByClassInstance(clazz);
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | NoClassDefFoundError ex) {
             initByNothing(className);
         }
     }
