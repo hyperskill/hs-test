@@ -32,13 +32,12 @@ public final class SystemHandler {
         OutputHandler.replaceOutput();
         InputHandler.replaceInput();
 
-        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
-
         if (isSecurityManagerAllowed()) {
             oldSecurityManager = getSecurityManager();
             System.setSecurityManager(new TestingSecurityManager(oldSecurityManager));
         }
 
+        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
         TestingSecurityManager.setTestingGroup(rootGroup);
 
         oldLocale = Locale.getDefault();
