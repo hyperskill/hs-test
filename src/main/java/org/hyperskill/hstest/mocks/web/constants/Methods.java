@@ -1,11 +1,16 @@
 package org.hyperskill.hstest.mocks.web.constants;
 
-public final class Methods {
+import java.util.NoSuchElementException;
 
-    private Methods() { }
+public enum Methods {
+    GET, POST, PUT, DELETE;
 
-    public static final String GET = "GET";
-    public static final String POST = "POST";
-    public static final String PUT = "PUT";
-    public static final String DELETE = "DELETE";
+    public static Methods of(String method) {
+        for (Methods val : Methods.values()) {
+            if (val.toString().equals(method)) {
+                return val;
+            }
+        }
+        throw new NoSuchElementException("No method \"" + method + "\"");
+    }
 }

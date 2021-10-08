@@ -1,9 +1,16 @@
 package org.hyperskill.hstest.mocks.web.constants;
 
-public final class StatusCodes {
+public enum StatusCodes {
+    CODE_200("200 OK"),
+    CODE_404("404 Not Found");
 
-    private StatusCodes() { }
+    String code;
+    StatusCodes(String code) {
+        this.code = code;
+    }
 
-    public static final String CODE_200 = "200 OK";
-    public static final String CODE_404 = "404 Not Found";
+    @Override
+    public String toString() {
+        return code;
+    }
 }

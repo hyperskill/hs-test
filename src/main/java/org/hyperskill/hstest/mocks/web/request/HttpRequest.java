@@ -1,41 +1,60 @@
 package org.hyperskill.hstest.mocks.web.request;
 
 import org.apache.http.entity.ContentType;
+import org.hyperskill.hstest.mocks.web.constants.Headers;
+import org.hyperskill.hstest.mocks.web.constants.Methods;
+import org.hyperskill.hstest.mocks.web.constants.Schemas;
 import org.hyperskill.hstest.mocks.web.response.HttpResponse;
 
 import java.util.Base64;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
 import static org.hyperskill.hstest.mocks.web.constants.Headers.AUTHORIZATION;
 import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_TYPE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
+import static org.hyperskill.hstest.mocks.web.constants.UrlSeparators.anchorSep;
+import static org.hyperskill.hstest.mocks.web.constants.UrlSeparators.hostSep;
+import static org.hyperskill.hstest.mocks.web.constants.UrlSeparators.paramsSep;
+import static org.hyperskill.hstest.mocks.web.constants.UrlSeparators.portSep;
+import static org.hyperskill.hstest.mocks.web.constants.UrlSeparators.schemaSep;
 import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
-import static org.hyperskill.hstest.mocks.web.request.HttpRequestParser.parseUri;
 
 public class HttpRequest {
 
-    String method = "";
-    String uri = "";
+    String method;
     String version = "";
 
     String schema = "http";
     String host = "localhost";
-    int port = 80;
+    int port = -1;
     String endpoint = "/";
     String anchor = "";
 
-    Map<String, String> params = new HashMap<>();
-    Map<String, String> headers = new HashMap<>();
+    Map<String, String> params = new LinkedHashMap<>();
+    Map<String, String> headers = new LinkedHashMap<>();
 
     String content = "";
     int contentLength;
 
-    public HttpRequest() { }
+    public HttpRequest() {
+        this(Methods.GET, "");
+    }
 
-    public HttpRequest(String method) {
-        this.method = method;
+    public HttpRequest(String uri) {
+        this(Methods.GET, uri);
+    }
+
+    public HttpRequest(Methods method) {
+        this(method, "");
+    }
+
+    public HttpRequest(Methods method, String uri) {
+        this.method = method.name();
+        if (uri.length() != 0) {
+            setUri(uri);
+        }
     }
 
     public String getMethod() {
@@ -43,43 +62,122 @@ public class HttpRequest {
     }
 
     public String getUri() {
-        return uri;
+        String httpHost = schema + schemaSep + host;
+        if (port >= 0) {
+            httpHost += portSep + port;
+        }
+        return httpHost + getLocalUri();
     }
 
     public String getLocalUri() {
         String localUri = endpoint;
         if (params.size() > 0) {
-            localUri += "?" + packUrlParams(params);
+            localUri += paramsSep + packUrlParams(params);
         }
         if (anchor.length() > 0) {
-            localUri += "#" + anchor;
+            localUri += anchorSep + anchor;
         }
         return localUri;
+    }
+
+    public HttpRequest setUri(String uri) {
+        if (uri.contains(schemaSep)) {
+            int index = uri.indexOf(schemaSep);
+            schema = uri.substring(0, index);
+            uri = uri.substring(index + schemaSep.length());
+        }
+
+        if (!uri.contains(hostSep)) {
+            uri += hostSep;
+        }
+
+        int hostIndex = uri.indexOf(hostSep);
+        String hostAndPort = uri.substring(0, hostIndex);
+
+        if (hostAndPort.contains(portSep)) {
+            int portIndex = hostAndPort.indexOf(portSep);
+            host = hostAndPort.substring(0, portIndex);
+            port = Integer.parseInt(hostAndPort.substring(portIndex + portSep.length()));
+        } else if (hostAndPort.length() != 0) {
+            host = hostAndPort;
+        }
+
+        uri = uri.substring(hostIndex);
+
+        if (uri.contains(anchorSep)) {
+            int index = uri.indexOf(anchorSep);
+            setAnchor(uri.substring(index + anchorSep.length()));
+            uri = uri.substring(0, index);
+        }
+
+        if (uri.contains(paramsSep)) {
+            int index = uri.indexOf(paramsSep);
+            String strGetParams = uri.substring(index + 1);
+            String[] arrayParams = strGetParams.split("&");
+
+            for (String param : arrayParams) {
+                String[] parts = param.split("=");
+                String key = parts[0];
+                String value = parts.length == 1 ? "" : parts[1];
+                addParam(key, value);
+            }
+
+            uri = uri.substring(0, index);
+        }
+
+        setEndpoint(uri);
+        return this;
     }
 
     public String getSchema() {
         return schema;
     }
 
+    public HttpRequest setSchema(Schemas schema) {
+        return setSchema(schema.toString());
+    }
+
+    public HttpRequest setSchema(String schema) {
+        this.schema = schema;
+        return this;
+    }
+
     public String getHost() {
         return host;
+    }
+
+    public HttpRequest setHost(String host) {
+        this.host = host;
+        return this;
     }
 
     public int getPort() {
         return port;
     }
 
+    public HttpRequest setPort(int port) {
+        this.port = port;
+        return this;
+    }
+
     public String getEndpoint() {
         return endpoint;
+    }
+
+    public HttpRequest setEndpoint(String endpoint) {
+        if (!endpoint.startsWith("/")) {
+            endpoint = "/" + endpoint;
+        }
+        this.endpoint = endpoint;
+        return this;
     }
 
     public String getAnchor() {
         return anchor;
     }
 
-    public HttpRequest setUri(String uri) {
-        this.uri = uri;
-        parseUri(this);
+    public HttpRequest setAnchor(String anchor) {
+        this.anchor = anchor;
         return this;
     }
 
@@ -115,6 +213,10 @@ public class HttpRequest {
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public HttpRequest addHeader(Headers header, String value) {
+        return addHeader(header.toString(), value);
     }
 
     public HttpRequest addHeader(String header, String value) {
@@ -155,7 +257,7 @@ public class HttpRequest {
     }
 
     public HttpResponse send() {
-        if (method.equals(POST) && !params.isEmpty()) {
+        if (method.equals(POST.toString()) && !params.isEmpty()) {
             content = packUrlParams(params);
         }
         HttpResponse response = HttpRequestExecutor.send(this);

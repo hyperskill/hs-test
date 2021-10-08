@@ -11,6 +11,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.hyperskill.hstest.mocks.web.constants.Methods;
 import org.hyperskill.hstest.mocks.web.response.HttpResponse;
 
 import java.io.DataInputStream;
@@ -20,10 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hyperskill.hstest.mocks.web.constants.Headers.CONTENT_TYPE;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.PUT;
 
 public final class HttpRequestExecutor {
 
@@ -116,7 +113,7 @@ public final class HttpRequestExecutor {
     }
 
     private static HttpRequestBase constructGet(HttpRequest request) {
-        String uriWithUrlParams = request.uri;
+        String uriWithUrlParams = request.getUri();
         if (request.params != null && !request.params.isEmpty()) {
             uriWithUrlParams += "?" + packUrlParams(request.params);
         }
@@ -124,28 +121,28 @@ public final class HttpRequestExecutor {
     }
 
     private static HttpRequestBase constructPost(HttpRequest request) {
-        HttpPost post = new HttpPost(request.uri);
+        HttpPost post = new HttpPost(request.getUri());
         post.setEntity(new StringEntity(request.content,
-            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE))));
+            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE.toString()))));
         return post;
     }
 
     private static HttpRequestBase constructPut(HttpRequest request) {
-        HttpPut put = new HttpPut(request.uri);
+        HttpPut put = new HttpPut(request.getUri());
         put.setEntity(new StringEntity(request.content,
-            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE))));
+            ContentType.getByMimeType(request.headers.get(CONTENT_TYPE.toString()))));
         return put;
     }
 
     private static HttpRequestBase constructDelete(HttpRequest request) {
-        return new HttpDelete(request.uri);
+        return new HttpDelete(request.getUri());
     }
 
     public static HttpResponse send(HttpRequest request) {
 
         HttpRequestBase requestBase;
 
-        switch (request.method) {
+        switch (Methods.of(request.method)) {
             case POST:
                 requestBase = constructPost(request);
                 break;

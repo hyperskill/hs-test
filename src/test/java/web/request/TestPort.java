@@ -34,14 +34,14 @@ public class TestPort {
     public void testPortNoPort() {
         HttpRequest req = new HttpRequest(GET)
             .setUri("http://localhost3");
-        Assert.assertEquals(req.getPort(), 80);
+        Assert.assertEquals(req.getPort(), -1);
     }
 
     @Test
     public void testPortNoPortRoot() {
         HttpRequest req = new HttpRequest(GET)
             .setUri("http://localhost8/");
-        Assert.assertEquals(req.getPort(), 80);
+        Assert.assertEquals(req.getPort(), -1);
     }
 
     @Test

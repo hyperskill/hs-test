@@ -1,11 +1,18 @@
 package org.hyperskill.hstest.mocks.web.constants;
 
-public final class Headers {
+public enum Headers {
+    CONTENT_TYPE("Content-Type"),
+    CONTENT_LENGTH("Content-Length"),
+    HOST("Host"),
+    AUTHORIZATION("Authorization");
 
-    private Headers() { }
+    String type;
+    Headers(String type) {
+        this.type = type;
+    }
 
-    public static final String CONTENT_TYPE = "Content-Type";
-    public static final String CONTENT_LENGTH = "Content-Length";
-    public static final String HOST = "Host";
-    public static final String AUTHORIZATION = "Authorization";
+    @Override
+    public String toString() {
+        return type;
+    }
 }

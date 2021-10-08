@@ -11,7 +11,7 @@ public class WebPage {
 
     private String content = "";
     private String contentType = "";
-    private String statusCode = CODE_200;
+    private String statusCode = CODE_200.toString();
 
     private static final String NEW_LINE = "\r\n";
 
@@ -40,7 +40,7 @@ public class WebPage {
         RESPONSE_STATUS_CODE + RESPONSE_CONTENT_LENGTH + NEW_LINE;
 
     static final String NOT_FOUND = RESPONSE
-        .replaceAll(STATUS_CODE_TEMP, CODE_404)
+        .replaceAll(STATUS_CODE_TEMP, CODE_404.toString())
         .replaceAll(CONTENT_LENGTH_TEMP, "0");
 
     private String createHeader() {
