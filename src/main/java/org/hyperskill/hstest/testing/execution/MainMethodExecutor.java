@@ -1,7 +1,6 @@
 package org.hyperskill.hstest.testing.execution;
 
 import org.hyperskill.hstest.common.ReflectionUtils;
-import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
 import org.hyperskill.hstest.dynamic.input.InputHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
@@ -98,8 +97,8 @@ public class MainMethodExecutor extends ProgramExecutor {
     private void initByNothing(String userPackage, boolean tryEmptyPackage) {
         // TODO use javap and regex "public static( final)? void main\(java\.lang\.String(\[\]|\.\.\.)\)"
 
-        List<Class<?>> classesWithMainMethod = ClassSearcher
-            .getClassesForPackage(userPackage)
+        List<Class<?>> classesWithMainMethod = ReflectionUtils
+            .getAllClassesFromPackage(userPackage)
             .stream()
             .filter(ReflectionUtils::hasMainMethod)
             .collect(toList());

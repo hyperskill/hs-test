@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.common;
 
+import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.DynamicTest;
 import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
@@ -182,6 +183,15 @@ public final class ReflectionUtils {
             }
             throw new UnexpectedError(feedback, ex);
         }
+    }
+
+    /**
+     * Get all classes which package name that starts with "packageName".
+     * It doesn't search among library jars, only among compiled class files.
+     * I.e. among all test files and among all user files.
+     */
+    public static List<Class<?>> getAllClassesFromPackage(String packageName) {
+        return ClassSearcher.getClassesForPackage(packageName);
     }
 
     /**
