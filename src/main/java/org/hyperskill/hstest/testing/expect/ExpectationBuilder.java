@@ -5,8 +5,8 @@ import org.hyperskill.hstest.exception.outcomes.PresentationError;
 import org.hyperskill.hstest.testing.expect.json.ExpectationJsonBuilder;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextAmountBuilder;
 import org.hyperskill.hstest.testing.expect.text.ExpectationTextSearcher;
+import org.hyperskill.hstest.testing.expect.xml.ExpectationXmlBuilder;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 public class ExpectationBuilder<T> {
@@ -71,5 +71,9 @@ public class ExpectationBuilder<T> {
 
     public ExpectationJsonBuilder<T> asJson() {
         return new ExpectationJsonBuilder<>(expect);
+    }
+
+    public ExpectationXmlBuilder<T> asXml() {
+        return new ExpectationXmlBuilder<>(expect);
     }
 }

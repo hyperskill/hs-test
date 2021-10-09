@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.testing.expect.json.builder;
 
+import org.hyperskill.hstest.testing.expect.base.checker.KeyValueChecker;
 import org.hyperskill.hstest.testing.expect.base.checker.StringChecker;
 
 import java.util.regex.Pattern;
@@ -135,12 +136,12 @@ public class JsonObjectBuilder extends JsonFinishedObjectBuilder {
     }
 
     public JsonObjectBuilder value(StringChecker key, JsonBaseBuilder value, String failFeedback) {
-        keyValueCheckers.add(new KeyValueChecker(key, value, true, failFeedback));
+        keyValueCheckers.add(new KeyValueChecker<>(key, value, true, failFeedback));
         return this;
     }
 
     public JsonFinishedObjectBuilder anyOtherValues() {
-        keyValueCheckers.add(new KeyValueChecker(key -> true, any(), false, ""));
+        keyValueCheckers.add(new KeyValueChecker<>(key -> true, any(), false, ""));
         return this;
     }
 

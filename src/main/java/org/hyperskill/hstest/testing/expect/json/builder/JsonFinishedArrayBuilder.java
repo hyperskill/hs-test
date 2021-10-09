@@ -15,11 +15,11 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
 
     JsonBaseBuilder itemTemplate = null;
     ArrayLengthChecker requiredLength = null;
-    final List<ArrayIndexChecker> arrayIndexCheckers = new ArrayList<>();
+    final List<ArrayIndexChecker<JsonBaseBuilder>> arrayIndexCheckers = new ArrayList<>();
 
     @Override
     public final boolean check(JsonElement elem, ExpectationJsonFeedback feedback) {
-        for (ArrayIndexChecker checker : arrayIndexCheckers) {
+        for (ArrayIndexChecker<JsonBaseBuilder> checker : arrayIndexCheckers) {
             checker.matched = false;
         }
 
@@ -58,7 +58,7 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
                 }
             }
 
-            for (ArrayIndexChecker checker : arrayIndexCheckers) {
+            for (ArrayIndexChecker<JsonBaseBuilder> checker : arrayIndexCheckers) {
                 if (checker.indexChecker.check(index)) {
                     feedback.addPath("" + index);
                     boolean result = checker.valueChecker.check(value, feedback);
@@ -81,7 +81,7 @@ public class JsonFinishedArrayBuilder extends JsonBaseBuilder {
             return false;
         }
 
-        for (ArrayIndexChecker checker : arrayIndexCheckers) {
+        for (ArrayIndexChecker<JsonBaseBuilder> checker : arrayIndexCheckers) {
             if (checker.requireMatch && !checker.matched) {
                 String result = "is missing an item";
                 if (checker.itemDescription != null) {

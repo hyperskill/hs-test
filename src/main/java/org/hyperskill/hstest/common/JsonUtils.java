@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.MalformedJsonException;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
 
 public final class JsonUtils {
@@ -24,7 +23,7 @@ public final class JsonUtils {
 
     public static String getPrettyJson(JsonElement json) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
+        return Utils.cleanText(gson.toJson(json));
     }
 
     public static String getType(JsonElement json) {
