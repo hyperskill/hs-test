@@ -8,7 +8,7 @@ plugins {
 group 'org.hyperskill'
 version '8.2'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -20,12 +20,12 @@ dependencies {
 
     // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    api 'org.assertj:assertj-swing-junit:3.9.2'
-    api 'org.apache.httpcomponents:httpclient:4.5.9'
-    api 'com.google.code.gson:gson:2.8.5'
+    api 'org.assertj:assertj-swing-junit:3.17.1'
+    api 'org.apache.httpcomponents:httpclient:4.5.13'
+    api 'com.google.code.gson:gson:2.8.8'
 
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -42,7 +42,7 @@ tasks.withType(JavaCompile) {
 // }
 
 wrapper {
-    gradleVersion = '6.6.1'
+    gradleVersion = '7.2'
 }
 
 task resolveDependencies {
@@ -63,11 +63,11 @@ task resolveDependencies {
 }
 
 task createFatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class': 'org.hyperskill.hstest.stage.StageTest'
     }
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
