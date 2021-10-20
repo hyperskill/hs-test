@@ -259,6 +259,7 @@ public class HttpRequest {
     public HttpResponse send() {
         if (method.equals(POST.toString()) && !params.isEmpty()) {
             content = packUrlParams(params);
+            params.clear();
         }
         HttpResponse response = HttpRequestExecutor.send(this);
         sleep(1); // So that we cannot send 2 requests in the same microsecond

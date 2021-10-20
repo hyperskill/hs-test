@@ -113,11 +113,7 @@ public final class HttpRequestExecutor {
     }
 
     private static HttpRequestBase constructGet(HttpRequest request) {
-        String uriWithUrlParams = request.getUri();
-        if (request.params != null && !request.params.isEmpty()) {
-            uriWithUrlParams += "?" + packUrlParams(request.params);
-        }
-        return new HttpGet(uriWithUrlParams);
+        return new HttpGet(request.getUri());
     }
 
     private static HttpRequestBase constructPost(HttpRequest request) {
