@@ -2,9 +2,9 @@ package org.hyperskill.hstest.testing.execution;
 
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
-import org.hyperskill.hstest.dynamic.input.InputHandler;
-import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.security.ExitException;
+import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
@@ -95,8 +95,6 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByNothing(String userPackage, boolean tryEmptyPackage) {
-        // TODO use javap and regex "public static( final)? void main\(java\.lang\.String(\[\]|\.\.\.)\)"
-
         List<Class<?>> classesWithMainMethod = ReflectionUtils
             .getAllClassesFromPackage(userPackage)
             .stream()
@@ -194,7 +192,8 @@ public class MainMethodExecutor extends ProgramExecutor {
     @Override
     protected void launch(String... args) {
         initMethod();
-        InputHandler.setDynamicInputFunc(group, this::requestInput);
+        SystemHandler.installHandler(this,
+            () -> TestingSecurityManager.getTestingGroup() == group);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
     }
@@ -213,11 +212,6 @@ public class MainMethodExecutor extends ProgramExecutor {
                 }
             }
         }
-    }
-
-    @Override
-    public String getOutput() {
-        return OutputHandler.getPartialOutput(group);
     }
 
     @Override

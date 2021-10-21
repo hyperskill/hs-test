@@ -1,14 +1,20 @@
 package org.hyperskill.hstest.common;
 
+import lombok.Data;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 public final class FileUtils {
 
@@ -74,11 +80,56 @@ public final class FileUtils {
         }
         Path path = Paths.get(name);
         try {
-            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-            //return Files.readString(path); <- Java 11
+            return Files.readString(path);
         } catch (IOException ignored) {
             return null;
         }
+    }
+
+    @Data
+    public static class Folder {
+        final File folder;
+        final List<File> dirs;
+        final List<File> files;
+    }
+
+    public static Iterable<Folder> walkUserFiles(String folder) throws IOException {
+        var currFolder = new File(folder).getAbsolutePath();
+        var testFolder = new File(currFolder, "test").getAbsolutePath();
+
+        Iterator<Path> walk = Files.walk(Paths.get(currFolder))
+            .filter(Files::isDirectory)
+            .filter(path -> !path.startsWith(Paths.get(testFolder)))
+            .iterator();
+
+        return () -> new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return walk.hasNext();
+            }
+
+            @Override
+            public Folder next() {
+                Path next = walk.next();
+
+                if (next == null) {
+                    throw new NoSuchElementException();
+                }
+
+                File[] children = next.toFile().listFiles();
+
+                if (children == null) {
+                    throw new NoSuchElementException();
+                }
+
+                List<File> listChildren = List.of(children);
+
+                List<File> dirs = listChildren.stream().filter(File::isDirectory).collect(toList());
+                List<File> files = listChildren.stream().filter(File::isFile).collect(toList());
+
+                return new FileUtils.Folder(next.toFile(), dirs, files);
+            }
+        };
     }
 
 }

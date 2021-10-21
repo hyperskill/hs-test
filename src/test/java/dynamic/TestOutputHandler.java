@@ -13,10 +13,12 @@ public class TestOutputHandler {
     @Before
     public void setUp() {
         SystemHandler.setUp();
+        OutputHandler.installOutputHandler(null, () -> true);
     }
 
     @After
     public void tearDown() {
+        OutputHandler.uninstallOutputHandler(null);
         SystemHandler.tearDownSystem();
     }
 

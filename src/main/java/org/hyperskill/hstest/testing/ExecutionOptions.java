@@ -45,7 +45,7 @@ public final class ExecutionOptions {
 
     /**
      * Enables SecurityManager even though it's not recommended being used in Java 17
-     * In Java 8-16 it still will be used, on Java 17 it's not unless this flag is set to true.
+     * In Java 8-17 it still will be used, on Java 18 it's not unless this flag is set to true.
      * Use "-DforceSecurityManager=true" to set this flag.
      */
     public static boolean forceSecurityManager = Boolean.getBoolean("forceSecurityManager");

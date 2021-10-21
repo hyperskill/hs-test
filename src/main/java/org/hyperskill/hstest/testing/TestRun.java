@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.testing;
 
 import lombok.Getter;
+import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
@@ -63,6 +64,12 @@ public class TestRun {
     public void stopTestedPrograms() {
         for (TestedProgram testedProgram : testedPrograms) {
             testedProgram.stop();
+        }
+    }
+
+    public void invalidateHandlers() {
+        for (var testedProgram : testedPrograms) {
+            SystemHandler.uninstallHandler(testedProgram.getProgramExecutor());
         }
     }
 

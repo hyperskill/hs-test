@@ -26,26 +26,26 @@ public class TestGettingOutputWhileProgramInBackground extends StageTest {
 
         String out = main.getOutput();
         if (!out.equals("")) {
-            return CheckResult.wrong("");
+            return CheckResult.wrong("1) Real out (length " + out.length() + "):\n" + out);
         }
 
         sleep(75);
 
         out = main.getOutput();
         if (!out.equals("Test\n")) {
-            return CheckResult.wrong("");
+            return CheckResult.wrong("2) Real out (length " + out.length() + "):\n" + out);
         }
 
         sleep(100);
 
         out = main.getOutput();
         if (!out.equals("Test\nTest\n")) {
-            return CheckResult.wrong("");
+            return CheckResult.wrong("3) Real out (length " + out.length() + "):\n" + out);
         }
 
         main.stop();
         if (!main.isFinished()) {
-            return CheckResult.wrong("");
+            return CheckResult.wrong("Main is not finished");
         }
 
         return CheckResult.correct();

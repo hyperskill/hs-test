@@ -11,17 +11,22 @@ import org.hyperskill.hstest.outcomes.Outcome;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.hyperskill.hstest.testing.runner.AsyncMainMethodRunner;
+import org.hyperskill.hstest.testing.execution.process.GoExecutor;
+import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
+import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
+import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hyperskill.hstest.common.FileUtils.walkUserFiles;
 import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTests;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RESET;
@@ -29,8 +34,9 @@ import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
 
-    protected TestRunner runner = new AsyncMainMethodRunner();
+    protected TestRunner runner = new AsyncDynamicTestingRunner();
     protected AttachType attach = null;
+    protected String source = null;
 
     @Getter private static TestRun currTestRun;
     private final String sourceName;
@@ -43,6 +49,10 @@ public abstract class StageTest<AttachType> {
     }
 
     public StageTest(String sourceName) {
+        if (source != null) {
+            sourceName = source;
+        }
+
         Package currPackage = getClass().getPackage();
 
         String strPackage = "";
@@ -62,7 +72,29 @@ public abstract class StageTest<AttachType> {
         this(testedClass.getName());
     }
 
-    private List<TestRun> initTests() {
+    private TestRunner initRunner() throws IOException {
+        for (var folder : walkUserFiles(".")) {
+            for (var file : folder.getFiles()) {
+                if (file.getName().endsWith(".go")) {
+                    return new AsyncDynamicTestingRunner(GoExecutor.class);
+                }
+                if (file.getName().endsWith(".js")) {
+                    return new AsyncDynamicTestingRunner(JavascriptExecutor.class);
+                }
+                if (file.getName().endsWith(".py")) {
+                    return new AsyncDynamicTestingRunner(PythonExecutor.class);
+                }
+            }
+        }
+
+        return new AsyncDynamicTestingRunner();
+    }
+
+    private List<TestRun> initTests() throws IOException {
+        if (runner == null) {
+            runner = initRunner();
+        }
+
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
         testCases.addAll(searchDynamicTests(this));
@@ -89,9 +121,7 @@ public abstract class StageTest<AttachType> {
 
     private void printTestNum(int num) {
         String totalTests = num == currTestGlobal ? "" : " (" + currTestGlobal + ")";
-        OutputHandler.getRealOut().println(
-            RED_BOLD + "\nStart test " + num + totalTests + RESET
-        );
+        OutputHandler.print(RED_BOLD + "\nStart test " + num + totalTests + RESET);
     }
 
     @Test
@@ -155,6 +185,9 @@ public abstract class StageTest<AttachType> {
             fail(failText);
         } finally {
             currTestRun = null;
+            runner = null;
+            attach = null;
+            source = null;
             try {
                 SystemHandler.tearDownSystem();
             } catch (Throwable ignored) { }

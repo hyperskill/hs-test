@@ -1,8 +1,9 @@
 package org.hyperskill.hstest.dynamic.input;
 
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
+
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Supplier;
 
 public final class InputHandler {
 
@@ -19,22 +20,12 @@ public final class InputHandler {
         System.setIn(realIn);
     }
 
-    public static void setDynamicInputFunc(ThreadGroup group, DynamicTestFunction func) {
-        mockIn.setDynamicInputFunction(group, func);
+    public static void installInputHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        mockIn.installInputHandler(program, condition);
     }
 
-    @Deprecated
-    public static void setInput(String input) {
-        mockIn.provideText(input);
+    public static void uninstallInputHandler(ProgramExecutor program) {
+        mockIn.uninstallInputHandler(program);
     }
 
-    @Deprecated
-    public static void setInputFuncs(List<DynamicInputFunction> inputFuncs) {
-        List<DynamicInputFunction> newFuncs = new LinkedList<>();
-        for (DynamicInputFunction func : inputFuncs) {
-            newFuncs.add(new DynamicInputFunction(
-                func.getTriggerCount(), func.getInputFunction()));
-        }
-        mockIn.setTexts(newFuncs);
-    }
 }

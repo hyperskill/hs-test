@@ -4,9 +4,11 @@ import org.hyperskill.hstest.dynamic.input.InputHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 import static java.lang.System.getSecurityManager;
 import static org.hyperskill.hstest.common.JavaUtils.isSecurityManagerAllowed;
@@ -96,5 +98,15 @@ public final class SystemHandler {
             throw new ErrorWithFeedback("Cannot tear down the testing process more than once");
         }
         lockerThread = null;
+    }
+
+    public static void installHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        InputHandler.installInputHandler(program, condition);
+        OutputHandler.installOutputHandler(program, condition);
+    }
+
+    public static void uninstallHandler(ProgramExecutor program) {
+        InputHandler.uninstallInputHandler(program);
+        OutputHandler.uninstallOutputHandler(program);
     }
 }

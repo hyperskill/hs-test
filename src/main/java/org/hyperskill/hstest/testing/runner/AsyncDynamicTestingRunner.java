@@ -10,6 +10,8 @@ import org.hyperskill.hstest.exception.testing.TimeLimitException;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
+import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +21,21 @@ import java.util.concurrent.TimeoutException;
 
 import static org.hyperskill.hstest.testing.ExecutionOptions.debugMode;
 
-public class AsyncMainMethodRunner implements TestRunner {
+public class AsyncDynamicTestingRunner implements TestRunner {
+
+    protected Class<? extends ProgramExecutor> executor;
+
+    public AsyncDynamicTestingRunner() {
+        this(MainMethodExecutor.class);
+    }
+
+    public AsyncDynamicTestingRunner(Class<? extends ProgramExecutor> executor) {
+        this.executor = executor;
+    }
+
+    Class<? extends ProgramExecutor> getExecutor() {
+        return executor;
+    }
 
     private CheckResult runMain(TestRun testRun) {
         TestCase<?> testCase = testRun.getTestCase();
@@ -57,6 +73,7 @@ public class AsyncMainMethodRunner implements TestRunner {
         } catch (Throwable ex) {
             testRun.setErrorInTest(ex);
         } finally {
+            testRun.invalidateHandlers();
             executorService.shutdownNow();
         }
 

@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.testing.execution;
 
+import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
@@ -7,6 +8,7 @@ import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.StateMachine;
 
+import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.COMPILATION_ERROR;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.FINISHED;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.NOT_STARTED;
@@ -21,17 +23,18 @@ public abstract class ProgramExecutor {
      * States that tested program can be in
      * Initial state in NOT_STARTED,
      * State just before running the program is READY
-     * End state is either EXCEPTION_THROWN or FINISHED
+     * End state is EXCEPTION_THROWN, FINISHED or COMPILATION_ERROR
      * WAITING means the tested program waits for the input
      * RUNNING means the tested program is currently running
      */
     protected enum ProgramState {
-        NOT_STARTED, WAITING, RUNNING, EXCEPTION_THROWN, FINISHED
+        NOT_STARTED, WAITING, RUNNING, EXCEPTION_THROWN, FINISHED, COMPILATION_ERROR
     }
 
     protected final StateMachine<ProgramState> machine = new StateMachine<>(NOT_STARTED);
 
     {
+        machine.addTransition(NOT_STARTED, COMPILATION_ERROR);
         machine.addTransition(NOT_STARTED, RUNNING);
 
         machine.addTransition(WAITING, RUNNING);
@@ -47,7 +50,10 @@ public abstract class ProgramExecutor {
 
     protected abstract void launch(String... args);
     protected abstract void terminate();
-    public abstract String getOutput();
+
+    public final String getOutput() {
+        return OutputHandler.getPartialOutput(this);
+    }
 
     public final String start(String... args) {
         if (!machine.inState(NOT_STARTED)) {
@@ -113,7 +119,7 @@ public abstract class ProgramExecutor {
         return returnOutputAfterExecution ? getOutput() : "";
     }
 
-    protected final String requestInput() {
+    public final String requestInput() {
         if (noMoreInput) {
             return null;
         }
