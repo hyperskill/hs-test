@@ -23,10 +23,10 @@ public final class SystemHandler {
     private static SecurityManager oldSecurityManager;
     private static Locale oldLocale;
     private static String oldLineSeparator;
-    // private static String oldUserDir;
+    private static String oldDefaultCharset;
 
     private static final String separatorProperty = "line.separator";
-    // private static final String userDirProperty = "user.dir";
+    private static final String defaultCharsetProperty = "file.encoding";
 
     public static void setUp() {
         lockSystemForTesting();
@@ -48,18 +48,8 @@ public final class SystemHandler {
         oldLineSeparator = System.getProperty(separatorProperty);
         System.setProperty(separatorProperty, "\n");
 
-        /*
-        oldUserDir = System.getProperty(userDirProperty);
-        File dir = new File(oldUserDir);
-        if (dir.getName().equals("task")) {
-            // EduTools when testing sets user dir to subproject,
-            // but when the user is running their code user dir is set to root dir
-            // Since testing should be consistent with running the code we should
-            // revert back user dir to the root dir.
-            dir = dir.getParentFile().getParentFile();
-            System.setProperty(userDirProperty, dir.getAbsolutePath());
-        }
-        */
+        oldDefaultCharset = System.getProperty(defaultCharsetProperty);
+        System.setProperty(defaultCharsetProperty, "UTF-8");
     }
 
     public static void tearDownSystem() {
@@ -76,8 +66,7 @@ public final class SystemHandler {
 
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);
-
-        // System.setProperty(userDirProperty, oldUserDir);
+        System.setProperty(defaultCharsetProperty, oldDefaultCharset);
     }
 
     private static void lockSystemForTesting() {
