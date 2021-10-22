@@ -6,6 +6,7 @@ import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,5 +79,22 @@ public class InputMock extends InputStream {
     @Override
     public int read() {
         return getInputHandler().ejectChar();
+    }
+
+    public ByteArrayOutputStream readline() {
+        var result = new ByteArrayOutputStream();
+
+        while (true) {
+            int c = read();
+            if (c == -1) {
+                break;
+            }
+            result.write(c);
+            if (c == '\n') {
+                break;
+            }
+        }
+
+        return result;
     }
 }

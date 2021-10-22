@@ -167,6 +167,14 @@ public abstract class ProgramExecutor {
     }
 
     /**
+     * Returns false if no more input will be consumed by the program.
+     * Otherwise, returns true.
+     */
+    public final boolean isInputAllowed() {
+        return !noMoreInput;
+    }
+
+    /**
      * @return true if tested program waits for the input. Would be useful
      *         for the tested program that is executed in the background.
      */
@@ -205,6 +213,10 @@ public abstract class ProgramExecutor {
 
     public boolean isInBackground() {
         return inBackground;
+    }
+
+    public void tearDown() {
+
     }
 
     @Override

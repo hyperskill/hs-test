@@ -155,6 +155,14 @@ public class TestedProgram {
     }
 
     /**
+     * Returns false if no more input will be consumed by the program.
+     * Otherwise, returns true.
+     */
+    public boolean isInputAllowed() {
+        return programExecutor.isInputAllowed();
+    }
+
+    /**
      * @return true if tested program waits for the input. Would be useful
      *         for the tested program that is executed in the background.
      */

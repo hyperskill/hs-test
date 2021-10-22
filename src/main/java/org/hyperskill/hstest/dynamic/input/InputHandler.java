@@ -2,6 +2,7 @@ package org.hyperskill.hstest.dynamic.input;
 
 import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.function.Supplier;
 
@@ -18,6 +19,10 @@ public final class InputHandler {
 
     public static void revertInput() {
         System.setIn(realIn);
+    }
+
+    public static ByteArrayOutputStream readline() {
+        return mockIn.readline();
     }
 
     public static void installInputHandler(ProgramExecutor program, Supplier<Boolean> condition) {

@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.common;
 
 import lombok.Data;
+import org.hyperskill.hstest.dynamic.SystemHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,6 +131,18 @@ public final class FileUtils {
                 return new FileUtils.Folder(next.toFile(), dirs, files);
             }
         };
+    }
+
+    public static String cwd() {
+        return new File(System.getProperty(SystemHandler.separatorProperty)).getAbsolutePath();
+    }
+
+    public static void chdir(String folder) {
+        chdir(new File(folder));
+    }
+
+    public static void chdir(File folder) {
+        System.setProperty(SystemHandler.separatorProperty, folder.getAbsolutePath());
     }
 
 }

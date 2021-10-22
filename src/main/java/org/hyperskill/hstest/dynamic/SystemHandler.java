@@ -25,8 +25,8 @@ public final class SystemHandler {
     private static String oldLineSeparator;
     private static String oldDefaultCharset;
 
-    private static final String separatorProperty = "line.separator";
-    private static final String defaultCharsetProperty = "file.encoding";
+    public static final String separatorProperty = "line.separator";
+    public static final String defaultCharsetProperty = "file.encoding";
 
     public static void setUp() {
         lockSystemForTesting();

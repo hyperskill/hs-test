@@ -5,8 +5,9 @@ import org.hyperskill.hstest.testing.execution.runnable.RunnableFile;
 
 import java.util.List;
 
-public class JavascriptExecutor extends ProcessExecutor {
-    protected JavascriptExecutor(RunnableFile runnable) {
+public class JavaExecutor extends ProcessExecutor {
+
+    protected JavaExecutor(RunnableFile runnable) {
         super(runnable);
     }
 

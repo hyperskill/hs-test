@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.outcomes;
 
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.exception.outcomes.CompilationError;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
@@ -155,6 +156,9 @@ public abstract class Outcome {
 
         } else if (ex instanceof ExceptionWithFeedback) {
             return new ExceptionOutcome(currTest, (ExceptionWithFeedback) ex);
+
+        } else if (ex instanceof CompilationError) {
+            return new CompilationErrorOutcome((CompilationError) ex);
 
         } else if (ex instanceof ErrorWithFeedback
             || ex instanceof FileSystemException
