@@ -33,10 +33,10 @@ public class ProcessWrapper {
     private boolean terminated = false;
 
     private final List<Long> cpuLoadHistory = new LinkedList<>();
-    private final int cpuLoadHistoryMax = 10;
+    private final int cpuLoadHistoryMax = 2;
 
     private final List<Integer> outputDiffHistory = new LinkedList<>();
-    private final int outputDiffHistoryMax = 3;
+    private final int outputDiffHistoryMax = 2;
 
     @Getter @Setter boolean checkEarlyFinish = false;
     @Getter @Setter boolean registerOutput = true;
@@ -71,7 +71,6 @@ public class ProcessWrapper {
         try {
             stdin.write(input.toByteArray());
         } catch (IOException e) {
-            String command = String.join(" ", args);
             StageTest.getCurrTestRun().setErrorInTest(
                 new UnexpectedError("Can't provide input to the process\n" + command));
         }
