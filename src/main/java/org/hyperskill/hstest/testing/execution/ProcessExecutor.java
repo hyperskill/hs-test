@@ -28,7 +28,7 @@ public abstract class ProcessExecutor extends ProgramExecutor {
     private ThreadGroup group;
 
     private boolean continueExecuting = true;
-    private final RunnableFile runnable;
+    protected final RunnableFile runnable;
 
     protected ProcessExecutor(RunnableFile runnable) {
         this.runnable = runnable;

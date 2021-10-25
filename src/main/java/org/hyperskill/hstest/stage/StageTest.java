@@ -72,7 +72,7 @@ public abstract class StageTest<AttachType> {
         this(testedClass.getName());
     }
 
-    private TestRunner initRunner() throws IOException {
+    private TestRunner initRunner() {
         for (var folder : walkUserFiles(".")) {
             for (var file : folder.getFiles()) {
                 if (file.getName().endsWith(".go")) {
@@ -90,7 +90,7 @@ public abstract class StageTest<AttachType> {
         return new AsyncDynamicTestingRunner();
     }
 
-    private List<TestRun> initTests() throws IOException {
+    private List<TestRun> initTests() {
         if (runner == null) {
             runner = initRunner();
         }

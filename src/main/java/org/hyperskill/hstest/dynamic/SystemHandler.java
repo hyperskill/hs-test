@@ -25,6 +25,7 @@ public final class SystemHandler {
     private static String oldLineSeparator;
     private static String oldDefaultCharset;
 
+    public static final String workingDirectoryProperty = "user.dir";
     public static final String separatorProperty = "line.separator";
     public static final String defaultCharsetProperty = "file.encoding";
 

@@ -2,16 +2,22 @@ package org.hyperskill.hstest.testing.execution.process;
 
 import org.hyperskill.hstest.testing.execution.ProcessExecutor;
 import org.hyperskill.hstest.testing.execution.runnable.RunnableFile;
+import org.hyperskill.hstest.testing.execution.searcher.JavascriptSearcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JavascriptExecutor extends ProcessExecutor {
-    protected JavascriptExecutor(RunnableFile runnable) {
-        super(runnable);
+    protected JavascriptExecutor(String sourceName) {
+        super(new JavascriptSearcher().find(sourceName));
     }
 
     @Override
     protected List<String> executionCommand(List<String> args) {
-        return null;
+        List<String> fullArgs = new ArrayList<>();
+        fullArgs.addAll(List.of("node", runnable.getFile().getAbsolutePath()));
+        fullArgs.addAll(args);
+
+        return fullArgs;
     }
 }
