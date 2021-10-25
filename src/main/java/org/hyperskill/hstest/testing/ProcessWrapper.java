@@ -90,7 +90,11 @@ public class ProcessWrapper {
             stdin = process.getOutputStream();
 
         } catch (Exception ex) {
-            throw new UnexpectedError("Cannot start process\n" + command, ex);
+            StageTest.getCurrTestRun().setErrorInTest(
+                new UnexpectedError("Cannot start process\n" + command, ex));
+            alive = false;
+            terminated = true;
+            return this;
         }
 
         if (group == null) {
