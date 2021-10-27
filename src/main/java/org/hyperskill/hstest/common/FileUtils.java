@@ -189,22 +189,4 @@ public final class FileUtils {
     public static boolean isfile(String path) {
         return new File(abspath(path)).isFile();
     }
-
-    public static void main(String[] args) {
-        for (var f : walkUserFiles(cwd())) {
-            System.out.println(f.folder.getAbsolutePath());
-            System.out.println(abspath(f.folder));
-            System.out.println(f.folder.getName());
-            for (var g : f.files) {
-                System.out.println("    FILE " + g.getName() + "\n    " +
-                    g.getAbsolutePath() + "\n    " + abspath(g));
-            }
-            for (var g : f.dirs) {
-                System.out.println("    DIR " + g.getName() + " \n    " +
-                    g.getAbsolutePath() + "\n    " + abspath(g));
-            }
-            System.out.println();
-            System.out.println("---");
-        }
-    }
 }
