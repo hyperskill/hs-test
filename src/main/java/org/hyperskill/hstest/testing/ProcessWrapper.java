@@ -38,6 +38,9 @@ public class ProcessWrapper {
     private final List<Integer> outputDiffHistory = new LinkedList<>();
     private final int outputDiffHistoryMax = 2;
 
+    private boolean initialIdleWait = true;
+    private final int initialIdleWaitMax = 10;
+
     @Getter @Setter boolean checkEarlyFinish = false;
     @Getter @Setter boolean registerOutput = true;
 
@@ -175,7 +178,7 @@ public class ProcessWrapper {
         }
     }
 
-    private void checkStdout() {
+    private void checkStdout()   {
         checkPipe(process.getInputStream(), System.out, stdout);
     }
 
@@ -199,7 +202,16 @@ public class ProcessWrapper {
             oldCpuTime = currCpuTime;
 
             cpuLoadHistory.add(currCpuLoad);
-            if (cpuLoadHistory.size() > cpuLoadHistoryMax) {
+
+            if (initialIdleWait && currCpuTime != 0) {
+                initialIdleWait = false;
+            }
+
+            if (initialIdleWait && cpuLoadHistory.size() > initialIdleWaitMax) {
+                initialIdleWait = false;
+            }
+
+            if (!initialIdleWait && cpuLoadHistory.size() > cpuLoadHistoryMax) {
                 cpuLoadHistory.remove(0);
             }
 
@@ -221,12 +233,20 @@ public class ProcessWrapper {
                 outputDiffHistory.remove(0);
             }
 
+            if (initialIdleWait && diff > 0) {
+                initialIdleWait = false;
+            }
+
             sleep(10);
             checkAlive();
         }
     }
 
     public boolean isWaitingInput() {
+        if (initialIdleWait) {
+            return false;
+        }
+
         boolean programNotLoadingProcessor =
             cpuLoadHistory.size() >= cpuLoadHistoryMax
             && cpuLoadHistory.stream().mapToLong(e -> e).sum() < 1;
@@ -243,6 +263,7 @@ public class ProcessWrapper {
             throw new UnexpectedError("Program is not waiting for the input\n" + command);
         }
         cpuLoadHistory.clear();
+        outputDiffHistory.clear();
     }
 
     public boolean isFinished() {
