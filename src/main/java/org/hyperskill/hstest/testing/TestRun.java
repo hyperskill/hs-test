@@ -23,7 +23,7 @@ import static org.hyperskill.hstest.testcase.CheckResult.correct;
 
 public class TestRun {
 
-    private final TestRunner testRunner;
+    @Getter private final TestRunner testRunner;
     @Getter private final int testNum;
     @Getter private final int testCount;
     @Getter private final TestCase<?> testCase;

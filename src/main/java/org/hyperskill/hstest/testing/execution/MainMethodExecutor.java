@@ -49,7 +49,11 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     public MainMethodExecutor(String sourceName) {
-        initByName(sourceName);
+        if (sourceName != null) {
+            initByName(sourceName);
+        } else {
+            initByNothing();
+        }
     }
 
     private void initByClassInstance(Class<?> clazz) {

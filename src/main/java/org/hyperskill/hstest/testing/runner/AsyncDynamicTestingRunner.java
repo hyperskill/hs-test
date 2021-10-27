@@ -33,7 +33,7 @@ public class AsyncDynamicTestingRunner implements TestRunner {
         this.executor = executor;
     }
 
-    Class<? extends ProgramExecutor> getExecutor() {
+    public Class<? extends ProgramExecutor> getExecutor() {
         return executor;
     }
 
