@@ -7,6 +7,7 @@ import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.exception.testing.TestedProgramFinishedEarly;
 import org.hyperskill.hstest.exception.testing.TestedProgramThrewException;
 import org.hyperskill.hstest.exception.testing.TimeLimitException;
+import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
@@ -109,5 +110,12 @@ public class AsyncDynamicTestingRunner implements TestRunner {
         }
 
         return result;
+    }
+
+    @Override
+    public void tearDown(TestCase<?> testCase) {
+        for (var program : StageTest.getCurrTestRun().getTestedPrograms()) {
+            program.getProgramExecutor().tearDown();
+        }
     }
 }

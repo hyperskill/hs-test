@@ -6,13 +6,16 @@ import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import org.hyperskill.hstest.stage.StageTest;
 
+import java.io.File;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -221,5 +224,32 @@ public final class ReflectionUtils {
             .flatMap(Stream::of)
             .distinct()
             .collect(Collectors.toList());
+    }
+
+    public static <T extends StageTest<?>> boolean isTests(T stage) throws URISyntaxException {
+        return new File(stage
+            .getClass()
+            .getProtectionDomain()
+            .getCodeSource()
+            .getLocation().toURI())
+            .getAbsolutePath()
+            .contains(File.separator + "hs-test"
+                + File.separator + "build"
+                + File.separator + "classes");
+    }
+
+    public static <T extends StageTest<?>> void setupCwd(T stage) {
+        String testDir = FileUtils.cwd()
+            + File.separator + "src"
+            + File.separator + "test"
+            + File.separator + "java"
+            + File.separator + stage.getClass().getPackageName().replace(".", File.separator);
+
+        File file = new File(testDir);
+        if (file.getName().equals("test")) {
+            testDir = file.getParent();
+        }
+
+        FileUtils.chdir(testDir);
     }
 }

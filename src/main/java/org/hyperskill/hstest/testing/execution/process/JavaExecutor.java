@@ -7,7 +7,7 @@ import java.util.List;
 
 public class JavaExecutor extends ProcessExecutor {
 
-    protected JavaExecutor(RunnableFile runnable) {
+    public JavaExecutor(RunnableFile runnable) {
         super(runnable);
     }
 

@@ -24,6 +24,7 @@ public final class SystemHandler {
     private static Locale oldLocale;
     private static String oldLineSeparator;
     private static String oldDefaultCharset;
+    private static String oldWorkingDirectory;
 
     public static final String workingDirectoryProperty = "user.dir";
     public static final String separatorProperty = "line.separator";
@@ -51,6 +52,8 @@ public final class SystemHandler {
 
         oldDefaultCharset = System.getProperty(defaultCharsetProperty);
         System.setProperty(defaultCharsetProperty, "UTF-8");
+
+        oldWorkingDirectory = System.getProperty(workingDirectoryProperty);
     }
 
     public static void tearDownSystem() {
@@ -68,6 +71,7 @@ public final class SystemHandler {
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);
         System.setProperty(defaultCharsetProperty, oldDefaultCharset);
+        System.setProperty(workingDirectoryProperty, oldWorkingDirectory);
     }
 
     private static void lockSystemForTesting() {

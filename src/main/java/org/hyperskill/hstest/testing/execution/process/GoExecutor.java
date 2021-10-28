@@ -17,7 +17,7 @@ public class GoExecutor extends ProcessExecutor {
     private final String executable;
     private final String filename;
 
-    protected GoExecutor(String sourceName) {
+    public GoExecutor(String sourceName) {
         super(new GoSearcher().find(sourceName));
 
         var fileName = runnable.getFile().getName();
@@ -36,7 +36,7 @@ public class GoExecutor extends ProcessExecutor {
 
     @Override
     protected List<String> compilationCommand() {
-        return List.of("go", "build", runnable.getFile().getAbsolutePath());
+        return List.of("go", "build", runnable.getFile().getName());
     }
 
     @Override

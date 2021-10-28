@@ -15,7 +15,9 @@ public class ExceptionOutcome extends Outcome {
         String feedback = ex.getErrorText();
 
         testNumber = testNum;
-        stackTrace = filterStackTrace(getStackTrace(cause));
+        if (cause != null) {
+            stackTrace = filterStackTrace(getStackTrace(cause));
+        }
 
         errorText = feedback;
 

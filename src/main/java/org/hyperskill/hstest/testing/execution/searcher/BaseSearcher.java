@@ -207,7 +207,7 @@ public abstract class BaseSearcher {
     }
 
     public RunnableFile find(String source) {
-        if (source == null) {
+        if (source == null || source.isEmpty()) {
             return search(null);
         }
 

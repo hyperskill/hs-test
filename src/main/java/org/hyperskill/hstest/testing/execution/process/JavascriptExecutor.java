@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavascriptExecutor extends ProcessExecutor {
-    protected JavascriptExecutor(String sourceName) {
+    public JavascriptExecutor(String sourceName) {
         super(new JavascriptSearcher().find(sourceName));
     }
 

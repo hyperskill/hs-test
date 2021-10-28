@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PythonExecutor extends ProcessExecutor {
-    protected PythonExecutor(String sourceName) {
+    public PythonExecutor(String sourceName) {
         super(new PythonSearcher().find(sourceName));
     }
 

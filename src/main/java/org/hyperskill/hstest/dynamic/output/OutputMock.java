@@ -8,10 +8,12 @@ import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.BLACK_UNDERLINED;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.BLUE;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.testing.ExecutionOptions.ignoreStdout;

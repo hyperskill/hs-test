@@ -155,6 +155,9 @@ public final class FileUtils {
     }
 
     public static void chdir(String folder) {
+        if (folder.equals("C:\\Users\\Vladimir\\Desktop\\hs-test\\src\\test\\java\\outcomes\\src\\test\\java\\outcomes")) {
+            System.out.println("!!! " + folder);
+        }
         chdir(new File(folder));
     }
 
@@ -163,7 +166,11 @@ public final class FileUtils {
     }
 
     public static String abspath(String path) {
-        return abspath(new File(path));
+        String cwd = System.getProperty(SystemHandler.workingDirectoryProperty);
+        if (path.startsWith(cwd)) {
+            return path;
+        }
+        return abspath(new File(cwd, path));
     }
 
     public static String abspath(File file) {

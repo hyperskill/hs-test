@@ -2,6 +2,7 @@ package org.hyperskill.hstest.testing;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.stage.StageTest;
@@ -11,8 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
@@ -32,14 +37,13 @@ public class ProcessWrapper {
     private final AtomicInteger pipesWatching = new AtomicInteger(0);
     private boolean terminated = false;
 
-    private final List<Long> cpuLoadHistory = new LinkedList<>();
+    private final Queue<Long> cpuLoadHistory = new ConcurrentLinkedQueue<>();
     private final int cpuLoadHistoryMax = 2;
 
-    private final List<Integer> outputDiffHistory = new LinkedList<>();
+    private final Queue<Integer> outputDiffHistory = new ConcurrentLinkedQueue<>();
     private final int outputDiffHistoryMax = 2;
 
     private boolean initialIdleWait = true;
-    private final int initialIdleWaitMax = 10;
 
     @Getter @Setter boolean checkEarlyFinish = false;
     @Getter @Setter boolean registerOutput = true;
@@ -73,6 +77,7 @@ public class ProcessWrapper {
     public void provideInput(ByteArrayOutputStream input) {
         try {
             stdin.write(input.toByteArray());
+            stdin.flush();
         } catch (IOException e) {
             StageTest.getCurrTestRun().setErrorInTest(
                 new UnexpectedError("Can't provide input to the process\n" + command));
@@ -86,8 +91,13 @@ public class ProcessWrapper {
         }
 
         try {
-            process = new ProcessBuilder(args)
-                .directory(new File(System.getProperty("user.dir")).getAbsoluteFile())
+            List<String> fullArgs = new ArrayList<>();
+            fullArgs.add("cmd");
+            fullArgs.add("/c");
+            fullArgs.addAll(List.of(args));
+
+            process = new ProcessBuilder(fullArgs)
+                .directory(new File(FileUtils.cwd()))
                 .start();
 
             stdin = process.getOutputStream();
@@ -203,16 +213,8 @@ public class ProcessWrapper {
 
             cpuLoadHistory.add(currCpuLoad);
 
-            if (initialIdleWait && currCpuTime != 0) {
-                initialIdleWait = false;
-            }
-
-            if (initialIdleWait && cpuLoadHistory.size() > initialIdleWaitMax) {
-                initialIdleWait = false;
-            }
-
             if (!initialIdleWait && cpuLoadHistory.size() > cpuLoadHistoryMax) {
-                cpuLoadHistory.remove(0);
+                cpuLoadHistory.remove();
             }
 
             sleep(10);
@@ -230,7 +232,7 @@ public class ProcessWrapper {
 
             outputDiffHistory.add(diff);
             if (outputDiffHistory.size() > outputDiffHistoryMax) {
-                outputDiffHistory.remove(0);
+                outputDiffHistory.remove();
             }
 
             if (initialIdleWait && diff > 0) {

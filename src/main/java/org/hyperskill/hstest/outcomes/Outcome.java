@@ -1,5 +1,6 @@
 package org.hyperskill.hstest.outcomes;
 
+import org.hyperskill.hstest.common.Utils;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.CompilationError;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
@@ -42,18 +43,20 @@ public abstract class Outcome {
         String whenErrorHappened;
         if (testNumber == 0) {
             whenErrorHappened = " during testing";
-        } else {
+        } else if (testNumber > 0) {
             whenErrorHappened = " in test #" + testNumber;
+        } else {
+            whenErrorHappened = "";
         }
 
         String result = getType() + whenErrorHappened;
 
         if (!errorText.isEmpty()) {
-            result += "\n\n" + errorText.trim();
+            result += "\n\n" + Utils.cleanText(errorText.trim());
         }
 
         if (!stackTrace.isEmpty()) {
-            result += "\n\n" + stackTrace.trim();
+            result += "\n\n" + Utils.cleanText(stackTrace.trim());
         }
 
         String fullOut = OutputHandler.getDynamicOutput();

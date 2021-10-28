@@ -1,6 +1,8 @@
 package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
+import org.hyperskill.hstest.common.FileUtils;
+import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
@@ -20,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
 
-    protected TestRunner runner = new AsyncDynamicTestingRunner();
+    protected TestRunner runner = null;
     protected AttachType attach = null;
     protected String source = null;
 
@@ -43,6 +44,7 @@ public abstract class StageTest<AttachType> {
 
     static int currTestGlobal = 0;
     public static final String LIB_TEST_PACKAGE = "outcomes.separate_package.";
+    private boolean isTests = false;
 
     public StageTest() {
         this("");
@@ -73,7 +75,7 @@ public abstract class StageTest<AttachType> {
     }
 
     private TestRunner initRunner() {
-        for (var folder : walkUserFiles(".")) {
+        for (var folder : walkUserFiles(FileUtils.cwd())) {
             for (var file : folder.getFiles()) {
                 if (file.getName().endsWith(".go")) {
                     return new AsyncDynamicTestingRunner(GoExecutor.class);
@@ -130,6 +132,12 @@ public abstract class StageTest<AttachType> {
         boolean needTearDown = false;
         try {
             SystemHandler.setUp();
+
+            if (ReflectionUtils.isTests(this)) {
+                isTests = true;
+                ReflectionUtils.setupCwd(this);
+            }
+
             List<TestRun> testRuns = initTests();
 
             for (TestRun testRun : testRuns) {
