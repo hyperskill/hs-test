@@ -3,6 +3,7 @@ package org.hyperskill.hstest.testing;
 import lombok.Getter;
 import lombok.Setter;
 import org.hyperskill.hstest.common.FileUtils;
+import org.hyperskill.hstest.common.OsUtils;
 import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.stage.StageTest;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -92,8 +91,12 @@ public class ProcessWrapper {
 
         try {
             List<String> fullArgs = new ArrayList<>();
-            fullArgs.add("cmd");
-            fullArgs.add("/c");
+
+            if (OsUtils.isWindows()) {
+                fullArgs.add("cmd");
+                fullArgs.add("/c");
+            }
+
             fullArgs.addAll(List.of(args));
 
             process = new ProcessBuilder(fullArgs)
