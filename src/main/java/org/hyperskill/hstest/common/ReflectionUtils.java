@@ -227,15 +227,15 @@ public final class ReflectionUtils {
     }
 
     public static <T extends StageTest<?>> boolean isTests(T stage) throws URISyntaxException {
-        return new File(stage
+        var clazz = new File(stage
             .getClass()
             .getProtectionDomain()
             .getCodeSource()
             .getLocation().toURI())
-            .getAbsolutePath()
-            .contains(File.separator + "hs-test"
-                + File.separator + "build"
-                + File.separator + "classes");
+            .getAbsolutePath();
+
+        return clazz.contains(File.separator + "hs-test" + File.separator + "build")
+            || clazz.contains(File.separator + "hs-test" + File.separator + "out");
     }
 
     public static <T extends StageTest<?>> void setupCwd(T stage) {
