@@ -93,8 +93,9 @@ public class ProcessWrapper {
             List<String> fullArgs = new ArrayList<>();
 
             if (OsUtils.isWindows()) {
-                fullArgs.add("cmd");
-                fullArgs.add("/c");
+                // To test this in windows you need WSL2 installed
+                fullArgs.add("bash");
+                fullArgs.add("-c");
             }
 
             fullArgs.addAll(List.of(args));

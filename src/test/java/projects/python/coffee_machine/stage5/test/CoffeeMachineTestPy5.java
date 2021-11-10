@@ -3,9 +3,13 @@ package projects.python.coffee_machine.stage5.test;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
 
 
 class TestClue {
@@ -26,6 +30,11 @@ class TestClue {
 }
 
 public class CoffeeMachineTestPy5 extends StageTest<TestClue> {
+
+    @BeforeClass
+    public static void stopProcessTest() {
+        Assume.assumeTrue(includeProcessTesting);
+    }
 
     @Override
     public List<TestCase<TestClue>> generate() {

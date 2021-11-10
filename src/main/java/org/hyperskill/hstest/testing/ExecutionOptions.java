@@ -49,4 +49,17 @@ public final class ExecutionOptions {
      * Use "-DforceSecurityManager=true" to set this flag.
      */
     public static boolean forceSecurityManager = Boolean.getBoolean("forceSecurityManager");
+
+    /**
+     * Enables tests that use process testing to test solutions written in Go, JS etc.
+     * By default, it's turned off because some computers don't have Go, JS etc. installed.
+     * For example, Jitpack, that builds hs-test library.
+     *
+     * To mark the test as the one that uses process testing you should write the following code:
+     *  \@BeforeClass
+     *   public static void stopProcessTest() {
+     *       Assume.assumeTrue(includeProcessTesting);
+     *   }
+     */
+    public static boolean includeProcessTesting = Boolean.getBoolean("includeProcessTesting");
 }

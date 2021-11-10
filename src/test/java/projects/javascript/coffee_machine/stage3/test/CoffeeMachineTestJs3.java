@@ -3,8 +3,12 @@ package projects.javascript.coffee_machine.stage3.test;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 
 import java.util.List;
+
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
 
 
 class TestClue {
@@ -19,6 +23,11 @@ class TestClue {
 }
 
 public class CoffeeMachineTestJs3 extends StageTest<TestClue> {
+
+    @BeforeClass
+    public static void stopProcessTest() {
+        Assume.assumeTrue(includeProcessTesting);
+    }
 
     @Override
     public List<TestCase<TestClue>> generate() {

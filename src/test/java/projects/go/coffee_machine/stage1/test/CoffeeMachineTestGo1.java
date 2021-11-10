@@ -3,11 +3,20 @@ package projects.go.coffee_machine.stage1.test;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 
 import java.util.List;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
+
 
 public class CoffeeMachineTestGo1 extends StageTest<String> {
+
+    @BeforeClass
+    public static void stopProcessTest() {
+        Assume.assumeTrue(includeProcessTesting);
+    }
 
     @Override
     public List<TestCase<String>> generate() {
