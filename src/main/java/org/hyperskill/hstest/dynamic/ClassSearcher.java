@@ -18,6 +18,9 @@ import java.util.jar.JarFile;
  * Thanks to https://stackoverflow.com/a/22462785
  */
 public class ClassSearcher {
+
+    private static final String extension = ".class";
+
     /**
      * Private helper method
      *
@@ -45,8 +48,6 @@ public class ClassSearcher {
                 } else {
                     fullName = pckgname + "." + file;
                 }
-
-                String extension = ".class";
 
                 if (fullName.endsWith(extension)) {
                     try {
@@ -92,8 +93,8 @@ public class ClassSearcher {
             && ((jarEntry = entries.nextElement()) != null);) {
             name = jarEntry.getName();
 
-            if (name.contains(".class")) {
-                name = name.substring(0, name.length() - 6).replace('/', '.');
+            if (name.contains(extension)) {
+                name = name.substring(0, name.length() - extension.length()).replace('/', '.');
 
                 if (name.contains(pckgname)) {
                     try {
