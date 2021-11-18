@@ -46,9 +46,11 @@ public class ClassSearcher {
                     fullName = pckgname + "." + file;
                 }
 
-                if (fullName.endsWith(".class")) {
+                String extension = ".class";
+
+                if (fullName.endsWith(extension)) {
                     try {
-                        String className = fullName.substring(0, fullName.length() - 6);
+                        String className = fullName.substring(0, fullName.length() - extension.length());
                         Class<?> clazz = Thread.currentThread()
                             .getContextClassLoader().loadClass(className);
 
