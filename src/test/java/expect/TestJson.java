@@ -34,6 +34,17 @@ public class TestJson {
     }
 
     @Test
+    public void testGetPrettyJsonWithHtmlChars() {
+        String json = "{\"a\":\"<head></head>\"}";
+
+        String newJson = JsonUtils.getPrettyJson(JsonUtils.getJson(json))
+            .replace("\n", "")
+            .replace(" ", "");
+
+        Assert.assertEquals(json, newJson);
+    }
+
+    @Test
     public void testWrongConventionToJson() {
         assertThrows(
             () -> JsonUtils.getJson("{"),
