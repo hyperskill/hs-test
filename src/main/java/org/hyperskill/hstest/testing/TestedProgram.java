@@ -68,6 +68,17 @@ public class TestedProgram {
     }
 
     /**
+     * Shows special feedback in case user's program will throw special exception.
+     * Note, that this feedback will be shown only while testing JVM applications,
+     * not programs written in Go, JS, other languages.
+     * @param clazz class that is supposed to be thrown in the user code
+     * @param feedback feedback that will be shown in case such error will be thrown
+     */
+    public void feedbackOnException(Class<? extends Throwable> clazz, String feedback) {
+        StageTest.getCurrTestRun().getTestCase().feedbackOnException(clazz, feedback);
+    }
+
+    /**
      * Starts tested program in the background
      * @param args arguments you want tested program to start with
      */
