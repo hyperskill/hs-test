@@ -13,16 +13,16 @@ import java.util.List;
  * Class for running user program and asynchronously test it with input that can be generated while
  * the tested program is running.
  *
- * Supposed to be used inside DynamicTesting::handle method.
+ * Supposed to be used inside method marked with @DynamicTest annotation.
  *
  * The main feature is to "freeze" user thread while it's waiting for the input and generate appropriate
- * input based on current output.
+ * input based on current output. Then, "freeze" tests while user's program processes this input.
  *
  * The main flow is:
  * 1. Create TestedProgram instance with the class, whose main method you want to run
  * 2. Start the test using TestedProgram::start
- * 3. The tested program will execute till it needs some input
- * 4. "Start" returns output that was collected during tested program's execution
+ * 3. The tested program will execute till it requests some input
+ * 4. "start" returns output that was collected during tested program's partial execution
  * 5. Some testing code generates new input for the tested program
  * 6. Continue testing with the new input using TestedProgram::execute method
  * 7. The tested program will execute till it needs some input etc...
@@ -89,7 +89,7 @@ public class TestedProgram {
 
     /**
      * Starts tested program synchronously, so this method will block test execution
-     * till tested program request an output.
+     * till tested program request an input.
      * @param args arguments you want tested program to start with
      * @return Output that tested program manages to print while executing the program.
      *         Returns an empty string if returnOutputAfterExecution is set to false.
@@ -116,9 +116,9 @@ public class TestedProgram {
      *         "start", "execute" or "getOutput" is invoked.
      *
      *         The TestedProgram class returns every line of the output only once.
-     *         So, the concatenation of all the strings that were returned in
-     *         "start", "execute", "getOutput" methods will be always equal
-     *         to the whole output of the tested program.
+     *         So, it is guaranteed that the concatenation of all the strings
+     *         that were returned in "start", "execute", "getOutput" methods
+     *         will be always equal to the whole output of the tested program.
      */
     public String getOutput() {
         return programExecutor.getOutput();
@@ -157,7 +157,7 @@ public class TestedProgram {
     /**
      * After this method being called, every input request result in EOF being sent
      * to tested program without waiting for the proper input.
-     * If tested program is waiting input, then EOF also will be sent.
+     * If tested program is waiting input, then EOF will also be sent.
      *
      * Note, that this cannot be undone and indicates the end of the input.
      */
