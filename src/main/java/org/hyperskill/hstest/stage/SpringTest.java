@@ -95,7 +95,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
                 try {
                     if (file.isDirectory()) {
-                        filesArray = folder.getAbsoluteFile().listFiles();
+                        filesArray = file.getAbsoluteFile().listFiles();
                         if (filesArray != null) {
                             files.addAll(Arrays.asList(filesArray));
                         }
