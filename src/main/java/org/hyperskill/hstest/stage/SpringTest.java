@@ -107,18 +107,16 @@ public abstract class SpringTest extends StageTest<Object> {
                         continue;
                     }
 
-                    BufferedReader bufReader = new BufferedReader(new StringReader(content));
-
-                    String line;
-                    String toSearch = "server.port";
-                    while ((line = bufReader.readLine()) != null) {
-                        if (line.startsWith(toSearch) && line.contains("=")) {
-                            String portNumber = line.substring(line.indexOf("=") + 1).trim();
-                            return Integer.parseInt(portNumber);
+                    try (BufferedReader bufReader = new BufferedReader(new StringReader(content))) {
+                        String line;
+                        String toSearch = "server.port";
+                        while ((line = bufReader.readLine()) != null) {
+                            if (line.startsWith(toSearch) && line.contains("=")) {
+                                String portNumber = line.substring(line.indexOf("=") + 1).trim();
+                                return Integer.parseInt(portNumber);
+                            }
                         }
                     }
-
-                    bufReader.close();
                 } catch (IOException | NumberFormatException ignored) { }
             }
         }
