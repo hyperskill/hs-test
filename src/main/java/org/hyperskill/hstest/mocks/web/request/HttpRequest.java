@@ -256,6 +256,11 @@ public class HttpRequest {
         return addHeader(AUTHORIZATION, headerValue);
     }
 
+    public HttpRequest tokenAuth(String token) {
+        String headerValue = "Bearer " + token;
+        return addHeader(AUTHORIZATION, headerValue);
+    }
+
     public HttpResponse send() {
         if (method.equals(POST.toString()) && !params.isEmpty()) {
             content = packUrlParams(params);
