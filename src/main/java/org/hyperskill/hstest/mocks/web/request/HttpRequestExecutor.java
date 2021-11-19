@@ -74,18 +74,19 @@ public final class HttpRequestExecutor {
                     byte[] lastRawPortion = new byte[readBytes];
                     System.arraycopy(rawPortion, 0, lastRawPortion, 0, readBytes);
                     buffer.add(new BufferPortion(lastRawPortion));
-                    break;
+                } else {
+                    buffer.add(new BufferPortion(rawPortion));
                 }
-                buffer.add(new BufferPortion(rawPortion));
             }
 
             byte[] rawContent = new byte[contentLength];
-            for (int i = 0; i < buffer.size(); i++) {
-                BufferPortion portion = buffer.get(i);
+            int currentDest = 0;
+            for (BufferPortion portion : buffer) {
                 System.arraycopy(
                     portion.buffer, 0,
-                    rawContent, i * READ_CHUNK,
+                    rawContent, currentDest,
                     portion.buffer.length);
+                currentDest += portion.buffer.length;
             }
 
             request.releaseConnection();
