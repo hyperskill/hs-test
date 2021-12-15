@@ -154,7 +154,7 @@ public abstract class ProgramExecutor {
     /**
      * After this method being called, every input request result in EOF being sent
      * to tested program without waiting for the proper input.
-     * If tested program is waiting input, then EOF also will be sent.
+     * If tested program is waiting input, then EOF will also be sent.
      *
      * Note, that this cannot be undone and indicates the end of the input.
      */

@@ -2,6 +2,7 @@ package expect;
 
 import org.hyperskill.hstest.common.JsonUtils;
 import org.hyperskill.hstest.exception.outcomes.PresentationError;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.regex.Pattern;
@@ -20,6 +21,28 @@ import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
 import static util.AssertUtils.assertThrows;
 
 public class TestJson {
+
+    @Test
+    public void testGetPrettyJsonWithNulls() {
+        String json = "{\"a\":null,\"b\":null}";
+
+        String newJson = JsonUtils.getPrettyJson(JsonUtils.getJson(json))
+            .replace("\n", "")
+            .replace(" ", "");
+
+        Assert.assertEquals(json, newJson);
+    }
+
+    @Test
+    public void testGetPrettyJsonWithHtmlChars() {
+        String json = "{\"a\":\"<head></head>\"}";
+
+        String newJson = JsonUtils.getPrettyJson(JsonUtils.getJson(json))
+            .replace("\n", "")
+            .replace(" ", "");
+
+        Assert.assertEquals(json, newJson);
+    }
 
     @Test
     public void testWrongConventionToJson() {

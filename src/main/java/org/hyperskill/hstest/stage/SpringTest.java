@@ -35,7 +35,7 @@ import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUr
 
 public abstract class SpringTest extends StageTest<Object> {
 
-    private static final int DEFAULT_PORT = 8889;
+    private static final int DEFAULT_PORT = 8080;
 
     private static boolean isTearDown = false;
     private static boolean springRunning = false;
@@ -95,7 +95,7 @@ public abstract class SpringTest extends StageTest<Object> {
 
                 try {
                     if (file.isDirectory()) {
-                        filesArray = folder.getAbsoluteFile().listFiles();
+                        filesArray = file.getAbsoluteFile().listFiles();
                         if (filesArray != null) {
                             files.addAll(Arrays.asList(filesArray));
                         }
@@ -107,18 +107,16 @@ public abstract class SpringTest extends StageTest<Object> {
                         continue;
                     }
 
-                    BufferedReader bufReader = new BufferedReader(new StringReader(content));
-
-                    String line;
-                    String toSearch = "server.port";
-                    while ((line = bufReader.readLine()) != null) {
-                        if (line.startsWith(toSearch) && line.contains("=")) {
-                            String portNumber = line.substring(line.indexOf("=") + 1).trim();
-                            return Integer.parseInt(portNumber);
+                    try (BufferedReader bufReader = new BufferedReader(new StringReader(content))) {
+                        String line;
+                        String toSearch = "server.port";
+                        while ((line = bufReader.readLine()) != null) {
+                            if (line.startsWith(toSearch) && line.contains("=")) {
+                                String portNumber = line.substring(line.indexOf("=") + 1).trim();
+                                return Integer.parseInt(portNumber);
+                            }
                         }
                     }
-
-                    bufReader.close();
                 } catch (IOException | NumberFormatException ignored) { }
             }
         }

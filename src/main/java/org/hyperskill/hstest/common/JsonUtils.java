@@ -22,7 +22,11 @@ public final class JsonUtils {
     }
 
     public static String getPrettyJson(JsonElement json) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder()
+            .disableHtmlEscaping()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .create();
         return Utils.cleanText(gson.toJson(json));
     }
 
