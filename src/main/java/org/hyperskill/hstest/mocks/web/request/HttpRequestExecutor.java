@@ -65,11 +65,20 @@ public final class HttpRequestExecutor {
             int contentLength = 0;
             while (true) {
                 byte[] rawPortion = new byte[READ_CHUNK];
-                int readBytes = input.read(rawPortion);
+
+                int readBytes;
+                try {
+                    readBytes = input.read(rawPortion);
+                } catch (IOException ex) {
+                    break;
+                }
+
                 if (readBytes == -1) {
                     break;
                 }
+
                 contentLength += readBytes;
+
                 if (readBytes != READ_CHUNK) {
                     byte[] lastRawPortion = new byte[readBytes];
                     System.arraycopy(rawPortion, 0, lastRawPortion, 0, readBytes);
