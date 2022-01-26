@@ -94,8 +94,10 @@ public class ProcessWrapper {
 
             if (OsUtils.isWindows()) {
                 // To test this in windows you need WSL2 installed
-                fullArgs.add("bash");
-                fullArgs.add("-c");
+                // fullArgs.add("bash");
+                // fullArgs.add("-c");
+                fullArgs.add("cmd");
+                fullArgs.add("/c");
             }
 
             fullArgs.addAll(List.of(args));
