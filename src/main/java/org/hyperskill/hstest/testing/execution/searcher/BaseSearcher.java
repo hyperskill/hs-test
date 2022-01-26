@@ -14,7 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.MULTILINE;
 import static java.util.stream.Collectors.toSet;
 
 public abstract class BaseSearcher {
@@ -197,6 +199,21 @@ public abstract class BaseSearcher {
         }
 
         return result;
+    }
+
+    protected RunnableFile simpleSearch(String whereToSearch, String mainDesc, String mainRegex) {
+        var mainSearcher = Pattern.compile(mainRegex, MULTILINE);
+
+        var mainFilter = new MainFilter(mainDesc);
+        mainFilter.source(FileFilter.regexFilter(mainSearcher));
+
+        return searchCached(
+            whereToSearch,
+            null,
+            null,
+            mainFilter,
+            null
+        );
     }
 
     @Data
