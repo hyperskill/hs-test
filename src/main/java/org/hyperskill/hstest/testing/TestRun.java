@@ -48,13 +48,9 @@ public class TestRun {
     }
 
     public void setErrorInTest(Throwable errorInTest) {
-        if (this.errorInTest == null) {
+        if (this.errorInTest == null || errorInTest == null) {
             this.errorInTest = errorInTest;
         }
-    }
-
-    public void resetErrorInTest() {
-        this.errorInTest = null;
     }
 
     public void setInputUsed() {

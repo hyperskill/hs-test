@@ -7,6 +7,7 @@ import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.CompilationError;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.OutOfInputError;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.ProcessWrapper;
 import org.hyperskill.hstest.testing.execution.runnable.RunnableFile;
@@ -14,6 +15,7 @@ import org.hyperskill.hstest.testing.execution.runnable.RunnableFile;
 import java.util.List;
 
 import static org.hyperskill.hstest.common.Utils.sleep;
+import static org.hyperskill.hstest.common.Utils.tryManyTimes;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.COMPILATION_ERROR;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.FINISHED;
@@ -109,6 +111,12 @@ public abstract class ProcessExecutor extends ProgramExecutor {
                         var nextInput = InputHandler.readline();
                         process.provideInput(nextInput);
                     } catch (ExitException ex) {
+                        if (waitIfTerminated()) {
+                            if (StageTest.getCurrTestRun().getErrorInTest() instanceof OutOfInputError) {
+                                StageTest.getCurrTestRun().setErrorInTest(null);
+                            }
+                            break;
+                        }
                         stopInput();
                     }
                 }
@@ -133,6 +141,11 @@ public abstract class ProcessExecutor extends ProgramExecutor {
         } finally {
             FileUtils.chdir(oldWorkingDirectory);
         }
+    }
+
+    private boolean waitIfTerminated() {
+        return tryManyTimes(100, 10,
+            () -> process.isFinished(false));
     }
 
     @Override
