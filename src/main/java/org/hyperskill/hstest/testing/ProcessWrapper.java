@@ -194,7 +194,7 @@ public class ProcessWrapper {
         }
     }
 
-    private void checkStdout()   {
+    private void checkStdout() {
         checkPipe(process.getInputStream(), System.out, stdout);
     }
 
@@ -217,9 +217,11 @@ public class ProcessWrapper {
             long currCpuLoad = currCpuTime - oldCpuTime;
             oldCpuTime = currCpuTime;
 
-            cpuLoadHistory.add(currCpuLoad);
+            if (!initialIdleWait) {
+                cpuLoadHistory.add(currCpuLoad);
+            }
 
-            if (!initialIdleWait && cpuLoadHistory.size() > cpuLoadHistoryMax) {
+            if (cpuLoadHistory.size() > cpuLoadHistoryMax) {
                 cpuLoadHistory.remove();
             }
 
@@ -236,7 +238,10 @@ public class ProcessWrapper {
             int diff = currOutputSize - oldOutputSize;
             oldOutputSize = currOutputSize;
 
-            outputDiffHistory.add(diff);
+            if (!initialIdleWait) {
+                outputDiffHistory.add(diff);
+            }
+
             if (outputDiffHistory.size() > outputDiffHistoryMax) {
                 outputDiffHistory.remove();
             }

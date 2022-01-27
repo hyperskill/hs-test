@@ -3,7 +3,7 @@ package org.hyperskill.hstest.dynamic.input;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.ExitException;
-import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.exception.outcomes.OutOfInputError;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.Settings;
 

@@ -53,6 +53,10 @@ public class TestRun {
         }
     }
 
+    public void resetErrorInTest() {
+        this.errorInTest = null;
+    }
+
     public void setInputUsed() {
         this.inputUsed = true;
     }

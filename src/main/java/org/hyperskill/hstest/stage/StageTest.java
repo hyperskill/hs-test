@@ -16,6 +16,7 @@ import org.hyperskill.hstest.testing.TestRun;
 import org.hyperskill.hstest.testing.execution.process.GoExecutor;
 import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
 import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
+import org.hyperskill.hstest.testing.execution.process.ShellExecutor;
 import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
@@ -85,6 +86,9 @@ public abstract class StageTest<AttachType> {
                 }
                 if (file.getName().endsWith(".py")) {
                     return new AsyncDynamicTestingRunner(PythonExecutor.class);
+                }
+                if (file.getName().endsWith(".sh")) {
+                    return new AsyncDynamicTestingRunner(ShellExecutor.class);
                 }
             }
         }
