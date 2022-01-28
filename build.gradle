@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'org.hyperskill'
-version '8.3'
+version '9'
 
 sourceCompatibility = 11
 
