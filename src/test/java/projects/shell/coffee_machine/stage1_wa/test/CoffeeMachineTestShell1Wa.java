@@ -2,18 +2,21 @@ package projects.shell.coffee_machine.stage1_wa.test;
 
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import outcomes.base.ContainsMessage;
 import outcomes.base.UserErrorTest;
 
 import java.util.List;
 
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
+
 
 public class CoffeeMachineTestShell1Wa extends UserErrorTest<String> {
 
     @BeforeClass
     public static void stopProcessTest() {
-        //Assume.assumeTrue(includeProcessTesting);
+        Assume.assumeTrue(includeProcessTesting);
     }
 
     @ContainsMessage

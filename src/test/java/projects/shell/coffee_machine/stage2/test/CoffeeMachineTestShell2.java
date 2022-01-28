@@ -3,16 +3,19 @@ package projects.shell.coffee_machine.stage2.test;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 
 import java.util.List;
+
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
 
 
 public class CoffeeMachineTestShell2 extends StageTest<String> {
 
     @BeforeClass
     public static void stopProcessTest() {
-        //Assume.assumeTrue(includeProcessTesting);
+        Assume.assumeTrue(includeProcessTesting);
     }
 
     @Override
