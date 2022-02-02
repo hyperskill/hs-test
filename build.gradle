@@ -42,7 +42,7 @@ tasks.withType(JavaCompile) {
 // }
 
 wrapper {
-    gradleVersion = '7.2'
+    gradleVersion = '7.3'
 }
 
 task resolveDependencies {

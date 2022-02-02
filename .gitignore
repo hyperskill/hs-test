@@ -36,15 +36,9 @@ classes/
 # linux
 *~
 
-# Tests and solutions to projects
-
-src/main/java/solutions/*
-src/test/java/solutiontests/*
-
 # gradle
 
 build/*
-gradle/*
 .gradle/*
 gradlew
 gradlew.bat
