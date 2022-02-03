@@ -94,6 +94,25 @@ public final class FileUtils {
         final List<File> files;
     }
 
+    public static boolean hasJavaSolution(String folder) {
+        var currFolder = abspath(folder);
+        var srcFolder = join(currFolder, "src");
+
+        if (!isdir(srcFolder)) {
+            return false;
+        }
+
+        for (var src : walkUserFiles(srcFolder)) {
+            for (var file : src.files) {
+                if (file.getName().endsWith(".java") || file.getName().endsWith(".kt")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static Iterable<Folder> walkUserFiles(String folder) {
         var currFolder = abspath(folder);
         var testFolder = join(currFolder, "test");

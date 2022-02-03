@@ -11,7 +11,6 @@ import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
 import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.util.concurrent.ExecutionException;
@@ -25,10 +24,6 @@ import static org.hyperskill.hstest.testing.ExecutionOptions.debugMode;
 public class AsyncDynamicTestingRunner implements TestRunner {
 
     protected Class<? extends ProgramExecutor> executor;
-
-    public AsyncDynamicTestingRunner() {
-        this(MainMethodExecutor.class);
-    }
 
     public AsyncDynamicTestingRunner(Class<? extends ProgramExecutor> executor) {
         this.executor = executor;

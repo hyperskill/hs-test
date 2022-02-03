@@ -13,6 +13,7 @@ import org.hyperskill.hstest.outcomes.Outcome;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
+import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
 import org.hyperskill.hstest.testing.execution.process.GoExecutor;
 import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
 import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hyperskill.hstest.common.FileUtils.hasJavaSolution;
 import static org.hyperskill.hstest.common.FileUtils.walkUserFiles;
 import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTests;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RED_BOLD;
@@ -76,6 +78,10 @@ public abstract class StageTest<AttachType> {
     }
 
     private TestRunner initRunner() {
+        if (hasJavaSolution(FileUtils.cwd())) {
+            return new AsyncDynamicTestingRunner(MainMethodExecutor.class);
+        }
+
         for (var folder : walkUserFiles(FileUtils.cwd())) {
             for (var file : folder.getFiles()) {
                 if (file.getName().endsWith(".go")) {
@@ -93,7 +99,7 @@ public abstract class StageTest<AttachType> {
             }
         }
 
-        return new AsyncDynamicTestingRunner();
+        return new AsyncDynamicTestingRunner(MainMethodExecutor.class);
     }
 
     private List<TestRun> initTests() {
