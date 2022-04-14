@@ -174,9 +174,6 @@ public final class FileUtils {
     }
 
     public static void chdir(String folder) {
-        if (folder.equals("C:\\Users\\Vladimir\\Desktop\\hs-test\\src\\test\\java\\outcomes\\src\\test\\java\\outcomes")) {
-            System.out.println("!!! " + folder);
-        }
         chdir(new File(folder));
     }
 
