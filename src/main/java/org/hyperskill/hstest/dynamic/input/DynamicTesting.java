@@ -161,7 +161,7 @@ public interface DynamicTesting {
      *
      * @param obj object that contain methods and variables declared with DynamicTest annotation.
      * @return list of DynamicMethod objects that represent every method marked
-     *         with DynamicTestingMethod annotation.
+     *         with DynamicTest annotation.
      */
     static <A, T extends StageTest<A>> List<TestCase<A>> searchDynamicTests(T obj) {
         class DynamicTestElement<M extends Member & AnnotatedElement>
