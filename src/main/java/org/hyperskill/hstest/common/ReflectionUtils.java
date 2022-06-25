@@ -252,4 +252,19 @@ public final class ReflectionUtils {
 
         FileUtils.chdir(testDir);
     }
+
+    public static List<Class<?>> getTypesAnnotatedWith(String annotationPath) {
+        return ReflectionUtils
+                .getAllClassesFromPackage("")
+                .stream()
+                .filter(clazz -> {
+                    for (var annotation : clazz.getDeclaredAnnotations()) {
+                        if (annotation.getClass().getCanonicalName().equals(annotationPath)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
 }
