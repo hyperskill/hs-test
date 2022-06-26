@@ -259,7 +259,7 @@ public final class ReflectionUtils {
                 .stream()
                 .filter(clazz -> {
                     for (var annotation : clazz.getDeclaredAnnotations()) {
-                        Class<?> annotationClass = annotation.getClass();
+                        Class<?> annotationClass = annotation.annotationType();
                         String annotationName = annotationClass.getCanonicalName();
                         if (annotationName.equals(annotationPath)) {
                             return true;
