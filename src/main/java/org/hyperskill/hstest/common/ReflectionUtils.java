@@ -265,6 +265,7 @@ public final class ReflectionUtils {
                     }
                     return false;
                 })
+                .filter(ReflectionUtils::hasMainMethod)
                 .collect(Collectors.toList());
     }
 }
