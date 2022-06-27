@@ -253,7 +253,7 @@ public final class ReflectionUtils {
         FileUtils.chdir(testDir);
     }
 
-    public static List<Class<?>> getTypesAnnotatedWith(String annotationPath) {
+    public static List<Class<?>> getClassesAnnotatedWith(String annotationPath) {
         return ReflectionUtils
                 .getAllClassesFromPackage("")
                 .stream()
@@ -265,7 +265,6 @@ public final class ReflectionUtils {
                     }
                     return false;
                 })
-                .filter(ReflectionUtils::hasMainMethod)
                 .collect(Collectors.toList());
     }
 }
