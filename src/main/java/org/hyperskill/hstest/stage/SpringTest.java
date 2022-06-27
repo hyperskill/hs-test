@@ -6,6 +6,7 @@ import org.hyperskill.hstest.common.NetworkUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
@@ -155,14 +156,18 @@ public abstract class SpringTest extends StageTest<Object> {
     public static void startSpring() throws Exception {
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
-            List<Class<?>> suitableClasses = ReflectionUtils.getTypesAnnotatedWith(annotationPath);
+            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath)
+                    .stream()
+                    .filter(ReflectionUtils::hasMainMethod)
+                    .collect(Collectors.toList());;
 
             int length = suitableClasses.size();
             if (length == 0) {
-                throw new UnexpectedError("No class found with annotation " + annotationPath);
+                throw new ErrorWithFeedback("No class found with annotation " + annotationPath);
             } else if (length > 1) {
-                throw new UnexpectedError(
-                        "More than one class found with annotation " + annotationPath + "\n" +
+                throw new ErrorWithFeedback(
+                        "More than one class found with annotation " + annotationPath +
+                                " , please leave only 1 class with this annotation." + "\n" +
                                 "Found classes: " + suitableClasses.stream()
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
