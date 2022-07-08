@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
+import static org.hyperskill.hstest.common.Utils.isPackageName;
 import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.stage.StageTest.LIB_TEST_PACKAGE;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
@@ -72,6 +73,10 @@ public class MainMethodExecutor extends ProgramExecutor {
     private void initByName(String sourceName) {
         if (Package.getPackage(sourceName) != null) {
             initByPackageName(sourceName);
+        } else if (isPackageName(sourceName)){
+            throw new ErrorWithFeedback("Cannot find a class with a main method in package " +
+                    "\"" + sourceName + "\".\n" +
+                    "Check if you declared it as \"public static void main(String[] args)\".");
         } else {
             initByClassName(sourceName);
         }
@@ -86,7 +91,8 @@ public class MainMethodExecutor extends ProgramExecutor {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             initByClassInstance(clazz);
         } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-            initByNothing(className);
+            throw new ErrorWithFeedback("Cannot find a class with a main method.\n" +
+                    "Check if you declared it as \"public static void main(String[] args)\".");
         }
     }
 
