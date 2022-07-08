@@ -193,4 +193,8 @@ public final class Utils {
 
         return method1.compareTo(method2);
     }
+
+    public static boolean isPackageName(String name) {
+        return name.matches("^[a-z_]+(\\.[a-z_]+)*");
+    }
 }

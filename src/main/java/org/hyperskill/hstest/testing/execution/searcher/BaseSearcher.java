@@ -247,8 +247,10 @@ public abstract class BaseSearcher {
             return new RunnableFile(new File(folder), new File(file + ext));
 
         } else {
-            return searchCached(null,
-                null, null, null, null);
+            var index = sourceModule.lastIndexOf(moduleSeparator);
+            var path = sourceModule.substring(0, index);
+            var folder = FileUtils.abspath(path.replace(moduleSeparator, File.separator));
+            throw new ErrorWithFeedback("Cannot find a file to execute your code in directory \"" + folder + "\".");
         }
     }
 
