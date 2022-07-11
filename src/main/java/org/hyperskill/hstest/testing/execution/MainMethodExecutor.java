@@ -20,7 +20,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.hyperskill.hstest.common.ProcessUtils.newDaemonThreadPool;
 import static org.hyperskill.hstest.common.ReflectionUtils.getMainMethod;
-import static org.hyperskill.hstest.common.Utils.isPackageName;
 import static org.hyperskill.hstest.exception.FailureHandler.getUserException;
 import static org.hyperskill.hstest.stage.StageTest.LIB_TEST_PACKAGE;
 import static org.hyperskill.hstest.testing.execution.ProgramExecutor.ProgramState.EXCEPTION_THROWN;
@@ -59,12 +58,8 @@ public class MainMethodExecutor extends ProgramExecutor {
 
     private void initByClassInstance(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
-            if (clazz.getName().startsWith(LIB_TEST_PACKAGE)) {
-                initByNothing(clazz.getPackage().getName(), false);
-            } else {
-                initByNothing();
-            }
-            return;
+            String errorMessage = getNotFoundClassWithMainMethodMessage(clazz.getPackage().getName());
+            throw new ErrorWithFeedback(errorMessage);
         }
 
         runClass = clazz;
@@ -73,10 +68,6 @@ public class MainMethodExecutor extends ProgramExecutor {
     private void initByName(String sourceName) {
         if (Package.getPackage(sourceName) != null) {
             initByPackageName(sourceName);
-        } else if (isPackageName(sourceName)){
-            throw new ErrorWithFeedback("Cannot find a class with a main method in package " +
-                    "\"" + sourceName + "\".\n" +
-                    "Check if you declared it as \"public static void main(String[] args)\".");
         } else {
             initByClassName(sourceName);
         }
@@ -91,8 +82,8 @@ public class MainMethodExecutor extends ProgramExecutor {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             initByClassInstance(clazz);
         } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-            throw new ErrorWithFeedback("Cannot find a class with a main method.\n" +
-                    "Check if you declared it as \"public static void main(String[] args)\".");
+            String errorMessage = getNotFoundClassWithMainMethodMessage("");
+            throw new ErrorWithFeedback(errorMessage);
         }
     }
 
@@ -113,19 +104,13 @@ public class MainMethodExecutor extends ProgramExecutor {
 
         int count = classesWithMainMethod.size();
 
-        String inPackage = "";
-        if (!userPackage.isEmpty()) {
-            inPackage = " in package \"" + userPackage + "\"";
-        }
-
         if (count == 0) {
             if (tryEmptyPackage) {
                 initByNothing("", false);
                 return;
             }
-            throw new ErrorWithFeedback(
-                "Cannot find a class with a main method" + inPackage + ".\n" +
-                "Check if you declared it as \"public static void main(String[] args)\".");
+            String errorMessage = getNotFoundClassWithMainMethodMessage(userPackage);
+            throw new ErrorWithFeedback(errorMessage);
         }
 
         if (count > 1) {
@@ -139,6 +124,11 @@ public class MainMethodExecutor extends ProgramExecutor {
                 .map(Class::getName)
                 .sorted()
                 .collect(joining(", "));
+
+            String inPackage = "";
+            if (!userPackage.isEmpty()) {
+                inPackage = " in package \"" + userPackage + "\"";
+            }
 
             throw new ErrorWithFeedback(
                 "There are " + count + " classes with main method"
@@ -243,6 +233,15 @@ public class MainMethodExecutor extends ProgramExecutor {
             throw new UnexpectedError("Cannot change class loader after the program has started");
         }
         this.useSeparateClassLoader = value;
+    }
+
+    private String getNotFoundClassWithMainMethodMessage(String userPackage) {
+        String inPackage = "";
+        if (!userPackage.isEmpty()) {
+            inPackage = " in package \"" + userPackage + "\"";
+        }
+        return "Cannot find a class with a main method" + inPackage + ".\n" +
+                "Check if you declared it as \"public static void main(String[] args)\".";
     }
 
 }
