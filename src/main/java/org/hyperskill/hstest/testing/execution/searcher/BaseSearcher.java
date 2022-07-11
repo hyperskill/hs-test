@@ -241,7 +241,7 @@ public abstract class BaseSearcher {
 
         } else if (sourceFile != null && FileUtils.isfile(sourceFile)) {
             var index = sourceModule.lastIndexOf(moduleSeparator);
-            var path = sourceModule.substring(0, index);
+            var path = sourceModule.substring(0, Math.max(index, 0));
             var file = sourceModule.substring(index + 1);
             var folder = FileUtils.abspath(path.replace(moduleSeparator, File.separator));
             return new RunnableFile(new File(folder), new File(file + ext));
