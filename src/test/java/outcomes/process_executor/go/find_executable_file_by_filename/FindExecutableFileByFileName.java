@@ -4,9 +4,18 @@ import org.hyperskill.hstest.dynamic.DynamicTest;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testing.TestedProgram;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+
+import static org.hyperskill.hstest.testing.ExecutionOptions.includeProcessTesting;
 
 
 public class FindExecutableFileByFileName extends StageTest<String> {
+
+    @BeforeClass
+    public static void stopProcessTest() {
+        Assume.assumeTrue(includeProcessTesting);
+    }
 
     @DynamicTest
     CheckResult test() {
