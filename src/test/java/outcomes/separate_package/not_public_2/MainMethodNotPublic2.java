@@ -18,10 +18,11 @@ public class MainMethodNotPublic2 extends UserErrorTest {
 
     @ContainsMessage
     String m =
-        "Error in test #1\n" +
-        "\n" +
-        "Cannot find a class with a main method in package \"outcomes.separate_package.not_public_2\".\n" +
-        "Check if you declared it as \"public static void main(String[] args)\".";
+            "Error in test #1\n" +
+                    "\n" +
+                    "Cannot find a main method in class " +
+                    "\"outcomes.separate_package.not_public_2.MainMethodNotPublic2Main\".\n" +
+                    "Check if you declared it as \"public static void main(String[] args)\".";
 
     public MainMethodNotPublic2() {
         super(MainMethodNotPublic2Main.class);

@@ -12,9 +12,9 @@ public class NoPackageByPackageName extends UserErrorTest {
     @ContainsMessage
     String m1 =
             "Error in test #1\n" +
-                    "\n" +
-                    "Cannot find a class with a main method.\n" +
-                    "Check if you declared it as \"public static void main(String[] args)\".";
+            "\n" +
+            "Cannot find either a package or a class named \"outcomes.separate_package.non_existent_package\". " +
+            "Check if you've created one of these.";
 
     @DynamicTest
     CheckResult test() {

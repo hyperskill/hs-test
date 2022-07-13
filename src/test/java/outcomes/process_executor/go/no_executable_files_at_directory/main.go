@@ -1,1 +1,7 @@
-package find_two_files_and_one_entry_point
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println(`Main file`)
+}
