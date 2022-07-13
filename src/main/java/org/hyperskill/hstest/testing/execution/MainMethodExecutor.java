@@ -224,14 +224,4 @@ public class MainMethodExecutor extends ProgramExecutor {
         }
         this.useSeparateClassLoader = value;
     }
-
-    private String getNotFoundClassWithMainMethodMessage(String userPackage) {
-        String inPackage = "";
-        if (!userPackage.isEmpty()) {
-            inPackage = " in package \"" + userPackage + "\"";
-        }
-        return "Cannot find a class with a main method" + inPackage + ".\n" +
-                "Check if you declared it as \"public static void main(String[] args)\".";
-    }
-
 }
