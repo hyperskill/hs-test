@@ -16,7 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -266,5 +268,20 @@ public final class ReflectionUtils {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static boolean isPackage(String packageName) {
+        try {
+            final ClassLoader cld = Thread.currentThread().getContextClassLoader();
+            if (cld == null) {
+                throw new UnexpectedError("Can't get class loader.");
+            }
+
+            String resourcePath = packageName.replace('.', '/');
+            final Enumeration<URL> resources = cld.getResources(resourcePath);
+            return resources.hasMoreElements();
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }
