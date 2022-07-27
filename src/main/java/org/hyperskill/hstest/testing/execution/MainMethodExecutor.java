@@ -67,7 +67,7 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByName(String sourceName) {
-        if (Package.getPackage(sourceName) != null) {
+        if (ReflectionUtils.isPackage(sourceName)) {
             initByPackageName(sourceName);
         } else {
             initByClassName(sourceName);
