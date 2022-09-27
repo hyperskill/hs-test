@@ -1,0 +1,103 @@
+name: Checks
+on: [ push ]
+
+jobs:
+  Java_11:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java11
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_12:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java12
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_13:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java13
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_14:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java14
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_15:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java15
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_16:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java16
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_17:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java17
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_18:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java18
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_19:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java19
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java20
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_21:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java21
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
