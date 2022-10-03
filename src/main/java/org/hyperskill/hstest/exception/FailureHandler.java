@@ -33,7 +33,7 @@ public final class FailureHandler {
                 + "OS " + os + "\n"
                 + "Java " + java + "\n"
                 + "Vendor " + vendor + "\n"
-                + "Testing library version 9";
+                + "Testing library version 10";
         } else {
             return "Submitted via web";
         }
