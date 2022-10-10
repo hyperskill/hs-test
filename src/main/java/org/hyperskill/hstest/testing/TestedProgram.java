@@ -1,10 +1,14 @@
 package org.hyperskill.hstest.testing;
 
 import lombok.Getter;
+import org.hyperskill.hstest.exception.outcomes.OutcomeError;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
 import org.hyperskill.hstest.testing.execution.ProgramExecutor;
+import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,13 +40,11 @@ public class TestedProgram {
     private List<String> runArgs;
 
     /**
-     * Creates TestedProgram instance, but doesn't run the class
-     * It is deprecated, use other constructors instead
-     * @param testedClass class, whose main method you want to test
+     * Creates TestedProgram instance that will search for a class to run
+     * and will be able to run it
      */
-    @Deprecated
-    public TestedProgram(Class<?> testedClass) {
-        programExecutor = new MainMethodExecutor(testedClass.getName());
+    public TestedProgram() {
+        this((String) null);
     }
 
     /**
@@ -51,15 +53,45 @@ public class TestedProgram {
      * a particular package if sourceName is a package name
      */
     public TestedProgram(String sourceName) {
-        programExecutor = new MainMethodExecutor(sourceName);
+        var runner = StageTest.getCurrTestRun().getTestRunner();
+
+        if (!(runner instanceof AsyncDynamicTestingRunner)) {
+            throw new UnexpectedError(
+                "TestedProgram is supported only while using " +
+                    "AsyncDynamicTestingRunner runner, not " + runner.getClass());
+        }
+
+        if (sourceName == null) {
+            sourceName = StageTest.getCurrTestRun().getTestCase().getSourceName();
+        }
+
+        var asyncRunner = (AsyncDynamicTestingRunner) runner;
+
+        try {
+            programExecutor = asyncRunner
+                .getExecutor()
+                .getConstructor(String.class)
+                .newInstance(sourceName);
+        } catch (NoSuchMethodException ex) {
+            throw new UnexpectedError(
+                "Cannot find proper constructor of class " + asyncRunner.getExecutor(), ex);
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+            if (ex.getCause() instanceof OutcomeError) {
+                throw (OutcomeError) ex.getCause();
+            }
+            throw new UnexpectedError(
+                "Cannot instantiate constructor of " + asyncRunner.getExecutor(), ex);
+        }
     }
 
     /**
-     * Creates TestedProgram instance that will search for a class to run
-     * and will be able to run it
+     * Creates TestedProgram instance, but doesn't run the class
+     * It is deprecated, use other constructors instead
+     * @param testedClass class, whose main method you want to test
      */
-    public TestedProgram() {
-        programExecutor = new MainMethodExecutor();
+    @Deprecated
+    public TestedProgram(Class<?> testedClass) {
+        programExecutor = new MainMethodExecutor(testedClass.getName());
     }
 
     private void initProgram(String... args) {
@@ -163,6 +195,14 @@ public class TestedProgram {
      */
     public void stopInput() {
         programExecutor.stopInput();
+    }
+
+    /**
+     * Returns false if no more input will be consumed by the program.
+     * Otherwise, returns true.
+     */
+    public boolean isInputAllowed() {
+        return programExecutor.isInputAllowed();
     }
 
     /**

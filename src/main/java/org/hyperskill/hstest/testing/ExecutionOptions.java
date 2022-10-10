@@ -44,9 +44,15 @@ public final class ExecutionOptions {
     public static boolean debugMode = Boolean.getBoolean("debugMode") || isUnderDebugger();
 
     /**
-     * Enables SecurityManager even though it's not recommended being used in Java 17
-     * In Java 8-16 it still will be used, on Java 17 it's not unless this flag is set to true.
-     * Use "-DforceSecurityManager=true" to set this flag.
+     * Enables tests that use process testing to test solutions written in Go, JS etc.
+     * By default, it's turned off because some computers don't have Go, JS etc. installed.
+     * For example, Jitpack, that builds hs-test library.
+     *
+     * To mark the test as the one that uses process testing you should write the following code:
+     *  \@BeforeClass
+     *   public static void stopProcessTest() {
+     *       Assume.assumeTrue(includeProcessTesting);
+     *   }
      */
-    public static boolean forceSecurityManager = Boolean.getBoolean("forceSecurityManager");
+    public static boolean includeProcessTesting = Boolean.getBoolean("includeProcessTesting");
 }

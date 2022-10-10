@@ -1,6 +1,8 @@
 package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
+import org.hyperskill.hstest.common.FileUtils;
+import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
 import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
@@ -11,7 +13,12 @@ import org.hyperskill.hstest.outcomes.Outcome;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
-import org.hyperskill.hstest.testing.runner.AsyncMainMethodRunner;
+import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
+import org.hyperskill.hstest.testing.execution.process.GoExecutor;
+import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
+import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
+import org.hyperskill.hstest.testing.execution.process.ShellExecutor;
+import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -22,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hyperskill.hstest.common.FileUtils.hasJavaSolution;
+import static org.hyperskill.hstest.common.FileUtils.walkUserFiles;
 import static org.hyperskill.hstest.dynamic.input.DynamicTesting.searchDynamicTests;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RED_BOLD;
 import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RESET;
@@ -29,20 +38,26 @@ import static org.junit.Assert.fail;
 
 public abstract class StageTest<AttachType> {
 
-    protected TestRunner runner = new AsyncMainMethodRunner();
+    protected TestRunner runner = null;
     protected AttachType attach = null;
+    protected String source = null;
 
     @Getter private static TestRun currTestRun;
     private final String sourceName;
 
     static int currTestGlobal = 0;
     public static final String LIB_TEST_PACKAGE = "outcomes.separate_package.";
+    private boolean isTests = false;
 
     public StageTest() {
         this("");
     }
 
     public StageTest(String sourceName) {
+        if (source != null) {
+            sourceName = source;
+        }
+
         Package currPackage = getClass().getPackage();
 
         String strPackage = "";
@@ -62,7 +77,36 @@ public abstract class StageTest<AttachType> {
         this(testedClass.getName());
     }
 
+    private TestRunner initRunner() {
+        if (hasJavaSolution(FileUtils.cwd())) {
+            return new AsyncDynamicTestingRunner(MainMethodExecutor.class);
+        }
+
+        for (var folder : walkUserFiles(FileUtils.cwd())) {
+            for (var file : folder.getFiles()) {
+                if (file.getName().endsWith(".go")) {
+                    return new AsyncDynamicTestingRunner(GoExecutor.class);
+                }
+                if (file.getName().endsWith(".js")) {
+                    return new AsyncDynamicTestingRunner(JavascriptExecutor.class);
+                }
+                if (file.getName().endsWith(".py")) {
+                    return new AsyncDynamicTestingRunner(PythonExecutor.class);
+                }
+                if (file.getName().endsWith(".sh")) {
+                    return new AsyncDynamicTestingRunner(ShellExecutor.class);
+                }
+            }
+        }
+
+        return new AsyncDynamicTestingRunner(MainMethodExecutor.class);
+    }
+
     private List<TestRun> initTests() {
+        if (runner == null) {
+            runner = initRunner();
+        }
+
         List<TestRun> testRuns = new ArrayList<>();
         List<TestCase<AttachType>> testCases = new ArrayList<>(generate());
         testCases.addAll(searchDynamicTests(this));
@@ -89,9 +133,7 @@ public abstract class StageTest<AttachType> {
 
     private void printTestNum(int num) {
         String totalTests = num == currTestGlobal ? "" : " (" + currTestGlobal + ")";
-        OutputHandler.getRealOut().println(
-            RED_BOLD + "\nStart test " + num + totalTests + RESET
-        );
+        OutputHandler.print(RED_BOLD + "\nStart test " + num + totalTests + RESET);
     }
 
     @Test
@@ -100,6 +142,12 @@ public abstract class StageTest<AttachType> {
         boolean needTearDown = false;
         try {
             SystemHandler.setUp();
+
+            if (ReflectionUtils.isTests(this)) {
+                isTests = true;
+                ReflectionUtils.setupCwd(this);
+            }
+
             List<TestRun> testRuns = initTests();
 
             for (TestRun testRun : testRuns) {
@@ -155,6 +203,9 @@ public abstract class StageTest<AttachType> {
             fail(failText);
         } finally {
             currTestRun = null;
+            runner = null;
+            attach = null;
+            source = null;
             try {
                 SystemHandler.tearDownSystem();
             } catch (Throwable ignored) { }

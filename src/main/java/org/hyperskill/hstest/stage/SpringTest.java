@@ -6,6 +6,7 @@ import org.hyperskill.hstest.common.NetworkUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.mocks.web.request.HttpRequest;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
@@ -39,7 +41,6 @@ public abstract class SpringTest extends StageTest<Object> {
 
     private static boolean isTearDown = false;
     private static boolean springRunning = false;
-    private static Class<?> springClass;
     private static String[] args;
 
     protected final int port;
@@ -50,26 +51,45 @@ public abstract class SpringTest extends StageTest<Object> {
         startSpring();
     }
 
-    public SpringTest(Class<?> clazz) {
-        this(clazz, detectPort());
+    public SpringTest() {
+        this(detectPort());
     }
 
-    public SpringTest(Class<?> clazz, int port) {
+    @Deprecated
+    public SpringTest(Class<?> clazz) {
+        this();
+    }
+
+    public SpringTest(int port) {
         InfiniteLoopDetector.setWorking(false);
         Settings.doResetOutput = false;
         runner = new SpringApplicationRunner();
-        springClass = clazz;
         this.port = port;
     }
 
-    public SpringTest(Class<?> clazz, String database) {
-        this(clazz, detectPort(), database);
+    @Deprecated
+    public SpringTest(Class<?> clazz, int port) {
+        this(port);
     }
 
-    public SpringTest(Class<?> clazz, int port, String database) {
-        this(clazz, port);
+    public SpringTest(String database) {
+        this(detectPort(), database);
+    }
+
+    @Deprecated
+    public SpringTest(Class<?> clazz, String database) {
+        this(database);
+    }
+
+    public SpringTest(int port, String database) {
+        this(port);
         this.databasePath = database;
         replaceDatabase();
+    }
+
+    @Deprecated
+    public SpringTest(Class<?> clazz, int port, String database) {
+        this(port, database);
     }
 
     private static int detectPort() {
@@ -135,6 +155,26 @@ public abstract class SpringTest extends StageTest<Object> {
 
     public static void startSpring() throws Exception {
         if (!springRunning) {
+            String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
+            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath)
+                    .stream()
+                    .filter(ReflectionUtils::hasMainMethod)
+                    .collect(Collectors.toList());;
+
+            int length = suitableClasses.size();
+            if (length == 0) {
+                throw new ErrorWithFeedback("No class found with annotation " + annotationPath);
+            } else if (length > 1) {
+                throw new ErrorWithFeedback(
+                        "More than one class found with annotation " + annotationPath +
+                                " , please leave only 1 class with this annotation." + "\n" +
+                                "Found classes: " + suitableClasses.stream()
+                                .map(Class::getCanonicalName)
+                                .collect(Collectors.joining(", "))
+                );
+            }
+
+            Class<?> springClass = suitableClasses.get(0);
             Method mainMethod = ReflectionUtils.getMainMethod(springClass);
             mainMethod.invoke(null, new Object[] {args});
             springRunning = true;

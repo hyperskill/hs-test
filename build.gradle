@@ -1,14 +1,14 @@
 plugins {
     id 'java'
     id 'java-library'
-    id 'checkstyle'
+    // id 'checkstyle' doesn't work with jitpack for some reason
     // id 'org.jetbrains.kotlin.jvm' version '1.3.60'
 }
 
 group 'org.hyperskill'
-version '8.2'
+version '10'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -16,16 +16,16 @@ repositories {
 }
 
 dependencies {
-    api 'junit:junit:4.12'
+    api 'junit:junit:4.13.2'
 
     // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    api 'org.assertj:assertj-swing-junit:3.9.2'
-    api 'org.apache.httpcomponents:httpclient:4.5.9'
-    api 'com.google.code.gson:gson:2.8.5'
+    api 'org.assertj:assertj-swing-junit:3.17.1'
+    api 'org.apache.httpcomponents:httpclient:4.5.13'
+    api 'com.google.code.gson:gson:2.8.9'
 
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -63,11 +63,11 @@ task resolveDependencies {
 }
 
 task createFatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class': 'org.hyperskill.hstest.stage.StageTest'
     }
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar

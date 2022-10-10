@@ -2,9 +2,9 @@ package org.hyperskill.hstest.testing.execution;
 
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.DynamicClassLoader;
-import org.hyperskill.hstest.dynamic.input.InputHandler;
-import org.hyperskill.hstest.dynamic.output.OutputHandler;
+import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.security.ExitException;
+import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
@@ -49,24 +49,25 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     public MainMethodExecutor(String sourceName) {
-        initByName(sourceName);
+        if (sourceName != null) {
+            initByName(sourceName);
+        } else {
+            initByNothing();
+        }
     }
 
     private void initByClassInstance(Class<?> clazz) {
         if (!ReflectionUtils.hasMainMethod(clazz)) {
-            if (clazz.getName().startsWith(LIB_TEST_PACKAGE)) {
-                initByNothing(clazz.getPackage().getName(), false);
-            } else {
-                initByNothing();
-            }
-            return;
+            throw new ErrorWithFeedback(
+                    "Cannot find a main method in class \"" + clazz.getName() + "\".\n" +
+                     "Check if you declared it as \"public static void main(String[] args)\".");
         }
 
         runClass = clazz;
     }
 
     private void initByName(String sourceName) {
-        if (Package.getPackage(sourceName) != null) {
+        if (ReflectionUtils.isPackage(sourceName)) {
             initByPackageName(sourceName);
         } else {
             initByClassName(sourceName);
@@ -74,7 +75,7 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByPackageName(String packageName) {
-        initByNothing(packageName, false);
+        initByNothing(packageName);
     }
 
     private void initByClassName(String className) {
@@ -82,7 +83,9 @@ public class MainMethodExecutor extends ProgramExecutor {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             initByClassInstance(clazz);
         } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-            initByNothing(className);
+            throw new ErrorWithFeedback(
+                    "Cannot find either a package or a class named \"" + className + "\". " +
+                    "Check if you've created one of these.");
         }
     }
 
@@ -91,12 +94,6 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByNothing(String userPackage) {
-        initByNothing(userPackage, true);
-    }
-
-    private void initByNothing(String userPackage, boolean tryEmptyPackage) {
-        // TODO use javap and regex "public static( final)? void main\(java\.lang\.String(\[\]|\.\.\.)\)"
-
         List<Class<?>> classesWithMainMethod = ReflectionUtils
             .getAllClassesFromPackage(userPackage)
             .stream()
@@ -111,21 +108,12 @@ public class MainMethodExecutor extends ProgramExecutor {
         }
 
         if (count == 0) {
-            if (tryEmptyPackage) {
-                initByNothing("", false);
-                return;
-            }
             throw new ErrorWithFeedback(
-                "Cannot find a class with a main method" + inPackage + ".\n" +
-                "Check if you declared it as \"public static void main(String[] args)\".");
+                    "Cannot find a class with a main method" + inPackage + ".\n" +
+                            "Check if you declared it as \"public static void main(String[] args)\".");
         }
 
         if (count > 1) {
-            if (tryEmptyPackage) {
-                initByNothing("", false);
-                return;
-            }
-
             String allClassesNames = classesWithMainMethod
                 .stream()
                 .map(Class::getName)
@@ -194,7 +182,8 @@ public class MainMethodExecutor extends ProgramExecutor {
     @Override
     protected void launch(String... args) {
         initMethod();
-        InputHandler.setDynamicInputFunc(group, this::requestInput);
+        SystemHandler.installHandler(this,
+            () -> TestingSecurityManager.getTestingGroup() == group);
         executor = newDaemonThreadPool(1, group);
         task = executor.submit(() -> invokeMain(args));
     }
@@ -213,11 +202,6 @@ public class MainMethodExecutor extends ProgramExecutor {
                 }
             }
         }
-    }
-
-    @Override
-    public String getOutput() {
-        return OutputHandler.getPartialOutput(group);
     }
 
     @Override
@@ -240,5 +224,4 @@ public class MainMethodExecutor extends ProgramExecutor {
         }
         this.useSeparateClassLoader = value;
     }
-
 }

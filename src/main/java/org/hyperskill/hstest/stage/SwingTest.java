@@ -2,11 +2,10 @@ package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.assertj.swing.fixture.AbstractComponentFixture;
-import org.assertj.swing.fixture.EditableComponentFixture;
-import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JTextComponentFixture;
+import org.assertj.swing.exception.ActionFailedException;
+import org.assertj.swing.fixture.*;
 import org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 import org.hyperskill.hstest.exception.outcomes.WrongAnswer;
 import org.hyperskill.hstest.testcase.attach.SwingSettings;
 import org.hyperskill.hstest.testing.Settings;
@@ -77,6 +76,25 @@ public abstract class SwingTest extends StageTest<SwingSettings> {
 
     public void requireEmpty(JTextComponentFixture... elements) {
         require(elements, JTextComponentFixture::requireEmpty, "should be empty");
+    }
+
+    public <T extends AbstractButtonFixture<T, ?>> void click(T button) {
+        try {
+            button.click();
+        } catch (ActionFailedException ex) {
+            String name = ((SwingApplicationRunner) runner).fixtureToName(button);
+            throw new WrongAnswer("The test was unable to click the specific button component. Button text is \"" + name + "\".\n" +
+                    "To mitigate this error, try the following:-\n" +
+                    "1. Do not use the computer while the test is being executed. This maintains focus on the components the test wants to manipulate.\n" +
+                    "2. Make sure the component is present and is within the boundaries of the program screen and can be clicked.\n" +
+                    "3. There is something that is blocking the test from manipulating components in the screen. It should be removed.");
+        } catch (NullPointerException ex) {
+            String name = ((SwingApplicationRunner) runner).fixtureToName(button);
+            throw new WrongAnswer("Null pointer exception occurred due to component \"" + name + "\".");
+        } catch (IllegalStateException ex) {
+            String name = ((SwingApplicationRunner) runner).fixtureToName(button);
+            throw new WrongAnswer("The component \"" + name + "\" should be enabled and showing on the screen.");
+        }
     }
 
     public static List<Component> getAllComponents(final Container c) {

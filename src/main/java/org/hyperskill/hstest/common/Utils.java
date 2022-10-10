@@ -79,6 +79,21 @@ public final class Utils {
     }
 
     /**
+     * Escapes the string, useful for debugging
+     * Example: "123\n456" -> "123\\n456"
+     */
+    public static String escape(String str) {
+        return str.replace("\\", "\\\\")
+            .replace("\t", "\\t")
+            .replace("\b", "\\b")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\f", "\\f")
+            .replace("'", "\\'")
+            .replace("\"", "\\\"");
+    }
+
+    /**
      * Numbers-aware compare.
      * Compare strings as strings, but numbers inside strings as numbers.
      *

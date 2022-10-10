@@ -1,0 +1,15 @@
+name: 'Init environment'
+description: 'Install dependencies'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Set up Java 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: "11"
+    - name: Install Dependencies
+      run: gradle resolveDependencies
+      shell: bash

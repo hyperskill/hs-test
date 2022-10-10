@@ -6,14 +6,19 @@ import org.hyperskill.hstest.dynamic.input.DynamicTestingMethod;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.OutcomeError;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import org.hyperskill.hstest.stage.StageTest;
 
+import java.io.File;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -221,5 +226,62 @@ public final class ReflectionUtils {
             .flatMap(Stream::of)
             .distinct()
             .collect(Collectors.toList());
+    }
+
+    public static <T extends StageTest<?>> boolean isTests(T stage) throws URISyntaxException {
+        var clazz = new File(stage
+            .getClass()
+            .getProtectionDomain()
+            .getCodeSource()
+            .getLocation().toURI())
+            .getAbsolutePath();
+
+        return clazz.contains(File.separator + "hs-test" + File.separator + "build")
+            || clazz.contains(File.separator + "hs-test" + File.separator + "out");
+    }
+
+    public static <T extends StageTest<?>> void setupCwd(T stage) {
+        String testDir = FileUtils.cwd()
+            + File.separator + "src"
+            + File.separator + "test"
+            + File.separator + "java"
+            + File.separator + stage.getClass().getPackageName().replace(".", File.separator);
+
+        File file = new File(testDir);
+        if (file.getName().equals("test")) {
+            testDir = file.getParent();
+        }
+
+        FileUtils.chdir(testDir);
+    }
+
+    public static List<Class<?>> getClassesAnnotatedWith(String annotationPath) {
+        return ReflectionUtils
+                .getAllClassesFromPackage("")
+                .stream()
+                .filter(clazz -> {
+                    for (var annotation : clazz.getDeclaredAnnotations()) {
+                        if (annotation.annotationType().getCanonicalName().equals(annotationPath)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static boolean isPackage(String packageName) {
+        try {
+            final ClassLoader cld = Thread.currentThread().getContextClassLoader();
+            if (cld == null) {
+                throw new UnexpectedError("Can't get class loader.");
+            }
+
+            String resourcePath = packageName.replace('.', '/');
+            final Enumeration<URL> resources = cld.getResources(resourcePath);
+            return resources.hasMoreElements();
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }

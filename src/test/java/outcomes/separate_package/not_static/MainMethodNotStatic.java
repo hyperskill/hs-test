@@ -18,10 +18,11 @@ public class MainMethodNotStatic extends UserErrorTest {
 
     @ContainsMessage
     String m =
-        "Error in test #1\n" +
-        "\n" +
-        "Cannot find a class with a main method in package \"outcomes.separate_package.not_static\".\n" +
-        "Check if you declared it as \"public static void main(String[] args)\".";
+            "Error in test #1\n" +
+                    "\n" +
+                    "Cannot find a main method in class " +
+                    "\"outcomes.separate_package.not_static.MainMethodNotStaticMain\".\n" +
+                    "Check if you declared it as \"public static void main(String[] args)\".";
 
     public MainMethodNotStatic() {
         super(MainMethodNotStaticMain.class);

@@ -2,8 +2,6 @@ package org.hyperskill.hstest.common;
 
 import java.lang.management.ManagementFactory;
 
-import static org.hyperskill.hstest.testing.ExecutionOptions.forceSecurityManager;
-
 public class JavaUtils {
 
     private JavaUtils() { }
@@ -14,6 +12,11 @@ public class JavaUtils {
      */
     public static int getJavaVersion() {
         String version = System.getProperty("java.version");
+
+        String earlyAccess = "-ea";
+        if (version.endsWith(earlyAccess)) {
+            version = version.substring(0, version.length() - earlyAccess.length());
+        }
 
         if (version.startsWith("1.")) {
             version = version.substring(2, 3);
@@ -32,8 +35,15 @@ public class JavaUtils {
             .getInputArguments().toString().contains("jdwp");
     }
 
+    /**
+     * SecurityManager is not recommended being used in Java 17 but is allowed
+     * Starting from Java 18 it's prohibited to use
+     *
+     * SecurityManager was used to catch System.exit() in user's code
+     * tp prevent JVM from shutting down
+     */
     public static boolean isSecurityManagerAllowed() {
-        return getJavaVersion() <= 17 || forceSecurityManager;
+        return getJavaVersion() <= 17;
     }
 
     /**

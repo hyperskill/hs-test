@@ -1,17 +1,29 @@
 package org.hyperskill.hstest.dynamic.output;
 
+import lombok.Data;
 import lombok.Getter;
-import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.BLACK_UNDERLINED;
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.BLUE;
+import static org.hyperskill.hstest.dynamic.output.ColoredOutput.RESET;
 import static org.hyperskill.hstest.testing.ExecutionOptions.ignoreStdout;
 
 public class OutputMock extends OutputStream {
+    @Data
+    private static class ConditionalOutput {
+        final Supplier<Boolean> condition;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    }
 
     // original stream is used to actually see
     // the test in the console and nothing else
@@ -27,7 +39,11 @@ public class OutputMock extends OutputStream {
 
     // partial stream is used to collect output between
     // dynamic input calls in SystemInMock
-    private final Map<ThreadGroup, ByteArrayOutputStream> partial = new HashMap<>();
+    private final Map<ProgramExecutor, ConditionalOutput> partial = new HashMap<>();
+
+    // test output is used to print text inside tests
+    // this text will be printed in blue to distinguish it from user's program text
+    private final ByteArrayOutputStream testOutput = new ByteArrayOutputStream();
 
     OutputMock(PrintStream originalStream) {
         this.original = new PrintStream(new OutputStream() {
@@ -42,15 +58,23 @@ public class OutputMock extends OutputStream {
 
     @Override
     public synchronized void write(int b) {
+        var partialHandler = getPartialHandler();
+
+        if (partialHandler == null) {
+            testOutput.write(b);
+            if (b == '\n') {
+                original.print(BLUE + testOutput + RESET);
+                testOutput.reset();
+            }
+            return;
+        }
+
         original.write(b);
         cloned.write(b);
         dynamic.write(b);
+        partialHandler.write(b);
 
         InfiniteLoopDetector.write(b);
-
-        ThreadGroup currGroup = TestingSecurityManager.getTestingGroup();
-        partial.putIfAbsent(currGroup, new ByteArrayOutputStream());
-        partial.get(currGroup).write(b);
     }
 
     @Override
@@ -73,7 +97,9 @@ public class OutputMock extends OutputStream {
     public void reset() {
         cloned.reset();
         dynamic.reset();
-        partial.clear();
+        for (var value : partial.values()) {
+            value.getOutput().reset();
+        }
         InfiniteLoopDetector.reset();
     }
 
@@ -85,12 +111,34 @@ public class OutputMock extends OutputStream {
         return dynamic.toString();
     }
 
-    public synchronized String getPartial(ThreadGroup group) {
-        ByteArrayOutputStream s =
-            partial.getOrDefault(group, new ByteArrayOutputStream());
-
+    public synchronized String getPartial(ProgramExecutor program) {
+        ByteArrayOutputStream s = partial.get(program).output;
         String output = s.toString();
         s.reset();
         return output;
     }
+
+    void installOutputHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        if (partial.containsKey(program)) {
+            throw new UnexpectedError("Cannot install output handler from the same program twice");
+        }
+        partial.put(program, new ConditionalOutput(condition));
+    }
+
+    void uninstallOutputHandler(ProgramExecutor program) {
+        if (!partial.containsKey(program)) {
+            throw new UnexpectedError("Cannot uninstall output handler that doesn't exist");
+        }
+        partial.remove(program);
+    }
+
+    private ByteArrayOutputStream getPartialHandler() {
+        for (var handler : partial.values()) {
+            if (handler.condition.get()) {
+                return handler.output;
+            }
+        }
+        return null;
+    }
+
 }

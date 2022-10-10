@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.testing;
 
 import lombok.Getter;
+import org.hyperskill.hstest.dynamic.SystemHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.exception.outcomes.ExceptionWithFeedback;
 import org.hyperskill.hstest.exception.outcomes.TestPassed;
@@ -22,7 +23,7 @@ import static org.hyperskill.hstest.testcase.CheckResult.correct;
 
 public class TestRun {
 
-    private final TestRunner testRunner;
+    @Getter private final TestRunner testRunner;
     @Getter private final int testNum;
     @Getter private final int testCount;
     @Getter private final TestCase<?> testCase;
@@ -47,7 +48,7 @@ public class TestRun {
     }
 
     public void setErrorInTest(Throwable errorInTest) {
-        if (this.errorInTest == null) {
+        if (this.errorInTest == null || errorInTest == null) {
             this.errorInTest = errorInTest;
         }
     }
@@ -63,6 +64,12 @@ public class TestRun {
     public void stopTestedPrograms() {
         for (TestedProgram testedProgram : testedPrograms) {
             testedProgram.stop();
+        }
+    }
+
+    public void invalidateHandlers() {
+        for (var testedProgram : testedPrograms) {
+            SystemHandler.uninstallHandler(testedProgram.getProgramExecutor());
         }
     }
 

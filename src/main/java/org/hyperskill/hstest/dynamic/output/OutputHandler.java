@@ -2,8 +2,10 @@ package org.hyperskill.hstest.dynamic.output;
 
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testing.TestRun;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.io.PrintStream;
+import java.util.function.Supplier;
 
 import static org.hyperskill.hstest.common.Utils.cleanText;
 
@@ -16,6 +18,10 @@ public final class OutputHandler {
 
     private static final OutputMock MOCK_OUT = new OutputMock(REAL_OUT);
     private static final OutputMock MOCK_ERR = new OutputMock(REAL_ERR);
+
+    public static void print(String text) {
+        getRealOut().println(text);
+    }
 
     public static PrintStream getRealOut() {
         return MOCK_OUT.getOriginal();
@@ -53,8 +59,8 @@ public final class OutputHandler {
         return cleanText(MOCK_OUT.getDynamic());
     }
 
-    public static String getPartialOutput(ThreadGroup group) {
-        return cleanText(MOCK_OUT.getPartial(group));
+    public static String getPartialOutput(ProgramExecutor program) {
+        return cleanText(MOCK_OUT.getPartial(program));
     }
 
     public static void injectInput(String input) {
@@ -64,4 +70,16 @@ public final class OutputHandler {
         }
         MOCK_OUT.injectInput(input);
     }
+
+    public static void installOutputHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        MOCK_OUT.installOutputHandler(program, condition);
+        MOCK_ERR.installOutputHandler(program, condition);
+    }
+
+    public static void uninstallOutputHandler(ProgramExecutor program) {
+        MOCK_OUT.uninstallOutputHandler(program);
+        MOCK_ERR.uninstallOutputHandler(program);
+    }
+
+
 }

@@ -4,9 +4,11 @@ import org.hyperskill.hstest.dynamic.input.InputHandler;
 import org.hyperskill.hstest.dynamic.output.OutputHandler;
 import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
 import org.hyperskill.hstest.exception.outcomes.ErrorWithFeedback;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 import static java.lang.System.getSecurityManager;
 import static org.hyperskill.hstest.common.JavaUtils.isSecurityManagerAllowed;
@@ -21,10 +23,12 @@ public final class SystemHandler {
     private static SecurityManager oldSecurityManager;
     private static Locale oldLocale;
     private static String oldLineSeparator;
-    // private static String oldUserDir;
+    private static String oldDefaultCharset;
+    private static String oldWorkingDirectory;
 
-    private static final String separatorProperty = "line.separator";
-    // private static final String userDirProperty = "user.dir";
+    public static final String workingDirectoryProperty = "user.dir";
+    public static final String separatorProperty = "line.separator";
+    public static final String defaultCharsetProperty = "file.encoding";
 
     public static void setUp() {
         lockSystemForTesting();
@@ -46,18 +50,10 @@ public final class SystemHandler {
         oldLineSeparator = System.getProperty(separatorProperty);
         System.setProperty(separatorProperty, "\n");
 
-        /*
-        oldUserDir = System.getProperty(userDirProperty);
-        File dir = new File(oldUserDir);
-        if (dir.getName().equals("task")) {
-            // EduTools when testing sets user dir to subproject,
-            // but when the user is running their code user dir is set to root dir
-            // Since testing should be consistent with running the code we should
-            // revert back user dir to the root dir.
-            dir = dir.getParentFile().getParentFile();
-            System.setProperty(userDirProperty, dir.getAbsolutePath());
-        }
-        */
+        oldDefaultCharset = System.getProperty(defaultCharsetProperty);
+        System.setProperty(defaultCharsetProperty, "UTF-8");
+
+        oldWorkingDirectory = System.getProperty(workingDirectoryProperty);
     }
 
     public static void tearDownSystem() {
@@ -74,8 +70,8 @@ public final class SystemHandler {
 
         Locale.setDefault(oldLocale);
         System.setProperty(separatorProperty, oldLineSeparator);
-
-        // System.setProperty(userDirProperty, oldUserDir);
+        System.setProperty(defaultCharsetProperty, oldDefaultCharset);
+        System.setProperty(workingDirectoryProperty, oldWorkingDirectory);
     }
 
     private static void lockSystemForTesting() {
@@ -96,5 +92,15 @@ public final class SystemHandler {
             throw new ErrorWithFeedback("Cannot tear down the testing process more than once");
         }
         lockerThread = null;
+    }
+
+    public static void installHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        InputHandler.installInputHandler(program, condition);
+        OutputHandler.installOutputHandler(program, condition);
+    }
+
+    public static void uninstallHandler(ProgramExecutor program) {
+        InputHandler.uninstallInputHandler(program);
+        OutputHandler.uninstallOutputHandler(program);
     }
 }

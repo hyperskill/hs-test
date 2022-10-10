@@ -1,35 +1,53 @@
 package org.hyperskill.hstest.dynamic.input;
 
-import org.hyperskill.hstest.dynamic.security.TestingSecurityManager;
+import lombok.Data;
+import org.hyperskill.hstest.dynamic.security.ExitException;
 import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import org.hyperskill.hstest.stage.StageTest;
+import org.hyperskill.hstest.testing.execution.ProgramExecutor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class InputMock extends InputStream {
-    private final Map<ThreadGroup, DynamicInputHandler> handlers = new HashMap<>();
-
-    @Deprecated
-    void provideText(String text) {
-        List<DynamicInputFunction> texts = new LinkedList<>();
-        texts.add(new DynamicInputFunction(1, out -> text));
-        setTexts(texts);
+    @Data
+    private static class ConditionalInputHandler {
+        final Supplier<Boolean> condition;
+        final DynamicInputHandler handler;
     }
 
-    @Deprecated
-    void setTexts(List<DynamicInputFunction> texts) {
-        // inputTextFuncs = texts;
-        // TODO setDynamicInputFunction(DynamicInput.toDynamicInput());
-    }
+    private final Map<ProgramExecutor, ConditionalInputHandler> handlers = new HashMap<>();
 
-    void setDynamicInputFunction(ThreadGroup group, DynamicTestFunction func) {
-        if (handlers.containsKey(group)) {
-            throw new UnexpectedError("Cannot change dynamic input function");
+    void installInputHandler(ProgramExecutor program, Supplier<Boolean> condition) {
+        if (handlers.containsKey(program)) {
+            throw new UnexpectedError("Cannot install input handler from the same program twice");
         }
-        handlers.put(group, new DynamicInputHandler(func));
+        handlers.put(program, new ConditionalInputHandler(
+            condition,
+            new DynamicInputHandler(program::requestInput)
+        ));
+    }
+
+    void uninstallInputHandler(ProgramExecutor program) {
+        if (!handlers.containsKey(program)) {
+            throw new UnexpectedError("Cannot uninstall input handler that doesn't exist");
+        }
+        handlers.remove(program);
+    }
+
+    private DynamicInputHandler getInputHandler() {
+        for (var handler : handlers.values()) {
+            if (handler.condition.get()) {
+                return handler.handler;
+            }
+        }
+
+        StageTest.getCurrTestRun().setErrorInTest(
+            new UnexpectedError("Cannot find input handler to read data"));
+        throw new ExitException(0);
     }
 
     @Override
@@ -60,6 +78,23 @@ public class InputMock extends InputStream {
 
     @Override
     public int read() {
-        return handlers.get(TestingSecurityManager.getTestingGroup()).ejectChar();
+        return getInputHandler().ejectChar();
+    }
+
+    public ByteArrayOutputStream readline() {
+        var result = new ByteArrayOutputStream();
+
+        while (true) {
+            int c = read();
+            if (c == -1) {
+                break;
+            }
+            result.write(c);
+            if (c == '\n') {
+                break;
+            }
+        }
+
+        return result;
     }
 }
