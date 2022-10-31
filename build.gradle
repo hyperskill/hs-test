@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'java-library'
+    id 'maven-publish'
     // id 'checkstyle' doesn't work with jitpack for some reason
     // id 'org.jetbrains.kotlin.jvm' version '1.3.60'
 }
@@ -71,4 +72,24 @@ task createFatJar(type: Jar) {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.github.hyperskill"
+            artifactId = "hs-test"
+            version = "release-SNAPSHOT"
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "https://packages.jetbrains.team/maven/p/academy/hyperskill-hspc"
+            credentials {
+                username = spaceUsername
+                password = spacePassword
+            }
+        }
+    }
 }
