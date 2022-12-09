@@ -104,7 +104,10 @@ public final class FileUtils {
 
         for (var src : walkUserFiles(srcFolder)) {
             for (var file : src.files) {
-                if (file.getName().endsWith(".java") || file.getName().endsWith(".kt")) {
+                if (file.getName().endsWith(".java") ||
+                        file.getName().endsWith(".kt") ||
+                        file.getName().endsWith(".scala")
+                ) {
                     return true;
                 }
             }
