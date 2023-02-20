@@ -43,7 +43,7 @@ public class ProcessWrapper {
     private final int outputDiffHistoryMax = 2;
 
     public static boolean initialIdleWait = false;
-    private int initialIdleWaitTime = 150;
+    public static int initialIdleWaitTime = 150;
 
     @Getter @Setter boolean checkEarlyFinish = false;
     @Getter @Setter boolean registerOutput = true;
