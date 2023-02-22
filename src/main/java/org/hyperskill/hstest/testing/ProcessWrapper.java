@@ -42,8 +42,8 @@ public class ProcessWrapper {
     private final Queue<Integer> outputDiffHistory = new ConcurrentLinkedQueue<>();
     private final int outputDiffHistoryMax = 2;
 
-    private boolean initialIdleWait = true;
-    private int initialIdleWaitTime = 150;
+    public static boolean initialIdleWait = true;
+    public static int initialIdleWaitTime = 150;
 
     @Getter @Setter boolean checkEarlyFinish = false;
     @Getter @Setter boolean registerOutput = true;
