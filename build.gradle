@@ -24,6 +24,7 @@ dependencies {
     api 'org.assertj:assertj-swing-junit:3.17.1'
     api 'org.apache.httpcomponents:httpclient:4.5.13'
     api 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.projectlombok:lombok:1.18.22'
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

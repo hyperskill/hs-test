@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
+import static org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector.*;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
@@ -157,9 +159,6 @@ public abstract class SpringTest extends StageTest<Object> {
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
-                    //.stream()
-                    //.filter(ReflectionUtils::hasMainMethod)
-                    //.collect(Collectors.toList());;
 
             int length = suitableClasses.size();
             if (length == 0) {
@@ -178,22 +177,21 @@ public abstract class SpringTest extends StageTest<Object> {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[] {args});
             else {
-                Class<?> mainClassKotlin = ReflectionUtils
-                        .getAllClassesFromPackage("")
-                        .stream()
-                        .filter(it -> {
-                            if (it.getCanonicalName().equals("ApplicationKt") && ReflectionUtils.hasMainMethod(it)) {
-                                return true;
+                ReflectionUtils
+                        .getAllClassesFromPackage("").forEach(it -> {
+                            if (it.getCanonicalName().equals("ApplicationKt")
+                                    && ReflectionUtils.hasMainMethod(it)) {
+                                try {
+                                    ReflectionUtils.getMainMethod(it)
+                                        .invoke(null, new Object[]{args});
+                                } catch (IllegalAccessException e) {
+                                    throw new RuntimeException(e);
+                                } catch (InvocationTargetException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-                            return false;
-                        }).collect(Collectors.toList()).get(0);
-                ReflectionUtils.getMainMethod(mainClassKotlin)
-                        .invoke(null, new Object[] {args});
+                        });
             }
-
-            //Class<?> springClass = suitableClasses.get(0);
-            //Method mainMethod = ReflectionUtils.getMainMethod(springClass);
-            //mainMethod.invoke(null, new Object[] {args});
             springRunning = true;
         }
     }
