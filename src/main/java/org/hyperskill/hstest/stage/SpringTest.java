@@ -173,17 +173,20 @@ public abstract class SpringTest extends StageTest<Object> {
                 );
             }
 
-            if (ReflectionUtils.hasMainMethod(suitableClasses.get(0)))
+            if (ReflectionUtils.hasMainMethod(suitableClasses.get(0))) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
-                        .invoke(null, new Object[] {args});
+                        .invoke(null, new Object[]{args});
+                springRunning = true;
+            }
             else {
                 List<Class<?>> classes = ReflectionUtils.getAllClassesFromPackage("");
                 classes.forEach(it -> {
                             if (it.getCanonicalName().equals("ApplicationKt")
-                                    && ReflectionUtils.hasMainMethod(it)) {
+                                    && it.getDeclaredClasses().equals("main")) {
                                 try {
                                     ReflectionUtils.getMainMethod(it)
                                         .invoke(null, new Object[]{args});
+                                    springRunning = true;
                                 } catch (IllegalAccessException e) {
                                     throw new RuntimeException(e);
                                 } catch (InvocationTargetException e) {
@@ -192,7 +195,6 @@ public abstract class SpringTest extends StageTest<Object> {
                             }
                         });
             }
-            springRunning = true;
         }
     }
 
