@@ -181,7 +181,7 @@ public abstract class SpringTest extends StageTest<Object> {
             else {
                 List<Class<?>> classes = ReflectionUtils.getAllClassesFromPackage("");
                 classes.forEach(it -> {
-                            if (it.getCanonicalName().equals("ApplicationKt")
+                            if (it.getCanonicalName().contains("ApplicationKt")
                                     && it.getDeclaredClasses().equals("main")) {
                                 try {
                                     ReflectionUtils.getMainMethod(it)
