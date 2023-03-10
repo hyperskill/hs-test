@@ -181,17 +181,22 @@ public abstract class SpringTest extends StageTest<Object> {
             else {
                 List<Class<?>> classes = ReflectionUtils.getAllClassesFromPackage("");
                 classes.forEach(it -> {
-                            if (it.getCanonicalName().contains("ApplicationKt")
-                                    && Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList()).contains("main")) {
-                                try {
-                                    ReflectionUtils.getMainMethod(it)
-                                        .invoke(null, new Object[]{args});
-                                    springRunning = true;
-                                } catch (IllegalAccessException e) {
-                                    throw new RuntimeException(e);
-                                } catch (InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                }
+                            if (it.getCanonicalName().contains("ApplicationKt")) {
+                                List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
+                                listOfMethods.forEach(method -> {
+                                    if (method.getName().equals("main")) {
+                                        try {
+                                            ReflectionUtils.getMainMethod(it)
+                                                    .invoke(null, new Object[]{args});
+                                            springRunning = true;
+                                        } catch (IllegalAccessException e) {
+                                            throw new RuntimeException(e);
+                                        } catch (InvocationTargetException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                });
+
                             }
                         });
             }
