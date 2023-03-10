@@ -156,10 +156,10 @@ public abstract class SpringTest extends StageTest<Object> {
     public static void startSpring() throws Exception {
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
-            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath)
-                    .stream()
-                    .filter(ReflectionUtils::hasMainMethod)
-                    .collect(Collectors.toList());;
+            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
+                    //.stream()
+                    //.filter(ReflectionUtils::hasMainMethod)
+                    //.collect(Collectors.toList());;
 
             int length = suitableClasses.size();
             if (length == 0) {
@@ -174,9 +174,26 @@ public abstract class SpringTest extends StageTest<Object> {
                 );
             }
 
-            Class<?> springClass = suitableClasses.get(0);
-            Method mainMethod = ReflectionUtils.getMainMethod(springClass);
-            mainMethod.invoke(null, new Object[] {args});
+            if (ReflectionUtils.hasMainMethod(suitableClasses.get(0)))
+                ReflectionUtils.getMainMethod(suitableClasses.get(0))
+                        .invoke(null, new Object[] {args});
+            else {
+                Class<?> mainClassKotlin = ReflectionUtils
+                        .getAllClassesFromPackage("")
+                        .stream()
+                        .filter(it -> {
+                            if (it.getCanonicalName().equals("ApplicationKt") && ReflectionUtils.hasMainMethod(it)) {
+                                return true;
+                            }
+                            return false;
+                        }).collect(Collectors.toList()).get(0);
+                ReflectionUtils.getMainMethod(mainClassKotlin)
+                        .invoke(null, new Object[] {args});
+            }
+
+            //Class<?> springClass = suitableClasses.get(0);
+            //Method mainMethod = ReflectionUtils.getMainMethod(springClass);
+            //mainMethod.invoke(null, new Object[] {args});
             springRunning = true;
         }
     }
