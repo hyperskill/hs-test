@@ -156,16 +156,20 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public static void startSpring() throws Exception {
-        AtomicBoolean isKotlin = new AtomicBoolean(false);
+        boolean isKotlin = false;
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
             List<String> allNameOfClasses = ReflectionUtils.getAllClassesFromPackage("")
                     .stream().map(Class::getCanonicalName)
                     .collect(Collectors.toList());
-            allNameOfClasses.forEach(it -> {
-                        if (it.matches("\\w*ApplicationKt\\w*")) isKotlin.set(true);
-                    });
+            for (String s : allNameOfClasses) {
+                if (s.matches("\\w*ApplicationKt\\w*")) {
+                    isKotlin = true;
+                    break;
+                }
+            }
+
             int length = suitableClasses.size();
             if (length == 0) {
                 throw new ErrorWithFeedback("No class found with annotation " + annotationPath);
@@ -177,11 +181,11 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
                 );
-            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin.get()) {
+            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin) {
                 throw new ErrorWithFeedback("The main method was not found in the class");
             }
 
-            if (!isKotlin.get()) {
+            if (!isKotlin) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[]{args});
                 springRunning = true;
