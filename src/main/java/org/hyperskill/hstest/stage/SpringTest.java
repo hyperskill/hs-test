@@ -156,11 +156,13 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public static void startSpring() throws Exception {
-        boolean isJava = false;
+        boolean isKotlin = false;
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
-
+            isKotlin = ReflectionUtils.getAllClassesFromPackage("")
+                    .stream().map(it -> it.getCanonicalName())
+                    .collect(Collectors.toList()).contains("ApplicationKt");
             int length = suitableClasses.size();
             if (length == 0) {
                 throw new ErrorWithFeedback("No class found with annotation " + annotationPath);
@@ -172,18 +174,17 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
                 );
-            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0))) {
+            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin) {
                 throw new ErrorWithFeedback("The main method was not found in the class");
-            } else {
-                isJava = true;
             }
-            if (isJava) {
+
+            if (!isKotlin) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[]{args});
                 springRunning = true;
             } else {
-                List<Class<?>> classes = ReflectionUtils.getAllClassesFromPackage("");
-                classes.forEach(it -> {
+                List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
+                allClassesFromPackage.forEach(it -> {
                     if (it.getCanonicalName().contains("ApplicationKt")) {
                         List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
                         listOfMethods.forEach(method -> {
