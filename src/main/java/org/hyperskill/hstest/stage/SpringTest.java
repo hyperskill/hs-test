@@ -156,6 +156,7 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public static void startSpring() throws Exception {
+        boolean isJava = false;
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
@@ -171,34 +172,35 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
                 );
+            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0))) {
+                throw new ErrorWithFeedback("The main method was not found in the class");
+            } else {
+                isJava = true;
             }
 
-            if (ReflectionUtils.hasMainMethod(suitableClasses.get(0))) {
+            if (isJava) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[]{args});
                 springRunning = true;
-            }
-            else {
+            } else {
                 List<Class<?>> classes = ReflectionUtils.getAllClassesFromPackage("");
                 classes.forEach(it -> {
-                            if (it.getCanonicalName().contains("ApplicationKt")) {
-                                List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
-                                listOfMethods.forEach(method -> {
-                                    if (method.getName().equals("main")) {
-                                        try {
-                                            ReflectionUtils.getMainMethod(it)
-                                                    .invoke(null, new Object[]{args});
-                                            springRunning = true;
-                                        } catch (IllegalAccessException e) {
-                                            throw new RuntimeException(e);
-                                        } catch (InvocationTargetException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    }
-                                });
-
+                    if (it.getCanonicalName().contains("ApplicationKt")) {
+                        List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
+                        listOfMethods.forEach(method -> {
+                            if (method.getName().equals("main")) {
+                                try {
+                                    ReflectionUtils.getMainMethod(it)
+                                            .invoke(null, new Object[]{args});
+                                    springRunning = true;
+                                } catch (IllegalAccessException | InvocationTargetException e) {
+                                    throw new ErrorWithFeedback("The main method was not found in the class");
+                                }
                             }
                         });
+
+                    }
+                });
             }
         }
     }
