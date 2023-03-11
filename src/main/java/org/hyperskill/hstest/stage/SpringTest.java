@@ -164,7 +164,7 @@ public abstract class SpringTest extends StageTest<Object> {
                     .stream().map(Class::getCanonicalName)
                     .collect(Collectors.toList());
             for (String s : allNameOfClasses) {
-                if (s.matches("\\w*ApplicationKt\\w*")) {
+                if (s.contains("ApplicationKt")) {
                     isKotlin = true;
                     break;
                 }
