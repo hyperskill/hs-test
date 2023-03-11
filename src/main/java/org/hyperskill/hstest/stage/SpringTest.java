@@ -160,9 +160,10 @@ public abstract class SpringTest extends StageTest<Object> {
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
-            ReflectionUtils.getAllClassesFromPackage("")
+            List<String> allNameOfClasses = ReflectionUtils.getAllClassesFromPackage("")
                     .stream().map(Class::getCanonicalName)
-                    .collect(Collectors.toList()).forEach(it -> {
+                    .collect(Collectors.toList());
+            allNameOfClasses.forEach(it -> {
                         if (it.matches("\\w*ApplicationKt\\w*")) isKotlin.set(true);
                     });
             int length = suitableClasses.size();
