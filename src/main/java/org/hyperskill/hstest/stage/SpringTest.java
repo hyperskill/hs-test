@@ -177,7 +177,6 @@ public abstract class SpringTest extends StageTest<Object> {
             } else {
                 isJava = true;
             }
-
             if (isJava) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[]{args});
