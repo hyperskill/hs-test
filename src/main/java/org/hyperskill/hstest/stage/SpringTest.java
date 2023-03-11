@@ -27,10 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
-import static org.hyperskill.hstest.dynamic.output.InfiniteLoopDetector.*;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
 import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
@@ -156,13 +156,15 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public static void startSpring() throws Exception {
-        boolean isKotlin = false;
+        AtomicBoolean isKotlin = new AtomicBoolean(false);
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
             List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
-            isKotlin = ReflectionUtils.getAllClassesFromPackage("")
+            ReflectionUtils.getAllClassesFromPackage("")
                     .stream().map(Class::getCanonicalName)
-                    .collect(Collectors.toList()).contains("ApplicationKt");
+                    .collect(Collectors.toList()).forEach(it -> {
+                        if (it.matches("\\w*ApplicationKt\\w*")) isKotlin.set(true);
+                    });
             int length = suitableClasses.size();
             if (length == 0) {
                 throw new ErrorWithFeedback("No class found with annotation " + annotationPath);
@@ -174,11 +176,11 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
                 );
-            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin) {
+            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin.get()) {
                 throw new ErrorWithFeedback("The main method was not found in the class");
             }
 
-            if (!isKotlin) {
+            if (!isKotlin.get()) {
                 ReflectionUtils.getMainMethod(suitableClasses.get(0))
                         .invoke(null, new Object[]{args});
                 springRunning = true;
