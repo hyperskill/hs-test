@@ -27,14 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.PUT;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.*;
 import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
 public abstract class SpringTest extends StageTest<Object> {
@@ -163,8 +159,8 @@ public abstract class SpringTest extends StageTest<Object> {
             List<String> allNameOfClasses = ReflectionUtils.getAllClassesFromPackage("")
                     .stream().map(Class::getCanonicalName)
                     .collect(Collectors.toList());
-            for (String s : allNameOfClasses) {
-                if (s.contains("ApplicationKt")) {
+            for (String name : allNameOfClasses) {
+                if (name.endsWith("Kt")) {
                     isKotlin = true;
                     break;
                 }
@@ -182,7 +178,8 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .collect(Collectors.joining(", "))
                 );
             } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin) {
-                throw new ErrorWithFeedback("The main method was not found in the class");
+                throw new ErrorWithFeedback("The main method was not found in the class"
+                        + suitableClasses.get(0).getSimpleName());
             }
 
             if (!isKotlin) {
@@ -192,7 +189,7 @@ public abstract class SpringTest extends StageTest<Object> {
             } else {
                 List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
                 allClassesFromPackage.forEach(it -> {
-                    if (it.getCanonicalName().contains("ApplicationKt")) {
+                    if (it.getCanonicalName().endsWith("Kt")) {
                         List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
                         listOfMethods.forEach(method -> {
                             if (method.getName().equals("main")) {
