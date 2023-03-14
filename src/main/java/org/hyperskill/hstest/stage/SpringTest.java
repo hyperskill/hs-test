@@ -189,20 +189,17 @@ public abstract class SpringTest extends StageTest<Object> {
             } else {
                 List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
                 allClassesFromPackage.forEach(it -> {
-                    if (it.getCanonicalName().endsWith("Kt")) {
-                        List<Method> listOfMethods = Arrays.stream(it.getDeclaredMethods()).collect(Collectors.toList());
-                        listOfMethods.forEach(method -> {
-                            if (method.getName().equals("main")) {
-                                try {
-                                    ReflectionUtils.getMainMethod(it)
-                                            .invoke(null, new Object[]{args});
-                                    springRunning = true;
-                                } catch (IllegalAccessException | InvocationTargetException e) {
-                                    throw new ErrorWithFeedback("The main method was not found in the class");
-                                }
-                            }
-                        });
-
+                    if (it.getCanonicalName().endsWith("Kt")
+                            && ReflectionUtils.hasMainMethod(it)
+                            && !springRunning) {
+                        try {
+                            ReflectionUtils.getMainMethod(it)
+                                    .invoke(null, new Object[]{args});
+                            springRunning = true;
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            throw new ErrorWithFeedback("The main method was not found in the class" +
+                                    it.getSimpleName());
+                        }
                     }
                 });
             }
