@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,10 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hyperskill.hstest.common.Utils.tryManyTimes;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.DELETE;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.GET;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.POST;
-import static org.hyperskill.hstest.mocks.web.constants.Methods.PUT;
+import static org.hyperskill.hstest.mocks.web.constants.Methods.*;
 import static org.hyperskill.hstest.mocks.web.request.HttpRequestExecutor.packUrlParams;
 
 public abstract class SpringTest extends StageTest<Object> {
@@ -154,12 +152,19 @@ public abstract class SpringTest extends StageTest<Object> {
     }
 
     public static void startSpring() throws Exception {
+        boolean isKotlin = false;
         if (!springRunning) {
             String annotationPath = "org.springframework.boot.autoconfigure.SpringBootApplication";
-            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath)
-                    .stream()
-                    .filter(ReflectionUtils::hasMainMethod)
-                    .collect(Collectors.toList());;
+            List<Class<?>> suitableClasses = ReflectionUtils.getClassesAnnotatedWith(annotationPath);
+            List<String> allNameOfClasses = ReflectionUtils.getAllClassesFromPackage("")
+                    .stream().map(Class::getCanonicalName)
+                    .collect(Collectors.toList());
+            for (String name : allNameOfClasses) {
+                if (name.endsWith("Kt")) {
+                    isKotlin = true;
+                    break;
+                }
+            }
 
             int length = suitableClasses.size();
             if (length == 0) {
@@ -172,12 +177,32 @@ public abstract class SpringTest extends StageTest<Object> {
                                 .map(Class::getCanonicalName)
                                 .collect(Collectors.joining(", "))
                 );
+            } else if (!ReflectionUtils.hasMainMethod(suitableClasses.get(0)) && !isKotlin) {
+                throw new ErrorWithFeedback("The main method was not found in the class"
+                        + suitableClasses.get(0).getSimpleName());
             }
 
-            Class<?> springClass = suitableClasses.get(0);
-            Method mainMethod = ReflectionUtils.getMainMethod(springClass);
-            mainMethod.invoke(null, new Object[] {args});
-            springRunning = true;
+            if (!isKotlin) {
+                ReflectionUtils.getMainMethod(suitableClasses.get(0))
+                        .invoke(null, new Object[]{args});
+                springRunning = true;
+            } else {
+                List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
+                allClassesFromPackage.forEach(it -> {
+                    if (it.getCanonicalName().endsWith("Kt")
+                            && ReflectionUtils.hasMainMethod(it)
+                            && !springRunning) {
+                        try {
+                            ReflectionUtils.getMainMethod(it)
+                                    .invoke(null, new Object[]{args});
+                            springRunning = true;
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            throw new ErrorWithFeedback("The main method was not found in the class" +
+                                    it.getSimpleName());
+                        }
+                    }
+                });
+            }
         }
     }
 
