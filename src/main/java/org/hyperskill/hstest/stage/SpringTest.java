@@ -189,7 +189,7 @@ public abstract class SpringTest extends StageTest<Object> {
             } else {
                 List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
                 allClassesFromPackage.forEach(it -> {
-                    if (it != null 
+                    if (it.getCanonicalName() != null
                         && it.getCanonicalName().endsWith("Kt")
                             && ReflectionUtils.hasMainMethod(it)
                             && !springRunning) {
