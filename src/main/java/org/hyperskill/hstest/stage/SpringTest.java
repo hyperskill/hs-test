@@ -160,9 +160,11 @@ public abstract class SpringTest extends StageTest<Object> {
                     .stream().map(Class::getCanonicalName)
                     .collect(Collectors.toList());
             for (String name : allNameOfClasses) {
-                if (name.endsWith("Kt")) {
-                    isKotlin = true;
-                    break;
+                if (name != null) {
+                    if (name.endsWith("Kt")) {
+                        isKotlin = true;
+                        break;
+                    }
                 }
             }
 
