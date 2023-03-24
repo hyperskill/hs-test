@@ -160,7 +160,7 @@ public abstract class SpringTest extends StageTest<Object> {
                     .stream().map(Class::getCanonicalName)
                     .collect(Collectors.toList());
             for (String name : allNameOfClasses) {
-                if (name.endsWith("Kt")) {
+                if (name != null && name.endsWith("Kt")) {
                     isKotlin = true;
                     break;
                 }
@@ -189,7 +189,8 @@ public abstract class SpringTest extends StageTest<Object> {
             } else {
                 List<Class<?>> allClassesFromPackage = ReflectionUtils.getAllClassesFromPackage("");
                 allClassesFromPackage.forEach(it -> {
-                    if (it.getCanonicalName().endsWith("Kt")
+                    if (it.getCanonicalName() != null
+                        && it.getCanonicalName().endsWith("Kt")
                             && ReflectionUtils.hasMainMethod(it)
                             && !springRunning) {
                         try {
