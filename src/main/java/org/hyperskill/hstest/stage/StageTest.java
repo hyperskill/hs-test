@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
+import org.hyperskill.hstest.checker.CheckLibraryVersion;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
@@ -138,6 +139,8 @@ public abstract class StageTest<AttachType> {
 
     @Test
     public final void start() {
+        CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
+        checkLibraryVersion.checkVersion();
         int currTest = 0;
         boolean needTearDown = false;
         try {
@@ -166,6 +169,9 @@ public abstract class StageTest<AttachType> {
                 if (!result.isCorrect()) {
                     String fullFeedback = result.getFeedback() + "\n\n"
                         + testRun.getTestCase().getFeedback();
+                    if (!checkLibraryVersion.getLatestVersion()) {
+                        fullFeedback += checkLibraryVersion.getFeedback();
+                    }
                     throw new WrongAnswer(fullFeedback.trim());
                 }
 
