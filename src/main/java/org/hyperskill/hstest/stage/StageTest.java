@@ -139,8 +139,6 @@ public abstract class StageTest<AttachType> {
 
     @Test
     public final void start() {
-        CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
-        checkLibraryVersion.checkVersion();
         int currTest = 0;
         boolean needTearDown = false;
         try {
@@ -150,6 +148,9 @@ public abstract class StageTest<AttachType> {
                 isTests = true;
                 ReflectionUtils.setupCwd(this);
             }
+
+            CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
+            checkLibraryVersion.checkVersion();
 
             List<TestRun> testRuns = initTests();
 
@@ -165,7 +166,6 @@ public abstract class StageTest<AttachType> {
 
                 currTestRun = testRun;
                 CheckResult result = testRun.test();
-
                 if (!result.isCorrect()) {
                     String fullFeedback = result.getFeedback() + "\n\n"
                         + testRun.getTestCase().getFeedback();

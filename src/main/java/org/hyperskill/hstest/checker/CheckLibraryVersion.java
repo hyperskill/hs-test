@@ -1,13 +1,14 @@
 package org.hyperskill.hstest.checker;
 
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import javax.json.Json;
-import javax.json.JsonObject;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -57,14 +58,10 @@ public class CheckLibraryVersion {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        latestVersion = getLatestHsTestVersionFromGitHub();
+        getLatestHsTestVersionFromGitHub();
 
         if (!currentVersion.equals(latestVersion)) {
-            if (currentVersion.split("\\.")[0] != latestVersion.split("\\.")[0]) {
-                throw new RuntimeException(getFeedback());
-            } else {
-                isLatestVersion = false;
-            }
+            isLatestVersion = false;
         }
 
         lastChecked = LocalDate.now();
@@ -79,7 +76,7 @@ public class CheckLibraryVersion {
      * Returns latest version of the library from GitHub releases page of the library.
      * @return String latest version of the library
      */
-    private String getLatestHsTestVersionFromGitHub() {
+    private void getLatestHsTestVersionFromGitHub() {
         HttpURLConnection connection = null;
         try {
             URL url = new URL("https://api.github.com/repos/hyperskill/hs-test/releases/latest");
@@ -89,18 +86,23 @@ public class CheckLibraryVersion {
 
             int responseCode = connection.getResponseCode();
             if (responseCode != 200) {
-                throw new UnexpectedError("Error getting latest version of hs-test library from GitHub");
+                latestVersion = currentVersion;
+                return;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            latestVersion = currentVersion;
+            return;
         }
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String response = in.lines().collect(Collectors.joining());
-            JsonObject jsonObject = Json.createReader(new StringReader(response)).readObject();
-            return jsonObject.getString("tag_name");
+
+            Gson gson = new Gson();
+            Type type = new TypeToken<Map<String, Object>>(){}.getType();
+            Map<String,Object> map = gson.fromJson(response, type);
+            latestVersion = map.get("tag_name").toString().replace("v", "");
         } catch (IOException e) {
-            throw new UnexpectedError("Error getting latest version of hs-test library from GitHub");
+            latestVersion = currentVersion;
         }
     }
 
