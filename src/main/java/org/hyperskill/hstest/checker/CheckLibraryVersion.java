@@ -2,7 +2,6 @@ package org.hyperskill.hstest.checker;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.io.*;
 import java.lang.reflect.Type;
