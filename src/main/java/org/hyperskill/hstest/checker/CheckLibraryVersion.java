@@ -36,8 +36,6 @@ public class CheckLibraryVersion {
         if (lastCheckedFile.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(lastCheckedFile))) {
                 lastChecked = LocalDate.parse(reader.readLine());
-            } catch (IOException e) {
-                throw new IOException(e);
             }
         }
 
@@ -59,8 +57,6 @@ public class CheckLibraryVersion {
         lastChecked = LocalDate.now();
         try (FileWriter writer = new FileWriter(lastCheckedFile)) {
             writer.write(lastChecked.toString());
-        } catch (IOException e) {
-            throw new IOException(e);
         }
     }
 
