@@ -2,6 +2,7 @@ package org.hyperskill.hstest.checker;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.hyperskill.hstest.exception.outcomes.UnexpectedError;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -30,17 +31,14 @@ public class CheckLibraryVersion {
      * Checks if the current version of the library is the latest one on GitHub releases page of the library.
      * If not, throws an exception.
      */
-    public void checkVersion() {
+    public void checkVersion() throws IOException {
         LocalDate lastChecked = null;
         File lastCheckedFile = new File("LastChecked.txt");
         if (lastCheckedFile.exists()) {
-            try {
-                FileReader fileReader = new FileReader(lastCheckedFile);
-                BufferedReader reader = new BufferedReader(fileReader);
+            try (BufferedReader reader = new BufferedReader(new FileReader(lastCheckedFile))) {
                 lastChecked = LocalDate.parse(reader.readLine());
-                reader.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IOException(e);
             }
         }
 
@@ -49,15 +47,10 @@ public class CheckLibraryVersion {
         }
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(VERSION_FILE);
-        if (inputStream == null) {
-            throw new RuntimeException("Unable to find hs-test library version file");
-        }
-
-        try {
+        if (inputStream != null) {
             currentVersion = new BufferedReader(new InputStreamReader(inputStream)).readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } else return;
+
         getLatestHsTestVersionFromGitHub();
 
         if (!currentVersion.equals(latestVersion)) {
@@ -68,7 +61,7 @@ public class CheckLibraryVersion {
         try (FileWriter writer = new FileWriter(lastCheckedFile)) {
             writer.write(lastChecked.toString());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
     }
 
