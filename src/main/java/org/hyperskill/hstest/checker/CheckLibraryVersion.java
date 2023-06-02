@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Map;
@@ -18,10 +19,11 @@ import java.util.stream.Collectors;
 public class CheckLibraryVersion {
 
     private String VERSION_FILE = "src/main/java/org/hyperskill/hstest/resources/version.txt";
-
+    private String LAST_CHECKED_FILE = "lastCheckedHSTestLibrary.txt";
+    private String GITHUB_API = "https://api.github.com/repos/hyperskill/hs-test/releases/latest";
     private String currentVersion;
     private String latestVersion;
-    private boolean isLatestVersion = true;
+    public boolean isLatestVersion = true;
 
     public CheckLibraryVersion() {
     }
@@ -32,28 +34,24 @@ public class CheckLibraryVersion {
      */
     public void checkVersion() throws IOException {
         LocalDate lastChecked = null;
-        File lastCheckedFile = new File("LastChecked.txt");
+        String tempDirectoryPath = System.getProperty("java.io.tmpdir");
+        File lastCheckedFile = new File(tempDirectoryPath + File.separator + LAST_CHECKED_FILE);
         if (lastCheckedFile.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(lastCheckedFile))) {
                 lastChecked = LocalDate.parse(reader.readLine());
             }
         }
-
-        if (lastChecked != null && lastChecked.equals(LocalDate.now())) {
+        if (LocalDate.now().equals(lastChecked)) {
             return;
         }
-
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(VERSION_FILE);
         if (inputStream != null) {
             currentVersion = new BufferedReader(new InputStreamReader(inputStream)).readLine();
         } else return;
-
-        getLatestHsTestVersionFromGitHub();
-
+        latestVersion = getLatestHsTestVersionFromGitHub();
         if (!currentVersion.equals(latestVersion)) {
             isLatestVersion = false;
         }
-
         lastChecked = LocalDate.now();
         try (FileWriter writer = new FileWriter(lastCheckedFile)) {
             writer.write(lastChecked.toString());
@@ -64,33 +62,32 @@ public class CheckLibraryVersion {
      * Returns latest version of the library from GitHub releases page of the library.
      * @return String latest version of the library
      */
-    private void getLatestHsTestVersionFromGitHub() {
+    private String getLatestHsTestVersionFromGitHub() {
         HttpURLConnection connection = null;
+        int responseCode = -1;
         try {
-            URL url = new URL("https://api.github.com/repos/hyperskill/hs-test/releases/latest");
+            URL url = new URL(GITHUB_API);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/vnd.github+json");
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode != 200) {
-                latestVersion = currentVersion;
-                return;
-            }
+            connection.setConnectTimeout(100);
+            connection.setReadTimeout(500);
+            responseCode = connection.getResponseCode();
         } catch (IOException e) {
-            latestVersion = currentVersion;
-            return;
+            return currentVersion;
+        }
+        if (responseCode != 200) {
+            return currentVersion;
         }
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String response = in.lines().collect(Collectors.joining());
-
             Gson gson = new Gson();
             Type type = new TypeToken<Map<String, Object>>(){}.getType();
             Map<String,Object> map = gson.fromJson(response, type);
-            latestVersion = map.get("tag_name").toString().replace("v", "");
+            return map.get("tag_name").toString().replace("v", "");
         } catch (IOException e) {
-            latestVersion = currentVersion;
+            return currentVersion;
         }
     }
 
@@ -107,13 +104,5 @@ public class CheckLibraryVersion {
                 "   For Gradle:\n" +
                 "   gradle clean build --refresh-dependencies\n\n" +
                 "4. Restart the tests.\n\n";
-    }
-
-    /**
-     * Returns true if the current version of the library is the latest one.
-     * @return Boolean true if the current version of the library is the latest one
-     */
-    public Boolean getLatestVersion() {
-        return isLatestVersion;
     }
 }

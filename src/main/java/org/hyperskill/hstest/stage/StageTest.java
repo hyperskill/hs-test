@@ -149,9 +149,6 @@ public abstract class StageTest<AttachType> {
                 ReflectionUtils.setupCwd(this);
             }
 
-            CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
-            checkLibraryVersion.checkVersion();
-
             List<TestRun> testRuns = initTests();
 
             for (TestRun testRun : testRuns) {
@@ -167,9 +164,11 @@ public abstract class StageTest<AttachType> {
                 currTestRun = testRun;
                 CheckResult result = testRun.test();
                 if (!result.isCorrect()) {
+                    CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
+                    checkLibraryVersion.checkVersion();
                     String fullFeedback = result.getFeedback() + "\n\n"
                         + testRun.getTestCase().getFeedback();
-                    if (!checkLibraryVersion.getLatestVersion()) {
+                    if (!checkLibraryVersion.isLatestVersion) {
                         fullFeedback += checkLibraryVersion.getFeedback();
                     }
                     throw new WrongAnswer(fullFeedback.trim());
