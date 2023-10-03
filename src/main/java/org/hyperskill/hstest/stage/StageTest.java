@@ -15,10 +15,7 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
 import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
-import org.hyperskill.hstest.testing.execution.process.GoExecutor;
-import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
-import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
-import org.hyperskill.hstest.testing.execution.process.ShellExecutor;
+import org.hyperskill.hstest.testing.execution.process.*;
 import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
@@ -85,6 +82,9 @@ public abstract class StageTest<AttachType> {
 
         for (var folder : walkUserFiles(FileUtils.cwd())) {
             for (var file : folder.getFiles()) {
+                if (file.getName().endsWith(".cpp")) {
+                    return new AsyncDynamicTestingRunner(CppExecutor.class);
+                }
                 if (file.getName().endsWith(".go")) {
                     return new AsyncDynamicTestingRunner(GoExecutor.class);
                 }
