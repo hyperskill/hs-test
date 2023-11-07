@@ -18,7 +18,7 @@ public class CppSearcher extends BaseSearcher {
     public RunnableFile search(String whereToSearch) {
         return simpleSearch(whereToSearch,
                 "int main()",
-                "(^|\n) *int +main\\(.*\\)"
+                "(^|\\n)\\s*int\\s+main\\s*\\(.*\\)"
         );
     }
 }
