@@ -1,6 +1,7 @@
 package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
+import org.hyperskill.hstest.checker.CheckLibraryVersion;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
@@ -14,10 +15,7 @@ import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
 import org.hyperskill.hstest.testing.TestRun;
 import org.hyperskill.hstest.testing.execution.MainMethodExecutor;
-import org.hyperskill.hstest.testing.execution.process.GoExecutor;
-import org.hyperskill.hstest.testing.execution.process.JavascriptExecutor;
-import org.hyperskill.hstest.testing.execution.process.PythonExecutor;
-import org.hyperskill.hstest.testing.execution.process.ShellExecutor;
+import org.hyperskill.hstest.testing.execution.process.*;
 import org.hyperskill.hstest.testing.runner.AsyncDynamicTestingRunner;
 import org.hyperskill.hstest.testing.runner.TestRunner;
 import org.junit.Test;
@@ -84,6 +82,9 @@ public abstract class StageTest<AttachType> {
 
         for (var folder : walkUserFiles(FileUtils.cwd())) {
             for (var file : folder.getFiles()) {
+                if (file.getName().endsWith(".cpp")) {
+                    return new AsyncDynamicTestingRunner(CppExecutor.class);
+                }
                 if (file.getName().endsWith(".go")) {
                     return new AsyncDynamicTestingRunner(GoExecutor.class);
                 }
@@ -162,10 +163,14 @@ public abstract class StageTest<AttachType> {
 
                 currTestRun = testRun;
                 CheckResult result = testRun.test();
-
                 if (!result.isCorrect()) {
+                    CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
+                    checkLibraryVersion.checkVersion();
                     String fullFeedback = result.getFeedback() + "\n\n"
                         + testRun.getTestCase().getFeedback();
+                    if (!checkLibraryVersion.isLatestVersion) {
+                        fullFeedback += checkLibraryVersion.getFeedback();
+                    }
                     throw new WrongAnswer(fullFeedback.trim());
                 }
 
