@@ -42,7 +42,7 @@ public class CppExecutor extends ProcessExecutor {
 
     @Override
     protected List<String> compilationCommand() {
-        return List.of("g++", "-o", filename, runnable.getFile().getName());
+        return List.of("g++", "-std", "c++20", "-pipe", "-O2", "-static", "-o", filename, runnable.getFile().getName());
     }
 
     @Override
