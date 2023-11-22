@@ -74,3 +74,30 @@ jobs:
         run: java -version
       - name: test
         run: gradle test -i
+  Java_19:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java19
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java20
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
+  Java_21:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/java21
+      - name: java version
+        run: java -version
+      - name: test
+        run: gradle test -i
