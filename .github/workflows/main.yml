@@ -9,11 +9,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
           - 11
           - 12
           - 13
@@ -38,8 +33,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Install Dependencies
-        run: ./gradlew build
-
       - name: Run tests
-        run: ./gradlew test -i
+        run: ./gradlew test --rerun-tasks

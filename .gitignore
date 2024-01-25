@@ -31,4 +31,5 @@ classes/
 
 # gradle
 
-.gradle/*
+.gradle
+build
