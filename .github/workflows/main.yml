@@ -3,7 +3,7 @@ on: [ push ]
 
 jobs:
   tests:
-    name: Run tests
+    name: Run tests ${{ matrix.version }}
     runs-on: [ self-hosted, small ]
     strategy:
       fail-fast: false
