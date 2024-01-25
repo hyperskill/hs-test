@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -27,20 +26,9 @@ target/
 out/
 classes/
 
-#IDEA Project Files
-*iml
-*iws
-.idea
-*ipr
-
 # linux
 *~
 
 # gradle
 
-build/*
 .gradle/*
-gradlew
-gradlew.bat
-
-*.exe
