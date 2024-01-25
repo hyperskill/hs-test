@@ -7,7 +7,7 @@ jobs:
     runs-on: [ self-hosted, small ]
     strategy:
       matrix:
-        java:
+        version:
           - 6
           - 7
           - 8
@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: "${{ matrix.version }}"
+          java-version: '${{ matrix.version }}'
 
       - name: Install Dependencies
         run: gradle resolveDependencies
