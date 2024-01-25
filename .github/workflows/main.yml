@@ -39,7 +39,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Install Dependencies
-        run: ./gradlew resolveDependencies
+        run: gradle resolveDependencies
 
       - name: Run tests
-        run: ./gradlew test -i
+        run: gradle test -i
