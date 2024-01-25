@@ -35,9 +35,11 @@ jobs:
           java-version: '${{ matrix.version }}'
           cache: 'gradle'
 
-      - name: Install Dependencies
-        run: gradle resolveDependencies
-        shell: bash
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - name: test
-        run: gradle test -i
+      - name: Install Dependencies
+        run: ./gradlew resolveDependencies
+
+      - name: Run tests
+        run: ./gradlew test -i
