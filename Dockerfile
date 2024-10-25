@@ -1,4 +1,4 @@
-FROM gradle:5.3.1-jdk11-slim
+FROM gradle:8.5-jdk21
 
 COPY --chown=gradle . hs-test
 WORKDIR /home/gradle/hs-test

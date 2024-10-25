@@ -7,9 +7,9 @@ plugins {
 }
 
 group 'org.hyperskill'
-version '10.0.3'
+version '11.0.0'
 
-sourceCompatibility = 11
+sourceCompatibility = 21
 
 repositories {
     mavenCentral()
@@ -43,7 +43,7 @@ tasks.withType(JavaCompile) {
 // }
 
 wrapper {
-    gradleVersion = '7.3'
+    gradleVersion = '8.5'
 }
 
 task resolveDependencies {
@@ -85,10 +85,10 @@ publishing {
     }
     repositories {
         maven {
-            url "https://packages.jetbrains.team/maven/p/academy/hyperskill-hspc"
+            url "https://packages.jetbrains.team/maven/p/hyperskill-hs-test/maven"
             credentials {
-                username = spaceUsername
-                password = spacePassword
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
