@@ -87,8 +87,8 @@ publishing {
         maven {
             url "https://packages.jetbrains.team/maven/p/hyperskill-hs-test/maven"
             credentials {
-                username = spaceUsername
-                password = spacePassword
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
