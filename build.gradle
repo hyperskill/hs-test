@@ -7,9 +7,12 @@ plugins {
 }
 
 group 'org.hyperskill'
-version '12.0.0'
+version '12.0.1'
 
-sourceCompatibility = 21
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
@@ -76,7 +79,14 @@ task createFatJar(type: Jar) {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        stable(MavenPublication) {
+            groupId = "com.github.hyperskill"
+            artifactId = "hs-test"
+            version = project.version
+            from components.java
+        }
+
+        snapshot(MavenPublication) {
             groupId = "com.github.hyperskill"
             artifactId = "hs-test"
             version = "release-SNAPSHOT"
