@@ -9,6 +9,10 @@ jobs:
       fail-fast: false
       matrix:
         version:
+          - 17
+          - 18
+          - 19
+          - 20
           - 21
     steps:
       - uses: actions/checkout@v4
