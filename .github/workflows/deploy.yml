@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    runs-on: [ self-hosted, small ]
+    runs-on: arc-runners-small
     steps:
       - uses: actions/checkout@v4
 
