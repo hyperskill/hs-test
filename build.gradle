@@ -7,11 +7,11 @@ plugins {
 }
 
 group 'org.hyperskill'
-version '13.0.0'
+version '12.0.3'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_24
-    targetCompatibility = JavaVersion.VERSION_24
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -28,8 +28,8 @@ dependencies {
     api 'org.apache.httpcomponents:httpclient:4.5.14'
     api 'com.google.code.gson:gson:2.10.1'
 
-    compileOnly 'org.projectlombok:lombok:1.18.38'
-    annotationProcessor 'org.projectlombok:lombok:1.18.38'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -46,7 +46,7 @@ tasks.withType(JavaCompile) {
 // }
 
 wrapper {
-    gradleVersion = '8.14'
+    gradleVersion = '8.5'
 }
 
 task resolveDependencies {

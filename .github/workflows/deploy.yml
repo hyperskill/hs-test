@@ -7,14 +7,14 @@ on:
 
 jobs:
   publish:
-    runs-on: arc-runners-small
+    runs-on: [ self-hosted, small ]
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '24'
+          java-version: '17'
           distribution: 'corretto'
 
       - name: Setup Gradle

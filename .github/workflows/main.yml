@@ -4,19 +4,23 @@ on: [ push ]
 jobs:
   tests:
     name: Run tests for Java ${{ matrix.version }}
-    runs-on: arc-runners-small
+    runs-on: [ self-hosted, small ]
     strategy:
       fail-fast: false
       matrix:
         version:
-          - 24
+          - 17
+          - 18
+          - 19
+          - 20
+          - 21
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Java ${{ matrix.version }}
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
+          distribution: 'zulu'
           java-version: '${{ matrix.version }}'
           cache: 'gradle'
 
