@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
+import java.io.File; 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
@@ -150,7 +151,7 @@ public abstract class StageTest<AttachType> {
         }
 
         try {
-            Path currentDir = FileUtils.cwd().toPath();
+            Path currentDir = new File(FileUtils.cwd()).toPath();
             ExitCallDetector.DetectionResult result = ExitCallDetector.analyzeDirectory(currentDir);
             
             if (result.hasExitCalls()) {
