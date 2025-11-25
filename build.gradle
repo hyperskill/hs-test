@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'org.hyperskill'
-version '13.0.2'
+version '13.0.3'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

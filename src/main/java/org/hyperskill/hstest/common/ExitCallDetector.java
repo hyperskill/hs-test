@@ -5,6 +5,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -26,6 +26,7 @@ public class ExitCallDetector {
      */
     public static class DetectionResult {
         private final boolean hasExitCalls;
+        @Getter
         private final List<String> violations;
 
         public DetectionResult(boolean hasExitCalls, List<String> violations) {
@@ -35,10 +36,6 @@ public class ExitCallDetector {
 
         public boolean hasExitCalls() {
             return hasExitCalls;
-        }
-
-        public List<String> getViolations() {
-            return violations;
         }
 
         public String getFormattedMessage() {
@@ -74,7 +71,13 @@ public class ExitCallDetector {
             return new DetectionResult(false, violations);
         }
 
-        // If simple check finds something, do detailed AST analysis
+        // For Kotlin files, use simple string analysis (JavaParser can't parse Kotlin)
+        if (fileName.endsWith(".kt")) {
+            violations.addAll(simpleStringAnalysis(sourceCode, fileName));
+            return new DetectionResult(!violations.isEmpty(), violations);
+        }
+
+        // For Java files, try AST analysis first
         try {
             JavaParser parser = new JavaParser();
             ParseResult<CompilationUnit> parseResult = parser.parse(sourceCode);
@@ -83,6 +86,9 @@ public class ExitCallDetector {
                 CompilationUnit cu = parseResult.getResult().get();
                 ExitCallVisitor visitor = new ExitCallVisitor(fileName);
                 visitor.visit(cu, violations);
+            } else {
+                // Parsing failed, use simple string analysis
+                violations.addAll(simpleStringAnalysis(sourceCode, fileName));
             }
         } catch (Exception e) {
             // If parsing fails, fall back to simple string check
@@ -100,9 +106,9 @@ public class ExitCallDetector {
 
         try (Stream<Path> paths = Files.walk(directory)) {
             List<Path> javaFiles = paths
-                .filter(Files::isRegularFile)
-                .filter(p -> p.toString().endsWith(".java") || p.toString().endsWith(".kt"))
-                .collect(Collectors.toList());
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.toString().endsWith(".java") || p.toString().endsWith(".kt"))
+                    .toList();
 
             for (Path path : javaFiles) {
                 DetectionResult result = analyzeFile(path.toFile());
@@ -131,22 +137,26 @@ public class ExitCallDetector {
 
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].trim();
-            
+
             // Skip comments
             if (line.startsWith("//") || line.startsWith("/*") || line.startsWith("*")) {
                 continue;
             }
 
-            if (line.contains("System.exit")) {
+            // Check for System.exit( with optional whitespace
+            if (line.matches(".*System\\s*\\.\\s*exit\\s*\\(.*")) {
                 violations.add(fileName + " (line " + (i + 1) + "): System.exit() call detected");
             }
-            if (line.contains("exitProcess")) {
+            // Check for exitProcess( with optional whitespace
+            if (line.matches(".*exitProcess\\s*\\(.*")) {
                 violations.add(fileName + " (line " + (i + 1) + "): exitProcess() call detected");
             }
-            if (line.contains("Runtime") && line.contains(".exit")) {
+            // Check for Runtime...exit( with optional whitespace
+            if (line.contains("Runtime") && line.matches(".*\\.\\s*exit\\s*\\(.*")) {
                 violations.add(fileName + " (line " + (i + 1) + "): Runtime.exit() call detected");
             }
-            if (line.contains("Runtime") && line.contains(".halt")) {
+            // Check for Runtime...halt( with optional whitespace
+            if (line.contains("Runtime") && line.matches(".*\\.\\s*halt\\s*\\(.*")) {
                 violations.add(fileName + " (line " + (i + 1) + "): Runtime.halt() call detected");
             }
         }
@@ -169,18 +179,18 @@ public class ExitCallDetector {
             super.visit(methodCall, violations);
 
             String methodName = methodCall.getNameAsString();
-            
+
             // Check for exit, exitProcess, or halt calls
             if (methodName.equals("exit") || methodName.equals("exitProcess") || methodName.equals("halt")) {
-                
+
                 // Check if it's System.exit()
                 if (methodCall.getScope().isPresent()) {
                     String scope = methodCall.getScope().get().toString();
-                    
+
                     if (scope.equals("System")) {
                         int line = methodCall.getBegin().map(pos -> pos.line).orElse(0);
                         violations.add(fileName + " (line " + line + "): System.exit() call detected");
-                    } 
+                    }
                     else if (scope.contains("Runtime")) {
                         int line = methodCall.getBegin().map(pos -> pos.line).orElse(0);
                         if (methodName.equals("exit")) {
@@ -189,7 +199,7 @@ public class ExitCallDetector {
                             violations.add(fileName + " (line " + line + "): Runtime.halt() call detected");
                         }
                     }
-                } 
+                }
                 // Kotlin's exitProcess() has no scope
                 else if (methodName.equals("exitProcess")) {
                     int line = methodCall.getBegin().map(pos -> pos.line).orElse(0);
