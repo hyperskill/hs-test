@@ -2,6 +2,7 @@ package org.hyperskill.hstest.stage;
 
 import lombok.Getter;
 import org.hyperskill.hstest.checker.CheckLibraryVersion;
+import org.hyperskill.hstest.common.ExitCallDetector;
 import org.hyperskill.hstest.common.FileUtils;
 import org.hyperskill.hstest.common.ReflectionUtils;
 import org.hyperskill.hstest.dynamic.ClassSearcher;
@@ -22,7 +23,10 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
+import java.io.File; 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -137,6 +141,28 @@ public abstract class StageTest<AttachType> {
         OutputHandler.print(RED_BOLD + "\nStart test " + num + totalTests + RESET);
     }
 
+    /**
+     * Checks user code for forbidden exit calls before running tests
+     */
+    private void checkForExitCalls() {
+        // Only check Java files (other languages handled differently in Docker)
+        if (!hasJavaSolution(FileUtils.cwd())) {
+            return;
+        }
+
+        try {
+            Path currentDir = new File(FileUtils.cwd()).toPath();
+            ExitCallDetector.DetectionResult result = ExitCallDetector.analyzeDirectory(currentDir);
+            
+            if (result.hasExitCalls()) {
+                throw new WrongAnswer(result.getFormattedMessage());
+            }
+        } catch (IOException e) {
+            // If we can't read files, just continue (fail safely)
+            // The SecurityManager will catch it at runtime if needed
+        }
+    }
+
     @Test
     public final void start() {
         int currTest = 0;
@@ -148,6 +174,9 @@ public abstract class StageTest<AttachType> {
                 isTests = true;
                 ReflectionUtils.setupCwd(this);
             }
+
+            // Check for exit calls before running any tests
+            checkForExitCalls();
 
             List<TestRun> testRuns = initTests();
 
