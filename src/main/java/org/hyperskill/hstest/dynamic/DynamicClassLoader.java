@@ -25,11 +25,22 @@ public class DynamicClassLoader extends ClassLoader {
 
     protected synchronized Class<?> loadClass(String name, boolean resolve)
         throws ClassNotFoundException {
-        Class<?> result = findClass(name);
-        if (resolve) {
-            resolveClass(result);
+
+        Class<?> c = findLoadedClass(name);
+        if (c == null) {
+            try {
+                if (getParent() != null) {
+                    c = getParent().loadClass(name);
+                }
+            } catch (ClassNotFoundException e) {
+                c = findClass(name);
+            }
         }
-        return result;
+
+        if (resolve) {
+            resolveClass(c);
+        }
+        return c;
     }
 
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -45,7 +56,7 @@ public class DynamicClassLoader extends ClassLoader {
             if (classBytes == null) {
                 File f = findFile(name);
                 if (f == null) {
-                    return findSystemClass(name);
+                    throw new ClassNotFoundException(name);
                 }
 
                 classBytes = loadFileAsBytes(f);
