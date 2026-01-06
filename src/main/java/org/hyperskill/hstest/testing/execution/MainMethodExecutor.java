@@ -79,17 +79,13 @@ public class MainMethodExecutor extends ProgramExecutor {
     }
 
     private void initByClassName(String className) {
-        this.className = className;
-
-        if (!useSeparateClassLoader) {
-            try {
-                Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-                initByClassInstance(clazz);
-            } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-                throw new ErrorWithFeedback(
-                        "Cannot find either a package or a class named \"" + className + "\". " +
-                                "Check if you've created one of these.");
-            }
+        try {
+            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+            initByClassInstance(clazz);
+        } catch (ClassNotFoundException | NoClassDefFoundError ex) {
+            throw new ErrorWithFeedback(
+                    "Cannot find either a package or a class named \"" + className + "\". " +
+                    "Check if you've created one of these.");
         }
     }
 
@@ -138,27 +134,15 @@ public class MainMethodExecutor extends ProgramExecutor {
 
         try {
             if (useSeparateClassLoader) {
-                if (clazz == null) {
-                    clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-                }
-
                 ClassLoader cl = new DynamicClassLoader(clazz);
 
-                if (runClass == null) {
-                    runClass = cl.loadClass(className);
-                } else {
-                    className = clazz.getName();
-                    runClass = cl.loadClass(className);
-                }
-
+                className = clazz.getName();
+                runClass = cl.loadClass(className);
                 methodToInvoke = getMainMethod(runClass);
                 group = new ThreadGroup(runClass.getSimpleName());
                 group.setDaemon(true);
 
             } else {
-                if (runClass == null) {
-                    throw new UnexpectedError("runClass is null in initMethod");
-                }
                 className = clazz.getName();
                 methodToInvoke = getMainMethod(runClass);
                 group = new ThreadGroup(runClass.getSimpleName());

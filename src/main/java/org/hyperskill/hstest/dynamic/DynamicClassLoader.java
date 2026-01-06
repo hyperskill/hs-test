@@ -24,12 +24,23 @@ public class DynamicClassLoader extends ClassLoader {
     }
 
     protected synchronized Class<?> loadClass(String name, boolean resolve)
-            throws ClassNotFoundException {
-        Class<?> result = findClass(name);
-        if (resolve) {
-            resolveClass(result);
+        throws ClassNotFoundException {
+
+        Class<?> c = findLoadedClass(name);
+        if (c == null) {
+            try {
+                if (getParent() != null) {
+                    c = getParent().loadClass(name);
+                }
+            } catch (ClassNotFoundException e) {
+                c = findClass(name);
+            }
         }
-        return result;
+
+        if (resolve) {
+            resolveClass(c);
+        }
+        return c;
     }
 
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -45,7 +56,7 @@ public class DynamicClassLoader extends ClassLoader {
             if (classBytes == null) {
                 File f = findFile(name);
                 if (f == null) {
-                    return findSystemClass(name);
+                    throw new ClassNotFoundException(name);
                 }
 
                 classBytes = loadFileAsBytes(f);
@@ -55,10 +66,10 @@ public class DynamicClassLoader extends ClassLoader {
             result = defineClass(name, classBytes, 0, classBytes.length);
         } catch (IOException e) {
             throw new ClassNotFoundException(
-                    "Cannot load class " + name + ": " + e);
+                "Cannot load class " + name + ": " + e);
         } catch (ClassFormatError e) {
             throw new ClassNotFoundException(
-                    "Format of class file incorrect for class " + name + " : " + e);
+                "Format of class file incorrect for class " + name + " : " + e);
         }
 
         savedClasses.put(name, result);
@@ -67,10 +78,10 @@ public class DynamicClassLoader extends ClassLoader {
 
     private File findFile(String name) {
         File f = new File(
-                searchLocation
-                        + File.separator
-                        + name.replace(".", File.separator)
-                        + ".class"
+            searchLocation
+                + File.separator
+                + name.replace(".", File.separator)
+                + ".class"
         );
 
         if (f.exists()) {
