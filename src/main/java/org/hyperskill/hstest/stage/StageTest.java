@@ -44,7 +44,8 @@ public abstract class StageTest<AttachType> {
     protected AttachType attach = null;
     protected String source = null;
 
-    @Getter private static TestRun currTestRun;
+    @Getter
+    private static TestRun currTestRun;
     private final String sourceName;
 
     static int currTestGlobal = 0;
@@ -153,7 +154,7 @@ public abstract class StageTest<AttachType> {
         try {
             Path currentDir = new File(FileUtils.cwd()).toPath();
             ExitCallDetector.DetectionResult result = ExitCallDetector.analyzeDirectory(currentDir);
-            
+
             if (result.hasExitCalls()) {
                 throw new WrongAnswer(result.getFormattedMessage());
             }
@@ -196,7 +197,7 @@ public abstract class StageTest<AttachType> {
                     CheckLibraryVersion checkLibraryVersion = new CheckLibraryVersion();
                     checkLibraryVersion.checkVersion();
                     String fullFeedback = result.getFeedback() + "\n\n"
-                        + testRun.getTestCase().getFeedback();
+                            + testRun.getTestCase().getFeedback();
                     if (!checkLibraryVersion.isLatestVersion) {
                         fullFeedback += checkLibraryVersion.getFeedback();
                     }
@@ -242,7 +243,8 @@ public abstract class StageTest<AttachType> {
             source = null;
             try {
                 SystemHandler.tearDownSystem();
-            } catch (Throwable ignored) { }
+            } catch (Throwable ignored) {
+            }
         }
     }
 
@@ -259,6 +261,7 @@ public abstract class StageTest<AttachType> {
             .stream()
             .filter(StageTest.class::isAssignableFrom)
             .filter(c -> !Modifier.isAbstract(c.getModifiers()))
+            .filter(c -> !c.getSimpleName().endsWith("Kt"))
             .collect(Collectors.toList()).toArray(new Class<?>[]{});
 
         if (tests.length == 0) {
