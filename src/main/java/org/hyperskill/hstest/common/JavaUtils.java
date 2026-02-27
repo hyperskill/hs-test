@@ -13,14 +13,13 @@ public class JavaUtils {
     public static int getJavaVersion() {
         String version = System.getProperty("java.version");
 
-        String earlyAccess = "-ea";
-        if (version.endsWith(earlyAccess)) {
-            version = version.substring(0, version.length() - earlyAccess.length());
-        }
-
         if (version.startsWith("1.")) {
             version = version.substring(2, 3);
         } else {
+            int hyphen = version.indexOf("-");
+            if (hyphen != -1) {
+                version = version.substring(0, hyphen);
+            }
             int dot = version.indexOf(".");
             if(dot != -1) {
                 version = version.substring(0, dot);
