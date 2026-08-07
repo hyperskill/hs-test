@@ -2,6 +2,7 @@ package org.hyperskill.hstest.common;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -79,7 +80,11 @@ public class ExitCallDetector {
 
         // For Java files, try AST analysis first
         try {
-            JavaParser parser = new JavaParser();
+            // The default language level is POPULAR (= Java 11), which rejects newer syntax
+            // and would silently push all modern user code to the string-based fallback
+            ParserConfiguration configuration = new ParserConfiguration()
+                    .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+            JavaParser parser = new JavaParser(configuration);
             ParseResult<CompilationUnit> parseResult = parser.parse(sourceCode);
 
             if (parseResult.isSuccessful() && parseResult.getResult().isPresent()) {
